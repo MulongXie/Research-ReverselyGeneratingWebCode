@@ -1,0 +1,78 @@
+<html>
+
+<style type="text/css">
+	#butt_db{
+		width: 600px;
+        margin-top: 2000px;
+	}
+</style>
+
+<head>
+    <title>LogSearch</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+
+
+<body background="bg1.jpg">
+<div id="logoimg" align="center">
+    <img src="logo.png" id="logo" width="150" height="65">
+</div>
+
+
+<div id="input">
+    <h2 align="center">
+    Log Searching System <br>
+    </h2>
+    <div align="center">
+        <button id="show_all" style="display:none">Show All Data on Server</button>
+    </div>
+
+    <div id="input_folder" align="center">
+        <input type="text" id="folder" placeholder="Input target folder" list="folderList" onkeypress="enterPress1(event)">
+        <datalist id="folderList">
+            <option label="IT" value="IT">
+            <option label="operator" value="operator">
+            <option label="All Folders and Database" value="All">
+        </datalist>
+        <button id="sbmt_folder" class="sbmt_button" onclick="show()">Select</button>
+    </div>
+
+    <div align="center">
+        <p id="folder_name"></p>
+    </div>
+
+    <div id="input_keyword" align="center" style="display: none;">
+        <input type="text" id="keyword" placeholder="Input keyword" onkeypress="enterPress2(event)">
+        <button id="sbmt_keyword" class="sbmt_button">Search</button>
+    </div>
+</div>
+
+<div align="center">
+    <div id="nav_bar">
+        <button id="butt_table" class="active" style="display:none">Table</button>
+        <button id="butt_plot" style="display:none">Diagram</button>
+    </div>
+</div>
+
+<div id="rt_container" align="center">
+    <div id="rt_shell">
+        <div id="nav_data_source">
+            <ul style="list-style-type: none">
+                <li><button id="butt_text" class="active">Text File</button></li>
+                <li><button id="butt_db" margin-top="200px">Database</button></li>
+            </ul>
+        </div>
+
+        <div id="rt" align="center">
+            <div id="disp_table" style="display: block">
+                <div id="table_txt" style="display: block"></div>
+                <div id="table_db" style="display: none;"></div>
+            </div>
+            <div id="disp_plot" style="display: none" align="center"></div>
+            <div id="search_failed"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
