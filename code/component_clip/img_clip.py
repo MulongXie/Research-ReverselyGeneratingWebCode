@@ -3,8 +3,8 @@ import pandas as pd
 import os
 import numpy as np
 
-input_root = 'img_select/data2/'
-output_root = 'component/data2/'
+input_root = 'D:\\datasets\\dataset_webpage\\data\\test\\'
+output_root = 'component/test/'
 
 
 def get_file():
@@ -13,7 +13,7 @@ def get_file():
     for (root, _, file) in os.walk(input_root + 'label'):
         for f in file:
             csv.append(root + '/' + f)
-    for (root, _, file) in os.walk(input_root + 'org'):
+    for (root, _, file) in os.walk(input_root + 'screenshot'):
         for f in file:
             org_imgs.append(root + '/' + f)
     return csv, org_imgs
@@ -32,7 +32,7 @@ def padding(img):
     return pad_img
 
 
-def clip():
+def clip(is_padding=False):
 
     csv, org_imgs = get_file()
     print(len(csv))
@@ -62,8 +62,10 @@ def clip():
             else:
                 count[compo_class] = 1
 
-            pad_compo = padding(component)
-            cv2.imwrite(output_root + compo_class + '/' +str(count[compo_class]) + '.png', pad_compo)
+            if is_padding:
+                component = padding(component)
+
+            cv2.imwrite(output_root + compo_class + '/' +str(count[compo_class]) + '.png', component)
 
 
 clip()
