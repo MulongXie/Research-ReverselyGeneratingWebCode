@@ -11,8 +11,8 @@ is_wireframe = True
 is_show_img = False
 
 root = 'D:\\datasets\\dataset_webpage\\data\\data4\\'
-initial_url = "http://www.365daohang.com/"
-link_num = 20
+initial_url = "https://au.yahoo.com"
+link_num = 1
 start_pos = 0
 
 if is_crawl_link:

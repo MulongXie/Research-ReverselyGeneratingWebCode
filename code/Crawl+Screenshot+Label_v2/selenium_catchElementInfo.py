@@ -59,7 +59,7 @@ def catch(url, out_label, out_img, libel_format):
         height = driver.get_window_size()['height'] if driver.get_window_size()['width'] > scroll_height else scroll_height
 
         driver.set_window_position(0, 0)
-        driver.set_window_size(scroll_width, scroll_height)
+        driver.set_window_size(driver.get_window_size()['width'], scroll_height)
         print()
 
         driver.save_screenshot(out_img)
