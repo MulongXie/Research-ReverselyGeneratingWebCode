@@ -1,8 +1,6 @@
-import os
+import pandas as pd
 
-def f(a):
-    a = 1
+csv = pd.read_csv('preset_links.csv')
+csv.link = "https://" + csv.link
 
-a = 2
-f(a)
-print(a)
+csv.to_csv('preset_links.csv')

@@ -3,14 +3,14 @@ import selenium_catchElementInfo as catch
 import crawl_limitedset as crawl
 import pandas as pd
 
-is_crawl_link = True
+is_crawl_link = False
 is_read_existed_links = not is_crawl_link
 is_catch_element = True
 is_draw_label = True
 is_wireframe = True
 is_show_img = False
 
-root = 'D:\\datasets\\webpage\\data\\data3\\'
+root = 'D:\\datasets\\dataset_webpage\\data\\data4\\'
 initial_url = "http://www.365daohang.com/"
 link_num = 20
 start_pos = 0
@@ -23,7 +23,7 @@ if is_crawl_link:
 
 if is_read_existed_links:
     start_pos = 0
-    csv = pd.read_csv(root + 'links.csv')
+    csv = pd.read_csv(root + 'preset_links.csv')
     links = csv.link
 
 print("*** Links Fetched ***\n")

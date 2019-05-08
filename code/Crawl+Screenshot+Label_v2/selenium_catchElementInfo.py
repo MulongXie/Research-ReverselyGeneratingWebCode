@@ -45,11 +45,11 @@ def catch(url, out_label, out_img, libel_format):
         # fetch the attributes
         # csv = find_element('div', csv, driver)
         csv = find_element('img', csv, driver)
-        csv = find_element('a', csv, driver)
-        csv = find_element('h1', csv, driver)
-        csv = find_element('h2', csv, driver)
-        csv = find_element('button', csv, driver)
-        csv = find_element('input', csv, driver)
+        # csv = find_element('a', csv, driver)
+        # csv = find_element('h1', csv, driver)
+        # csv = find_element('h2', csv, driver)
+        # csv = find_element('button', csv, driver)
+        # csv = find_element('input', csv, driver)
         csv.to_csv(out_label)
 
         # save the full-size screen shot
