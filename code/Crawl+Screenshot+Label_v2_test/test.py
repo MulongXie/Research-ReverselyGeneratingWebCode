@@ -1,6 +1,5 @@
-import pandas as pd
+import tensorflow as tf
+import keras
 
-csv = pd.read_csv('preset_links.csv')
-csv.link = "https://" + csv.link
-
-csv.to_csv('preset_links.csv')
+print(tf.__version__)
+print(keras.__version__)

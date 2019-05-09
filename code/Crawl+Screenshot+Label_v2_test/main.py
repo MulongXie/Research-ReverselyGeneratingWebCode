@@ -11,7 +11,7 @@ is_wireframe = True
 is_show_img = False
 
 root = 'D:\\datasets\\dataset_webpage\\data\\test\\'
-initial_url = "https://youtube.com"
+initial_url = "https://facebook.com"
 link_num = 1
 start_pos = 0
 

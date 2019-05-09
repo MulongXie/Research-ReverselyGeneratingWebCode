@@ -59,7 +59,7 @@ def catch(url, out_label, out_img, libel_format):
         height = driver.get_window_size()['height'] if driver.get_window_size()['width'] > scroll_height else scroll_height
 
         hidden_w = driver.execute_script('return document.body.scrollLeft')
-        hidden_t = driver.execute_script('return document.body.scrollTop')
+        hidden_t = driver.execute_script('return document.body.scrollRight')
         hidden_ie = driver.execute_script('document.documentElement.scrollTop')
         print('hidden width:' + str(hidden_w))
         print('hidden top:' + str(hidden_t))
