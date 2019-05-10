@@ -1,35 +1,66 @@
 import cv2
 import numpy as np
+import os
 import pandas as pd
 
-root_path = "D:\\datasets\\dataset_webpage\\data\\test\\"
-output_path = root_path + "split\\"
 
-img = cv2.imread(root_path + "screenshot\\0.png")
-label = pd.read_csv(root_path + "label\\0.csv")
-height_avg = 600
+def split_img(img_root_path = "D:\datasets\dataset_webpage\data\split\img"):
+    img_name = 0
+    img_path = os.path.join(img_root_path, str(img_name))
+    img_input_path = os.path.join(img_path, 'org.png')
+    img_output_path = os.path.join(img_path, 'section')
 
-height_bottom = np.shape(img)[0]
-print(height_bottom)
+    height_avg = 600
 
-mini_ranges = []
-mini_imgs = []
+    print(img_input_path)
 
-h = 0
-mini_no = 0
-while h < height_bottom:
-    mini_range = {}
+    img = cv2.imread(img_input_path)
+    height_bottom = np.shape(img)[0]
 
-    mini_range['top'] = h
-    mini_range['bottom'] = h + height_avg if h + height_avg <= height_bottom else height_bottom
-    mini_ranges.append(mini_range)
+    print(np.shape(img))
 
-    mini_img = img[mini_range['top']:mini_range['bottom'], :, :]
-    mini_imgs.append(mini_img)
-    # cv2.imshow('img', mini_img)
-    # cv2.waitKey(0)
-    # cv2.imwrite(output_path + str(mini_no) + '.png', mini_img)
+    h = 0
+    section_no = 0
+    while h < height_bottom:
+        section_range = {}
 
-    h += height_avg
+        section_range['top'] = h
+        section_range['bottom'] = h + height_avg if h + height_avg <= height_bottom else height_bottom
+        section_img = img[section_range['top']:section_range['bottom'], :, :]
+        cv2.imwrite(os.path.join(img_output_path, str(section_no) + '.png'), section_img)
 
-print(mini_ranges)
+        h += height_avg
+        section_no += 1
+
+        cv2.imshow('img', section_img)
+        cv2.waitKey(0)
+
+
+def split_label(label_root_path="D:\datasets\dataset_webpage\data\split\label"):
+    label_name = 0
+    label_path = os.path.join(label_root_path, str(label_name))
+    org_label_path = os.path.join(label_path, 'org.csv')
+    split_label_path = os.path.join(label_path, 'split.csv')
+
+    label = pd.read_csv(org_label_path, index_col=0)
+    avg_height = 600
+
+    colums = label.columns.values
+    colums = np.append(colums, ['split_no'])
+
+    split_label = pd.DataFrame(columns=colums)
+    for i in range(len(label)):
+        item = label.iloc[i].copy()
+
+        split_no = int(item.by / avg_height)
+        item['by'] = item.by % avg_height
+        item['split_no'] = split_no
+
+        split_label.loc[i] = item
+
+    print(split_label)
+    split_label.to_csv(split_label_path)
+
+
+split_img()
+split_label()
