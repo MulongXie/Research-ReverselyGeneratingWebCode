@@ -11,7 +11,7 @@ def find_element(element, df, driver):
             continue
 
         # skim all nonsense elements
-        if d.size['width'] == 0 or d.size['height'] == 0:
+        if d.size['width'] == 0 or d.size['height'] == 0 or d.location['x'] < 0 or d.location['y'] < 0:
             continue
 
         dic = {}
