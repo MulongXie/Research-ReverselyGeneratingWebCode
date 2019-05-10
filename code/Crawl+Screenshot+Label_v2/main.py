@@ -11,7 +11,7 @@ is_wireframe = True
 is_show_img = False
 
 root = 'D:\\datasets\\dataset_webpage\\data\\data4\\'
-initial_url = "https://au.yahoo.com"
+initial_url = "https://www.anu.edu.au/"
 link_num = 1
 start_pos = 0
 

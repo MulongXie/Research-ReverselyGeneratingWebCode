@@ -11,7 +11,7 @@ is_wireframe = True
 is_show_img = False
 
 root = 'D:\\datasets\\dataset_webpage\\data\\test\\'
-initial_url = "https://facebook.com"
+initial_url = "https://www.anu.edu.au/"
 link_num = 1
 start_pos = 0
 
