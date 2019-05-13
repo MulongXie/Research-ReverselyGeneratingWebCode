@@ -1,7 +1,16 @@
 import os
 import numpy as np
 
-d = os.listdir('D:\datasets\PASCAL\VOCdevkit\VOC2012\JPEGImages')
-d = [s.strip('.jpg') for s in d]
+file = open('2012_train_test.txt')
+out = open('train_test.txt', 'w')
 
-print(d)
+c = 0
+for l in file.readlines():
+    i = l[:63]
+    try:
+        x = open(i)
+        out.write(l)
+    except FileNotFoundError as e:
+        print(e)
+        c += 1
+print(c)
