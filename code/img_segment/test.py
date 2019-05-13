@@ -57,11 +57,5 @@ def segment_label(segment_size, label_name=0, label_root_path="D:\datasets\datas
 
         index += 1
 
-    segment_label.to_csv('test.csv')
-    return segment_label
+    segment_label.to_csv(segment_label_path)
 
-
-label = segment_label(600)
-print(label)
-
-seg.segment_draw_label_by_no()
