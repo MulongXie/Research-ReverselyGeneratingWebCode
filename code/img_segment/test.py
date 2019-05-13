@@ -8,7 +8,7 @@ root_path = "D:\datasets\dataset_webpage\data\segment"
 img_root_path = os.path.join(root_path, 'img')
 label_root_path = os.path.join(root_path, 'label')
 
-name = 0
+name = 1
 img_path = os.path.join(img_root_path, str(name))
 label_path = os.path.join(label_root_path, str(name) + '\\segment.csv')
 segs_img_path = os.path.join(img_path, 'segment')
