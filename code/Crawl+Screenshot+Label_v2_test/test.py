@@ -1,5 +1,5 @@
-import tensorflow as tf
-import keras
+import re
+s = "D:\\datasets\\dataset_webpage\\data\\segment\\img\\0\\segment\\7.png"
 
-print(tf.__version__)
-print(keras.__version__)
+print(s[:32])
+print(s[s.rfind('\\') + 1:])

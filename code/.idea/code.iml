@@ -4,6 +4,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/Crwal+Screenshot" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Crawl+Screenshot+Label_v2_test" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/img_segment" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
