@@ -12,7 +12,7 @@ def box_convert(label):
 
 
 def label_convert(root):
-    label_new = ""
+    label_news = ""
     names = os.listdir(os.path.join(root, 'segment\\img'))
     for name in names:
         label_path = os.path.join(root, 'segment\\label\\' + str(name))
@@ -20,16 +20,16 @@ def label_convert(root):
 
         label_segments = pd.read_csv(os.path.join(label_path, 'segment.csv'))
 
-        label_convert = {}
+        label_new = {}
         for i in range(len(label_segments)):
             l = label_segments.iloc[i]
             seg_no = str(l['segment_no'])
-            if seg_no not in label_convert:
-                label_convert[seg_no] = img_path + "\\segment\\" + seg_no + ".jpg "
-            label_convert[seg_no] += box_convert(l)
+            if seg_no not in label_new:
+                label_new[seg_no] = img_path + "\\segment\\" + seg_no + ".jpg "
+            label_new[seg_no] += box_convert(l)
 
-        label_new += "\n".join(label_convert.values())
-    return label_new
+        label_news += "\n".join(label_new.values())
+    return label_news
 
 
 root = "D:\\datasets\\dataset_webpage\\data"
