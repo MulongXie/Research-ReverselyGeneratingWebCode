@@ -1,4 +1,4 @@
-import visual_drawLabel as draw
+import img_drawLabel as draw
 import web_catchElementInfo as catch
 import web_crawl as crawl
 import pandas as pd
@@ -11,7 +11,7 @@ is_draw_label = True
 is_wireframe = True
 is_show_img = False
 
-root = 'D:\\datasets\\dataset_webpage\\data\\test\\'
+root = 'D:\\datasets\\dataset_webpage\\data\\img_segment\\'
 initial_url = "https://www.ebay.com.au/b/Coles/bn_7114044189"
 link_num = 1
 start_pos = 0

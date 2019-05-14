@@ -3,26 +3,21 @@ import numpy as np
 import os
 import pandas as pd
 
-import visual_drawLabel as sd
+import img_drawLabel as draw
 
 
-def segment_img(segment_size, img_name=0, img_root_path="D:\datasets\dataset_webpage\data\segment\img", show=True):
-    img_path = os.path.join(img_root_path, str(img_name))
+def segment_img(segment_size, img_index=0, img_root_path="D:\datasets\dataset_webpage\data\img_segment\img", show=True):
+    img_path = os.path.join(img_root_path, str(img_index))
     img_input_path = os.path.join(img_path, 'org.png')
     img_output_path = os.path.join(img_path, 'segment')
 
-    print(img_path)
-
     img = cv2.imread(img_input_path)
     height_bottom = np.shape(img)[0]
-
-    print(np.shape(img))
 
     h = 0
     segment_no = 0
     while h < height_bottom:
         segment_range = {}
-
         segment_range['top'] = h
         segment_range['bottom'] = h + segment_size if h + segment_size <= height_bottom else height_bottom
         segment_img = img[segment_range['top']:segment_range['bottom'], :, :]
@@ -59,8 +54,8 @@ def extent(item, index, segment_label, segment_size):
     return index
 
 
-def segment_label(segment_size, label_name=0, label_root_path="D:\datasets\dataset_webpage\data\segment\label"):
-    label_path = os.path.join(label_root_path, str(label_name))
+def segment_label(segment_size, label_index=0, label_root_path="D:\datasets\dataset_webpage\data\segment\label"):
+    label_path = os.path.join(label_root_path, str(label_index))
     org_label_path = os.path.join(label_path, 'org.csv')
     segment_label_path = os.path.join(label_path, 'segment.csv')
 
@@ -90,12 +85,12 @@ def segment_label(segment_size, label_name=0, label_root_path="D:\datasets\datas
     segment_label.to_csv(segment_label_path)
 
 
-def segment_draw_label_by_no(img_root_path, label_root_path, name=0, show=True):
+def segment_draw_label_by_no(img_root_path, label_root_path, index=0, show=True):
 
-    img_path = os.path.join(img_root_path, str(name))
+    img_path = os.path.join(img_root_path, str(index))
     input_path = os.path.join(img_path, 'segment')
     output_path = os.path.join(img_path, 'labeled')
-    label_path = os.path.join(label_root_path, str(name) + '\\segment.csv')
+    label_path = os.path.join(label_root_path, str(index) + '\\segment.csv')
 
     label = pd.read_csv(label_path)
 
@@ -105,4 +100,17 @@ def segment_draw_label_by_no(img_root_path, label_root_path, name=0, show=True):
         seg_img = cv2.imread(seg_input_path)
         seg_label = label[label['segment_no'] == s]
 
-        sd.label(seg_label, seg_img, seg_output_path, show)
+        draw.label(seg_label, seg_img, seg_output_path, show)
+
+
+def segment(root_path, index):
+    img_root_path = os.path.join(root_path, 'img')
+    label_root_path = os.path.join(root_path, 'label')
+
+    # segment the image and corresponding label
+    segment_size = 600
+    segment_img(segment_size, index, img_root_path)
+    segment_label(segment_size, index, label_root_path)
+
+    # draw labels on segments
+    segment_draw_label_by_no(img_root_path, label_root_path, index)
