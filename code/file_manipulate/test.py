@@ -1,5 +1,18 @@
-s = 'a.jpg'
+import os
+import numpy as np
+import pandas as pd
 
-c = s.strip('jpg')
+root = "D:/datasets/dataset_webpage/data"
 
-print(c)
+csv = pd.read_csv('0.csv')
+
+print(csv)
+
+name = 0
+path = os.path.join(root, "segment/img/" + str(name) + '/labeled')
+
+print(path)
+
+imgs = os.listdir(path)
+
+print(imgs)
