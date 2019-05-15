@@ -5,14 +5,12 @@ import web_crawl as crawl
 import file_utils as file
 
 import pandas as pd
-import cv2
 import os
-import numpy as np
 
 is_crawl_link = True
 is_read_existed_links = not is_crawl_link
-is_catch_element = True
-is_draw_label = True
+is_catch_element = False
+is_draw_label = False
 
 # img_segment/img/index/segment/0..n.png
 #                      /labeled/0..n.png
@@ -23,11 +21,10 @@ root = os.path.join(data_position, 'img_segment')
 img_root = os.path.join(root, 'img')
 label_root = os.path.join(root, 'label')
 
-start_pos = 0
 if is_crawl_link:
     # set the web crawler
     initial_url = "http://www.ebay.com/sts "
-    link_num = 3
+    link_num = 0
     # start crawling
     links = crawl.crawl(initial_url, link_num, 5)
     crawl.save_links(links, os.path.join(root, 'links.csv'))
@@ -37,11 +34,12 @@ if is_crawl_link:
 
 if is_read_existed_links:
     # read links
-    csv = pd.read_csv(root + 'preset_links.csv')
+    csv = pd.read_csv(os.path.join(root, 'preset_links.csv'))
     links = csv.link
 
 print("*** Links Fetched ***\n")
 
+start_pos = 0
 for index in range(start_pos, len(links)):
     # set path
     index_root = os.path.join(img_root, str(index))
@@ -52,17 +50,20 @@ for index in range(start_pos, len(links)):
     # make dir if not existent
     file.make_nonexistent_dirs([index_root, seg_img_path, labeled_img_path])
 
-    # catch label and screenshot img
-    # and segment them into smaller size
+    # catch label and screenshot img and segment them into smaller size
+    catch_success = False
     if is_catch_element:
         # set the format of libel
         libel_format = pd.read_csv(os.path.join(root, 'format.csv'), index_col=0)
         url = links.iloc[index]
-        catch.catch(url, label_path, org_img_path, libel_format)
-        seg.segment_label(label_path, 600)
-        seg.segment_img(org_img_path, seg_img_path, 600, False)
-    # read and label data
-    if is_draw_label:
+        catch_success = catch.catch(url, label_path, org_img_path, libel_format)
+        if catch_success:
+            seg.segment_label(label_path, 600)
+            seg.segment_img(org_img_path, seg_img_path, 600, False)
+        else:
+            file.remove_dirs(index_root)
+    # read and draw label on segment img
+    if is_draw_label and catch_success:
         seg.segment_draw(seg_img_path, labeled_img_path, label_path, False)
 
-
+file.label_convert(label_root, img_root, os.path.join(root, 'label.txt'))

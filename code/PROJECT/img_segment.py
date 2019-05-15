@@ -94,16 +94,3 @@ def segment_img(org_img_path, output_segment_path, segment_size=600, show=True):
         if show:
             cv2.imshow('img', segment_img)
             cv2.waitKey(0)
-
-
-def segment(root_path, index):
-    img_root_path = os.path.join(root_path, 'img')
-    label_root_path = os.path.join(root_path, 'label')
-
-    # segment the image and corresponding label
-    segment_size = 600
-    segment_img(segment_size, index, img_root_path)
-    segment_label(segment_size, index, label_root_path)
-
-    # draw labels on segments
-    segment_draw(img_root_path, label_root_path, index)

@@ -56,8 +56,9 @@ def show(root_path="labeled_image", wait_key=0):
 
 
 def label(label, img, output_path, show=False):
-    distort = 1
-    img = cv2.resize(img, (int(np.shape(img)[1] * distort), int(np.shape(img)[0] * distort)))
+    if np.shape(img) == ():
+        return
+    img = cv2.resize(img, (int(np.shape(img)[1]), int(np.shape(img)[0])))
     draw(label, img)
 
     if show:
