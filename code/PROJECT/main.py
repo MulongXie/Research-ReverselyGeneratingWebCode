@@ -11,6 +11,7 @@ is_crawl_link = True
 is_read_existed_links = not is_crawl_link
 is_catch_element = False
 is_draw_label = False
+is_convert_label = True
 
 # img_segment/img/index/segment/0..n.png
 #                      /labeled/0..n.png
@@ -23,7 +24,7 @@ label_root = os.path.join(root, 'label')
 
 if is_crawl_link:
     # set the web crawler
-    initial_url = "http://www.ebay.com/sts "
+    initial_url = "https://www.bbc.com/"
     link_num = 0
     # start crawling
     links = crawl.crawl(initial_url, link_num, 5)
@@ -66,4 +67,7 @@ for index in range(start_pos, len(links)):
     if is_draw_label and catch_success:
         seg.segment_draw(seg_img_path, labeled_img_path, label_path, False)
 
-file.label_convert(label_root, img_root, os.path.join(root, 'label.txt'))
+if is_convert_label:
+    file.label_convert(label_root, img_root, os.path.join(root, 'label.txt'))
+    file.label_refine(os.path.join(root, 'label.txt'), os.path.join(root, 'label_refine.txt'))
+
