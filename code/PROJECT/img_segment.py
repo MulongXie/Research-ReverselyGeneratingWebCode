@@ -6,32 +6,6 @@ import pandas as pd
 import img_drawLabel as draw
 
 
-# cut the original img into fixed-size segment img
-def segment_img(segment_size, img_index=0, img_root_path="D:\datasets\dataset_webpage\data\img_segment\img", show=True):
-    img_path = os.path.join(img_root_path, str(img_index))
-    img_input_path = os.path.join(img_path, 'org.png')
-    img_output_path = os.path.join(img_path, 'segment')
-
-    img = cv2.imread(img_input_path)
-    height_bottom = np.shape(img)[0]
-
-    h = 0
-    segment_no = 0
-    while h < height_bottom:
-        segment_range = {}
-        segment_range['top'] = h
-        segment_range['bottom'] = h + segment_size if h + segment_size <= height_bottom else height_bottom
-        segment_img = img[segment_range['top']:segment_range['bottom'], :, :]
-        cv2.imwrite(os.path.join(img_output_path, str(segment_no) + '.png'), segment_img)
-
-        h += segment_size
-        segment_no += 1
-
-        if show:
-            cv2.imshow('img', segment_img)
-            cv2.waitKey(0)
-
-
 # extent labels that excess the segment size to the next segment
 def segment_extent(item, index, segment_label, segment_size):
     # calculate the extent segment
@@ -56,14 +30,22 @@ def segment_extent(item, index, segment_label, segment_size):
     return index
 
 
-# change the coordinates and size of labels to fit the img segment
-def segment_label(segment_size, label_index=0, label_root_path="D:\datasets\dataset_webpage\data\segment\label"):
-    label_path = os.path.join(label_root_path, str(label_index))
-    org_label_path = os.path.join(label_path, 'org.csv')
-    segment_label_path = os.path.join(label_path, 'segment.csv')
+# draw label on the segment images
+def segment_draw(segment_org_path, labeled_img_path, label_path, show=True):
+    label = pd.read_csv(label_path)
 
+    for s in range(label.iloc[-1].segment_no + 1):
+        seg_input_path = os.path.join(segment_org_path, str(s) + '.png')
+        seg_output_path = os.path.join(labeled_img_path, str(s) + '.png')
+        seg_img = cv2.imread(seg_input_path)
+        seg_label = label[label['segment_no'] == s]
+        draw.label(seg_label, seg_img, seg_output_path, show)
+
+
+# change the coordinates and size of labels to fit the img segment
+def segment_label(label_path, segment_size=600):
     # read the original label
-    org_label = pd.read_csv(org_label_path, index_col=0)
+    org_label = pd.read_csv(label_path, index_col=0)
 
     # initialize the segment labels by adding segment_no column and changing the relative label coordinate
     colums = org_label.columns.values
@@ -84,26 +66,29 @@ def segment_label(segment_size, label_index=0, label_root_path="D:\datasets\data
 
         index += 1
 
-    segment_label.to_csv(segment_label_path)
+    segment_label.to_csv(label_path)
 
 
-# draw label on the segment images
-def segment_draw(img_root_path, label_root_path, index=0, show=True):
+# cut the original img into fixed-size segment img
+def segment_img(org_img_path, output_segment_path, segment_size=600, show=True):
+    img = cv2.imread(org_img_path)
+    height_bottom = np.shape(img)[0]
 
-    img_path = os.path.join(img_root_path, str(index))
-    input_path = os.path.join(img_path, 'segment')
-    output_path = os.path.join(img_path, 'labeled')
-    label_path = os.path.join(label_root_path, str(index) + '\\segment.csv')
+    h = 0
+    segment_no = 0
+    while h < height_bottom:
+        segment_range = {}
+        segment_range['top'] = h
+        segment_range['bottom'] = h + segment_size if h + segment_size <= height_bottom else height_bottom
+        segment_img = img[segment_range['top']:segment_range['bottom'], :, :]
+        cv2.imwrite(os.path.join(output_segment_path, str(segment_no) + '.png'), segment_img)
 
-    label = pd.read_csv(label_path)
+        h += segment_size
+        segment_no += 1
 
-    for s in range(label.iloc[-1].segment_no + 1):
-        seg_input_path = os.path.join(input_path, str(s) + '.png')
-        seg_output_path = os.path.join(output_path, str(s) + '.png')
-        seg_img = cv2.imread(seg_input_path)
-        seg_label = label[label['segment_no'] == s]
-
-        draw.label(seg_label, seg_img, seg_output_path, show)
+        if show:
+            cv2.imshow('img', segment_img)
+            cv2.waitKey(0)
 
 
 def segment(root_path, index):

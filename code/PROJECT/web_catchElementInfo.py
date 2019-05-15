@@ -69,7 +69,5 @@ def catch(url, out_label, out_img, libel_format):
         #     driver.save_screenshot(out_img)
 
         print("Fetch Elements Successfully")
-        return True
     except Exception as e:
         print(e)
-        return False

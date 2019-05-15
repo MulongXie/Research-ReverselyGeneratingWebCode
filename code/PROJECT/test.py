@@ -1,4 +1,5 @@
 import img_drawLabel as draw
+import img_segment as seg
 import web_catchElementInfo as catch
 import web_crawl as crawl
 import file_utils as file
@@ -47,16 +48,17 @@ for index in range(start_pos, len(links)):
     # make dir if not existent
     file.make_nonexistent_dirs([index_root, seg_img_path, labeled_img_path])
 
-    # # catch label and screenshot img
-    # success = False
-    # if is_catch_element:
-    #     # set the format of libel
-    #     libel_format = pd.read_csv(root + 'format.csv', index_col=0)
-    #     url = links.iloc[index]
-    #     success = catch.catch(url, label_path, org_img_path, libel_format)
-    # # read and label data
-    # if is_draw_label and success:
-    #     label = pd.read_csv(label_path)
-    #     img = cv2.imread(org_img_path)
-    #     draw.label(label, img, labeled_img_path)
+    # catch label and screenshot img
+    # and segment them into smaller size
+    if is_catch_element:
+        # set the format of libel
+        libel_format = pd.read_csv(os.path.join(root, 'format.csv'), index_col=0)
+        url = links.iloc[index]
+        catch.catch(url, label_path, org_img_path, libel_format)
+        seg.segment_label(label_path, 600)
+        seg.segment_img(org_img_path, seg_img_path, 600, False)
+    # read and label data
+    if is_draw_label:
+        seg.segment_draw(seg_img_path, labeled_img_path, label_path)
+
 
