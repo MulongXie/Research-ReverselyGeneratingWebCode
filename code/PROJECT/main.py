@@ -1,8 +1,10 @@
 import img_drawLabel as draw
 import web_catchElementInfo as catch
 import web_crawl as crawl
+
 import pandas as pd
 import cv2
+import os
 
 is_crawl_link = True
 is_read_existed_links = not is_crawl_link
@@ -11,7 +13,15 @@ is_draw_label = True
 is_wireframe = True
 is_show_img = False
 
-root = 'D:\\datasets\\dataset_webpage\\data\\img_segment\\'
+# output path
+# img_segment/img/index/segment/0..n.png
+#                      /labeled/0..n.png
+#                      /org.png
+#            /label/index/label.csv
+root = 'D:\datasets\dataset_webpage\data'
+img_root = os.path.join(root, 'img_segment\img')
+label_root =
+
 initial_url = "https://www.ebay.com.au/b/Coles/bn_7114044189"
 link_num = 1
 start_pos = 0
@@ -33,7 +43,7 @@ print("*** Links Fetched ***\n")
 # set the format of libel
 libel_format = pd.read_csv(root + 'format.csv', index_col=0)
 for i in range(start_pos, len(links)):
-    # output path
+
     label_path = root + 'label/' + str(i) + '.csv'
     img_path = root + 'screenshot/' + str(i) + '.png'
     labeled_img_path = root + 'labeled_img/' + str(i) + '.png'

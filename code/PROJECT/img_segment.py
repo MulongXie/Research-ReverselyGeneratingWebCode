@@ -6,6 +6,7 @@ import pandas as pd
 import img_drawLabel as draw
 
 
+# cut the original img into fixed-size segment img
 def segment_img(segment_size, img_index=0, img_root_path="D:\datasets\dataset_webpage\data\img_segment\img", show=True):
     img_path = os.path.join(img_root_path, str(img_index))
     img_input_path = os.path.join(img_path, 'org.png')
@@ -31,7 +32,8 @@ def segment_img(segment_size, img_index=0, img_root_path="D:\datasets\dataset_we
             cv2.waitKey(0)
 
 
-def extent(item, index, segment_label, segment_size):
+# extent labels that excess the segment size to the next segment
+def segment_extent(item, index, segment_label, segment_size):
     # calculate the extent segment
     extent_item = item.copy()
     extent_item['by'] = 0
@@ -54,6 +56,7 @@ def extent(item, index, segment_label, segment_size):
     return index
 
 
+# change the coordinates and size of labels to fit the img segment
 def segment_label(segment_size, label_index=0, label_root_path="D:\datasets\dataset_webpage\data\segment\label"):
     label_path = os.path.join(label_root_path, str(label_index))
     org_label_path = os.path.join(label_path, 'org.csv')
@@ -73,10 +76,9 @@ def segment_label(segment_size, label_index=0, label_root_path="D:\datasets\data
         segment_no = int(item['by'] / segment_size)
         item['by'] = item['by'] % segment_size
         item['segment_no'] = segment_no
-
         # for those excess the segment size range
         if (item['by'] + item['bh']) >= segment_size:
-            index = extent(item, index, segment_label, segment_size)
+            index = segment_extent(item, index, segment_label, segment_size)
         else:
             segment_label.loc[index] = item
 
@@ -85,7 +87,8 @@ def segment_label(segment_size, label_index=0, label_root_path="D:\datasets\data
     segment_label.to_csv(segment_label_path)
 
 
-def segment_draw_label_by_no(img_root_path, label_root_path, index=0, show=True):
+# draw label on the segment images
+def segment_draw(img_root_path, label_root_path, index=0, show=True):
 
     img_path = os.path.join(img_root_path, str(index))
     input_path = os.path.join(img_path, 'segment')
@@ -113,4 +116,4 @@ def segment(root_path, index):
     segment_label(segment_size, index, label_root_path)
 
     # draw labels on segments
-    segment_draw_label_by_no(img_root_path, label_root_path, index)
+    segment_draw(img_root_path, label_root_path, index)
