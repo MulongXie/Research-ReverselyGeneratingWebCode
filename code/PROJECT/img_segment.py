@@ -34,12 +34,17 @@ def segment_extent(item, index, segment_label, segment_size):
 def segment_draw(segment_org_path, labeled_img_path, label_path, show=True):
     label = pd.read_csv(label_path)
 
+    if len(label) == 0:
+        print("No component needs to be labeled \n")
+        return
+
     for s in range(label.iloc[-1].segment_no + 1):
         seg_input_path = os.path.join(segment_org_path, str(s) + '.png')
         seg_output_path = os.path.join(labeled_img_path, str(s) + '.png')
         seg_img = cv2.imread(seg_input_path)
         seg_label = label[label['segment_no'] == s]
         draw.label(seg_label, seg_img, seg_output_path, show)
+    print('Labeled img saved in ' + labeled_img_path + '\n')
 
 
 # change the coordinates and size of labels to fit the img segment

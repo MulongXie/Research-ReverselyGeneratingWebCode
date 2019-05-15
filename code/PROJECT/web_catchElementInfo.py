@@ -31,7 +31,7 @@ def find_element(element, df, driver):
 # and save the screenshot
 def catch(url, out_label, out_img, libel_format):
     try:
-        print("*** catch element from %s ***" % url)
+        print("*** catching element from %s ***" % url)
         csv = libel_format
 
         # initialize the webdriver to get the full screen-shot and attributes
@@ -40,7 +40,6 @@ def catch(url, out_label, out_img, libel_format):
         driver = webdriver.Chrome(options=options)
         driver.maximize_window()
         driver.get(url)
-        print(driver.get_window_size()['width'])
 
         # fetch the attributes
         # csv = find_element('div', csv, driver)
@@ -60,7 +59,6 @@ def catch(url, out_label, out_img, libel_format):
 
         driver.set_window_position(0, 0)
         driver.set_window_size(driver.get_window_size()['width'], scroll_height)
-        print()
 
         driver.save_screenshot(out_img)
         # try:
@@ -68,6 +66,6 @@ def catch(url, out_label, out_img, libel_format):
         # except Exception as e:
         #     driver.save_screenshot(out_img)
 
-        print("Fetch Elements Successfully")
+        print("Catch Elements Successfully")
     except Exception as e:
         print(e)

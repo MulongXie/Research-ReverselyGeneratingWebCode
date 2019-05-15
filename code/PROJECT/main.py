@@ -26,19 +26,21 @@ label_root = os.path.join(root, 'label')
 start_pos = 0
 if is_crawl_link:
     # set the web crawler
-    initial_url = "https://www.ebay.com.au/b/Coles/bn_7114044189"
-    link_num = 1
+    initial_url = "http://www.ebay.com/sts "
+    link_num = 3
     # start crawling
     links = crawl.crawl(initial_url, link_num, 5)
-    crawl.save_links(links, root + 'links.csv')
+    crawl.save_links(links, os.path.join(root, 'links.csv'))
     # read links
-    csv = pd.read_csv(root + 'links.csv')
+    csv = pd.read_csv(os.path.join(root, 'links.csv'))
     links = csv.link
 
 if is_read_existed_links:
     # read links
     csv = pd.read_csv(root + 'preset_links.csv')
     links = csv.link
+
+print("*** Links Fetched ***\n")
 
 for index in range(start_pos, len(links)):
     # set path
@@ -61,6 +63,6 @@ for index in range(start_pos, len(links)):
         seg.segment_img(org_img_path, seg_img_path, 600, False)
     # read and label data
     if is_draw_label:
-        seg.segment_draw(seg_img_path, labeled_img_path, label_path)
+        seg.segment_draw(seg_img_path, labeled_img_path, label_path, False)
 
 

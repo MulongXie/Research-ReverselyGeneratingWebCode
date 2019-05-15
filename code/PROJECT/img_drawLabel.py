@@ -65,7 +65,6 @@ def label(label, img, output_path, show=False):
         cv2.waitKey(0)
 
     cv2.imwrite(output_path, img)
-    print(output_path)
 
 
 # used for sorting by area
