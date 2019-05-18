@@ -1,32 +1,46 @@
-import cv2
 import os
 import numpy as np
+import pandas as pd
 
 
-def draw_box(img, box):
-    count = 0
-    for b in box:
-        coord = b.split(",")
-        coord = [int(c) for c in coord]
-        img = cv2.rectangle(img, (coord[0], coord[1]), (coord[2], coord[3]), (0, 0, 255))
-        cv2.putText(img, str(count), (coord[0], coord[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
-        count += 1
+def box_convert(label):
+    x_min = label['bx']
+    y_min = label['by']
+    x_max = x_min + label['bw']
+    y_max = y_min + label['bh']
+    return " " + str(x_min) + "," + str(y_min) + "," + str(x_max) + "," + str(y_max) + ",1"
 
 
-label = open('label.txt')
+def label_convert(label_root, img_root):
+    label_news = ""
+    indices = os.listdir(os.path.join(label_root))
+    indices = [i[:-4] for i in indices]
+    for index in indices:
+        label_path = os.path.join(label_root, index + '.csv')
+        img_path = os.path.join(img_root, index + '\segment')
 
-for l in label.readlines():
-    content = l[:-1].split(" ")
+        label = pd.read_csv(label_path)
+        if len(label) == 0:
+            print("%s is empty" % label_path)
+            continue
+        label_new = {}
+        for i in range(len(label)):
+            l = label.iloc[i]
+            seg_no = str(l['segment_no'])
+            if seg_no not in label_new:
+                label_new[seg_no] = os.path.join(img_path, seg_no + ".png")
+            label_new[seg_no] += box_convert(l)
 
-    img_path = content[0]
-    root_path = img_path[:(img_path.find('\segment'))]
-    img_name = img_path[img_path.rfind('\\')+1:]
-    write_path = os.path.join(root_path, 'labeled\\' + img_name)
+        if len(label_new) > 0:
+            label_news += "\n".join(label_new.values())
+            label_news += '\n'
 
-    box = content[1:]
-    img = cv2.imread(img_path)
+        f = open('label.txt', 'w')
+        f.write(label_news)
+    return label_news
 
-    draw_box(img, box)
-    cv2.imshow('i', img)
-    cv2.waitKey(0)
+
+label_root = "D:\\datasets\\dataset_webpage\\data\\img_segment\\label"
+img_root = "D:\\datasets\\dataset_webpage\\data\\img_segment\\img"
+l = label_convert(label_root, img_root)
 

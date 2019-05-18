@@ -1,5 +1,61 @@
-[INFO  - 2019-03-21T00:57:09.768Z] GhostDriver - Main - running on port 54013
-[INFO  - 2019-03-21T00:57:13.998Z] Session [43f526a0-4b74-11e9-b02b-ab9b48e5eaf4] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
-[INFO  - 2019-03-21T00:57:13.998Z] Session [43f526a0-4b74-11e9-b02b-ab9b48e5eaf4] - page.customHeaders:  - {}
-[INFO  - 2019-03-21T00:57:13.998Z] Session [43f526a0-4b74-11e9-b02b-ab9b48e5eaf4] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
-[INFO  - 2019-03-21T00:57:13.998Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 43f526a0-4b74-11e9-b02b-ab9b48e5eaf4
+[INFO  - 2019-05-15T05:47:43.480Z] GhostDriver - Main - running on port 55333
+[INFO  - 2019-05-15T05:47:47.987Z] Session [f82501f0-76d4-11e9-ad50-bd49faf0d8dc] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
+[INFO  - 2019-05-15T05:47:47.987Z] Session [f82501f0-76d4-11e9-ad50-bd49faf0d8dc] - page.customHeaders:  - {}
+[INFO  - 2019-05-15T05:47:47.987Z] Session [f82501f0-76d4-11e9-ad50-bd49faf0d8dc] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2019-05-15T05:47:47.987Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: f82501f0-76d4-11e9-ad50-bd49faf0d8dc
+[ERROR - 2019-05-15T05:47:48.633Z] Session [f82501f0-76d4-11e9-ad50-bd49faf0d8dc] - page.onError - msg: ReferenceError: Can't find variable: $logger
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-05-15T05:47:48.634Z] Session [f82501f0-76d4-11e9-ad50-bd49faf0d8dc] - page.onError - stack:
+  initLogger (https://www.ebay.com/:22)
+  onload (https://www.ebay.com/:52)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-05-15T05:47:48.897Z] Session [f82501f0-76d4-11e9-ad50-bd49faf0d8dc] - page.onError - msg: TypeError: null is not an object (evaluating 'a.length')
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-05-15T05:47:48.897Z] Session [f82501f0-76d4-11e9-ad50-bd49faf0d8dc] - page.onError - stack:
+  removeClass (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:206)
+  onDestroy (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:309)
+  b_ (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:15)
+  y_ (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:51)
+  destroy (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:51)
+  onMount (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:308)
+  b_ (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:15)
+  b_ (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:55)
+  v (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:59)
+  _v_ (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:61)
+  _u_ (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:23)
+  afterInsert (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:27)
+  (anonymous function) (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:55)
+  N_ (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:31)
+  L_ (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:55)
+  v (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:58)
+  r (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:60)
+  (anonymous function) (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:60)
+  forEach (:0)
+  p (https://ir.ebaystatic.com/rs/c/highlnfe-grx3_gVy.js:59)
+  (anonymous function) (https://www.ebay.com/:95)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-05-15T05:47:50.442Z] Session [f82501f0-76d4-11e9-ad50-bd49faf0d8dc] - page.onError - msg: Exception in queued GPT command TypeError: null is not an object (evaluating 's.setAttribute')
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-05-15T05:47:50.443Z] Session [f82501f0-76d4-11e9-ad50-bd49faf0d8dc] - page.onError - stack:
+  push (https://securepubads.g.doubleclick.net/gpt/pubads_impl_2019050901.js:1)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-05-15T05:47:51.449Z] Session [f82501f0-76d4-11e9-ad50-bd49faf0d8dc] - page.onError - msg: ReferenceError: Can't find variable: GH
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-05-15T05:47:51.450Z] Session [f82501f0-76d4-11e9-ad50-bd49faf0d8dc] - page.onError - stack:
+  global code (https://ir.ebaystatic.com/rs/v/ucgxog1jbey55chg2qh3tn20fyr.js:2)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-05-15T05:47:51.510Z] Session [f82501f0-76d4-11e9-ad50-bd49faf0d8dc] - page.onError - msg: ReferenceError: Can't find variable: setUrls
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-05-15T05:47:51.510Z] Session [f82501f0-76d4-11e9-ad50-bd49faf0d8dc] - page.onError - stack:
+  global code (https://secureir.ebaystatic.com/cr/v/c1/yolo-loader.html?d=d&privacy=https%3A%2F%2Fpages.ebay.com%2Fhelp%2Fpolicies%2Fprivacy-policy.html&tos=https%3A%2F%2Fpages.ebay.com%2Fhelp%2Fpolicies%2Fuser-agreement.html:116)
+
+  phantomjs://platform/console++.js:263 in error

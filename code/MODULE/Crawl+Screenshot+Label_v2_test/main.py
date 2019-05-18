@@ -11,7 +11,7 @@ is_wireframe = True
 is_show_img = False
 
 root = 'D:\\datasets\\dataset_webpage\\data\\test\\'
-initial_url = "https://www.anu.edu.au/"
+initial_url = "https://world.taobao.com/"
 link_num = 1
 start_pos = 0
 
@@ -32,11 +32,13 @@ print("*** Links Fetched ***\n")
 # set the format of libel
 libel_format = pd.read_csv('format.csv', index_col=0)
 for i in range(start_pos, len(links)):
+    p = i
+
     # output path
-    label = root + 'label/' + str(i) + '.csv'
-    img = root + 'screenshot/' + str(i) + '.png'
-    labeled_img = root + 'labeled_img/' + str(i) + '.png'
-    wireframe = root + 'labeled_wireframe/' + str(i) + '.png'
+    label = root + 'label/' + str(p) + '.csv'
+    img = root + 'screenshot/' + str(p) + '.png'
+    labeled_img = root + 'labeled_img/' + str(p) + '.png'
+    wireframe = root + 'labeled_wireframe/' + str(p) + '.png'
     # catch, label and framework
     success = False
     if is_catch_element:
