@@ -7,7 +7,7 @@ import file_utils as file
 import pandas as pd
 import os
 
-is_crawl_link = True
+is_crawl_link = False
 is_read_existed_links = not is_crawl_link
 is_catch_element = False
 is_draw_label = False

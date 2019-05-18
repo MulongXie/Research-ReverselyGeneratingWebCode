@@ -18,7 +18,7 @@ def box_convert(label):
     y_min = label['by']
     x_max = x_min + label['bw']
     y_max = y_min + label['bh']
-    return " " + str(x_min) + "," + str(y_min) + "," + str(x_max) + "," + str(y_max) + ",1"
+    return " " + str(x_min) + "," + str(y_min) + "," + str(x_max) + "," + str(y_max) + ",0"
 
 
 def label_convert(label_root, img_root, output_path):
@@ -53,7 +53,6 @@ def label_convert(label_root, img_root, output_path):
 # remove path pointing into images without <img> label
 def label_refine(label_path, refine_label_path):
     org_label = open(label_path)
-    refine_label = open(refine_label_path, 'w')
 
     refine = ""
     is_refine = False
