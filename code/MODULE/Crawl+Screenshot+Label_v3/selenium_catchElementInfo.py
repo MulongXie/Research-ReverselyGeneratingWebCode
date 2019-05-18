@@ -35,20 +35,10 @@ def catch(url, out_label, out_img, libel_format):
         csv = libel_format
 
         # initialize the webdriver to get the full screen-shot and attributes
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')  # do not show the browser every time
-        # driver = webdriver.Chrome(options=options)
         driver = webdriver.PhantomJS()
-        driver.maximize_window()
         driver.get(url)
         print(driver.get_window_size()['width'])
         time.sleep(10)
-
-        # save the full-size screen shot
-        scroll_width = driver.execute_script('return document.body.parentNode.scrollWidth')
-        scroll_height = driver.execute_script('return document.body.parentNode.scrollHeight')
-        width = driver.get_window_size()['width'] if driver.get_window_size()['width'] > scroll_width else scroll_width
-        height = driver.get_window_size()['height'] if driver.get_window_size()['width'] < scroll_height else scroll_height
 
         # fetch the attributes
         # csv = find_element('div', csv, driver)
@@ -60,19 +50,7 @@ def catch(url, out_label, out_img, libel_format):
         # csv = find_element('input', csv, driver)
         csv.to_csv(out_label)
 
-        print('scroll width: ' + str(scroll_width))
-        print('window width: ' + str(driver.get_window_size()['width']))
-
-        # driver.set_window_size(scroll_width, scroll_height)
-        # driver.set_window_size(driver.get_window_size()['width'], scroll_height)
-
-        time.sleep(3)
-
         driver.save_screenshot(out_img)
-        # try:
-        #     driver.find_element_by_tag_name('body').screenshot(out_img)  # avoids scrollbar
-        # except Exception as e:
-        #     driver.save_screenshot(out_img)
 
         print("Fetch Elements Successfully")
         return True
