@@ -8,7 +8,7 @@ import pandas as pd
 import os
 import time
 
-is_crawl_link = False
+is_crawl_link = True
 is_read_existed_links = not is_crawl_link
 is_catch_element = True
 is_draw_label = True
@@ -26,8 +26,8 @@ driver_path = 'D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code
 
 if is_crawl_link:
     # set the web crawler
-    initial_url = "https://www.bbc.com/"
-    link_num = 0
+    initial_url = "https://world.taobao.com/"
+    link_num = 1
     # start crawling
     links = crawl.crawl(initial_url, link_num, 5)
     crawl.save_links(links, os.path.join(root, 'links.csv'))
@@ -62,6 +62,9 @@ for index in range(start_pos, len(links)):
         url = links.iloc[index]
         catch_success = catch.catch(url, label_path, org_img_path, libel_format, driver_path)
         if catch_success:
+            # avoid blank components
+            draw.compo_screen(org_img_path, label_path)
+            # segment long images into smaller sections
             seg.segment_label(label_path, 600)
             seg.segment_img(org_img_path, seg_img_path, 600, False)
         else:
