@@ -70,3 +70,12 @@ def label_refine(label_path, refine_label_path):
     if is_refine:
         refine_label = open(refine_label_path, 'w')
         refine_label.write(refine)
+
+
+# convert to format for colab
+def label_colab(label_path, label_colab_path):
+    labels = open(label_path)
+    label_colab = open(label_colab_path, 'w')
+    for label in labels.readlines():
+        label = label.replace('D:\datasets\dataset_webpage\\', '.\\')
+        label_colab.write(label)

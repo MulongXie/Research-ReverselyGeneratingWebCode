@@ -15,8 +15,8 @@ def compo_filter(compo, body_size):
     # ignore too large element
     if compo.size['width'] + compo.location['x'] > body_size['width']:
         return False
-    if compo.size['height'] + compo.location['y'] > body_size['height']:
-        return False
+    # if compo.size['height'] + compo.location['y'] > body_size['height']:
+    #     return False
     # ignore too small element
     if compo.size['width'] * compo.size['height'] < 100:
         return False
