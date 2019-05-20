@@ -1,4 +1,5 @@
 15/5/2019
 Solve the malposition problem in Chrome: Replacing with PhantomJS
 20/5/2019
+Add component filter to avoid img that is too small or excesses the body range
 Solve the unfully loaded problem in PhantomJS: Executing script to scroll through the whole page
