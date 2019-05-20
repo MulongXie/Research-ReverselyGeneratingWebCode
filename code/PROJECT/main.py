@@ -8,7 +8,7 @@ import pandas as pd
 import os
 import time
 
-is_crawl_link = True
+is_crawl_link = False
 is_read_existed_links = not is_crawl_link
 is_catch_element = True
 is_draw_label = True
@@ -42,7 +42,7 @@ if is_read_existed_links:
 
 print("*** Links Fetched ***\n")
 
-start_pos = 0
+start_pos = 1
 for index in range(start_pos, len(links)):
     start_time = time.clock()
     # set path
