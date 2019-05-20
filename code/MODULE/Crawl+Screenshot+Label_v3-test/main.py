@@ -2,6 +2,7 @@ import opencv_drawLabel as draw
 import selenium_catchElementInfo as catch
 import crawl_limitedset as crawl
 import pandas as pd
+import time
 
 is_crawl_link = True
 is_read_existed_links = not is_crawl_link
@@ -11,7 +12,7 @@ is_wireframe = True
 is_show_img = False
 
 root = 'D:\\datasets\\dataset_webpage\\data\\test\\'
-initial_url = "https://www.amazon.com"
+initial_url = "https://www.baidu.com"
 link_num = 1
 start_pos = 0
 
@@ -30,10 +31,11 @@ print("*** Links Fetched ***\n")
 
 
 # set the format of libel
-libel_format = pd.read_csv('format.csv', index_col=0)
+libel_format = pd.read_csv(root + 'format.csv', index_col=0)
 for i in range(start_pos, len(links)):
-    p = 'ph_tb'
+    start = time.clock()
 
+    p = i
     # output path
     label = root + 'label/' + str(p) + '.csv'
     img = root + 'screenshot/' + str(p) + '.png'
@@ -42,11 +44,14 @@ for i in range(start_pos, len(links)):
     # catch, label and framework
     success = False
     if is_catch_element:
-        success = catch.catch(links.iloc[i], label, img, libel_format, 1)
+        success = catch.catch(links.iloc[i], label, img, libel_format, 0)
     if is_draw_label and success:
         draw.label(label, img, i, labeled_img)
     if is_wireframe and success:
         draw.wireframe(label, img, i, wireframe)
+
+    end = time.clock()
+    print("****** Time taken: %ds ******" %int(end - start))
 
 if is_show_img:
     draw.show()

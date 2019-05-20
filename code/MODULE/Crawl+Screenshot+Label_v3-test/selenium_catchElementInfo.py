@@ -1,5 +1,4 @@
 from selenium import webdriver
-import pandas as pd
 import time
 
 
@@ -44,6 +43,37 @@ def find_element(element, df, driver):
     return df
 
 
+def take_screen(driver, output_path):
+    # scroll down to the bottom and scroll back to the top
+    # ensure all element fully loaded
+    driver.execute_script("""
+        (function () {
+            var y = 0;
+            var step = 100;
+            window.scroll(0, 0);
+
+            function f() {
+                if (y < document.body.scrollHeight) {
+                    y += step;
+                    window.scroll(0, y);
+                    setTimeout(f, 100);
+                } else {
+                    window.scroll(0, 0);
+                    document.title += "scroll-done";
+                }
+            }
+
+            setTimeout(f, 1000);
+        })();
+    """)
+    for i in range(30):
+        if "scroll-done" in driver.title:
+            break
+        time.sleep(10)
+
+    driver.save_screenshot(output_path)
+
+
 # fetch the elements information into csv
 # and save the screenshot
 def catch(url, out_label, out_img, libel_format, bro_driver):
@@ -72,16 +102,7 @@ def catch(url, out_label, out_img, libel_format, bro_driver):
         # csv = find_element('input', csv, driver)
         csv.to_csv(out_label)
 
-        if bro_driver == 0:
-            scroll_width = driver.execute_script('return document.body.parentNode.scrollWidth')
-            scroll_height = driver.execute_script('return document.body.parentNode.scrollHeight')
-            width = driver.get_window_size()['width'] if driver.get_window_size()['width'] > scroll_width else scroll_width
-            height = driver.get_window_size()['height'] if driver.get_window_size()['width'] > scroll_height else scroll_height
-            driver.set_window_position(0, 0)
-            driver.set_window_size(driver.get_window_size()['width'], scroll_height)
-
-        print(driver.get_window_size())
-        driver.save_screenshot(out_img)
+        take_screen(driver, out_img)
 
         print("Fetch Elements Successfully")
         return True
