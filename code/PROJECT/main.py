@@ -6,11 +6,12 @@ import file_utils as file
 
 import pandas as pd
 import os
+import time
 
 is_crawl_link = False
 is_read_existed_links = not is_crawl_link
-is_catch_element = False
-is_draw_label = False
+is_catch_element = True
+is_draw_label = True
 is_convert_label = True
 
 # img_segment/img/index/segment/0..n.png
@@ -42,6 +43,7 @@ print("*** Links Fetched ***\n")
 
 start_pos = 0
 for index in range(start_pos, len(links)):
+    start_time = time.clock()
     # set path
     index_root = os.path.join(img_root, str(index))
     org_img_path = os.path.join(index_root, 'org.png')
@@ -66,6 +68,9 @@ for index in range(start_pos, len(links)):
     # read and draw label on segment img
     if is_draw_label and catch_success:
         seg.segment_draw(seg_img_path, labeled_img_path, label_path, False)
+
+    end_time = time.clock()
+    print("*** Time taken:%ds ***\n" % int(end_time - start_time))
 
 if is_convert_label:
     file.label_convert(label_root, img_root, os.path.join(root, 'label.txt'))

@@ -44,7 +44,7 @@ def segment_draw(segment_org_path, labeled_img_path, label_path, show=True):
         seg_img = cv2.imread(seg_input_path)
         seg_label = label[label['segment_no'] == s]
         draw.label(seg_label, seg_img, seg_output_path, show)
-    print('Labeled img saved in ' + labeled_img_path + '\n')
+    print('Labeled img saved in ' + labeled_img_path)
 
 
 # change the coordinates and size of labels to fit the img segment
