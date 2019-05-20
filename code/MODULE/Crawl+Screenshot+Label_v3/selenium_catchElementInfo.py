@@ -1,6 +1,7 @@
 from selenium import webdriver
 import pandas as pd
 import time
+import os
 
 
 def find_element(element, df, driver):
@@ -29,13 +30,13 @@ def find_element(element, df, driver):
 
 # fetch the elements information into csv
 # and save the screenshot
-def catch(url, out_label, out_img, libel_format):
+def catch(url, out_label, out_img, libel_format, driver_path):
     try:
         print("*** catch element from %s ***" % url)
         csv = libel_format
 
         # initialize the webdriver to get the full screen-shot and attributes
-        driver = webdriver.PhantomJS()
+        driver = webdriver.PhantomJS(os.path.join(driver_path, 'phantomjs.exe'))
         driver.get(url)
         print(driver.get_window_size()['width'])
         time.sleep(10)
