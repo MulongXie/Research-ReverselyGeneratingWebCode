@@ -22,6 +22,7 @@ data_position = 'D:\datasets\dataset_webpage\data'
 root = os.path.join(data_position, 'img_segment')
 img_root = os.path.join(root, 'img')
 label_root = os.path.join(root, 'label')
+driver_path = 'D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\webdriver'
 
 if is_crawl_link:
     # set the web crawler
@@ -59,7 +60,7 @@ for index in range(start_pos, len(links)):
         # set the format of libel
         libel_format = pd.read_csv(os.path.join(root, 'format.csv'), index_col=0)
         url = links.iloc[index]
-        catch_success = catch.catch(url, label_path, org_img_path, libel_format)
+        catch_success = catch.catch(url, label_path, org_img_path, libel_format, driver_path)
         if catch_success:
             seg.segment_label(label_path, 600)
             seg.segment_img(org_img_path, seg_img_path, 600, False)

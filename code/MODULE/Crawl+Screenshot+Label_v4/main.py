@@ -12,7 +12,8 @@ is_wireframe = True
 is_show_img = False
 
 root = 'D:\\datasets\\dataset_webpage\\data\\test\\'
-initial_url = "https://www.baidu.com"
+driver_path = 'D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\webdriver'
+initial_url = "https://world.taobao.com"
 link_num = 1
 start_pos = 0
 
@@ -44,7 +45,7 @@ for i in range(start_pos, len(links)):
     # catch, label and framework
     success = False
     if is_catch_element:
-        success = catch.catch(links.iloc[i], label, img, libel_format, 0)
+        success = catch.catch(links.iloc[i], label, img, libel_format, 1, driver_path)
     if is_draw_label and success:
         draw.label(label, img, i, labeled_img)
     if is_wireframe and success:

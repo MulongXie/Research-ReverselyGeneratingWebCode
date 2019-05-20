@@ -1,39 +1,48 @@
-import os
-import time
-import logging
+# -*- coding: utf-8 -*-
+
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-URL = 'https://www.ebay.com/'
-PIC_PATH = os.path.join(os.path.expanduser('~'), 'Pictures/python/screenshot')
-PIC_NAME = 'screenshot.png'
+import time
 
 
-def screenshot_web(url=URL, path=PIC_PATH, name=PIC_NAME):
-    '''capture the whole web page
-    :param url: the website url
-    :type url: str
-    :param path: the path for saving picture
-    :type str
-    :param name: the name of picture
-    :type name: str
-    '''
-    if not os.path.exists(path):
-        os.makedirs(path)
-    browser = webdriver.PhantomJS()
+def take_screenshot(url, save_fn="capture.png"):
+    # browser = webdriver.Firefox() # Get local session of firefox
+    #谷歌浏览器截取当前窗口网页
+    chromedriver = r"C:\soft\chromedriver2.31_win32\chromedriver.exe"
+    browser = webdriver.Chrome(chromedriver)
+    #phantomjs截取整张网页
+    # browser = webdriver.PhantomJS()
+    browser.set_window_size(1200, 900)
+    browser.get(url) # Load page
+    browser.execute_script("""
+        (function () {
+            var y = 0;
+            var step = 100;
+            window.scroll(0, 0);
 
-    browser.get(url)
-    logging.debug('request completed')
+            function f() {
+                if (y < document.body.scrollHeight) {
+                    y += step;
+                    window.scroll(0, y);
+                    setTimeout(f, 100);
+                } else {
+                    window.scroll(0, 0);
+                    document.title += "scroll-done";
+                }
+            }
 
-    pic_path = 'x.png'
-    print(pic_path)
-    if browser.save_screenshot(pic_path):
-        print('Done!')
-    else:
-        print('Failed!')
+            setTimeout(f, 1000);
+        })();
+    """)
+
+    for i in range(30):
+        if "scroll-done" in browser.title:
+            break
+        time.sleep(10)
+
+    browser.save_screenshot(save_fn)
+    browser.close()
 
 
-if __name__ == '__main__':
-    screenshot_web()
+if __name__ == "__main__":
+
+    take_screenshot("http://codingpy.com")

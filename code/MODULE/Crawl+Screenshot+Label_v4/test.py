@@ -3,8 +3,8 @@ import time
 
 
 def take_screenshot(url, save_fn="capture.png"):
-    # browser = webdriver.Chrome()
-    browser = webdriver.PhantomJS()
+    browser = webdriver.Chrome()
+    # browser = webdriver.PhantomJS()
     browser.set_window_size(1200, 900)
     browser.get(url)
     # scroll down to the bottom and scroll back to the top

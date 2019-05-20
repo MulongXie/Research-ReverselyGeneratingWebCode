@@ -1,5 +1,6 @@
 from selenium import webdriver
 import time
+import os
 
 
 # refine the data
@@ -76,7 +77,7 @@ def take_screen(driver, output_path):
 
 # fetch the elements information into csv
 # and save the screenshot
-def catch(url, out_label, out_img, libel_format, bro_driver):
+def catch(url, out_label, out_img, libel_format, bro_driver, driver_path):
     try:
         print("*** catch element from %s ***" % url)
         csv = libel_format
@@ -85,10 +86,10 @@ def catch(url, out_label, out_img, libel_format, bro_driver):
         if bro_driver == 0:
             options = webdriver.ChromeOptions()
             options.add_argument('--headless')  # do not show the browser every time
-            driver = webdriver.Chrome(options=options)
+            driver = webdriver.Chrome(executable_path=os.path.join(driver_path, 'chromedriver.exe'), options=options)
             driver.maximize_window()
         else:
-            driver = webdriver.PhantomJS()
+            driver = webdriver.PhantomJS(executable_path=os.path.join(driver_path, 'phantomjs.exe'))
             driver.maximize_window()
         driver.get(url)
 
