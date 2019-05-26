@@ -21,7 +21,7 @@ def count_row(img, mask, a, b, width):
     return count
 
 
-def check_rec(img, mask, x, y):
+def scan_rec(img, mask, x, y):
     check_row = True
     check_column = True
     width = 1
@@ -34,6 +34,7 @@ def check_rec(img, mask, x, y):
             cc = count_column(img, mask, x, y + j, height)  # scan column (x, y+j),(x+1, y+j),(x+2, y+j)...(x+height, y+j)
             # if this column has no enough points, it is out of the object's border
             if cc / height < 0.1:
+                print('width fixed')
                 check_column = False
                 width -= 1
         if check_row:
@@ -41,10 +42,11 @@ def check_rec(img, mask, x, y):
             cr = count_row(img, mask, x + i, y, width)      # scan row (x+i, y),(x+i,y+1),(x+i,y+2)...(x+i, y+width)
             # if this row has no enough points, it is out of the object's border
             if cr / width < 0.3:
+                print('height fixed')
                 check_row = False
                 height -= 1
 
-        print("cc:%d cr:%d" % (cc, cr))
+        print("cc:%d cr:%d cc/height:%f cr/width:%f" % (cc, cr, cc/height, cr/width))
         print('width:%d height:%d ' % (width, height))
 
         i += 1
@@ -53,7 +55,7 @@ def check_rec(img, mask, x, y):
     return width, height
 
 
-def locate_point(img):
+def locate_rec(img):
     mask = np.zeros(img.shape, dtype=np.uint8)
     row = img.shape[0]
     column = img.shape[1]
@@ -65,7 +67,7 @@ def locate_point(img):
             if img[i, j] == 255 and mask[i, j] == 0:
                 rectangle['x'] = i
                 rectangle['y'] = j
-                rectangle['width'], rectangle['height'] = check_rec(img, mask, i, j)
+                rectangle['width'], rectangle['height'] = scan_rec(img, mask, i, j)
                 rectangles.append(rectangle)
 
     cv2.imshow('mask', mask)
@@ -73,10 +75,12 @@ def locate_point(img):
 
 
 img = np.zeros((600, 600), dtype=np.uint8)
-img[30:70, 200:320] = 255
-img[90:138, 50:76] = 255
+# img[30:70, 200:320] = 255
+# img[90:138, 50:76] = 255
 
-recs = locate_point(img)
+img = cv2.rectangle(img, (20, 20), (60, 60), (255, 0, 0))
+
+recs = locate_rec(img)
 print(recs)
 
 cv2.imshow('img', img)
