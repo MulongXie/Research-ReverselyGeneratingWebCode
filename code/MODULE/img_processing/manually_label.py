@@ -14,7 +14,7 @@ def add_label(label, ix, iy, x, y, segment_no, index):
     return label
 
 
-def draw_circle(event, x, y, flags, param):
+def relabel(event, x, y, flags, param):
     global ix, iy, img, org, label, index
     if event == cv2.EVENT_LBUTTONDOWN:
         # fetch the start points
@@ -40,7 +40,7 @@ def manually_label():
     index = len(label) - 1
 
     cv2.namedWindow('image')
-    cv2.setMouseCallback('image', draw_circle, [index])
+    cv2.setMouseCallback('image', relabel)
     while (1):
         cv2.imshow('image', img)
         k = cv2.waitKey(1)

@@ -36,6 +36,7 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
             if s < len(seg_imgs) and os.path.exists(seg_imgs[s]):
                 print(seg_imgs[s])
                 seg = cv2.imread(seg_imgs[s])
+                seg = cv2.resize(seg, (1200, 500))
                 cv2.imshow('segment', seg)
                 s += 1
             else:
@@ -43,11 +44,20 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
             if l < len(labeled_imgs) and os.path.exists(labeled_imgs[l]):
                 print(labeled_imgs[l])
                 lab = cv2.imread(labeled_imgs[l])
+                lab = cv2.resize(lab, (1200, 500))
                 cv2.imshow('labeled', lab)
                 l += 1
             else:
                 l = 9999
-            cv2.waitKey(0)
+            k = cv2.waitKey(0)
+
+            if k == ord('a'):
+                s = s - 2 if s >= 2 else 0
+                l = l - 2 if l >= 2 else 0
+
+            # revise label manually
+            if k == ord('d'):
+                print('--- Revise Labels ---')
 
 
 view_data()
