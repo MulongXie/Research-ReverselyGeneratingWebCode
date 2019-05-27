@@ -7,15 +7,18 @@ img_root = os.path.join(root, 'img')
 label_root = os.path.join(root, 'label')
 
 labels = os.listdir(label_root)
+indices = [int(l[:-4]) for l in labels]
+indices = sorted(indices)
 
 c_seg = 0
 c_labeled = 0
 # iterate each web page
-for label in labels:
-    index = label[:-4]
-    img_path = os.path.join(img_root, index)
+for index in indices:
+    img_path = os.path.join(img_root, str(index))
     img_path_segment = os.path.join(img_path, 'segment')
     img_path_labeled = os.path.join(img_path, 'labeled')
+
+    print("\n*** %s ***" % img_path)
 
     seg_imgs = []
     labeled_imgs = []
@@ -37,7 +40,7 @@ for label in labels:
         else:
             s = 9999
         if l < len(labeled_imgs) and os.path.exists(labeled_imgs[l]):
-            print(labeled_imgs[l], '\n')
+            print(labeled_imgs[l])
             lab = cv2.imread(labeled_imgs[l])
             cv2.imshow('labeled', lab)
             l += 1

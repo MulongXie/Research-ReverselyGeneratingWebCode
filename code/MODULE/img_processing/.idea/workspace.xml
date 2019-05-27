@@ -16,8 +16,8 @@
           <file leaf-file-name="test1.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/test1.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="272">
-                  <caret line="37" column="8" lean-forward="true" selection-start-line="37" selection-start-column="8" selection-end-line="37" selection-end-column="8" />
+                <state relative-caret-position="170">
+                  <caret line="10" selection-start-line="10" selection-end-line="10" selection-end-column="37" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -32,8 +32,8 @@
           <file leaf-file-name="manually_label.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/manually_label.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="408">
-                  <caret line="24" column="19" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="19" />
+                <state relative-caret-position="194">
+                  <caret line="35" column="24" selection-start-line="35" selection-start-column="24" selection-end-line="35" selection-end-column="24" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -44,8 +44,8 @@
           <file leaf-file-name="test2.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/test2.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="415">
-                  <caret line="43" column="13" lean-forward="true" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
+                <state relative-caret-position="187">
+                  <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -68,6 +68,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/manually_label.py" />
         <option value="$PROJECT_DIR$/test1.py" />
         <option value="$PROJECT_DIR$/test2.py" />
       </list>
@@ -252,8 +253,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/manually_label.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="19" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="19" />
+        <state relative-caret-position="194">
+          <caret line="35" column="24" selection-start-line="35" selection-start-column="24" selection-end-line="35" selection-end-column="24" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -262,8 +263,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="37" column="8" lean-forward="true" selection-start-line="37" selection-start-column="8" selection-end-line="37" selection-end-column="8" />
+        <state relative-caret-position="170">
+          <caret line="10" selection-start-line="10" selection-end-line="10" selection-end-column="37" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -272,8 +273,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="43" column="13" lean-forward="true" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
+        <state relative-caret-position="187">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
