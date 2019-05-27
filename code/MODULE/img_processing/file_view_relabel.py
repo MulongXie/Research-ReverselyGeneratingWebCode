@@ -3,10 +3,11 @@ import os
 import pandas as pd
 
 ix, iy = -1, -1
-gb_img = None
-gb_org = None
-gb_label = None
-gb_no = None
+gb_img = None   # original image segment
+gb_org = None   # copy of original image segment
+gb_label = None  # label of this web page
+gb_no = None  # index of the new line of label
+gb_newlabel = None
 
 
 def add_label(label, ix, iy, x, y, segment_no):
@@ -16,13 +17,12 @@ def add_label(label, ix, iy, x, y, segment_no):
 
 
 def relabel(event, x, y, flags, param):
-    global ix, iy, gb_img, gb_org, gb_label, gb_no
+    global ix, iy, gb_img, gb_org, gb_label, gb_no, gb_newlabel
     seg_no = param[0]
 
     if event == cv2.EVENT_LBUTTONDOWN:
         # fetch the start points
         ix, iy = x, y
-        print('start:(%d,%d)' % (ix, iy))
     elif event == cv2.EVENT_MOUSEMOVE and flags == cv2.EVENT_FLAG_LBUTTON:
         # draw the rectangle
         cv2.rectangle(gb_img, (ix, iy), (x, y), (0, 255, 0), -1)
@@ -31,14 +31,13 @@ def relabel(event, x, y, flags, param):
     elif event == cv2.EVENT_LBUTTONUP:
         # save the labeled area
         gb_no += 1
+        gb_newlabel += 1
         gb_label = add_label(gb_label, ix, iy, x, y, seg_no)
-        print('end:(%d,%d) No:%d' % (x, y, gb_no))
-        print(gb_label[-5:], '\n')
 
 
 def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
     # retrieve global variables for relabel
-    global gb_img, gb_org, gb_label, gb_no
+    global gb_img, gb_org, gb_label, gb_no, gb_newlabel
     # set root path
     root = os.path.join(data_position, 'img_segment')
     img_root = os.path.join(root, 'img')
@@ -48,7 +47,7 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
     labels = os.listdir(label_root)
     indices = sorted([int(l[:-4]) for l in labels])
 
-    # iterate each web page
+    # iterate all web pages
     for index in indices:
         # set paths
         img_path = os.path.join(img_root, str(index))
@@ -57,7 +56,7 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
         label_path = os.path.join(label_root, str(index) + '.csv')
         relabel_path = os.path.join(relabel_root, str(index) + '.csv')
 
-        print("\n*** %s ***" % img_path)
+        print("\n*** View Start %s ***" % img_path)
 
         # read original images, labeled images and labels
         seg_imgs_path = []
@@ -69,10 +68,13 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
         if os.path.exists(label_path):
             label = pd.read_csv(label_path)
             gb_label = label
+            gb_newlabel = 0
 
+        # iterate all image segments
         # show all images to validate labels
         s = 0
         l = 0
+        save = False
         while s is not 1000 or l is not 1000 :
             # read and show original image segments
             if s < len(seg_imgs_path) and os.path.exists(seg_imgs_path[s]):
@@ -99,15 +101,19 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
                 s = s - 2 if s >= 2 else 0
                 l = l - 2 if l >= 2 else 0
 
+            elif key == ord('n'):
+                print('*** View Terminat & Relabel Discard ***\n')
+                save = False
+
             # enter label mode
-            elif key == ord('d'):
+            elif key == ord('s'):
                 print('------ Revise Labels Start ------')
                 gb_img = seg_img.copy()
                 gb_org = gb_img.copy()
                 gb_no = len(gb_label) - 1
                 # set mouse callback function
                 seg_no = seg_imgs_path[s - 1].split('\\')[-1][:-4]
-                print('...Segment No:%s...' % seg_no)
+                print('... Segment No:%s ...' % seg_no)
                 cv2.setMouseCallback('segment', relabel, [seg_no])
                 while (1):
                     k = cv2.waitKey(0)
@@ -116,16 +122,20 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
                         if gb_no >= 0:
                             gb_label = gb_label.drop(index=gb_no)
                             gb_no -= 1
+                            gb_newlabel -= 1
                         else:
                             gb_no = -1
                         cv2.imshow('segment', gb_org)
                         print(gb_label[-5:])
                     # quit label mode
                     elif k == ord('q'):
-                        print('------ Revise Labels End ------\n')
+                        print('... Number of new labels: %d ...' % gb_newlabel)
+                        print('------ Revise Labels End & Save ------\n')
                         break
+                save = True
                 cv2.destroyAllWindows()
 
-        gb_label.to_csv(relabel_path)
+        if save:
+            gb_label.to_csv(relabel_path)
 
 view_data()
