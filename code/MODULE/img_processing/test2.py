@@ -1,18 +1,49 @@
 import cv2
-import numpy as np
+import os
 
-def draw_circle(event, x, y, flags, param):
-    print(type(param[0]), param[1])
-    if event == cv2.EVENT_LBUTTONDBLCLK:
-        cv2.circle(param, (x,y), 100, (255,0,0), -1)
+data_position = 'D:\datasets\dataset_webpage\data'
+root = os.path.join(data_position, 'img_segment')
+img_root = os.path.join(root, 'img')
+label_root = os.path.join(root, 'label')
 
-img = np.zeros((512,512,3), np.uint8)
-a = []
-cv2.namedWindow('image')
-cv2.setMouseCallback('image', draw_circle, [img, a])
+labels = os.listdir(label_root)
 
-while(1):
-    cv2.imshow('image',img)
-    if cv2.waitKey(20) & 0xFF == 27:
-        break
-cv2.destroyAllWindows()
+c_seg = 0
+c_labeled = 0
+# iterate each web page
+for label in labels:
+    index = label[:-4]
+    img_path = os.path.join(img_root, index)
+    img_path_segment = os.path.join(img_path, 'segment')
+    img_path_labeled = os.path.join(img_path, 'labeled')
+
+    seg_imgs = []
+    labeled_imgs = []
+    if os.path.exists(img_path_segment):
+        c_seg += 1
+        seg_imgs = [os.path.join(img_path_segment, p) for p in os.listdir(img_path_segment)]
+    if os.path.exists(img_path_labeled):
+        c_labeled += 1
+        labeled_imgs = [os.path.join(img_path_labeled, p) for p in os.listdir(img_path_labeled)]
+
+    s = 0
+    l = 0
+    while s != 9999 and l != 9999:
+        if s < len(seg_imgs) and os.path.exists(seg_imgs[s]):
+            print(seg_imgs[s])
+            seg = cv2.imread(seg_imgs[s])
+            cv2.imshow('segment', seg)
+            s += 1
+        else:
+            s = 9999
+        if l < len(labeled_imgs) and os.path.exists(labeled_imgs[l]):
+            print(labeled_imgs[l], '\n')
+            lab = cv2.imread(labeled_imgs[l])
+            cv2.imshow('labeled', lab)
+            l += 1
+        else:
+            l = 9999
+        cv2.waitKey(0)
+
+print(c_seg)
+print(c_labeled)
