@@ -77,5 +77,6 @@ def label_colab(label_path, label_colab_path):
     labels = open(label_path)
     label_colab = open(label_colab_path, 'w')
     for label in labels.readlines():
-        label = label.replace('D:\datasets\dataset_webpage\\', '.\\')
+        label = label.replace('D:\datasets\dataset_webpage\\', './')
+        label = label.replace('\\', '/')
         label_colab.write(label)
