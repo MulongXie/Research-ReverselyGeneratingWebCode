@@ -10,8 +10,8 @@ import time
 
 is_crawl_link = False
 is_read_existed_links = not is_crawl_link
-is_catch_element = False
-is_draw_label = False
+is_catch_element = True
+is_draw_label = True
 is_convert_label = True
 
 # img_segment/img/index/segment/0..n.png
@@ -37,12 +37,12 @@ if is_crawl_link:
 
 if is_read_existed_links:
     # read links
-    csv = pd.read_csv(os.path.join(root, 'preset_links.csv'))
+    csv = pd.read_csv(os.path.join(root, 'preset_links_500.csv'))
     links = csv.link
 
 print("*** Links Fetched ***\n")
 
-start_pos = 1
+start_pos = 193
 for index in range(start_pos, len(links)):
     start_time = time.clock()
     # set path

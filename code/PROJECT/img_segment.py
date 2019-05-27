@@ -22,7 +22,7 @@ def segment_extent(item, index, segment_label, segment_size):
 
     # extent recursively until the size is smaller than the segment size
     if (extent_item['by'] + extent_item['bh']) >= segment_size:
-        index = extent_item(extent_item, index + 1, segment_label, segment_size)
+        index = segment_extent(extent_item, index + 1, segment_label, segment_size)
     else:
         index += 1
         segment_label.loc[index] = extent_item
