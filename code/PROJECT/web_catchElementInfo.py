@@ -2,6 +2,7 @@ from selenium import webdriver
 import pandas as pd
 import time
 import os
+import cv2
 
 
 # refine the data
@@ -26,34 +27,39 @@ def compo_filter(compo, body_size):
 
 # take fully loaded screenshot
 def take_screen(driver, output_path):
-    # scroll down to the bottom and scroll back to the top
-    # ensure all element fully loaded
-    driver.execute_script("""
-        (function () {
-            var y = 0;
-            var step = 100;
-            window.scroll(0, 0);
-
-            function f() {
-                if (y < document.body.scrollHeight) {
-                    y += step;
-                    window.scroll(0, y);
-                    setTimeout(f, 100);
-                } else {
-                    window.scroll(0, 0);
-                    document.title += "scroll-done";
+    try:
+        # scroll down to the bottom and scroll back to the top
+        # ensure all element fully loaded
+        driver.execute_script("""
+            (function () {
+                var y = 0;
+                var step = 100;
+                window.scroll(0, 0);
+    
+                function f() {
+                    if (y < document.body.scrollHeight) {
+                        y += step;
+                        window.scroll(0, y);
+                        setTimeout(f, 100);
+                    } else {
+                        window.scroll(0, 0);
+                        document.title += "scroll-done";
+                    }
                 }
-            }
+    
+                setTimeout(f, 1000);
+            })();
+        """)
+        for i in range(30):
+            if "scroll-done" in driver.title:
+                break
+            time.sleep(10)
+        driver.save_screenshot(output_path)
+        return True
 
-            setTimeout(f, 1000);
-        })();
-    """)
-    for i in range(30):
-        if "scroll-done" in driver.title:
-            break
-        time.sleep(10)
-
-    driver.save_screenshot(output_path)
+    except:
+        print('Script execution filled')
+        return False
 
 
 def find_element(element, df, driver):
@@ -102,12 +108,20 @@ def catch(url, out_label, out_img, libel_format, driver_path, browser='PhantomJS
         # csv = find_element('h2', csv, driver)
         # csv = find_element('button', csv, driver)
         # csv = find_element('input', csv, driver)
-        csv.to_csv(out_label)
 
-        take_screen(driver, out_img)
+        if take_screen(driver, out_img):
+            img = cv2.imread(out_img)
+            if img is None:
+                print("Screenshot is None")
+                return False
 
-        print("Catch Elements Successfully")
-        return True
+            csv.to_csv(out_label)
+            print("Catch Elements Successfully")
+            return True
+        else:
+            print("Screenshot Failed")
+            return False
+
     except Exception as e:
         print(e)
         return False

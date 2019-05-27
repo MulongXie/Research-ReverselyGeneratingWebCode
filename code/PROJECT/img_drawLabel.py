@@ -106,7 +106,7 @@ def compo_screen(org_img_path, label_path):
     img = cv2.imread(org_img_path)
     label = pd.read_csv(label_path, index_col=0)
 
-    label_screened = pd.DataFrame(columns=label.columns.values)
+    label_scanned = pd.DataFrame(columns=label.columns.values)
 
     index = 0
     for i in range(len(label)):
@@ -116,7 +116,7 @@ def compo_screen(org_img_path, label_path):
         # calculate the average pixel value and discard blank ones that are pure withe
         avg_pix = clip.sum() / (clip.shape[0] * clip.shape[1] * clip.shape[2])
         if avg_pix < 245:
-            label_screened.loc[index] = compo
+            label_scanned.loc[index] = compo
             index += 1
 
-    label_screened.to_csv(label_path)
+    label_scanned.to_csv(label_path)
