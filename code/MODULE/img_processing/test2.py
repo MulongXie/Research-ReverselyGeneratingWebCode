@@ -1,13 +1,18 @@
 import cv2
+import numpy as np
 
-img = cv2.imread('bb.png')
-img = cv2.blur(img, (3, 3))
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-r, binary = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
+def draw_circle(event, x, y, flags, param):
+    print(type(param[0]), param[1])
+    if event == cv2.EVENT_LBUTTONDBLCLK:
+        cv2.circle(param, (x,y), 100, (255,0,0), -1)
 
-bin, contours, hierarchy = cv2.findContours(binary, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)  # 输出为三个参数
-cv2.drawContours(img, contours, -1, (0, 0, 255), 1)
+img = np.zeros((512,512,3), np.uint8)
+a = []
+cv2.namedWindow('image')
+cv2.setMouseCallback('image', draw_circle, [img, a])
 
-cv2.imshow('bin', bin)
-cv2.imshow("img", img)
-cv2.waitKey(0)
+while(1):
+    cv2.imshow('image',img)
+    if cv2.waitKey(20) & 0xFF == 27:
+        break
+cv2.destroyAllWindows()
