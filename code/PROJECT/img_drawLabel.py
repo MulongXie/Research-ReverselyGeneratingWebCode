@@ -101,7 +101,7 @@ def wireframe(label, image, output_path):
 
 
 # avoid blank component
-def compo_screen(org_img_path, label_path):
+def compo_scan(org_img_path, label_path):
     # read img and its label
     img = cv2.imread(org_img_path)
     label = pd.read_csv(label_path, index_col=0)

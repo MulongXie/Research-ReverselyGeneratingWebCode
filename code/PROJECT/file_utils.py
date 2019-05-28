@@ -24,10 +24,12 @@ def box_convert(label):
 def label_convert(label_root, img_root, output_path):
     label_news = ""
     indices = os.listdir(os.path.join(label_root))
-    indices = [i[:-4] for i in indices]
+    indices = sorted([int(i[:-4]) for i in indices])
     for index in indices:
-        label_path = os.path.join(label_root, index + '.csv')
-        img_path = os.path.join(img_root, index + '\segment')
+        label_path = os.path.join(label_root, str(index) + '.csv')
+        img_path = os.path.join(img_root, str(index) + '\segment')
+
+        print(label_path)
 
         label = pd.read_csv(label_path)
         if len(label) == 0:

@@ -10,8 +10,8 @@ import time
 
 is_crawl_link = False
 is_read_existed_links = not is_crawl_link
-is_catch_element = True
-is_draw_label = True
+is_catch_element = False
+is_draw_label = False
 is_convert_label = True
 
 # img_segment/img/index/segment/0..n.png
@@ -42,17 +42,17 @@ if is_read_existed_links:
 
 print("*** Links Fetched ***\n")
 
-start_pos = 322
+start_pos = 1000
 for index in range(start_pos, len(links)):
     start_time = time.clock()
     # set path
-    index_root = os.path.join(img_root, str(index))
-    org_img_path = os.path.join(index_root, 'org.png')
-    seg_img_path = os.path.join(index_root, 'segment')
-    labeled_img_path = os.path.join(index_root, 'labeled')
+    index_img_root = os.path.join(img_root, str(index))
+    org_img_path = os.path.join(index_img_root, 'org.png')
+    seg_img_path = os.path.join(index_img_root, 'segment')
+    labeled_img_path = os.path.join(index_img_root, 'labeled')
     label_path = os.path.join(label_root, str(index) + '.csv')
     # make dir if not existent
-    file.make_nonexistent_dirs([index_root, seg_img_path, labeled_img_path])
+    file.make_nonexistent_dirs([index_img_root, seg_img_path, labeled_img_path])
 
     # catch label and screenshot img and segment them into smaller size
     catch_success = False
@@ -62,13 +62,15 @@ for index in range(start_pos, len(links)):
         url = links.iloc[index]
         catch_success = catch.catch(url, label_path, org_img_path, libel_format, driver_path)
         if catch_success:
-            # avoid blank components
-            draw.compo_screen(org_img_path, label_path)
+            # remove blank components
+            draw.compo_scan(org_img_path, label_path)
             # segment long images into smaller sections
             seg.segment_label(label_path, 600)
             seg.segment_img(org_img_path, seg_img_path, 600, False)
         else:
-            file.remove_dirs(index_root)
+            file.remove_dirs(index_img_root)
+            if os.path.exists(label_path): os.remove(label_path)
+
     # read and draw label on segment img
     if is_draw_label and catch_success:
         seg.segment_draw(seg_img_path, labeled_img_path, label_path, False)

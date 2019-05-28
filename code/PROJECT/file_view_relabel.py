@@ -35,7 +35,7 @@ def relabel(event, x, y, flags, param):
         gb_label = add_label(gb_label, ix, iy, x, y, seg_no)
 
 
-def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
+def view_data(start_point, data_position = 'D:\datasets\dataset_webpage\data'):
     # retrieve global variables for relabel
     global gb_img, gb_org, gb_label, gb_no, gb_newlabel
     # set root path
@@ -48,7 +48,7 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
     indices = sorted([int(l[:-4]) for l in labels])
 
     # iterate all web pages
-    for index in indices:
+    for index in indices[indices.index(start_point):]:
         # set paths
         img_path = os.path.join(img_root, str(index))
         img_path_segment = os.path.join(img_path, 'segment')
@@ -138,4 +138,4 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
         if save:
             gb_label.to_csv(relabel_path)
 
-view_data()
+view_data(4)
