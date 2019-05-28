@@ -16,6 +16,14 @@ def add_label(label, ix, iy, x, y, segment_no):
     return label
 
 
+def draw_label(label, img, segment_no):
+    label = label[label['segment_no'] == int(segment_no)]
+    print('... Number of Labels:%d ...' % len(label))
+    for i in range(len(label)):
+        l = label.iloc[i]
+        cv2.rectangle(img, (l['bx'], l['by']), (l['bx'] + l['bh'], l['by'] + l['bw']), (0, 0, 255), 2)
+
+
 def relabel(event, x, y, flags, param):
     global ix, iy, gb_img, gb_org, gb_label, gb_no, gb_newlabelnum
     seg_no = param[0]
@@ -36,7 +44,7 @@ def relabel(event, x, y, flags, param):
         print(gb_label[-5:])
 
 
-def view_data(start_point, data_position = 'D:\datasets\dataset_webpage\data'):
+def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
     # retrieve global variables for relabel
     global gb_img, gb_org, gb_label, gb_no, gb_newlabelnum
     # set root path
@@ -63,58 +71,75 @@ def view_data(start_point, data_position = 'D:\datasets\dataset_webpage\data'):
         seg_imgs_path = []
         labeled_imgs_path = []
         if os.path.exists(img_path_segment):
-            seg_imgs_path = [os.path.join(img_path_segment, p) for p in os.listdir(img_path_segment)]
+            seg_imgs_path = [p for p in os.listdir(img_path_segment)]
+            seg_imgs_path.sort(key=lambda v: int(v[:-4]))  # sort by img index
+            seg_imgs_path = [os.path.join(img_path_segment, p) for p in seg_imgs_path]
         if os.path.exists(img_path_labeled):
-            labeled_imgs_path = [os.path.join(img_path_labeled, p) for p in os.listdir(img_path_labeled)]
+            labeled_imgs_path = [p for p in os.listdir(img_path_labeled)]
+            labeled_imgs_path.sort(key=lambda v: int(v[:-4]))  # sort by img index
+            labeled_imgs_path = [os.path.join(img_path_labeled, p) for p in labeled_imgs_path]
         if os.path.exists(label_path):
             label = pd.read_csv(label_path)
             gb_label = label
             gb_newlabelnum = 0
 
+        print(seg_imgs_path)
+        print(labeled_imgs_path)
+
         # iterate all image segments
         # show all images to validate labels
         s = 0
         l = 0
+        seg_next = True
+        lab_next = True
         save = False
-        while s is not 1000 or l is not 1000 :
+        while True:
             # read and show original image segments
             if s < len(seg_imgs_path) and os.path.exists(seg_imgs_path[s]):
                 print(seg_imgs_path[s])
                 seg_img = cv2.imread(seg_imgs_path[s])
                 seg_img = cv2.resize(seg_img, (1200, 500))
-                cv2.imshow('segment', seg_img)
-                s += 1
+                gb_img = seg_img
+                cv2.imshow('segment', gb_img)
             else:
-                s = 1000
+                seg_next = False
             # read and show labeled image segments
             if l < len(labeled_imgs_path) and os.path.exists(labeled_imgs_path[l]):
                 print(labeled_imgs_path[l])
                 lab_img = cv2.imread(labeled_imgs_path[l])
                 lab_img = cv2.resize(lab_img, (1200, 500))
                 cv2.imshow('labeled', lab_img)
-                l += 1
             else:
-                l = 1000
+                lab_next = False
+
+            if not seg_next and not lab_next:
+                break
+
+            # get the index of image segment
+            seg_no = seg_imgs_path[s].split('\\')[-1][:-4]
             key = cv2.waitKey(0)
 
             # back to the last image
             if key == ord('a'):
-                s = s - 2 if s >= 2 else 0
-                l = l - 2 if l >= 2 else 0
+                s = s - 1 if s >= 1 else 0
+                l = l - 1 if l >= 1 else 0
 
             elif key == ord('c'):
-                s -= 1
-                l -= 1
                 gb_label = gb_label.drop(index=gb_label.index.values)
                 print('*** Remove All Label for This Page ***')
+                continue
 
             elif key == ord('l'):
-                s -= 1
-                l -= 1
-                print(gb_label)
+                draw_label(gb_label, gb_img, seg_no)
+                continue
+
+            elif key == ord('e'):
+                print('*** Relabel Saved ***\n')
+                save = True
+                break
 
             elif key == ord('q'):
-                print('*** View for This Page Terminat & Relabel Discard ***\n')
+                print('*** Label Discarded ***\n')
                 save = False
                 break
 
@@ -129,7 +154,6 @@ def view_data(start_point, data_position = 'D:\datasets\dataset_webpage\data'):
                 gb_org = gb_img.copy()
                 gb_no = len(gb_label) - 1
                 # set mouse callback function
-                seg_no = seg_imgs_path[s - 1].split('\\')[-1][:-4]
                 print('... Segment No:%s ...' % seg_no)
                 cv2.setMouseCallback('segment', relabel, [seg_no])
                 while (1):
@@ -150,8 +174,12 @@ def view_data(start_point, data_position = 'D:\datasets\dataset_webpage\data'):
                         print('------ Revise Labels End & Save ------\n')
                         break
                 save = True
-                cv2.destroyAllWindows()
 
+            else:
+                s += 1
+                l += 1
+
+        cv2.destroyAllWindows()
         if save:
             gb_label.to_csv(relabel_path)
 
