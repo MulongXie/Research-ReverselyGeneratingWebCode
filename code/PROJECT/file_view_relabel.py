@@ -11,11 +11,11 @@ gb_img_broad = None  # the drawing broad
 gb_org = None   # copy of original image segment
 gb_label = None  # label of this web page
 gb_label_no = None  # index of the new line of label
-gb_newlabelnum = None
+gb_newlabelnum = 0
 
 
 def add_label(label, ix, iy, x, y, segment_no):
-    l = {'bx': ix, 'by': iy, 'bh': int(x - ix), 'bw': int(y - iy), 'segment_no': str(segment_no)}
+    l = {'bx': ix, 'by': iy, 'bh': int(x - ix), 'bw': int(y - iy), 'segment_no': int(segment_no)}
     label = label.append(l, ignore_index=True)
     print('... Number of new labels: %d ...' % gb_newlabelnum)
     return label
@@ -25,11 +25,13 @@ def draw_label(label, img, segment_no):
     if len(label) == 0:
         print('----- No Label ------')
         return
-    label = label[label['segment_no'] == str(segment_no)]
+    print(type(label['segment_no'][1]))
+    label = label[label['segment_no'] == segment_no]
     print('------ Number of Labels Drawn:%d ------' % len(label))
     for i in range(len(label)):
         l = label.iloc[i]
-        cv2.rectangle(img, (l['bx'], l['by']), (l['bx'] + l['bh'], l['by'] + l['bw']), (0, 0, 255), 2)
+        print(l)
+        cv2.rectangle(img, (l['bx'], l['by']), (l['bx'] + l['bw'], l['by'] + l['bh']), (0, 0, 255), 2)
     cv2.imshow('segment', img)
     cv2.waitKey(0)
 
@@ -116,7 +118,7 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
             if s < len(seg_imgs_path) and os.path.exists(seg_imgs_path[s]):
                 sp = seg_imgs_path[s]
                 seg_img = cv2.imread(sp)
-                seg_img = cv2.resize(seg_img, (1200, 500))
+                # seg_img = cv2.resize(seg_img, (600, 300))
                 gb_img = seg_img
                 cv2.imshow('segment', gb_img)
             else:
@@ -125,7 +127,7 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
             if l < len(labeled_imgs_path) and os.path.exists(labeled_imgs_path[l]):
                 lp = labeled_imgs_path[l]
                 lab_img = cv2.imread(lp)
-                lab_img = cv2.resize(lab_img, (1200, 500))
+                # lab_img = cv2.resize(lab_img, (600, 300))
                 cv2.imshow('labeled', lab_img)
             else:
                 lab_next = False
@@ -139,7 +141,7 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
 
             # *** step 4 *** Web Page-Level Options
             # get the index of image segment and check image segment image on by one
-            seg_no = seg_imgs_path[s].split('\\')[-1][:-4]
+            seg_no = int(seg_imgs_path[s].split('\\')[-1][:-4])
             key = cv2.waitKey(0)
 
             # back to the previous image
