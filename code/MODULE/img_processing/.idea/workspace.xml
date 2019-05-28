@@ -13,20 +13,23 @@
     <splitter split-orientation="horizontal" split-proportion="0.41218215">
       <split-first>
         <leaf>
-          <file leaf-file-name="test2.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/test2.py">
+          <file leaf-file-name="file_view_relabel.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/file_view_relabel.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="51">
-                  <caret line="3" column="16" lean-forward="true" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="16" />
+                <state relative-caret-position="-1622">
+                  <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+                  <folding>
+                    <element signature="e#0#10#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="file_view_relabel.py" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/file_view_relabel.py">
+          <file leaf-file-name="test2.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/test2.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="367">
-                  <caret line="75" column="13" lean-forward="true" selection-start-line="75" selection-start-column="13" selection-end-line="75" selection-end-column="13" />
+                <state relative-caret-position="221">
+                  <caret line="13" column="8" lean-forward="true" selection-start-line="13" selection-start-column="8" selection-end-line="13" selection-end-column="8" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -41,8 +44,8 @@
           <file leaf-file-name="file_data_view.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/file_data_view.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="296">
-                  <caret line="52" lean-forward="true" selection-start-line="52" selection-end-line="52" />
+                <state relative-caret-position="364">
+                  <caret line="26" selection-start-line="26" selection-end-line="26" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -79,6 +82,7 @@
       <find>seg_imgs</find>
       <find>labeled_imgs</find>
       <find>seg_imgs_pathg</find>
+      <find>gb_newlabel</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -87,8 +91,8 @@
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/file_data_view.py" />
         <option value="$PROJECT_DIR$/manually_label.py" />
-        <option value="$PROJECT_DIR$/test2.py" />
         <option value="$PROJECT_DIR$/test1.py" />
+        <option value="$PROJECT_DIR$/test2.py" />
         <option value="$PROJECT_DIR$/file_view_relabel.py" />
       </list>
     </option>
@@ -133,7 +137,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.file_view_relabel">
+  <component name="RunManager" selected="Python.test2">
     <configuration name="file_data_view" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="img_processing" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -233,9 +237,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test2" />
         <item itemvalue="Python.file_view_relabel" />
         <item itemvalue="Python.test1" />
-        <item itemvalue="Python.test2" />
         <item itemvalue="Python.file_data_view" />
         <item itemvalue="Python.manually_label" />
       </list>
@@ -332,16 +336,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/file_data_view.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="52" lean-forward="true" selection-start-line="52" selection-end-line="52" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test1.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="401">
@@ -352,17 +346,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/file_data_view.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="364">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/test2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="16" lean-forward="true" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="16" />
+        <state relative-caret-position="221">
+          <caret line="13" column="8" lean-forward="true" selection-start-line="13" selection-start-column="8" selection-end-line="13" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/file_view_relabel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="75" column="13" lean-forward="true" selection-start-line="75" selection-start-column="13" selection-end-line="75" selection-end-column="13" />
+        <state relative-caret-position="-1622">
+          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

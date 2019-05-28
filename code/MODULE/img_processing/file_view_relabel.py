@@ -7,7 +7,7 @@ gb_img = None   # original image segment
 gb_org = None   # copy of original image segment
 gb_label = None  # label of this web page
 gb_no = None  # index of the new line of label
-gb_newlabel = None
+gb_newlabelnum = None
 
 
 def add_label(label, ix, iy, x, y, segment_no):
@@ -17,7 +17,7 @@ def add_label(label, ix, iy, x, y, segment_no):
 
 
 def relabel(event, x, y, flags, param):
-    global ix, iy, gb_img, gb_org, gb_label, gb_no, gb_newlabel
+    global ix, iy, gb_img, gb_org, gb_label, gb_no, gb_newlabelnum
     seg_no = param[0]
 
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -31,13 +31,14 @@ def relabel(event, x, y, flags, param):
     elif event == cv2.EVENT_LBUTTONUP:
         # save the labeled area
         gb_no += 1
-        gb_newlabel += 1
+        gb_newlabelnum += 1
         gb_label = add_label(gb_label, ix, iy, x, y, seg_no)
+        print(gb_label[-5:])
 
 
-def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
+def view_data(start_point, data_position = 'D:\datasets\dataset_webpage\data'):
     # retrieve global variables for relabel
-    global gb_img, gb_org, gb_label, gb_no, gb_newlabel
+    global gb_img, gb_org, gb_label, gb_no, gb_newlabelnum
     # set root path
     root = os.path.join(data_position, 'img_segment')
     img_root = os.path.join(root, 'img')
@@ -48,7 +49,7 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
     indices = sorted([int(l[:-4]) for l in labels])
 
     # iterate all web pages
-    for index in indices:
+    for index in indices[indices.index(start_point):]:
         # set paths
         img_path = os.path.join(img_root, str(index))
         img_path_segment = os.path.join(img_path, 'segment')
@@ -56,7 +57,7 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
         label_path = os.path.join(label_root, str(index) + '.csv')
         relabel_path = os.path.join(relabel_root, str(index) + '.csv')
 
-        print("\n*** View Start %s ***" % img_path)
+        print("\n*** Viewing %s ***" % img_path)
 
         # read original images, labeled images and labels
         seg_imgs_path = []
@@ -68,7 +69,7 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
         if os.path.exists(label_path):
             label = pd.read_csv(label_path)
             gb_label = label
-            gb_newlabel = 0
+            gb_newlabelnum = 0
 
         # iterate all image segments
         # show all images to validate labels
@@ -101,9 +102,25 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
                 s = s - 2 if s >= 2 else 0
                 l = l - 2 if l >= 2 else 0
 
-            elif key == ord('n'):
-                print('*** View Terminat & Relabel Discard ***\n')
+            elif key == ord('c'):
+                s -= 1
+                l -= 1
+                gb_label = gb_label.drop(index=gb_label.index.values)
+                print('*** Remove All Label for This Page ***')
+
+            elif key == ord('l'):
+                s -= 1
+                l -= 1
+                print(gb_label)
+
+            elif key == ord('q'):
+                print('*** View for This Page Terminat & Relabel Discard ***\n')
                 save = False
+                break
+
+            elif key == ord('n'):
+                print('\n*** Program Terminated ***')
+                return
 
             # enter label mode
             elif key == ord('s'):
@@ -122,14 +139,14 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
                         if gb_no >= 0:
                             gb_label = gb_label.drop(index=gb_no)
                             gb_no -= 1
-                            gb_newlabel -= 1
+                            gb_newlabelnum -= 1
                         else:
                             gb_no = -1
                         cv2.imshow('segment', gb_org)
                         print(gb_label[-5:])
                     # quit label mode
-                    elif k == ord('q'):
-                        print('... Number of new labels: %d ...' % gb_newlabel)
+                    elif k == ord('d'):
+                        print('... Number of new labels: %d ...' % gb_newlabelnum)
                         print('------ Revise Labels End & Save ------\n')
                         break
                 save = True
@@ -138,4 +155,5 @@ def view_data(data_position = 'D:\datasets\dataset_webpage\data'):
         if save:
             gb_label.to_csv(relabel_path)
 
-view_data()
+
+view_data(13)
