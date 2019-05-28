@@ -1,13 +1,12 @@
 import cv2
 import os
 import pandas as pd
-import numpy as np
 
 ix, iy = -1, -1
 # global variables for visualisation
 gb_img = None  # record the new label
 gb_img_pre = None  # restore the new labels
-gb_img_board = None  # the drawing board
+gb_img_broad = None  # the drawing broad
 
 gb_org = None  # copy of original image segment
 gb_label = None  # label of this web page
@@ -20,11 +19,6 @@ def add_label(label, ix, iy, x, y, segment_no):
     label = label.append(l, ignore_index=True)
     print('... Number of new labels: %d ...' % gb_newlabelnum)
     return label
-
-
-def overlap(bottom, top, board):
-    cv2.addWeighted(bottom, 0.7, top, 0.3, 0, board)
-    cv2.imshow('segment', board)
 
 
 def draw_label(label, img, segment_no):
@@ -43,7 +37,7 @@ def draw_label(label, img, segment_no):
 
 
 def relabel(event, x, y, flags, param):
-    global ix, iy, gb_img, gb_img_pre, gb_img_board, \
+    global ix, iy, gb_img, gb_img_pre, gb_img_broad, \
         gb_org, gb_label, gb_label_no, gb_newlabelnum
     seg_no = param[0]
 
@@ -55,7 +49,8 @@ def relabel(event, x, y, flags, param):
         # draw the rectangle
         gb_img = gb_img_pre.copy()
         cv2.rectangle(gb_img, (ix, iy), (x, y), (0, 255, 0), -1)
-        overlap(gb_org, gb_img, gb_img_board)
+        cv2.addWeighted(gb_org, 0.7, gb_img, 0.3, 0, gb_img_broad)
+        cv2.imshow('segment', gb_img_broad)
     elif event == cv2.EVENT_LBUTTONUP:
         # save the labeled area
         gb_label_no += 1
@@ -63,28 +58,10 @@ def relabel(event, x, y, flags, param):
         gb_label = add_label(gb_label, ix, iy, x, y, seg_no)
 
 
-def add_tips(flag):
-    img = np.zeros((150, 400, 3), dtype=np.uint8)
-    # webpage-level
-    if flag == 0:
-        cv2.putText(img, 'q: Go Next WebPage & Discard Label', (0, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-        cv2.putText(img, 'a: Go Previous Image', (0, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-        cv2.putText(img, 'd: Go Next Image', (0, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-        cv2.putText(img, 's: Start Relabelling', (0, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-        cv2.putText(img, 'l: Show Labels', (0, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-        cv2.putText(img, 'c: Remove All Labels of This Page', (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-        cv2.putText(img, 'n: Terminate Program', (0, 140), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-    # segment-level
-    elif flag == 1:
-        cv2.putText(img, 'q: Quit Relabelling Mode', (0, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-        cv2.putText(img, 'z: Withdraw the Last Relabel', (0, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-    cv2.imshow('tips', img)
-
-
 def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
     # *** step 1 *** Root Path
     # retrieve global variables for relabel
-    global gb_img, gb_img_pre, gb_img_board, \
+    global gb_img, gb_img_pre, gb_img_broad, \
         gb_org, gb_label, gb_label_no, gb_newlabelnum
     # set root path
     root = os.path.join(data_position, 'img_segment')
@@ -131,16 +108,12 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
         l = 0
         seg_next = True
         lab_next = True
-        save = True
+        save = False
 
         next = True
         sp = ''
         lp = ''
         while True:
-            # show tips
-            tips = 0
-            add_tips(tips)
-
             # read and show original image segments
             if s < len(seg_imgs_path) and os.path.exists(seg_imgs_path[s]):
                 sp = seg_imgs_path[s]
@@ -186,9 +159,14 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
             elif key == ord('l'):
                 draw_label(gb_label, gb_img, seg_no)
                 continue
+            # skip rest segment images and save the current relabel
+            elif key == ord('e'):
+                print('*** Relabel Saved ***\n')
+                save = True
+                break
             # skip rest segment images and discard the current relabel
             elif key == ord('q'):
-                print('*** WebPage Discorded & Labels are Not Saved ***\n')
+                print('*** End Checking ***\n')
                 save = False
                 break
             # terminate the program
@@ -199,13 +177,9 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
             # *** step 5 *** Segment-Level Options
             # enter label mode
             elif key == ord('s'):
-                # show tips
-                tips = 1
-                add_tips(tips)
-
                 print('------ Revise Labels Start ------')
                 gb_img_pre = gb_img.copy()
-                gb_img_board = gb_img.copy()
+                gb_img_broad = gb_img.copy()
                 gb_org = gb_img.copy()
                 gb_label_no = len(gb_label) - 1
                 # set mouse callback function
@@ -222,14 +196,15 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
                         else:
                             gb_label_no = -1
                         gb_img = gb_img_pre.copy()
-                        overlap(gb_org, gb_img_pre, gb_img_board)
-                        print('... Number of new labels: %d ...' % gb_newlabelnum)
+                        cv2.addWeighted(gb_org, 0.7, gb_img_pre, 0.3, 0, gb_img_broad)
+                        cv2.imshow('segment', gb_img_broad)
 
                     # quit label mode
-                    elif k == ord('q'):
+                    elif k == ord('d'):
                         print('------ Revise Labels End------')
                         draw_label(gb_label, gb_img, seg_no)
                         break
+                save = True
 
             else:
                 s += 1
@@ -242,4 +217,4 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
             print('*** Relabels Saved to %s ***' % relabel_path)
 
 
-view_data(1)
+view_data(16)
