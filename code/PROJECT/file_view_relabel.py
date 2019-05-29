@@ -14,7 +14,7 @@ gb_newlabelnum = 0
 def add_label(label, ix, iy, x, y, segment_no):
     l = {'bx': ix, 'by': iy, 'bh': int(y - iy), 'bw': int(x - ix), 'segment_no': segment_no}
     label = label.append(l, ignore_index=True)
-    print('... Number of new labels: %d ...' % gb_newlabelnum)
+    print('... Number of New Labels: %d ...' % gb_newlabelnum)
     return label
 
 
@@ -102,8 +102,8 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
             label_new = label.drop(index=label.index.values)
             gb_newlabelnum = 0
 
-        print("\n*** Start Checking %s with %d Labels ***" % (img_path, len(label)))
-        print(seg_img_paths)
+        print("\n*** Start Checking %s ***" % (img_path))
+        print("*** Number of Labels: %d ***" % (len(label)))
 
         # *** step 3 *** Iterate Segment Images
         # iterate all image segments for each web page
@@ -121,7 +121,8 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
             seg_img = cv2.imread(seg_img_paths[s])
             seg_index = int(seg_img_paths[s].split('\\')[-1][:-4])
             if move:
-                if seg_img_paths[s] is not '': print(seg_img_paths[s])
+                if seg_img_paths[s] is not '':
+                    print(seg_img_paths[s])
                 gb_img = seg_img.copy()
                 if str(seg_index) not in passed:
                     gb_label = label[label['segment_no'] == seg_index]
@@ -149,13 +150,18 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
             elif key == ord('r'):
                 gb_img = seg_img.copy()
                 gb_label = gb_label.drop(index=gb_label.index.values)
-                print('*** Remove Labels of This Image ***')
+                label_new = label_new.drop(index=label_new[label_new['segment_no']==seg_index].index.values)
+                print('*** Remove Labels of Image %d ***' % seg_index)
             # skip rest segment images and discard the current relabel
             elif key == ord('q'):
                 s += 1
                 move = True
-                print('*** Image are Discorded ***\n')
+                print('*** Image is Discarded ***')
                 continue
+            elif key == ord('e'):
+                save = False
+                print('*** Next Web Page ***\n')
+                break
             # terminate the program
             elif key == ord('n'):
                 print('\n*** Program Terminated ***')
@@ -170,7 +176,6 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
                 print('------ Revise Labels Start ------')
                 gb_label_index = len(gb_label) - 1
                 # set mouse callback function
-                print('... Segment No:%s ...' % seg_index)
                 cv2.setMouseCallback('img', relabel, [seg_index])
                 while (1):
                     k = cv2.waitKey(0)
@@ -182,27 +187,24 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
                         gb_newlabelnum = gb_newlabelnum - 1 if gb_newlabelnum >= 1 else 0
                         gb_img = seg_img.copy()
                         draw_label(gb_label, gb_img)
-                        print('... Number of new labels: %d ...' % gb_newlabelnum)
 
                     # quit label mode
                     elif k == ord('d'):
                         print('------ ReLabel End ------')
-                        s += 1
                         move = True
                         break
-
             else:
                 continue
 
             cv2.destroyAllWindows()
             label_new = label_new.append(gb_label, ignore_index=True, sort=False)
-            if len(label_new) is not 0: print(label_new[-5:])
             passed[str(seg_index)] = 1
+            print('... Number of Current Labels: %d ...' % len(label_new))
 
 
         if save:
             label_new.to_csv(relabel_path)
-            print('*** %d Labels Saved to %s ***' % (len(label_new), relabel_path))
+            print('*** %d Labels Saved to %s ***\n' % (len(label_new), relabel_path))
 
 
-view_data(8)
+view_data(42)
