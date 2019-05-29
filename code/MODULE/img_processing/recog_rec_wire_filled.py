@@ -80,15 +80,15 @@ def draw(img, recs):
         cv2.rectangle(img, (rec['y'], rec['x']), (rec['y'] + rec['width'], rec['x'] + rec['height']), (255,0,0), 2)
 
 
-img = np.zeros((600, 600, 3), dtype=np.uint8)
+# img = np.zeros((600, 600, 3), dtype=np.uint8)
 # img[30:50, 30:50, :] = 255
-img[90:138, 50:76, :] = 255
-img[100:103, 66:70] = 0
+# img[90:138, 50:76, :] = 255
+# img[100:103, 66:70] = 0
 # img = cv2.rectangle(img, (20, 20), (200, 200), (255, 0, 0), 5)
 
-# img = cv2.imread('bb.png')
+img = cv2.imread('bb.png')
 # img = img[:600, :, :]
-# img = cv2.blur(img, (5, 5))
+img = cv2.blur(img, (5, 5))
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 r, bin = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
@@ -99,4 +99,5 @@ print(recs)
 draw(img, recs)
 
 cv2.imshow('img', img)
+cv2.imwrite('ba.png', img)
 cv2.waitKey(0)
