@@ -148,9 +148,10 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
                 print('*** Remove Labels of This Image ***')
             # skip rest segment images and discard the current relabel
             elif key == ord('q'):
-                print('*** WebPage and Label are Discorded ***\n')
-                save = False
-                break
+                s += 1
+                move = True
+                print('*** Image are Discorded ***\n')
+                continue
             # terminate the program
             elif key == ord('n'):
                 print('\n*** Program Terminated ***')
@@ -171,8 +172,6 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
                     k = cv2.waitKey(0)
                     # withdraw the last label
                     if k == ord('z'):
-                        print(gb_label_index)
-                        print(gb_label)
                         if gb_label_index >= 0:
                             gb_label = gb_label.drop(index=gb_label.index[gb_label_index])
                             gb_label_index -= 1
@@ -188,14 +187,18 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
                         move = True
                         break
 
+            else:
+                continue
+
             cv2.destroyAllWindows()
             label_new = label_new.append(gb_label, ignore_index=True, sort=False)
+            if len(label_new) is not 0: print(label_new[-5:])
             passed[str(seg_index)] = 1
 
 
         if save:
             label_new.to_csv(relabel_path)
-            print('*** %d Labels Saved to %s ***' % (len(gb_label), relabel_path))
+            print('*** %d Labels Saved to %s ***' % (len(label_new), relabel_path))
 
 
-view_data(9)
+view_data(8)
