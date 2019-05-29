@@ -27,19 +27,22 @@ def overlap(bottom, top, board):
     cv2.imshow('segment', board)
 
 
-def draw_label(label, img, segment_no):
+def draw_label(label, org, segment_no):
     if len(label) == 0:
         print('----- No Label ------')
         return
-    print(type(label['segment_no'][1]))
+    img = org.copy()
     label = label[label['segment_no'] == segment_no]
     print('------ Number of Labels Drawn:%d ------' % len(label))
     for i in range(len(label)):
         l = label.iloc[i]
-        print(l)
-        cv2.rectangle(img, (l['bx'], l['by']), (l['bx'] + l['bw'], l['by'] + l['bh']), (0, 0, 255), 2)
+        cv2.rectangle(img, (int(l['bx']), int(l['by'])), (int(l['bx'] + l['bh']), int(l['by'] + l['bw'])), (0, 0, 255), 1)
     cv2.imshow('segment', img)
-    cv2.waitKey(0)
+    k = cv2.waitKey(0)
+
+    if k == ord('z'):
+        return False
+    return True
 
 
 def relabel(event, x, y, flags, param):
@@ -67,16 +70,16 @@ def add_tips(flag):
     img = np.zeros((150, 400, 3), dtype=np.uint8)
     # webpage-level
     if flag == 0:
-        cv2.putText(img, 'q: Go Next WebPage & Discard Label', (0, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-        cv2.putText(img, 'a: Go Previous Image', (0, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-        cv2.putText(img, 'd: Go Next Image', (0, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-        cv2.putText(img, 's: Start Relabelling', (0, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-        cv2.putText(img, 'l: Show Labels', (0, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-        cv2.putText(img, 'c: Remove All Labels of This Page', (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-        cv2.putText(img, 'n: Terminate Program', (0, 140), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        cv2.putText(img, 'a: Go Previous Image', (0, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        cv2.putText(img, 'd: Go Next Image', (0, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        cv2.putText(img, 's: Start Relabelling', (0, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        cv2.putText(img, 'q: Go Next WebPage & Discard Label', (0, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        cv2.putText(img, 'l: Show Labels', (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        cv2.putText(img, 'c: Remove All Labels of This Page', (0, 140), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        cv2.putText(img, 'n: Terminate Program', (0, 160), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
     # segment-level
     elif flag == 1:
-        cv2.putText(img, 'q: Quit Relabelling Mode', (0, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        cv2.putText(img, 'd: Quit Relabelling Mode', (0, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
         cv2.putText(img, 'z: Withdraw the Last Relabel', (0, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
     cv2.imshow('tips', img)
 
@@ -103,8 +106,6 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
         label_path = os.path.join(label_root, str(index) + '.csv')
         relabel_path = os.path.join(relabel_root, str(index) + '.csv')
 
-        print("\n*** Start Checking %s ***" % img_path)
-
         # retrieve paths of original images and labeled images
         seg_imgs_path = []
         labeled_imgs_path = []
@@ -122,6 +123,7 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
             gb_label = label
             gb_newlabelnum = 0
 
+        print("\n*** Start Checking %s with %d Labels ***" % (img_path, len(gb_label)))
         print(seg_imgs_path)
         print(labeled_imgs_path)
 
@@ -175,6 +177,11 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
             if key == ord('a'):
                 s = s - 1 if s >= 1 else 0
                 l = l - 1 if l >= 1 else 0
+            # next image
+            elif key == ord('d'):
+                s += 1
+                l += 1
+                next = True
             # remove all existing labels
             elif key == ord('c'):
                 gb_label = gb_label.drop(index=gb_label.index.values)
@@ -226,20 +233,20 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
                         print('... Number of new labels: %d ...' % gb_newlabelnum)
 
                     # quit label mode
-                    elif k == ord('q'):
-                        print('------ Revise Labels End------')
-                        draw_label(gb_label, gb_img, seg_no)
-                        break
+                    elif k == ord('d'):
+                        if draw_label(gb_label, gb_org, seg_no):
+                            s += 1
+                            l += 1
+                            print('------ Revise Labels End------')
+                            break
+                        else:
+                            cv2.imshow('segment', gb_img_board)
 
-            else:
-                s += 1
-                l += 1
-                next = True
 
         cv2.destroyAllWindows()
         if save:
             gb_label.to_csv(relabel_path)
-            print('*** Relabels Saved to %s ***' % relabel_path)
+            print('*** %d Labels Saved to %s ***' % (len(gb_label), relabel_path))
 
 
 view_data(1)
