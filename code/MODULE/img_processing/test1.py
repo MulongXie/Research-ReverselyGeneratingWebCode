@@ -1,24 +1,21 @@
 import cv2
 import numpy as np
 
-img = cv2.imread('x.jpg')
-gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-edges = cv2.Canny(gray,50,150,apertureSize = 3)
+moon = cv2.imread("1.png", 0)
+row, column = moon.shape
+moon_f = np.copy(moon)
+moon_f = moon_f.astype("float")
 
-lines = cv2.HoughLines(edges,1,np.pi/180,100)
-for line in lines:
-    for rho,theta in line:
-        a = np.cos(theta)
-        b = np.sin(theta)
-        x0 = a*rho
-        y0 = b*rho
-        x1 = int(x0 + 2000*(-b))
-        y1 = int(y0 + 2000*(a))
-        x2 = int(x0 - 2000*(-b))
-        y2 = int(y0 - 2000*(a))
+gradient = np.zeros((row, column))
 
-    cv2.line(img,(x1,y1),(x2,y2),(0,0,255),2)
+for x in range(row - 1):
+    for y in range(column - 1):
+        gx = abs(moon_f[x + 1, y] - moon_f[x, y])
+        gy = abs(moon_f[x, y + 1] - moon_f[x, y])
+        gradient[x, y] = gx + gy
 
-cv2.imshow('houghlines',img)
-cv2.imshow('edg', edges)
-cv2.waitKey(0)
+sharp = moon_f + gradient
+sharp = np.where(sharp < 0, 0, np.where(sharp > 255, 255, sharp))
+
+cv2.imshow("gradient", gradient)
+cv2.waitKey()
