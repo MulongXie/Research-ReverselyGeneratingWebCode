@@ -12,7 +12,8 @@ gb_newlabelnum = 0
 
 
 def add_label(label, ix, iy, x, y, segment_no):
-    l = {'bx': ix, 'by': iy, 'bh': int(y - iy), 'bw': int(x - ix), 'segment_no': segment_no}
+    l = {'bx': ix, 'by': iy, 'bh': int(y - iy), 'bw': int(x - ix), 'segment_no': segment_no,
+         'element': 'img', 'p': 1, 'c_img': 1}
     label = label.append(l, ignore_index=True)
     print('... Number of New Labels: %d ...' % gb_newlabelnum)
     return label
@@ -37,7 +38,6 @@ def relabel(event, x, y, flags, param):
     if event == cv2.EVENT_LBUTTONDOWN:
         # fetch the start points
         ix, iy = x, y
-        gb_img_pre = gb_img.copy()
     elif event == cv2.EVENT_MOUSEMOVE and flags == cv2.EVENT_FLAG_LBUTTON:
         # draw the rectangle
         img = gb_img.copy()
@@ -207,4 +207,4 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
             print('*** %d Labels Saved to %s ***\n' % (len(label_new), relabel_path))
 
 
-view_data(42)
+view_data(122)
