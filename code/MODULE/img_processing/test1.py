@@ -14,8 +14,7 @@ for x in range(row - 1):
         gy = abs(moon_f[x, y + 1] - moon_f[x, y])
         gradient[x, y] = gx + gy
 
-sharp = moon_f + gradient
-sharp = np.where(sharp < 0, 0, np.where(sharp > 255, 255, sharp))
-
+gradient = gradient.astype("uint8")
+cv2.imshow("moon", moon)
 cv2.imshow("gradient", gradient)
 cv2.waitKey()
