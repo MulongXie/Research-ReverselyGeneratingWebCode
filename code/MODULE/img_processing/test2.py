@@ -1,18 +1,13 @@
 import cv2
 import numpy as np
 
-img = cv2.imread('0.png')
-row = np.shape(img)[0]
-column = np.shape(img)[1]
+img = np.zeros((800, 600, 3), dtype=np.uint8)
+img[30:50, 30:50, :] = 255
+img[90:138, 50:76, :] = 255
+img[100:103, 66:70] = 0
 
-grad = np.zeros(img.shape, dtype=np.uint8)
-
-for x in range(row - 1):
-    for y in range(column - 1):
-        gx = abs(img[x + 1, y, :] - img[x, y, :])
-        gy = abs(img[x, y + 1] - img[x, y, :])
-        grad[x, y] = gx + gy
-
-cv2.imwrite('bb.png', grad)
-cv2.imshow("img", grad)
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+r, bin = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
+cv2.imshow('bin', bin)
+cv2.imshow('img', img)
 cv2.waitKey(0)
