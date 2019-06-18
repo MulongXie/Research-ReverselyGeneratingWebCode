@@ -15,10 +15,10 @@ def is_truncation(img, direction, x, y, para):
     elif direction == 'right':
         trun = img[x - u: x + d + 1, y + r] - img[x - u: x + d + 1, y + r + 1]
 
-    trun = int (np.sum(trun) / 255)
+    trun = np.sum(trun)
     print(direction)
-    print("truncation:", trun)
-    print(para, '\n')
+    print(trun)
+    print(para)
     return trun
 
 
@@ -26,7 +26,7 @@ def is_rec(img, mask, x, y):
     # diffuse towards four directions
     up, down, left, right = (0, 0, 0, 0)
     is_trun_up, is_trun_down, is_trun_left, is_trun_right = (False, False, False, False)
-    t_up, t_dowm, t_left, t_right = (1, 1, 1, 1)
+    update_up, update_down, update_left, update_right = (False, False, False, False)
 
     width = left + right + 1
     height = up + down + 1
@@ -35,31 +35,41 @@ def is_rec(img, mask, x, y):
         height = up + down + 1
         if not is_trun_up:
             t_up = is_truncation(img, 'up', x, y, (up, down, left, right))
+            if t_up / width >= 0.6:
+                is_trun_up = True
+                update_up = False
+            else:
+                update_up = True
+
         if not is_trun_down:
             t_dowm = is_truncation(img, 'down', x, y, (up, down, left, right))
+            if t_dowm / width >= 0.6:
+                is_trun_down = True
+                update_down = False
+            else:
+                update_down = True
+
         if not is_trun_left:
             t_left = is_truncation(img, 'left', x, y, (up, down, left, right))
+            if t_left / height >= 0.6:
+                is_trun_left = True
+                update_left = False
+            else:
+                update_left = True
+
         if not is_trun_right:
             t_right = is_truncation(img, 'right', x, y, (up, down, left, right))
+            if t_right / height >= 0.6:
+                is_trun_right = True
+                update_right = False
+            else:
+                update_right = True
 
-        if not is_trun_up and (t_up / width) >= 0.6:
-            is_trun_up = True
-        else:
-            up = up + 1 if x - up >= 0 else up
-        if not is_trun_down and (t_dowm / width) >= 0.6:
-            is_trun_down = True
-        else:
-            down = down + 1 if x + down < img.shape[0] else down
-        if not is_trun_left and (t_left / height) >= 0.6:
-            is_trun_left = True
-        else:
-            left = left + 1 if y - left >= 0 else left
-        if not is_trun_right and (t_right / height) >= 0.6:
-            is_trun_right = True
-        else:
-            right = right + 1 if y + right < img.shape[1] else right
-
-
+        if update_up: up = up + 1 if x - up >= 0 else up
+        if update_down: down = down + 1 if x + down < img.shape[0] else down
+        if update_left: left = left + 1 if y - left >= 0 else left
+        if update_right: right = right + 1 if y + right < img.shape[1] else right
+        
     mask[x - up: x + down, y - left: y + right] = 1
     return width, height
 
