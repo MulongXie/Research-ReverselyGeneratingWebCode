@@ -4,19 +4,29 @@ import numpy as np
 
 def is_truncation(img, direction, x, y, para):
     (u, d, l, r) = para
-    trun = 0
+    width = l + r + 1
+    height = u + d + 1
+    is_trun = False
     # calculate the truncation
     if direction == 'up':
         trun = img[x - u, y - l: y + r + 1] - img[x - u - 1, y - l: y + r + 1]
+        trun = int(np.sum(trun) / 255)
+        if trun / width >= 0.6: is_trun = True
     elif direction == 'down':
         trun = img[x + d, y - l: y + r + 1] - img[x + d + 1, y - l: y + r + 1]
+        trun = int(np.sum(trun) / 255)
+        print(x + d)
+        if trun / width >= 0.6: is_trun = True
     elif direction == 'left':
         trun = img[x - u: x + d + 1, y - l] - img[x - u: x + d + 1, y - l - 1]
+        trun = int(np.sum(trun) / 255)
+        if trun / height >= 0.6: is_trun = True
     elif direction == 'right':
         trun = img[x - u: x + d + 1, y + r] - img[x - u: x + d + 1, y + r + 1]
+        trun = int(np.sum(trun) / 255)
+        if trun / height >= 0.6: is_trun = True
 
-    trun = int(np.sum(trun) / 255)
-    return trun
+    return is_trun
 
 
 def is_rec(img, mask, x, y):
@@ -24,39 +34,34 @@ def is_rec(img, mask, x, y):
     up, down, left, right = (0, 0, 0, 0)
     is_trun_up, is_trun_down, is_trun_left, is_trun_right = (False, False, False, False)
 
-    width = left + right + 1
-    height = up + down + 1
     while not (is_trun_up and is_trun_down and is_trun_left and is_trun_right):
         if not is_trun_up:
-            t_up = is_truncation(img, 'up', x, y, (up, down, left, right))
-            if t_up / width >= 0.6:
+            if is_truncation(img, 'up', x, y, (up, down, left, right)):
                 is_trun_up = True
-                up = up + 1 if x - up >= 0 else up
 
         if not is_trun_down:
-            t_dowm = is_truncation(img, 'down', x, y, (up, down, left, right))
-            if t_dowm / width >= 0.6:
+            if is_truncation(img, 'down', x, y, (up, down, left, right)):
                 is_trun_down = True
-                down = down + 1 if x + down < img.shape[0] else down
 
         if not is_trun_left:
-            t_left = is_truncation(img, 'left', x, y, (up, down, left, right))
-            if t_left / height >= 0.6:
+            if is_truncation(img, 'left', x, y, (up, down, left, right)):
                 is_trun_left = True
-                left = left + 1 if y - left >= 0 else left
 
         if not is_trun_right:
-            t_right = is_truncation(img, 'right', x, y, (up, down, left, right))
-            if t_right / height >= 0.6:
+            if is_truncation(img, 'right', x, y, (up, down, left, right)):
                 is_trun_right = True
-                right = right + 1 if y + right < img.shape[1] else right
 
         if not is_trun_up: up = up + 1 if x - up >= 0 else up
         if not is_trun_down: down = down + 1 if x + down < img.shape[0] else down
         if not is_trun_left: left = left + 1 if y - left >= 0 else left
         if not is_trun_right: right = right + 1 if y + right < img.shape[1] else right
-        width = left + right + 1
-        height = up + down + 1
+
+    up = up + 1 if x - up >= 0 else up
+    down = down + 1 if x + down < img.shape[0] else down
+    left = left + 1 if y - left >= 0 else left
+    right = right + 1 if y + right < img.shape[1] else right
+    width = left + right + 1
+    height = up + down + 1
 
     mask[x - up: x + down, y - left: y + right] = 255
 
@@ -74,7 +79,6 @@ def scan(img):
             rectangle = {}
             if img[i, j] == 255 and mask[i, j] == 0:
                 print(i, j)
-                print(mask[i, j])
                 rectangle['x'], rectangle['y'], rectangle['width'], rectangle['height'] = is_rec(img, mask, i, j)
                 rectangles.append(rectangle)
 
