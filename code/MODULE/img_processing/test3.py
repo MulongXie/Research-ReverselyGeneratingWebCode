@@ -15,10 +15,10 @@ def is_truncation(img, direction, x, y, para):
     elif direction == 'right':
         trun = img[x - u: x + d + 1, y + r] - img[x - u: x + d + 1, y + r + 1]
 
-    trun = np.sum(trun)
+    trun = int(np.sum(trun) / 255)
     print(direction)
     print(trun)
-    print(para)
+    print(para, '\n')
     return trun
 
 
@@ -69,8 +69,9 @@ def is_rec(img, mask, x, y):
         if update_down: down = down + 1 if x + down < img.shape[0] else down
         if update_left: left = left + 1 if y - left >= 0 else left
         if update_right: right = right + 1 if y + right < img.shape[1] else right
-        
-    mask[x - up: x + down, y - left: y + right] = 1
+
+    mask[x - up: x + down, y - left: y + right] = 255
+
     return width, height
 
 
