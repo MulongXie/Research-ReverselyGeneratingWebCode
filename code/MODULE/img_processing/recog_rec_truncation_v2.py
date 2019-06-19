@@ -64,12 +64,13 @@ def is_rec(img, mask, x, y):
     width = left + right + 1
     height = up + down + 1
     mask[x - up: x + down + 1, y - left: y + right + 1] = 255
+    img[x - up: x + down + 1, y - left: y + right + 1] = 0
 
     return x - up, y - left, width, height
 
 
 def scan(img):
-    mask = np.zeros(img.shape, dtype=np.uint8)
+    mask = np.full(img.shape, 0, dtype=np.uint8)
     row = img.shape[0]
     column = img.shape[1]
 
@@ -83,6 +84,7 @@ def scan(img):
                 rectangles.append(rectangle)
 
                 cv2.imshow('mask', mask)
+                cv2.imshow('copy', img)
                 cv2.waitKey(0)
 
     print(rectangles)
@@ -101,6 +103,7 @@ img = img[600: 1200, :]
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 r, bin = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
+bin_copy = bin.copy()
 
-cv2.imshow('img', img)
+cv2.imshow('img', bin_copy)
 scan(bin)
