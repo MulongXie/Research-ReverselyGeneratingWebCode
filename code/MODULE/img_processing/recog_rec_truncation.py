@@ -2,32 +2,36 @@ import cv2
 import numpy as np
 
 
-def is_truncation(img, direction, x, y, para):
+def is_truncation(img, direction, x, y, para, thresh=0.8):
     (u, d, l, r) = para
     width = l + r + 1
     height = u + d + 1
 
     # calculate the truncation
     if direction == 'up':
+        # boundary
         if x - u - 1 < 0: return True
         trun = img[x - u, y - l: y + r + 1] - img[x - u - 1, y - l: y + r + 1]
         trun = int(np.sum(trun) / 255)
-        if trun / width >= 0.6: return True
+        if trun / width >= thresh: return True
     elif direction == 'down':
+        # boundary
         if x + d + 1 == img.shape[0]: return True
         trun = img[x + d, y - l: y + r + 1] - img[x + d + 1, y - l: y + r + 1]
         trun = int(np.sum(trun) / 255)
-        if trun / width >= 0.6: return True
+        if trun / width >= thresh: return True
     elif direction == 'left':
+        # boundary
         if y - l - 1 < 0: return True
         trun = img[x - u: x + d + 1, y - l] - img[x - u: x + d + 1, y - l - 1]
         trun = int(np.sum(trun) / 255)
-        if trun / height >= 0.6: return True
+        if trun / height >= thresh: return True
     elif direction == 'right':
+        # boundary
         if y + r + 1 == img.shape[1]: return True
         trun = img[x - u: x + d + 1, y + r] - img[x - u: x + d + 1, y + r + 1]
         trun = int(np.sum(trun) / 255)
-        if trun / height >= 0.6: return True
+        if trun / height >= thresh: return True
 
     return False
 
@@ -64,12 +68,13 @@ def is_rec(img, mask, x, y):
     width = left + right + 1
     height = up + down + 1
     mask[x - up: x + down + 1, y - left: y + right + 1] = 255
+    img[x - up: x + down + 1, y - left: y + right + 1] = 0
 
     return x - up, y - left, width, height
 
 
 def scan(img):
-    mask = np.zeros(img.shape, dtype=np.uint8)
+    mask = np.full(img.shape, 0, dtype=np.uint8)
     row = img.shape[0]
     column = img.shape[1]
 
@@ -83,6 +88,7 @@ def scan(img):
                 rectangles.append(rectangle)
 
                 cv2.imshow('mask', mask)
+                cv2.imshow('copy', img)
                 cv2.waitKey(0)
 
     print(rectangles)
@@ -101,6 +107,7 @@ img = img[600: 1200, :]
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 r, bin = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
+bin_copy = bin.copy()
 
-cv2.imshow('img', img)
+cv2.imshow('img', bin_copy)
 scan(bin)

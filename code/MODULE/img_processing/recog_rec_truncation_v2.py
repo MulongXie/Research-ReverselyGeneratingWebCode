@@ -9,21 +9,25 @@ def is_truncation(img, direction, x, y, para, thresh=0.8):
 
     # calculate the truncation
     if direction == 'up':
+        # boundary
         if x - u - 1 < 0: return True
         trun = img[x - u, y - l: y + r + 1] - img[x - u - 1, y - l: y + r + 1]
         trun = int(np.sum(trun) / 255)
         if trun / width >= thresh: return True
     elif direction == 'down':
+        # boundary
         if x + d + 1 == img.shape[0]: return True
         trun = img[x + d, y - l: y + r + 1] - img[x + d + 1, y - l: y + r + 1]
         trun = int(np.sum(trun) / 255)
         if trun / width >= thresh: return True
     elif direction == 'left':
+        # boundary
         if y - l - 1 < 0: return True
         trun = img[x - u: x + d + 1, y - l] - img[x - u: x + d + 1, y - l - 1]
         trun = int(np.sum(trun) / 255)
         if trun / height >= thresh: return True
     elif direction == 'right':
+        # boundary
         if y + r + 1 == img.shape[1]: return True
         trun = img[x - u: x + d + 1, y + r] - img[x - u: x + d + 1, y + r + 1]
         trun = int(np.sum(trun) / 255)
