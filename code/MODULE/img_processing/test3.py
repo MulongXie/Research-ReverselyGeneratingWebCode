@@ -7,11 +7,16 @@ def is_truncation(img, direction, x, y, para, thresh=0.8):
     width = l + r + 1
     height = u + d + 1
 
+    if np.sum(img[x - u, y - l: y + r + 1]) == 0 or \
+        np.sum(img[x + d, y - l: y + r + 1]) == 0 or \
+        np.sum(img[x - u: x + d + 1, y - l]) == 0 or \
+        np.sum(img[x - u: x + d + 1, y + r]) == 0:
+        return True
+
     # calculate the truncation
     if direction == 'up':
         # boundary
         if x - u - 1 < 0: return True
-        if np.sum(img[x - u - 1, y - l: y + r + 1]) == 0:
         trun = img[x - u, y - l: y + r + 1] - img[x - u - 1, y - l: y + r + 1]
         trun = int(np.sum(trun) / 255)
         if trun / width >= thresh: return True
@@ -37,7 +42,7 @@ def is_truncation(img, direction, x, y, para, thresh=0.8):
     return False
 
 
-def is_rec(img, mask, x, y):
+def is_rec(img, mask, x, y, min_area=1000):
     # diffuse towards four directions
     up, down, left, right = (0, 0, 0, 0)
     is_trun_up, is_trun_down, is_trun_left, is_trun_right = (False, False, False, False)
@@ -68,8 +73,13 @@ def is_rec(img, mask, x, y):
 
     width = left + right + 1
     height = up + down + 1
+    img[x - up: x + down + 1, y - left - 1: y + right + 1] = 0
+
+    if width * height <= min_area:
+        print('too small')
+        return -1, -1, -1, -1
+
     mask[x - up: x + down + 1, y - left: y + right + 1] = 255
-    img[x - up: x + down + 1, y - left: y + right + 1] = 0
 
     return x - up, y - left, width, height
 
@@ -86,6 +96,10 @@ def scan(img):
             if img[i, j] == 255 and mask[i, j] == 0:
                 print('\n', i, j)
                 rectangle['x'], rectangle['y'], rectangle['width'], rectangle['height'] = is_rec(img, mask, i, j)
+                if (rectangle['x'], rectangle['y'], rectangle['width'], rectangle['height']) == (-1, -1, -1, -1):
+                    print('aaaaa')
+                    continue
+                print('bbbbb')
                 rectangles.append(rectangle)
 
                 cv2.imshow('mask', mask)
