@@ -53,5 +53,5 @@ def morphology(img, dil_times=1):
     return close
 
 
-img = cv2.imread("1.png", 0)
+img = cv2.imread("2.png", 0)
 result = morphology(img)

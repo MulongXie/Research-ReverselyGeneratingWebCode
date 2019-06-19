@@ -6,20 +6,25 @@ def is_truncation(img, direction, x, y, para):
     (u, d, l, r) = para
     width = l + r + 1
     height = u + d + 1
+
     # calculate the truncation
     if direction == 'up':
+        if x - u - 1 < 0: return True
         trun = img[x - u, y - l: y + r + 1] - img[x - u - 1, y - l: y + r + 1]
         trun = int(np.sum(trun) / 255)
         if trun / width >= 0.6: return True
     elif direction == 'down':
+        if x + d + 1 == img.shape[0]: return True
         trun = img[x + d, y - l: y + r + 1] - img[x + d + 1, y - l: y + r + 1]
         trun = int(np.sum(trun) / 255)
         if trun / width >= 0.6: return True
     elif direction == 'left':
+        if y - l - 1 < 0: return True
         trun = img[x - u: x + d + 1, y - l] - img[x - u: x + d + 1, y - l - 1]
         trun = int(np.sum(trun) / 255)
         if trun / height >= 0.6: return True
     elif direction == 'right':
+        if y + r + 1 == img.shape[1]: return True
         trun = img[x - u: x + d + 1, y + r] - img[x - u: x + d + 1, y + r + 1]
         trun = int(np.sum(trun) / 255)
         if trun / height >= 0.6: return True
@@ -56,10 +61,10 @@ def is_rec(img, mask, x, y):
 
         print(up, down, left, right)
 
-    up = up + 1 if x - up >= 0 else up
-    down = down + 1 if x + down < img.shape[0] else down
-    left = left + 1 if y - left >= 0 else left
-    right = right + 1 if y + right < img.shape[1] else right
+    up = up + 1 if x - up > 0 else up
+    down = down + 1 if x + down < img.shape[0] - 1 else down
+    left = left + 1 if y - left > 0 else left
+    right = right + 1 if y + right < img.shape[1] - 1 else right
     width = left + right + 1
     height = up + down + 1
 
@@ -89,17 +94,18 @@ def scan(img):
     return rectangles
 
 
-# img = np.zeros((600, 600, 3), dtype=np.uint8)
-# img[30:50, 30:50, :] = 255
-# img[90:138, 50:76, :] = 255
-# img[100:103, 66:70] = 0
+img = np.zeros((600, 600, 3), dtype=np.uint8)
+img[30:50, 30:50, :] = 255
+img[90:138, 50:76, :] = 255
+img[100:103, 66:70] = 0
 
-img = cv2.imread('c_close.png')
+img[220: 230, :50, :] = 255
+
+
+# img = cv2.imread('c_close.png')
+# img = img[600: 1200, :]
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 r, bin = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
 
 scan(bin)
-
-cv2.imshow('bin', bin)
-cv2.waitKey(0)
