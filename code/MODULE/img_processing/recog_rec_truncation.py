@@ -59,16 +59,11 @@ def is_rec(img, mask, x, y):
         if not is_trun_left: left = left + 1 if y - left >= 0 else left
         if not is_trun_right: right = right + 1 if y + right < img.shape[1] else right
 
-        print(up, down, left, right)
+    print(up, down, left, right)
 
-    up = up + 1 if x - up > 0 else up
-    down = down + 1 if x + down < img.shape[0] - 1 else down
-    left = left + 1 if y - left > 0 else left
-    right = right + 1 if y + right < img.shape[1] - 1 else right
     width = left + right + 1
     height = up + down + 1
-
-    mask[x - up: x + down, y - left: y + right] = 255
+    mask[x - up: x + down + 1, y - left: y + right + 1] = 255
 
     return x - up, y - left, width, height
 
@@ -87,8 +82,8 @@ def scan(img):
                 rectangle['x'], rectangle['y'], rectangle['width'], rectangle['height'] = is_rec(img, mask, i, j)
                 rectangles.append(rectangle)
 
-                cv2.imshow('mask', mask)
-                cv2.waitKey(0)
+                # cv2.imshow('mask', mask)
+                # cv2.waitKey(0)
 
     print(rectangles)
     return rectangles
@@ -99,7 +94,7 @@ img[30:50, 30:50, :] = 255
 img[90:138, 50:76, :] = 255
 img[100:103, 66:70] = 0
 
-img[220: 230, :50, :] = 255
+img[220: 230, :, :] = 255
 
 
 # img = cv2.imread('c_close.png')
