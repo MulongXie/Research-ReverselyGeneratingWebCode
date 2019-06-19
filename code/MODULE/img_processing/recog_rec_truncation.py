@@ -82,25 +82,25 @@ def scan(img):
                 rectangle['x'], rectangle['y'], rectangle['width'], rectangle['height'] = is_rec(img, mask, i, j)
                 rectangles.append(rectangle)
 
-                # cv2.imshow('mask', mask)
-                # cv2.waitKey(0)
+                cv2.imshow('mask', mask)
+                cv2.waitKey(0)
 
     print(rectangles)
     return rectangles
 
 
-img = np.zeros((600, 600, 3), dtype=np.uint8)
-img[30:50, 30:50, :] = 255
-img[90:138, 50:76, :] = 255
-img[100:103, 66:70] = 0
+# img = np.zeros((600, 600, 3), dtype=np.uint8)
+# img[30:50, 30:50, :] = 255
+# img[90:138, 50:76, :] = 255
+# img[100:103, 66:70] = 0
+# img[220: 230, :, :] = 255
 
-img[220: 230, :, :] = 255
 
-
-# img = cv2.imread('c_close.png')
-# img = img[600: 1200, :]
+img = cv2.imread('c_close.png')
+img = img[600: 1200, :]
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 r, bin = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
 
+cv2.imshow('img', img)
 scan(bin)
