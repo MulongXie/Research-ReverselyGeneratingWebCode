@@ -67,7 +67,7 @@ def get_boundary(area):
     return boundary, extremum
 
 
-def is_rectangle(boundary, extremum, thresh=0.8):
+def is_rectangle(boundary, extremum, thresh=0.9):
     (up, bottom, left, right) = extremum
 
     fit_up, fit_bottom, fit_left, fit_right = (0, 0, 0, 0)  # count the fit points
@@ -105,6 +105,7 @@ def is_rectangle(boundary, extremum, thresh=0.8):
         return False
 
     return True
+
 
 def scan(img):
     mark = np.full(img.shape, 0, dtype=np.uint8)
