@@ -1,4 +1,5 @@
-l = []
-l.append([1, 2])
-l.append([3,3,3])
-print(l[1][1])
+
+d = {'a': 2, 'b': 4}
+
+for k in d:
+    print(k)
