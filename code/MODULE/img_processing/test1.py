@@ -24,7 +24,17 @@ def bfs_connected_area(img, x, y, mark):
     return area
 
 
-def get_boundary(area, broad):
+def draw_boundary(boundary, broad):
+    # draw
+    for b in boundary:
+        b_sp = b.split('_')
+        if b_sp[0] == 'row':
+            broad[int(b_sp[2]), boundary[b]] = 255
+        elif b_sp[0] == 'col':
+            broad[boundary[b], int(b_sp[2])] = 255
+
+
+def get_boundary(area):
     up, bottom, left, right = (None, None, None, None)
     boundary = {}
     for point in area:
@@ -54,46 +64,47 @@ def get_boundary(area, broad):
 
     extremum = (up, bottom, left, right)
 
-    # draw
-    for b in boundary:
-        b_sp = b.split('_')
-        if b_sp[0] == 'row':
-            broad[int(b_sp[2]), boundary[b]] = 255
-        elif b_sp[0] == 'col':
-            broad[boundary[b], int(b_sp[2])] = 255
-
     return boundary, extremum
 
 
-def is_rectangle(boundary, extremum):
+def is_rectangle(boundary, extremum, thresh=0.8):
     (up, bottom, left, right) = extremum
 
-    grad_up = []
-    grad_bottom = []
-    grad_left = []
-    grad_right = []
+    fit_up, fit_bottom, fit_left, fit_right = (0, 0, 0, 0)  # count the fit points
+    len_up, len_bottom, len_left, len_right = (0, 0, 0, 0)  # count the length of boundary
 
     for b in boundary:
         b_sp = b.split('_')
-        # up boundary
         if b_sp[0] == 'row':
             if b_sp[1] == 'min':
-                grad_left.append(abs(boundary[b] - left))
+                len_left += 1
+                if (abs(boundary[b] - left)) == 0:
+                    fit_left += 1
             if b_sp[1] == 'max':
-                grad_right.append(abs(boundary[b] - right))
+                len_right += 1
+                if abs(boundary[b] - right) == 0:
+                    fit_right += 1
         if b_sp[0] == 'col':
             if b_sp[1] == 'min':
-                grad_up.append(abs(boundary[b] - up))
+                len_up += 1
+                if abs(boundary[b] - up) == 0:
+                    fit_up += 1
             if b_sp[1] == 'max':
-                grad_bottom.append(abs(boundary[b] - bottom))
+                len_bottom += 1
+                if abs(boundary[b] - bottom) == 0:
+                    fit_bottom += 1
 
-    print("up:", grad_up)
-    print("bottom:", grad_bottom)
-    print("left:", grad_left)
-    print("right:", grad_right)
+    print("up: %d zeros in %d length" % (fit_up, len_up))
+    print("bottom: %d zeros in %d length" % (fit_bottom, len_bottom))
+    print("left: %d zeros in %d length" % (fit_left, len_left))
+    print("right: %d zeros in %d length" % (fit_right, len_right))
     print('\n')
 
+    if (fit_up / len_up) < thresh or (fit_bottom / len_bottom) < thresh\
+        or (fit_left / len_left) < thresh or (fit_right / len_right) < thresh:
+        return False
 
+    return True
 
 def scan(img):
     mark = np.full(img.shape, 0, dtype=np.uint8)
@@ -104,12 +115,15 @@ def scan(img):
         for j in range(column):
             if img[i, j] == 255 and mark[i, j] == 0:
                 area = bfs_connected_area(img, i, j, mark)
-                boundary, extremum = get_boundary(area, bound)
-                is_rectangle(boundary, extremum)
+                boundary, extremum = get_boundary(area)
 
-                cv2.imshow('mark', mark)
-                cv2.imshow('boundary', bound)
-                cv2.waitKey(0)
+                if is_rectangle(boundary, extremum):
+                    draw_boundary(boundary, bound)
+
+                    cv2.imshow('org', img)
+                    cv2.imshow('mark', mark)
+                    cv2.imshow('boundary', bound)
+                    cv2.waitKey(0)
 
 
 # img = np.zeros((600, 600, 3), dtype=np.uint8)

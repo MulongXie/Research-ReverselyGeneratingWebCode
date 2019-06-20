@@ -2,92 +2,128 @@ import cv2
 import numpy as np
 
 
-def is_boundary(img, direction, x, y, para, thresh=0.8):
-    (u, d, l, r) = para
-
-    # calculate the truncation
-    if direction == 'up':
-        # boundary
-        if x - u - 1 < 0 or np.sum(img[x - u, y - l: y + r + 1]) == 0: return True
-    elif direction == 'down':
-        # boundary
-        if x + d + 1 == img.shape[0] or np.sum(img[x + d, y - l: y + r + 1]) == 0: return True
-    elif direction == 'left':
-        # boundary
-        if y - l - 1 < 0 or np.sum(img[x - u: x + d + 1, y - l]) == 0: return True
-    elif direction == 'right':
-        # boundary
-        if y + r + 1 == img.shape[1] or np.sum(img[x - u: x + d + 1, y + r]) == 0: return True
-
-    return False
+def neighbor(img, x, y, mark, stack):
+    for i in range(x - 1, x + 2):
+        if i < 0 or i >= img.shape[0]: continue
+        for j in range(y - 1, y + 2):
+            if j < 0 or j >= img.shape[1]: continue
+            if img[i, j] == 255 and mark[i, j] == 0:
+                stack.append([i, j])
+                mark[i, j] = 255
 
 
-def is_rec(img, mask, x, y, min_area=1000):
-    # diffuse towards four directions
-    up, down, left, right = (0, 0, 0, 0)
-    is_boundary_up, is_boundary_down, is_boundary_left, is_boundary_right = (False, False, False, False)
+def bfs_connected_area(img, x, y, mark):
+    stack = [[x, y]]    # points waiting for inspection
+    area = [[x, y]]   # points of this area
+    mark[x, y] = 255    # drawing broad
 
-    while not (is_boundary_up and is_boundary_down and is_boundary_left and is_boundary_right):
-        if not is_boundary_up:
-            if is_boundary(img, 'up', x, y, (up, down, left, right)):
-                is_boundary_up = True
+    while len(stack) > 0:
+        point = stack.pop()
+        area.append(point)
+        neighbor(img, point[0], point[1], mark, stack)
+    return area
 
-        if not is_boundary_down:
-            if is_boundary(img, 'down', x, y, (up, down, left, right)):
-                is_boundary_down = True
 
-        if not is_boundary_left:
-            if is_boundary(img, 'left', x, y, (up, down, left, right)):
-                is_boundary_left = True
+def draw_boundary(boundary, broad):
+    # draw
+    for b in boundary:
+        b_sp = b.split('_')
+        if b_sp[0] == 'row':
+            broad[int(b_sp[2]), boundary[b]] = 255
+        elif b_sp[0] == 'col':
+            broad[boundary[b], int(b_sp[2])] = 255
 
-        if not is_boundary_right:
-            if is_boundary(img, 'right', x, y, (up, down, left, right)):
-                is_boundary_right = True
 
-        if not is_boundary_up and x - up >= 0: up = up + 1
-        if not is_boundary_down and x + down < img.shape[0]: down = down + 1
-        if not is_boundary_left and y - left >= 0: left = left + 1
-        if not is_boundary_right and y + right < img.shape[1]: right = right + 1
+def get_boundary(area):
+    up, bottom, left, right = (None, None, None, None)
+    boundary = {}
+    for point in area:
+        # range of each row by checking y
+        b_left = 'row_min_' + str(point[0])
+        b_right = 'row_max_' + str(point[0])
+        # range of each column by checking x
+        b_up = 'col_min_' + str(point[1])
+        b_bottom = 'col_max_' + str(point[1])
+        if b_left not in boundary or boundary[b_left] > point[1]:
+            boundary[b_left] = point[1]
+        if b_right not in boundary or boundary[b_right] < point[1]:
+            boundary[b_right] = point[1]
+        if b_up not in boundary or boundary[b_up] > point[0]:
+            boundary[b_up] = point[0]
+        if b_bottom not in boundary or boundary[b_bottom] < point[0]:
+            boundary[b_bottom] = point[0]
 
-    print(up, down, left, right)
+        if up is None or up > point[0]:
+            up = point[0]
+        if bottom is None or bottom < point[0]:
+            bottom = point[0]
+        if left is None or left > point[1]:
+            left = point[1]
+        if right is None or right < point[1]:
+            right = point[1]
 
-    width = left + right + 1
-    height = up + down + 1
-    img[x - up: x + down + 1, y - left - 1: y + right + 1] = 0
+    extremum = (up, bottom, left, right)
 
-    if width * height <= min_area:
-        print('too small')
-        return -1, -1, -1, -1
+    return boundary, extremum
 
-    mask[x - up: x + down + 1, y - left: y + right + 1] = 255
 
-    return x - up, y - left, width, height
+def is_rectangle(boundary, extremum, thresh=0.8):
+    (up, bottom, left, right) = extremum
 
+    fit_up, fit_bottom, fit_left, fit_right = (0, 0, 0, 0)  # count the fit points
+    len_up, len_bottom, len_left, len_right = (0, 0, 0, 0)  # count the length of boundary
+
+    for b in boundary:
+        b_sp = b.split('_')
+        if b_sp[0] == 'row':
+            if b_sp[1] == 'min':
+                len_left += 1
+                if (abs(boundary[b] - left)) == 0:
+                    fit_left += 1
+            if b_sp[1] == 'max':
+                len_right += 1
+                if abs(boundary[b] - right) == 0:
+                    fit_right += 1
+        if b_sp[0] == 'col':
+            if b_sp[1] == 'min':
+                len_up += 1
+                if abs(boundary[b] - up) == 0:
+                    fit_up += 1
+            if b_sp[1] == 'max':
+                len_bottom += 1
+                if abs(boundary[b] - bottom) == 0:
+                    fit_bottom += 1
+
+    print("up: %d zeros in %d length" % (fit_up, len_up))
+    print("bottom: %d zeros in %d length" % (fit_bottom, len_bottom))
+    print("left: %d zeros in %d length" % (fit_left, len_left))
+    print("right: %d zeros in %d length" % (fit_right, len_right))
+    print('\n')
+
+    if (fit_up / len_up) < thresh or (fit_bottom / len_bottom) < thresh\
+        or (fit_left / len_left) < thresh or (fit_right / len_right) < thresh:
+        return False
+
+    return True
 
 def scan(img):
-    mask = np.full(img.shape, 0, dtype=np.uint8)
-    row = img.shape[0]
-    column = img.shape[1]
+    mark = np.full(img.shape, 0, dtype=np.uint8)
+    bound = mark.copy()
+    row, column = img.shape[0], img.shape[1]
 
-    rectangles = []
     for i in range(row):
         for j in range(column):
-            rectangle = {}
-            if img[i, j] == 255 and mask[i, j] == 0:
-                print('\n', i, j)
-                rectangle['x'], rectangle['y'], rectangle['width'], rectangle['height'] = is_rec(img, mask, i, j)
-                if (rectangle['x'], rectangle['y'], rectangle['width'], rectangle['height']) == (-1, -1, -1, -1):
-                    print('aaaaa')
-                    continue
-                print('bbbbb')
-                rectangles.append(rectangle)
+            if img[i, j] == 255 and mark[i, j] == 0:
+                area = bfs_connected_area(img, i, j, mark)
+                boundary, extremum = get_boundary(area)
 
-                cv2.imshow('mask', mask)
-                cv2.imshow('copy', img)
-                cv2.waitKey(0)
+                if is_rectangle(boundary, extremum):
+                    draw_boundary(boundary, bound)
 
-    print(rectangles)
-    return rectangles
+                    cv2.imshow('org', img)
+                    cv2.imshow('mark', mark)
+                    cv2.imshow('boundary', bound)
+                    cv2.waitKey(0)
 
 
 # img = np.zeros((600, 600, 3), dtype=np.uint8)
@@ -96,13 +132,11 @@ def scan(img):
 # img[100:103, 66:70] = 0
 # img[220: 230, :, :] = 255
 
-
 img = cv2.imread('c_close.png')
 img = img[600: 1200, :]
-
+#
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 r, bin = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
 bin_copy = bin.copy()
 
-cv2.imshow('img', bin_copy)
-scan(bin)
+scan(bin_copy)
