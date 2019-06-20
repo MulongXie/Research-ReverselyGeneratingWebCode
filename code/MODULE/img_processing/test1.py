@@ -25,6 +25,7 @@ def bfs_connected_area(img, x, y, mark):
 
 
 def get_boundary(area, broad):
+    x_min, x_max, y_min, y_max = (None, None, None, None)
     boundary = {}
     for point in area:
         b_left = 'row_' + str(point[0]) + "_min"
@@ -40,6 +41,17 @@ def get_boundary(area, broad):
         if b_bottom not in boundary or boundary[b_bottom] < point[0]:
             boundary[b_bottom] = point[0]
 
+        if x_min is None or x_min > point[0]:
+            x_min = point[0]
+        if x_max is None or x_max < point[0]:
+            x_max = point[0]
+        if y_min is None or y_min > point[1]:
+            y_min = point[1]
+        if y_max is None or y_max < point[1]:
+            y_max = point[1]
+
+    corner = (x_min, x_max, y_min, y_max)
+    print(corner)
     # draw
     for b in boundary:
         if b[:3] == 'row':
@@ -47,7 +59,7 @@ def get_boundary(area, broad):
         elif b[:3] == 'col':
             broad[boundary[b], int(b[4:-4])] = 255
 
-    return boundary
+    return boundary, corner
 
 
 def scan(img):
@@ -59,10 +71,10 @@ def scan(img):
         for j in range(column):
             if img[i, j] == 255 and mark[i, j] == 0:
                 area = bfs_connected_area(img, i, j, mark)
-                boundary = get_boundary(area, bound)
+                boundary, corner = get_boundary(area, bound)
 
                 cv2.imshow('mark', mark)
-                cv2.imshow('wire', bound)
+                cv2.imshow('boundary', bound)
                 cv2.waitKey(0)
 
 

@@ -1,5 +1,3 @@
+a, b, c, d = None
 
-d = {'a': 2, 'b': 4}
-
-for k in d:
-    print(k)
+print(a)
