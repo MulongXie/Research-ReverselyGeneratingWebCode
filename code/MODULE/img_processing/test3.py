@@ -42,7 +42,7 @@ def is_truncation(img, direction, x, y, para, thresh=0.8):
     return False
 
 
-def is_rec(img, mask, x, y, min_area=1000):
+def is_rec(img, mask, x, y, min_area=100):
     # diffuse towards four directions
     up, down, left, right = (0, 0, 0, 0)
     is_trun_up, is_trun_down, is_trun_left, is_trun_right = (False, False, False, False)
@@ -68,8 +68,8 @@ def is_rec(img, mask, x, y, min_area=1000):
         if not is_trun_down and x + down < img.shape[0]: down = down + 1
         if not is_trun_left and y - left >= 0: left = left + 1
         if not is_trun_right and y + right < img.shape[1]: right = right + 1
+        print(up, down, left, right)
 
-    print(up, down, left, right)
 
     width = left + right + 1
     height = up + down + 1
@@ -97,9 +97,7 @@ def scan(img):
                 print('\n', i, j)
                 rectangle['x'], rectangle['y'], rectangle['width'], rectangle['height'] = is_rec(img, mask, i, j)
                 if (rectangle['x'], rectangle['y'], rectangle['width'], rectangle['height']) == (-1, -1, -1, -1):
-                    print('aaaaa')
                     continue
-                print('bbbbb')
                 rectangles.append(rectangle)
 
                 cv2.imshow('mask', mask)
@@ -110,15 +108,14 @@ def scan(img):
     return rectangles
 
 
-# img = np.zeros((600, 600, 3), dtype=np.uint8)
-# img[30:50, 30:50, :] = 255
-# img[90:138, 50:76, :] = 255
-# img[100:103, 66:70] = 0
-# img[220: 230, :, :] = 255
+img = np.zeros((600, 600, 3), dtype=np.uint8)
+img[30:50, 30:50, :] = 255
+img[90:138, 50:76, :] = 255
+img[100:103, 66:70] = 0
+img = cv2.rectangle(img, (20, 20), (200, 200), (255, 0, 0), 1)
 
-
-img = cv2.imread('c_close.png')
-img = img[600: 1200, :]
+# img = cv2.imread('c_close.png')
+# img = img[0: 600, :]
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 r, bin = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)

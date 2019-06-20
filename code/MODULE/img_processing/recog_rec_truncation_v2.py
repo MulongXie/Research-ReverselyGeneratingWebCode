@@ -45,29 +45,29 @@ def is_truncation(img, direction, x, y, para, thresh=0.8):
 def is_rec(img, mask, x, y, min_area=1000):
     # diffuse towards four directions
     up, down, left, right = (0, 0, 0, 0)
-    is_trun_up, is_trun_down, is_trun_left, is_trun_right = (False, False, False, False)
+    is_boundary_up, is_boundary_down, is_boundary_left, is_boundary_right = (False, False, False, False)
 
-    while not (is_trun_up and is_trun_down and is_trun_left and is_trun_right):
-        if not is_trun_up:
+    while not (is_boundary_up and is_boundary_down and is_boundary_left and is_boundary_right):
+        if not is_boundary_up:
             if is_truncation(img, 'up', x, y, (up, down, left, right)):
-                is_trun_up = True
+                is_boundary_up = True
 
-        if not is_trun_down:
+        if not is_boundary_down:
             if is_truncation(img, 'down', x, y, (up, down, left, right)):
-                is_trun_down = True
+                is_boundary_down = True
 
-        if not is_trun_left:
+        if not is_boundary_left:
             if is_truncation(img, 'left', x, y, (up, down, left, right)):
-                is_trun_left = True
+                is_boundary_left = True
 
-        if not is_trun_right:
+        if not is_boundary_right:
             if is_truncation(img, 'right', x, y, (up, down, left, right)):
-                is_trun_right = True
+                is_boundary_right = True
 
-        if not is_trun_up and x - up >= 0: up = up + 1
-        if not is_trun_down and x + down < img.shape[0]: down = down + 1
-        if not is_trun_left and y - left >= 0: left = left + 1
-        if not is_trun_right and y + right < img.shape[1]: right = right + 1
+        if not is_boundary_up and x - up >= 0: up = up + 1
+        if not is_boundary_down and x + down < img.shape[0]: down = down + 1
+        if not is_boundary_left and y - left >= 0: left = left + 1
+        if not is_boundary_right and y + right < img.shape[1]: right = right + 1
 
     print(up, down, left, right)
 
