@@ -1,3 +1,5 @@
-a, b, c, d = None
+import numpy as np
 
-print(a)
+a = [3, 3, 3]
+
+print([i - 5 for i in a])

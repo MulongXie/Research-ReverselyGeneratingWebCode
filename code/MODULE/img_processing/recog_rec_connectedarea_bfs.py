@@ -13,9 +13,9 @@ def neighbor(img, x, y, mark, stack):
 
 
 def bfs_connected_area(img, x, y, mark):
-    stack = [[x, y]]    # points waiting for inspection
-    area = [[x, y]]   # points of this area
-    mark[x, y] = 255    # drawing broad
+    stack = [[x, y]]  # points waiting for inspection
+    area = [[x, y]]  # points of this area
+    mark[x, y] = 255  # drawing broad
 
     while len(stack) > 0:
         point = stack.pop()
@@ -25,13 +25,15 @@ def bfs_connected_area(img, x, y, mark):
 
 
 def get_boundary(area, broad):
-    x_min, x_max, y_min, y_max = (None, None, None, None)
+    up, bottom, left, right = (None, None, None, None)
     boundary = {}
     for point in area:
-        b_left = 'row_' + str(point[0]) + "_min"
-        b_right = 'row_' + str(point[0]) + "_max"
-        b_up = 'col_' + str(point[1]) + "_min"
-        b_bottom = 'col_' + str(point[1]) + "_max"
+        # range of each row by checking y
+        b_left = 'row_min_' + str(point[0])
+        b_right = 'row_max_' + str(point[0])
+        # range of each column by checking x
+        b_up = 'col_min_' + str(point[1])
+        b_bottom = 'col_max_' + str(point[1])
         if b_left not in boundary or boundary[b_left] > point[1]:
             boundary[b_left] = point[1]
         if b_right not in boundary or boundary[b_right] < point[1]:
@@ -41,25 +43,55 @@ def get_boundary(area, broad):
         if b_bottom not in boundary or boundary[b_bottom] < point[0]:
             boundary[b_bottom] = point[0]
 
-        if x_min is None or x_min > point[0]:
-            x_min = point[0]
-        if x_max is None or x_max < point[0]:
-            x_max = point[0]
-        if y_min is None or y_min > point[1]:
-            y_min = point[1]
-        if y_max is None or y_max < point[1]:
-            y_max = point[1]
+        if up is None or up > point[0]:
+            up = point[0]
+        if bottom is None or bottom < point[0]:
+            bottom = point[0]
+        if left is None or left > point[1]:
+            left = point[1]
+        if right is None or right < point[1]:
+            right = point[1]
 
-    corner = (x_min, x_max, y_min, y_max)
-    print(corner)
+    extremum = (up, bottom, left, right)
+
     # draw
     for b in boundary:
-        if b[:3] == 'row':
-            broad[int(b[4:-4]), boundary[b]] = 255
-        elif b[:3] == 'col':
-            broad[boundary[b], int(b[4:-4])] = 255
+        b_sp = b.split('_')
+        if b_sp[0] == 'row':
+            broad[int(b_sp[2]), boundary[b]] = 255
+        elif b_sp[0] == 'col':
+            broad[boundary[b], int(b_sp[2])] = 255
 
-    return boundary, corner
+    return boundary, extremum
+
+
+def is_rectangle(boundary, extremum):
+    (up, bottom, left, right) = extremum
+
+    grad_up = []
+    grad_bottom = []
+    grad_left = []
+    grad_right = []
+
+    for b in boundary:
+        b_sp = b.split('_')
+        # up boundary
+        if b_sp[0] == 'row':
+            if b_sp[1] == 'min':
+                grad_left.append(abs(boundary[b] - left))
+            if b_sp[1] == 'max':
+                grad_right.append(abs(boundary[b] - right))
+        if b_sp[0] == 'col':
+            if b_sp[1] == 'min':
+                grad_up.append(abs(boundary[b] - up))
+            if b_sp[1] == 'max':
+                grad_bottom.append(abs(boundary[b] - bottom))
+
+    print("up:", grad_up)
+    print("bottom:", grad_bottom)
+    print("left:", grad_left)
+    print("right:", grad_right)
+    print('\n')
 
 
 def scan(img):
@@ -71,7 +103,8 @@ def scan(img):
         for j in range(column):
             if img[i, j] == 255 and mark[i, j] == 0:
                 area = bfs_connected_area(img, i, j, mark)
-                boundary, corner = get_boundary(area, bound)
+                boundary, extremum = get_boundary(area, bound)
+                is_rectangle(boundary, extremum)
 
                 cv2.imshow('mark', mark)
                 cv2.imshow('boundary', bound)
@@ -90,7 +123,5 @@ img = img[600: 1200, :]
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 r, bin = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
 bin_copy = bin.copy()
-
-cv2.imshow('img', bin_copy)
 
 scan(bin_copy)
