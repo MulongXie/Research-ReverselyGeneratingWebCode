@@ -86,14 +86,13 @@ def scan(img):
                 if is_rectangle(boundary):
                     draw_boundary(boundary, wire)
 
-                # cv2.imshow('org', img)
-                # cv2.imshow('mark', mark)
+    cv2.imshow('org', img)
     cv2.imshow('boundary', wire)
     cv2.waitKey(0)
 
 
 img = cv2.imread('c_close.png')
-img = img[: 600, :]
+img = img[600: 1200, :]
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 r, bin = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
