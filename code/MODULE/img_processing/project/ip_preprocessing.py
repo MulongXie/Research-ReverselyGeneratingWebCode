@@ -24,13 +24,13 @@ def get_gradient(img):
     return gradient
 
 
-def grad_to_binary(grad):
-    rec, bin = cv2.threshold(grad, 0, 255, cv2.THRESH_BINARY)
+def grad_to_binary(grad, min):
+    rec, bin = cv2.threshold(grad, min, 255, cv2.THRESH_BINARY)
     return bin
 
 
-def preprocess(gray):
+def preprocess(gray, grad_min=1):
     grad = get_gradient(gray)        # get RoI with high gradient
-    binary = grad_to_binary(grad)   # enhance the RoI
+    binary = grad_to_binary(grad, grad_min)   # enhance the RoI
     close = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, (5, 5))   # remove noises
     return close
