@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from collections import Counter
 
 
 def neighbor(img, x, y, mark, stack):
@@ -46,8 +47,25 @@ def get_boundary(area):
     return boundary
 
 
+def is_line(boundary, thresh=3):
+    # up and bottom
+    difference = [abs(boundary[0][i][1] - boundary[1][i][1]) for i in range(len(boundary[1]))]
+    most, number = Counter(difference).most_common(1)[0]
+    # too slim
+    if most < thresh:
+        return True
+    # left and right
+    difference = [abs(boundary[2][i][1] - boundary[3][i][1]) for i in range(len(boundary[2]))]
+    most, number = Counter(difference).most_common(1)[0]
+    # too slim
+    if most < thresh:
+        return True
+
+    return False
+
+
 # detect if it is rectangle by evenness of each border
-def is_rectangle(boundary, thresh=0.9):
+def is_rectangle(boundary, thresh):
 
     # up, bottom: (column_index, min/max row border)
     # left, right: (row_index, min/max column border)
@@ -59,12 +77,14 @@ def is_rectangle(boundary, thresh=0.9):
                 evenness += 1
         if evenness / len(border) < thresh:
             return False
+        if is_line(boundary):
+            return False
 
     return True
 
 
 # take the binary image as input
-def rectangle_detection(bin):
+def rectangle_detection(bin, evenness_thresh=0.9):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
@@ -76,7 +96,7 @@ def rectangle_detection(bin):
                 area = bfs_connected_area(bin, i, j, mark)
                 boundary = get_boundary(area)
                 boundary_all.append(boundary)
-                if is_rectangle(boundary):
+                if is_rectangle(boundary, evenness_thresh):
                     boundary_rec.append(boundary)
 
     return boundary_all, boundary_rec
