@@ -3,9 +3,10 @@ import numpy as np
 
 
 def read_img(path, height=[0, 600]):
-    img = cv2.imread(path, 0)
+    img = cv2.imread(path)
     img = img[height[0]:height[1]]
-    return img
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    return img, gray
 
 
 def get_gradient(img):
@@ -20,8 +21,6 @@ def get_gradient(img):
             gy = abs(img_f[x, y + 1] - img_f[x, y])
             gradient[x, y] = gx + gy
     gradient = gradient.astype("uint8")
-
-    cv2.imwrite('gradient.png', gradient)
     return gradient
 
 
@@ -30,15 +29,8 @@ def grad_to_binary(grad):
     return bin
 
 
-def preprocess(img):
-    grad = get_gradient(img)        # get RoI with high gradient
+def preprocess(gray):
+    grad = get_gradient(gray)        # get RoI with high gradient
     binary = grad_to_binary(grad)   # enhance the RoI
     close = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, (5, 5))   # remove noises
-
-    cv2.imwrite('binary.png', binary)
-    cv2.imwrite('close.png', close)
     return close
-
-
-img = read_img('2.png')
-preprocess(img)

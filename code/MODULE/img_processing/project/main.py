@@ -5,13 +5,14 @@ import cv2
 import numpy as np
 import time
 
-img = cv2.imread('c_close.png')
-img = img[600: 1200, :]
 
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-r, bin = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
+org, gray = pre.read_img('2.png', [0, 600])
+binary = pre.preprocess(gray)
+boundary_all, boundary_rec = det.rectangle_detection(binary)
 
-s = time.clock()
-det.rectangle_detection(bin)
-e = time.clock()
-print(e - s)
+cv2.imshow('org', org)
+cv2.imshow('gray', gray)
+cv2.imshow('binary', binary)
+cv2.imshow('boundary_all', boundary_all)
+cv2.imshow('rec', boundary_rec)
+cv2.waitKey(0)

@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import time
 
 
 def neighbor(img, x, y, mark, stack):
@@ -76,7 +75,8 @@ def is_rectangle(boundary, thresh=0.9):
 # take the binary image as input
 def rectangle_detection(bin):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
-    wire = mark.copy()
+    boundary_all = mark.copy()
+    boundary_rec = mark.copy()
     row, column = bin.shape[0], bin.shape[1]
 
     for i in range(row):
@@ -84,9 +84,8 @@ def rectangle_detection(bin):
             if bin[i, j] == 255 and mark[i, j] == 0:
                 area = bfs_connected_area(bin, i, j, mark)
                 boundary = get_boundary(area)
+                draw_boundary(boundary, boundary_all)
                 if is_rectangle(boundary):
-                    draw_boundary(boundary, wire)
+                    draw_boundary(boundary, boundary_rec)
 
-    cv2.imshow('org', bin)
-    cv2.imshow('boundary', wire)
-    cv2.waitKey(0)
+    return boundary_all, boundary_rec
