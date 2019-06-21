@@ -26,25 +26,24 @@ def bfs_connected_area(img, x, y, mark):
 
 
 def draw_boundary(boundary, broad):
-    # up and bottom: (column_index, min/max row)
+    # up and bottom: (column_index, min/max row border)
     for point in boundary[0] + boundary[1]:
         broad[point[1], point[0]] = 255
-    # left, right: (row_index, min/max column)
+    # left, right: (row_index, min/max column border)
     for point in boundary[2] + boundary[3]:
         broad[point[0], point[1]] = 255
 
 
 def get_boundary(area):
-    # elements in border: (row/column index,
     border_up, border_bottom, border_left, border_right = ({}, {}, {}, {})
     for point in area:
         # point: (row_index, column_index)
-        # up, bottom: (column_index, min/max row) detect range of each column
+        # up, bottom: (column_index, min/max row border) detect range of each column
         if point[1] not in border_up or border_up[point[1]] > point[0]:
             border_up[point[1]] = point[0]
         if point[1] not in border_bottom or border_bottom[point[1]] < point[0]:
             border_bottom[point[1]] = point[0]
-        # left, right: (row_index, min/max column) detect range of each row
+        # left, right: (row_index, min/max column border) detect range of each row
         if point[0] not in border_left or border_left[point[0]] > point[1]:
             border_left[point[0]] = point[1]
         if point[0] not in border_right or border_right[point[0]] < point[1]:
@@ -54,20 +53,22 @@ def get_boundary(area):
     for i in range(len(boundary)):
         boundary[i] = sorted(boundary[i].items(), key=lambda x: x[0])
 
-    print(boundary[1])
-
     return boundary
 
 
 # detect if it is rectangle by evenness of each border
 def is_rectangle(boundary, thresh=0.9):
 
-    evennesses = []
+    # up, bottom: (column_index, min/max row border)
+    # left, right: (row_index, min/max column border)
     for border in boundary:
-        evenness = []
+        # calculate the evenness of each border
+        evenness = 0
         for i in range(len(border) - 1):
-            evenness.append(border)
-
+            if border[i][1] - border[i + 1][1] == 0:
+                evenness += 1
+        if evenness / len(border) < thresh:
+            return False
 
     return True
 
@@ -82,15 +83,13 @@ def scan(img):
             if img[i, j] == 255 and mark[i, j] == 0:
                 area = bfs_connected_area(img, i, j, mark)
                 boundary = get_boundary(area)
-                draw_boundary(boundary, wire)
-
-                # if is_rectangle(boundary):
-                #     draw_boundary(boundary, bound)
+                if is_rectangle(boundary):
+                    draw_boundary(boundary, wire)
 
                 # cv2.imshow('org', img)
                 # cv2.imshow('mark', mark)
-                cv2.imshow('boundary', wire)
-                cv2.waitKey(0)
+    cv2.imshow('boundary', wire)
+    cv2.waitKey(0)
 
 
 img = cv2.imread('c_close.png')
