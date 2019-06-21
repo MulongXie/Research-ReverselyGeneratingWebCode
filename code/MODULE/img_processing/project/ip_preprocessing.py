@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-def read_img(path, height=[0, 600]):
+def read_img(path, height=(0, 600)):
     img = cv2.imread(path)
     img = img[height[0]:height[1]]
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)

@@ -6,13 +6,12 @@ import numpy as np
 import time
 
 
-org, gray = pre.read_img('2.png', [0, 600])
+org, gray = pre.read_img('2.png', [600, 1500])
 binary = pre.preprocess(gray)
 boundary_all, boundary_rec = det.rectangle_detection(binary)
+corners = det.get_corner(boundary_rec)
+det.draw_bounding_box(corners, org)
 
 cv2.imshow('org', org)
-cv2.imshow('gray', gray)
 cv2.imshow('binary', binary)
-cv2.imshow('boundary_all', boundary_all)
-cv2.imshow('rec', boundary_rec)
 cv2.waitKey(0)

@@ -24,6 +24,15 @@ def bfs_connected_area(img, x, y, mark):
     return area
 
 
+def draw_boundary(boundary, broad):
+    # up and bottom: (column_index, min/max row border)
+    for point in boundary[0] + boundary[1]:
+        broad[point[1], point[0]] = 255
+    # left, right: (row_index, min/max column border)
+    for point in boundary[2] + boundary[3]:
+        broad[point[0], point[1]] = 255
+
+
 def get_boundary(area):
     border_up, border_bottom, border_left, border_right = ({}, {}, {}, {})
     for point in area:
@@ -66,8 +75,8 @@ def is_rectangle(boundary, thresh=0.9):
 # take the binary image as input
 def rectangle_detection(bin):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
-    boundary_all = []
-    boundary_rec = []
+    boundary_all = mark.copy()
+    boundary_rec = mark.copy()
     row, column = bin.shape[0], bin.shape[1]
 
     for i in range(row):
@@ -75,22 +84,8 @@ def rectangle_detection(bin):
             if bin[i, j] == 255 and mark[i, j] == 0:
                 area = bfs_connected_area(bin, i, j, mark)
                 boundary = get_boundary(area)
-                boundary_all.append(boundary)
+                draw_boundary(boundary, boundary_all)
                 if is_rectangle(boundary):
-                    boundary_rec.append(boundary)
+                    draw_boundary(boundary, boundary_rec)
 
     return boundary_all, boundary_rec
-
-
-def get_corner(boundaries):
-    corners = []
-    for bounary in boundaries:
-        up_left = (bounary[0][0][0], bounary[2][0][0])
-        bottom_right = (bounary[1][-1][0], bounary[3][-1][0])
-        corners.append((up_left, bottom_right))
-    return corners
-
-
-def draw_bounding_box(corners, broad, color=(0, 255, 0), line=3):
-    for corner in corners:
-        broad = cv2.rectangle(broad, corner[0], corner[1], color, line)
