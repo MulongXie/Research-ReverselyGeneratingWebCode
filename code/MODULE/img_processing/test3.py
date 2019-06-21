@@ -1,5 +1,7 @@
-import numpy as np
+import cv2
 
-a = [3, 3, 3]
+img = cv2.imread('c_close.png')
+img = img[200: 480, 250:]
 
-print([i - 5 for i in a])
+cv2.imshow('img', img)
+cv2.waitKey(0)

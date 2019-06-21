@@ -121,10 +121,10 @@ def scan(img):
                 if is_rectangle(boundary, extremum):
                     draw_boundary(boundary, bound)
 
-                    cv2.imshow('org', img)
-                    cv2.imshow('mark', mark)
-                    cv2.imshow('boundary', bound)
-                    cv2.waitKey(0)
+                cv2.imshow('org', img)
+                cv2.imshow('mark', mark)
+                cv2.imshow('boundary', bound)
+                cv2.waitKey(0)
 
 
 # img = np.zeros((600, 600, 3), dtype=np.uint8)
@@ -134,8 +134,8 @@ def scan(img):
 # img[220: 230, :, :] = 255
 
 img = cv2.imread('c_close.png')
-img = img[600: 1200, :]
-#
+img = img[200: 480, 250:]
+
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 r, bin = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
 bin_copy = bin.copy()
