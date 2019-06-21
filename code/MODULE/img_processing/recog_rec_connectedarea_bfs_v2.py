@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import time
 
 
 def neighbor(img, x, y, mark, stack):
@@ -13,9 +14,9 @@ def neighbor(img, x, y, mark, stack):
 
 
 def bfs_connected_area(img, x, y, mark):
-    stack = [[x, y]]  # points waiting for inspection
-    area = [[x, y]]  # points of this area
-    mark[x, y] = 255  # drawing broad
+    stack = [[x, y]]    # points waiting for inspection
+    area = [[x, y]]   # points of this area
+    mark[x, y] = 255    # drawing broad
 
     while len(stack) > 0:
         point = stack.pop()
@@ -24,104 +25,81 @@ def bfs_connected_area(img, x, y, mark):
     return area
 
 
-def get_boundary(area, broad):
-    up, bottom, left, right = (None, None, None, None)
-    boundary = {}
+def draw_boundary(boundary, broad):
+    # up and bottom: (column_index, min/max row)
+    for point in boundary[0] + boundary[1]:
+        broad[point[1], point[0]] = 255
+    # left, right: (row_index, min/max column)
+    for point in boundary[2] + boundary[3]:
+        broad[point[0], point[1]] = 255
+
+
+def get_boundary(area):
+    # elements in border: (row/column index,
+    border_up, border_bottom, border_left, border_right = ({}, {}, {}, {})
     for point in area:
-        # range of each row by checking y
-        b_left = 'row_min_' + str(point[0])
-        b_right = 'row_max_' + str(point[0])
-        # range of each column by checking x
-        b_up = 'col_min_' + str(point[1])
-        b_bottom = 'col_max_' + str(point[1])
-        if b_left not in boundary or boundary[b_left] > point[1]:
-            boundary[b_left] = point[1]
-        if b_right not in boundary or boundary[b_right] < point[1]:
-            boundary[b_right] = point[1]
-        if b_up not in boundary or boundary[b_up] > point[0]:
-            boundary[b_up] = point[0]
-        if b_bottom not in boundary or boundary[b_bottom] < point[0]:
-            boundary[b_bottom] = point[0]
+        # point: (row_index, column_index)
+        # up, bottom: (column_index, min/max row) detect range of each column
+        if point[1] not in border_up or border_up[point[1]] > point[0]:
+            border_up[point[1]] = point[0]
+        if point[1] not in border_bottom or border_bottom[point[1]] < point[0]:
+            border_bottom[point[1]] = point[0]
+        # left, right: (row_index, min/max column) detect range of each row
+        if point[0] not in border_left or border_left[point[0]] > point[1]:
+            border_left[point[0]] = point[1]
+        if point[0] not in border_right or border_right[point[0]] < point[1]:
+            border_right[point[0]] = point[1]
 
-        if up is None or up > point[0]:
-            up = point[0]
-        if bottom is None or bottom < point[0]:
-            bottom = point[0]
-        if left is None or left > point[1]:
-            left = point[1]
-        if right is None or right < point[1]:
-            right = point[1]
+    boundary = [border_up, border_bottom, border_left, border_right]
+    for i in range(len(boundary)):
+        boundary[i] = sorted(boundary[i].items(), key=lambda x: x[0])
 
-    extremum = (up, bottom, left, right)
+    print(boundary[1])
 
-    # draw
-    for b in boundary:
-        b_sp = b.split('_')
-        if b_sp[0] == 'row':
-            broad[int(b_sp[2]), boundary[b]] = 255
-        elif b_sp[0] == 'col':
-            broad[boundary[b], int(b_sp[2])] = 255
-
-    return boundary, extremum
+    return boundary
 
 
-def is_rectangle(boundary, extremum):
-    (up, bottom, left, right) = extremum
+# detect if it is rectangle by evenness of each border
+def is_rectangle(boundary, thresh=0.9):
 
-    grad_up = []
-    grad_bottom = []
-    grad_left = []
-    grad_right = []
+    evennesses = []
+    for border in boundary:
+        evenness = []
+        for i in range(len(border) - 1):
+            evenness.append(border)
 
-    for b in boundary:
-        b_sp = b.split('_')
-        # up boundary
-        if b_sp[0] == 'row':
-            if b_sp[1] == 'min':
-                grad_left.append(abs(boundary[b] - left))
-            if b_sp[1] == 'max':
-                grad_right.append(abs(boundary[b] - right))
-        if b_sp[0] == 'col':
-            if b_sp[1] == 'min':
-                grad_up.append(abs(boundary[b] - up))
-            if b_sp[1] == 'max':
-                grad_bottom.append(abs(boundary[b] - bottom))
 
-    print("up:", grad_up)
-    print("bottom:", grad_bottom)
-    print("left:", grad_left)
-    print("right:", grad_right)
-    print('\n')
+    return True
 
 
 def scan(img):
     mark = np.full(img.shape, 0, dtype=np.uint8)
-    bound = mark.copy()
+    wire = mark.copy()
     row, column = img.shape[0], img.shape[1]
 
     for i in range(row):
         for j in range(column):
             if img[i, j] == 255 and mark[i, j] == 0:
                 area = bfs_connected_area(img, i, j, mark)
-                boundary, extremum = get_boundary(area, bound)
-                is_rectangle(boundary, extremum)
+                boundary = get_boundary(area)
+                draw_boundary(boundary, wire)
 
-                cv2.imshow('mark', mark)
-                cv2.imshow('boundary', bound)
+                # if is_rectangle(boundary):
+                #     draw_boundary(boundary, bound)
+
+                # cv2.imshow('org', img)
+                # cv2.imshow('mark', mark)
+                cv2.imshow('boundary', wire)
                 cv2.waitKey(0)
 
 
-# img = np.zeros((600, 600, 3), dtype=np.uint8)
-# img[30:50, 30:50, :] = 255
-# img[90:138, 50:76, :] = 255
-# img[100:103, 66:70] = 0
-# img[220: 230, :, :] = 255
-
 img = cv2.imread('c_close.png')
-img = img[200: 480, 250:]
+img = img[: 600, :]
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 r, bin = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
 bin_copy = bin.copy()
 
+s = time.clock()
 scan(bin_copy)
+print(time.clock() - s)

@@ -1,7 +1,7 @@
-import cv2
 
-img = cv2.imread('c_close.png')
-img = img[200: 480, 250:]
+a = [(1, 3), (2, 4)]
+b = [(10, 10)]
 
-cv2.imshow('img', img)
-cv2.waitKey(0)
+c = a + b
+
+print(c)

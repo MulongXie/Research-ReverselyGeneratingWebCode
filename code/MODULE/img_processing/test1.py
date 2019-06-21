@@ -67,10 +67,11 @@ def get_boundary(area):
     return boundary, extremum
 
 
+# detect if it is rectangle by evenness of each border
 def is_rectangle(boundary, extremum, thresh=0.9):
     (up, bottom, left, right) = extremum
 
-    fit_up, fit_bottom, fit_left, fit_right = (0, 0, 0, 0)  # count the fit points
+    even_up, even_bottom, even_left, even_right = ([], [], [], [])  # count the even points
     len_up, len_bottom, len_left, len_right = (0, 0, 0, 0)  # count the length of boundary
 
     for b in boundary:
@@ -79,29 +80,29 @@ def is_rectangle(boundary, extremum, thresh=0.9):
             if b_sp[1] == 'min':
                 len_left += 1
                 if (abs(boundary[b] - left)) == 0:
-                    fit_left += 1
+                    even_left += 1
             if b_sp[1] == 'max':
                 len_right += 1
                 if abs(boundary[b] - right) == 0:
-                    fit_right += 1
+                    even_right += 1
         if b_sp[0] == 'col':
             if b_sp[1] == 'min':
                 len_up += 1
                 if abs(boundary[b] - up) == 0:
-                    fit_up += 1
+                    even_up += 1
             if b_sp[1] == 'max':
                 len_bottom += 1
                 if abs(boundary[b] - bottom) == 0:
-                    fit_bottom += 1
+                    even_bottom += 1
 
-    print("up: %d zeros in %d length" % (fit_up, len_up))
-    print("bottom: %d zeros in %d length" % (fit_bottom, len_bottom))
-    print("left: %d zeros in %d length" % (fit_left, len_left))
-    print("right: %d zeros in %d length" % (fit_right, len_right))
-    print('\n')
+    # print("up: %d zeros in %d length" % (even_up, len_up))
+    # print("bottom: %d zeros in %d length" % (even_bottom, len_bottom))
+    # print("left: %d zeros in %d length" % (even_left, len_left))
+    # print("right: %d zeros in %d length" % (even_right, len_right))
+    # print('\n')
 
-    if (fit_up / len_up) < thresh or (fit_bottom / len_bottom) < thresh\
-        or (fit_left / len_left) < thresh or (fit_right / len_right) < thresh:
+    if (even_up / len_up) < thresh or (even_bottom / len_bottom) < thresh\
+        or (even_left / len_left) < thresh or (even_right / len_right) < thresh:
         return False
 
     return True
