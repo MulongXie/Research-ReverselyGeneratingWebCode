@@ -74,26 +74,28 @@ def is_line(boundary, thresh=3):
 
 
 # detect if it is rectangle by evenness of each border
-def is_rectangle(boundary, thresh):
+def is_rectangle(boundary,  min_parameter=400, min_evenness=0.8):
     if is_line(boundary):
         return False
 
     # up, bottom: (column_index, min/max row border)
     # left, right: (row_index, min/max column border)
+    evenness = 0
+    parameter = 0
     for border in boundary:
+        parameter += len(border)
         # calculate the evenness of each border
-        evenness = 0
         for i in range(len(border) - 1):
             if border[i][1] - border[i + 1][1] == 0:
                 evenness += 1
-        if evenness / len(border) < thresh:
-            return False
 
+    if parameter < min_parameter or (evenness / parameter) < min_evenness:
+        return False
     return True
 
 
 # take the binary image as input
-def boundary_detection(bin, min_evenness=0.9, min_area=400):
+def boundary_detection(bin, min_area=400):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
@@ -107,7 +109,7 @@ def boundary_detection(bin, min_evenness=0.9, min_area=400):
                 if len(area) > min_area:
                     boundary = get_boundary(area)
                     boundary_all.append(boundary)
-                    if is_rectangle(boundary, min_evenness):
+                    if is_rectangle(boundary):
                         boundary_rec.append(boundary)
 
     return boundary_all, boundary_rec

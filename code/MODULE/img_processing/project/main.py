@@ -8,7 +8,7 @@ import time
 start = time.clock()
 
 org, gray = pre.read_img('1.png', (0, 2000))  # cut out partial img
-binary = pre.preprocess(gray, 0)
+binary = pre.preprocess(gray, 1)
 boundary_all, boundary_rec = det.boundary_detection(binary)
 corners = det.get_corner(boundary_rec)
 
