@@ -75,6 +75,8 @@ def is_line(boundary, thresh=3):
 
 # detect if it is rectangle by evenness of each border
 def is_rectangle(boundary, thresh):
+    if is_line(boundary):
+        return False
 
     # up, bottom: (column_index, min/max row border)
     # left, right: (row_index, min/max column border)
@@ -85,8 +87,6 @@ def is_rectangle(boundary, thresh):
             if border[i][1] - border[i + 1][1] == 0:
                 evenness += 1
         if evenness / len(border) < thresh:
-            return False
-        if is_line(boundary):
             return False
 
     return True
