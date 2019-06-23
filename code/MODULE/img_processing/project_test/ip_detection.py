@@ -15,44 +15,6 @@ def neighbor(img, x, y, mark, stack):
                 mark[i, j] = 255
 
 
-def is_line(boundary, thresh=3):
-    # up and bottom
-    difference = [abs(boundary[0][i][1] - boundary[1][i][1]) for i in range(len(boundary[1]))]
-    most, number = Counter(difference).most_common(1)[0]
-    # too slim
-    if most < thresh:
-        return True
-    # left and right
-    difference = [abs(boundary[2][i][1] - boundary[3][i][1]) for i in range(len(boundary[2]))]
-    most, number = Counter(difference).most_common(1)[0]
-    # too slim
-    if most < thresh:
-        return True
-
-    return False
-
-
-# detect if it is rectangle by evenness of each border
-def is_rectangle(boundary, thresh):
-
-    # up, bottom: (column_index, min/max row border)
-    # left, right: (row_index, min/max column border)
-    for border in boundary:
-        # calculate the evenness of each border
-        evenness = 0
-        for i in range(len(border) - 1):
-            if border[i][1] - border[i + 1][1] == 0:
-                evenness += 1
-        if evenness / len(border) < thresh:
-            return False
-        if is_line(boundary):
-            return False
-
-    return True
-
-
-
-
 def bfs_connected_area(img, x, y, mark):
     stack = [[x, y]]    # points waiting for inspection
     area = [[x, y]]   # points of this area
@@ -96,30 +58,64 @@ def get_corner(boundaries):
     return corners
 
 
+def is_line(boundary, min_gap=10):
+    # up and bottom
+    difference = [abs(boundary[0][i][1] - boundary[1][i][1]) for i in range(len(boundary[1]))]
+    most, number = Counter(difference).most_common(1)[0]
+    # too slim
+    if most < min_gap:
+        return True
+    # left and right
+    difference = [abs(boundary[2][i][1] - boundary[3][i][1]) for i in range(len(boundary[2]))]
+    most, number = Counter(difference).most_common(1)[0]
+    # too slim
+    if most < min_gap:
+        return True
+
+    return False
+
+
+# detect if it is rectangle by evenness of each border
+def is_rectangle(boundary,  min_parameter=400, min_evenness=0.8):
+    if is_line(boundary):
+        return False
+
+    # up, bottom: (column_index, min/max row border)
+    # left, right: (row_index, min/max column border)
+    evenness = 0
+    parameter = 0
+    for border in boundary:
+        parameter += len(border)
+        # calculate the evenness of each border
+        for i in range(len(border) - 1):
+            if border[i][1] - border[i + 1][1] == 0:
+                evenness += 1
+
+    if parameter < min_parameter or (evenness / parameter) < min_evenness:
+        return False
+    return True
+
+
 # take the binary image as input
-def rectangle_detection(bin, min_evenness=0.9, min_area=400):
+def boundary_detection(bin, min_area=400):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
     row, column = bin.shape[0], bin.shape[1]
 
-    broad = np.zeros(bin.shape, dtype=np.uint8)  # binary broad
-
     for i in range(row):
         for j in range(column):
             if bin[i, j] == 255 and mark[i, j] == 0:
                 area = bfs_connected_area(bin, i, j, mark)
-                print(len(area))
+                # ignore all small area
                 if len(area) > min_area:
                     boundary = get_boundary(area)
                     boundary_all.append(boundary)
-                    if is_rectangle(boundary, min_evenness):
+                    if is_rectangle(boundary):
                         boundary_rec.append(boundary)
 
-                    draw.draw_boundary(boundary, broad)
-                    cv2.imshow('bon', broad)
-                    cv2.waitKey(0)
+                    # broad = draw.draw_boundary(boundary, bin)
+                    # cv2.imshow('bond', broad)
+                    # cv2.waitKey(0)
 
     return boundary_all, boundary_rec
-
-
