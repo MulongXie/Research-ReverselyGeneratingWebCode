@@ -47,6 +47,15 @@ def get_boundary(area):
     return boundary
 
 
+def get_corner(boundaries):
+    corners = []
+    for bounary in boundaries:
+        up_left = (bounary[0][0][0], bounary[2][0][0])
+        bottom_right = (bounary[1][-1][0], bounary[3][-1][0])
+        corners.append((up_left, bottom_right))
+    return corners
+
+
 def is_line(boundary, thresh=3):
     # up and bottom
     difference = [abs(boundary[0][i][1] - boundary[1][i][1]) for i in range(len(boundary[1]))]
@@ -84,7 +93,7 @@ def is_rectangle(boundary, thresh):
 
 
 # take the binary image as input
-def rectangle_detection(bin, min_evenness=0.9, min_area=400):
+def boundary_detection(bin, min_evenness=0.9, min_area=400):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
@@ -102,34 +111,3 @@ def rectangle_detection(bin, min_evenness=0.9, min_area=400):
                         boundary_rec.append(boundary)
 
     return boundary_all, boundary_rec
-
-
-def get_corner(boundaries):
-    corners = []
-    for bounary in boundaries:
-        up_left = (bounary[0][0][0], bounary[2][0][0])
-        bottom_right = (bounary[1][-1][0], bounary[3][-1][0])
-        corners.append((up_left, bottom_right))
-    return corners
-
-
-def draw_bounding_box(corners, org, color=(0, 255, 0), line=3):
-    broad = org.copy()
-    for corner in corners:
-        broad = cv2.rectangle(broad, corner[0], corner[1], color, line)
-
-    return broad
-
-
-def draw_boundary(boundaries, shape):
-    broad = np.zeros(shape[:2], dtype=np.uint8)  # binary broad
-
-    for boundary in boundaries:
-        # up and bottom: (column_index, min/max row border)
-        for point in boundary[0] + boundary[1]:
-            broad[point[1], point[0]] = 255
-        # left, right: (row_index, min/max column border)
-        for point in boundary[2] + boundary[3]:
-            broad[point[0], point[1]] = 255
-
-    return broad
