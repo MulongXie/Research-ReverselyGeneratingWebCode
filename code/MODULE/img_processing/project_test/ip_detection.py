@@ -51,9 +51,9 @@ def get_boundary(area):
 
 def get_corner(boundaries):
     corners = []
-    for bounary in boundaries:
-        up_left = (bounary[0][0][0], bounary[2][0][0])
-        bottom_right = (bounary[1][-1][0], bounary[3][-1][0])
+    for boundary in boundaries:
+        up_left = (boundary[0][0][0], boundary[2][0][0])
+        bottom_right = (boundary[1][-1][0], boundary[3][-1][0])
         corners.append((up_left, bottom_right))
     return corners
 
@@ -76,7 +76,7 @@ def is_line(boundary, min_gap=10):
 
 
 # detect if it is rectangle by evenness of each border
-def is_rectangle(boundary,  min_parameter=400, min_evenness=0.8):
+def is_rectangle(boundary, filling, min_parameter=400, min_evenness=0.8, min_filling_degree=0.5):
     if is_line(boundary):
         return False
 
@@ -91,8 +91,18 @@ def is_rectangle(boundary,  min_parameter=400, min_evenness=0.8):
             if border[i][1] - border[i + 1][1] == 0:
                 evenness += 1
 
+    # ignore text and irregular shape
     if parameter < min_parameter or (evenness / parameter) < min_evenness:
         return False
+
+    width = abs(boundary[3][-1][0] - boundary[2][0][0])     # right_col - left_col
+    height = abs(boundary[1][-1][0] - boundary[0][0][0])    # bottom_row - up_row
+    area = width * height
+
+    # ignore paragraph block
+    if filling / area < min_filling_degree:
+        return False
+
     return True
 
 
@@ -111,11 +121,11 @@ def boundary_detection(bin, min_area=400):
                 if len(area) > min_area:
                     boundary = get_boundary(area)
                     boundary_all.append(boundary)
-                    if is_rectangle(boundary):
+                    if is_rectangle(boundary, len(area)):
                         boundary_rec.append(boundary)
 
-                    # broad = draw.draw_boundary(boundary, bin)
-                    # cv2.imshow('bond', broad)
-                    # cv2.waitKey(0)
+                        # broad = draw.draw_boundary(boundary, bin)
+                        # cv2.imshow('bond', broad)
+                        # cv2.waitKey(0)
 
     return boundary_all, boundary_rec
