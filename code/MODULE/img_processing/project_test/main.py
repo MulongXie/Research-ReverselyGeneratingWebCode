@@ -7,12 +7,13 @@ import time
 
 start = time.clock()
 
-org, gray = pre.read_img('4.png', (1000, 2000))  # cut out partial img
-binary = pre.preprocess(gray, 0)
+org, gray = pre.read_img('3.png', (1600, 2200))  # cut out partial img
+binary = pre.preprocess(gray, 1)
 boundary_all, boundary_rec = det.boundary_detection(binary)
 corners = det.get_corner(boundary_rec)
+com_corners = det.rec_compress(binary, corners)
 
-bounding_drawn = draw.draw_bounding_box(corners, org)
+bounding_drawn = draw.draw_bounding_box(com_corners, org)
 boundary_drawn = draw.draw_boundaries(boundary_all, org.shape)
 
 print(time.clock() - start)  # running time

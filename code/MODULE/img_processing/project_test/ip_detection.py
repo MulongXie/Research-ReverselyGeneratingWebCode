@@ -95,28 +95,66 @@ def is_rectangle(boundary, filling, min_parameter=400, min_evenness=0.8, min_fil
     if parameter < min_parameter or (evenness / parameter) < min_evenness:
         return False
 
-    width = abs(boundary[3][-1][0] - boundary[2][0][0])     # right_col - left_col
-    height = abs(boundary[1][-1][0] - boundary[0][0][0])    # bottom_row - up_row
-    area = width * height
-
-    # ignore paragraph block
-    if filling / area < min_filling_degree:
-        return False
-
     return True
 
 
+def rec_compress(binary, corners, min_area=0.8):
+
+    compressed_corners = []
+    for corner in corners:
+        (up_left, bottom_right) = corner
+        (y_min, x_min) = up_left
+        (y_max, x_max) = bottom_right
+
+        height = x_max - x_min
+        width = y_max - y_min
+
+        # up down
+        for x in range(x_min + 1, x_max):
+            pix_num = int(np.sum(binary[x, y_min: y_max]) / 255)
+            if pix_num / width > min_area:
+                x_min = x
+                break
+        # bottom-up
+        for x in range(x_max - 1, x_min, -1):
+            pix_num = (np.sum(binary[x, y_min: y_max]) / 255)
+            if pix_num / width > min_area:
+                x_max = x
+                break
+
+        # left to right
+        for y in range(y_min + 1, y_max):
+            pix_num = int(np.sum(binary[x_min: x_max, y]) / 255)
+            if pix_num / height > min_area:
+                y_min = y
+                break
+        # right to left
+        for y in range(y_max - 1, y_min, -1):
+            pix_num = int(np.sum(binary[x_min: x_max, y]) / 255)
+            if pix_num / height > min_area:
+                y_max = y
+                break
+            if pix_num / height > min_area:
+                break
+
+        up_left = (y_min, x_min)
+        bottom_right = (y_max, x_max)
+        compressed_corners.append((up_left, bottom_right))
+
+    return compressed_corners
+
+
 # take the binary image as input
-def boundary_detection(bin, min_area=400):
-    mark = np.full(bin.shape, 0, dtype=np.uint8)
+def boundary_detection(binary, min_area=400):
+    mark = np.full(binary.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
-    row, column = bin.shape[0], bin.shape[1]
+    row, column = binary.shape[0], binary.shape[1]
 
     for i in range(row):
         for j in range(column):
-            if bin[i, j] == 255 and mark[i, j] == 0:
-                area = bfs_connected_area(bin, i, j, mark)
+            if binary[i, j] == 255 and mark[i, j] == 0:
+                area = bfs_connected_area(binary, i, j, mark)
                 # ignore all small area
                 if len(area) > min_area:
                     boundary = get_boundary(area)
@@ -124,7 +162,7 @@ def boundary_detection(bin, min_area=400):
                     if is_rectangle(boundary, len(area)):
                         boundary_rec.append(boundary)
 
-                        # broad = draw.draw_boundary(boundary, bin)
+                        # broad = draw.draw_boundary(boundary, binary)
                         # cv2.imshow('bond', broad)
                         # cv2.waitKey(0)
 
