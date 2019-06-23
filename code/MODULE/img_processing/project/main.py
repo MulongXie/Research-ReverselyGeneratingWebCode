@@ -15,7 +15,7 @@ start = time.clock()
 
 # org, gray = pre.read_img(os.path.join(input_root, i), (0, 3000))  # cut out partial img
 org, gray = pre.read_img('input/4.png', (0, 3000))  # cut out partial img
-binary = pre.preprocess(gray, 1)
+binary = pre.preprocess(gray, 0)
 boundary_all, boundary_rec = det.boundary_detection(binary)
 corners = det.get_corner(boundary_rec)
 # draw result
