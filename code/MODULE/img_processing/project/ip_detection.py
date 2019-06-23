@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 from collections import Counter
 
+import ip_draw as draw
+
 
 def neighbor(img, x, y, mark, stack):
     for i in range(x - 1, x + 2):
@@ -56,18 +58,18 @@ def get_corner(boundaries):
     return corners
 
 
-def is_line(boundary, thresh=3):
+def is_line(boundary, min_gap=10):
     # up and bottom
     difference = [abs(boundary[0][i][1] - boundary[1][i][1]) for i in range(len(boundary[1]))]
     most, number = Counter(difference).most_common(1)[0]
     # too slim
-    if most < thresh:
+    if most < min_gap:
         return True
     # left and right
     difference = [abs(boundary[2][i][1] - boundary[3][i][1]) for i in range(len(boundary[2]))]
     most, number = Counter(difference).most_common(1)[0]
     # too slim
-    if most < thresh:
+    if most < min_gap:
         return True
 
     return False
