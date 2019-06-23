@@ -84,7 +84,7 @@ def is_rectangle(boundary, thresh):
 
 
 # take the binary image as input
-def rectangle_detection(bin, evenness_thresh=0.9):
+def rectangle_detection(bin, min_evenness=0.9, min_area=400):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
@@ -94,10 +94,12 @@ def rectangle_detection(bin, evenness_thresh=0.9):
         for j in range(column):
             if bin[i, j] == 255 and mark[i, j] == 0:
                 area = bfs_connected_area(bin, i, j, mark)
-                boundary = get_boundary(area)
-                boundary_all.append(boundary)
-                if is_rectangle(boundary, evenness_thresh):
-                    boundary_rec.append(boundary)
+                # ignore all small area
+                if len(area) > min_area:
+                    boundary = get_boundary(area)
+                    boundary_all.append(boundary)
+                    if is_rectangle(boundary, min_evenness):
+                        boundary_rec.append(boundary)
 
     return boundary_all, boundary_rec
 
