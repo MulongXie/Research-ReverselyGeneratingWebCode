@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 from collections import Counter
 
+import ip_draw as draw
+
 
 def neighbor(img, x, y, mark, stack):
     for i in range(x - 1, x + 2):
@@ -11,40 +13,6 @@ def neighbor(img, x, y, mark, stack):
             if img[i, j] == 255 and mark[i, j] == 0:
                 stack.append([i, j])
                 mark[i, j] = 255
-
-
-def bfs_connected_area(img, x, y, mark):
-    stack = [[x, y]]    # points waiting for inspection
-    area = [[x, y]]   # points of this area
-    mark[x, y] = 255    # drawing broad
-
-    while len(stack) > 0:
-        point = stack.pop()
-        area.append(point)
-        neighbor(img, point[0], point[1], mark, stack)
-    return area
-
-
-def get_boundary(area):
-    border_up, border_bottom, border_left, border_right = ({}, {}, {}, {})
-    for point in area:
-        # point: (row_index, column_index)
-        # up, bottom: (column_index, min/max row border) detect range of each column
-        if point[1] not in border_up or border_up[point[1]] > point[0]:
-            border_up[point[1]] = point[0]
-        if point[1] not in border_bottom or border_bottom[point[1]] < point[0]:
-            border_bottom[point[1]] = point[0]
-        # left, right: (row_index, min/max column border) detect range of each row
-        if point[0] not in border_left or border_left[point[0]] > point[1]:
-            border_left[point[0]] = point[1]
-        if point[0] not in border_right or border_right[point[0]] < point[1]:
-            border_right[point[0]] = point[1]
-
-    boundary = [border_up, border_bottom, border_left, border_right]
-    for i in range(len(boundary)):
-        boundary[i] = sorted(boundary[i].items(), key=lambda x: x[0])
-
-    return boundary
 
 
 def is_line(boundary, thresh=3):
@@ -83,23 +51,40 @@ def is_rectangle(boundary, thresh):
     return True
 
 
-# take the binary image as input
-def rectangle_detection(bin, evenness_thresh=0.9):
-    mark = np.full(bin.shape, 0, dtype=np.uint8)
-    boundary_all = []
-    boundary_rec = []
-    row, column = bin.shape[0], bin.shape[1]
 
-    for i in range(row):
-        for j in range(column):
-            if bin[i, j] == 255 and mark[i, j] == 0:
-                area = bfs_connected_area(bin, i, j, mark)
-                boundary = get_boundary(area)
-                boundary_all.append(boundary)
-                if is_rectangle(boundary, evenness_thresh):
-                    boundary_rec.append(boundary)
 
-    return boundary_all, boundary_rec
+def bfs_connected_area(img, x, y, mark):
+    stack = [[x, y]]    # points waiting for inspection
+    area = [[x, y]]   # points of this area
+    mark[x, y] = 255    # drawing broad
+
+    while len(stack) > 0:
+        point = stack.pop()
+        area.append(point)
+        neighbor(img, point[0], point[1], mark, stack)
+    return area
+
+
+def get_boundary(area):
+    border_up, border_bottom, border_left, border_right = ({}, {}, {}, {})
+    for point in area:
+        # point: (row_index, column_index)
+        # up, bottom: (column_index, min/max row border) detect range of each column
+        if point[1] not in border_up or border_up[point[1]] > point[0]:
+            border_up[point[1]] = point[0]
+        if point[1] not in border_bottom or border_bottom[point[1]] < point[0]:
+            border_bottom[point[1]] = point[0]
+        # left, right: (row_index, min/max column border) detect range of each row
+        if point[0] not in border_left or border_left[point[0]] > point[1]:
+            border_left[point[0]] = point[1]
+        if point[0] not in border_right or border_right[point[0]] < point[1]:
+            border_right[point[0]] = point[1]
+
+    boundary = [border_up, border_bottom, border_left, border_right]
+    for i in range(len(boundary)):
+        boundary[i] = sorted(boundary[i].items(), key=lambda x: x[0])
+
+    return boundary
 
 
 def get_corner(boundaries):
@@ -111,23 +96,30 @@ def get_corner(boundaries):
     return corners
 
 
-def draw_bounding_box(corners, org, color=(0, 255, 0), line=3):
-    broad = org.copy()
-    for corner in corners:
-        broad = cv2.rectangle(broad, corner[0], corner[1], color, line)
+# take the binary image as input
+def rectangle_detection(bin, min_evenness=0.9, min_area=400):
+    mark = np.full(bin.shape, 0, dtype=np.uint8)
+    boundary_all = []
+    boundary_rec = []
+    row, column = bin.shape[0], bin.shape[1]
 
-    return broad
+    broad = np.zeros(bin.shape, dtype=np.uint8)  # binary broad
+
+    for i in range(row):
+        for j in range(column):
+            if bin[i, j] == 255 and mark[i, j] == 0:
+                area = bfs_connected_area(bin, i, j, mark)
+                print(len(area))
+                if len(area) > min_area:
+                    boundary = get_boundary(area)
+                    boundary_all.append(boundary)
+                    if is_rectangle(boundary, min_evenness):
+                        boundary_rec.append(boundary)
+
+                    draw.draw_boundary(boundary, broad)
+                    cv2.imshow('bon', broad)
+                    cv2.waitKey(0)
+
+    return boundary_all, boundary_rec
 
 
-def draw_boundary(boundaries, shape):
-    broad = np.zeros(shape[:2], dtype=np.uint8)  # binary broad
-
-    for boundary in boundaries:
-        # up and bottom: (column_index, min/max row border)
-        for point in boundary[0] + boundary[1]:
-            broad[point[1], point[0]] = 255
-        # left, right: (row_index, min/max column border)
-        for point in boundary[2] + boundary[3]:
-            broad[point[0], point[1]] = 255
-
-    return broad
