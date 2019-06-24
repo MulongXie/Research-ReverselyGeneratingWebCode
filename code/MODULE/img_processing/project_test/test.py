@@ -1,7 +1,8 @@
 
-x = 0
+x = [1, 1, 1, 2, 3, 4]
 
-for x in range(1, 10):
-    pass
+for i in x:
+    if i == 1:
+        x.pop()
 
-fo
+print(x)

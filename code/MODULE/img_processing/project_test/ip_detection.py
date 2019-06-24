@@ -45,7 +45,6 @@ def get_boundary(area):
     boundary = [border_up, border_bottom, border_left, border_right]
     for i in range(len(boundary)):
         boundary[i] = sorted(boundary[i].items(), key=lambda x: x[0])
-
     return boundary
 
 
@@ -77,6 +76,7 @@ def is_line(boundary, min_gap=10):
 def is_wireframe(binary, corners, max_thickness=6):
 
     wireframes = []
+    non_wireframe = []
     for corner in corners:
         (up_left, bottom_right) = corner
         (y_min, x_min) = up_left
@@ -103,8 +103,10 @@ def is_wireframe(binary, corners, max_thickness=6):
 
         if is_wire:
             wireframes.append(corner)
+        else:
+            non_wireframe.append(corner)
 
-    return wireframes
+    return wireframes, non_wireframe
 
 
 # detect if it is rectangle by evenness of each border
@@ -126,54 +128,50 @@ def is_rectangle(boundary, min_parameter=400, min_evenness=0.8, min_filling_degr
     # ignore text and irregular shape
     if parameter < min_parameter or (evenness / parameter) < min_evenness:
         return False
-
     return True
 
 
-def rec_compress(binary, corners, min_area=0.4):
-
-    compressed_corners = []
-    for corner in corners:
-        (up_left, bottom_right) = corner
-        (y_min, x_min) = up_left
-        (y_max, x_max) = bottom_right
-
-        height = x_max - x_min
-        width = y_max - y_min
-
-        # up down
-        for x in range(x_min + 1, x_max):
-            pix_num = int(np.sum(binary[x, y_min: y_max]) / 255)
-            if pix_num / width > min_area:
-                x_min = x
-                break
-        # bottom-up
-        for x in range(x_max - 1, x_min, -1):
-            pix_num = (np.sum(binary[x, y_min: y_max]) / 255)
-            if pix_num / width > min_area:
-                x_max = x
-                break
-
-        # left to right
-        for y in range(y_min + 1, y_max):
-            pix_num = int(np.sum(binary[x_min: x_max, y]) / 255)
-            if pix_num / height > min_area:
-                y_min = y
-                break
-        # right to left
-        for y in range(y_max - 1, y_min, -1):
-            pix_num = int(np.sum(binary[x_min: x_max, y]) / 255)
-            if pix_num / height > min_area:
-                y_max = y
-                break
-            if pix_num / height > min_area:
-                break
-
-        up_left = (y_min, x_min)
-        bottom_right = (y_max, x_max)
-        compressed_corners.append((up_left, bottom_right))
-
-    return compressed_corners
+# def rec_compress(binary, corners, max_thickness=6):
+#
+#     compressed_corners = []
+#     for corner in corners:
+#         (up_left, bottom_right) = corner
+#         (y_min, x_min) = up_left
+#         (y_max, x_max) = bottom_right
+#
+#         # up down
+#         if np.sum(binary[x_min + max_thickness, y_min + max_thickness: y_max - max_thickness]) == 0:
+#             for x in range(x_min + max_thickness, x_max):
+#                 if np.mean(binary[x, y_min: y_max]) >= 250:
+#                     x_min = x
+#                     break
+#
+#         # bottom-up
+#         if np.sum(binary[x_max - max_thickness, y_min + max_thickness: y_max - max_thickness]) == 0:
+#             for x in range(x_max - max_thickness, x_min, -1):
+#                 if np.mean(binary[x, y_min: y_max]) >= 252:
+#                     x_max = x
+#                     break
+#
+#         # left to right
+#         if np.sum(binary[x_min + max_thickness: x_max - max_thickness, y_min + max_thickness]) == 0:
+#             for y in range(y_min + max_thickness, y_max):
+#                 if np.mean(binary[x_min: x_max, y]) >= 252:
+#                     y_min = y
+#                     break
+#
+#         # right to left
+#         if np.sum(binary[x_min + max_thickness: x_max - max_thickness, y_max - max_thickness]) == 0:
+#             for y in range(y_max - max_thickness, y_min, -1):
+#                 if np.mean(binary[x_min: x_max, y]) >= 252:
+#                     y_max = y
+#                     break
+#
+#         up_left = (y_min, x_min)
+#         bottom_right = (y_max, x_max)
+#         compressed_corners.append((up_left, bottom_right))
+#
+#     return compressed_corners
 
 
 # take the binary image as input
