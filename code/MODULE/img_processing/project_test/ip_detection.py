@@ -98,7 +98,7 @@ def is_rectangle(boundary, filling, min_parameter=400, min_evenness=0.8, min_fil
     return True
 
 
-def rec_compress(binary, corners, min_area=0.8):
+def rec_compress(binary, corners, min_area=0.4):
 
     compressed_corners = []
     for corner in corners:
