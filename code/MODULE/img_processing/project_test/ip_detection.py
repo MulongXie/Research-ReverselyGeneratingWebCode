@@ -71,12 +71,44 @@ def is_line(boundary, min_gap=10):
     # too slim
     if most < min_gap:
         return True
-
     return False
 
 
+def is_wireframe(binary, corners, max_thickness=6):
+
+    wireframes = []
+    for corner in corners:
+        (up_left, bottom_right) = corner
+        (y_min, x_min) = up_left
+        (y_max, x_max) = bottom_right
+
+        is_wire = False
+        vacancy = [0, 0, 0, 0]
+        for i in range(1, max_thickness):
+            # up down
+            if vacancy[0] == 0 and np.sum(binary[x_min + i, y_min + i: y_max - i]) == 0:
+                vacancy[0] = 1
+            # bottom-up
+            if vacancy[1] == 0 and np.sum(binary[x_max - i, y_min + i: y_max - i]) == 0:
+                vacancy[1] = 1
+            # left to right
+            if vacancy[2] == 0 and np.sum(binary[x_min + i: x_max - i, y_min + i]) == 0:
+                vacancy[2] = 1
+            # right to left
+            if vacancy[3] == 0 and np.sum(binary[x_min + i: x_max - i, y_max - i]) == 0:
+                vacancy[3] = 1
+
+            if np.sum(vacancy) == 4:
+                is_wire = True
+
+        if is_wire:
+            wireframes.append(corner)
+
+    return wireframes
+
+
 # detect if it is rectangle by evenness of each border
-def is_rectangle(boundary, filling, min_parameter=400, min_evenness=0.8, min_filling_degree=0.5):
+def is_rectangle(boundary, min_parameter=400, min_evenness=0.8, min_filling_degree=0.5):
     if is_line(boundary):
         return False
 
@@ -159,7 +191,7 @@ def boundary_detection(binary, min_area=400):
                 if len(area) > min_area:
                     boundary = get_boundary(area)
                     boundary_all.append(boundary)
-                    if is_rectangle(boundary, len(area)):
+                    if is_rectangle(boundary):
                         boundary_rec.append(boundary)
 
                         # broad = draw.draw_boundary(boundary, binary)
