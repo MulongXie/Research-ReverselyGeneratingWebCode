@@ -1,4 +1,4 @@
-class CONFIG:
+class Config:
 
     def __init__(self):
         self.DATA_ROOT = "D:/datasets/dataset_webpage/data/img_relabelled"

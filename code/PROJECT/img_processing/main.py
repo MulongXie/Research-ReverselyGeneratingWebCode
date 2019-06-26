@@ -1,20 +1,21 @@
 import ip_detection as det
 import ip_preprocessing as pre
 import ip_draw as draw
+from CONFIG import Config
 
 import cv2
 import time
 import os
 
-input_root = 'input'
-output_root = 'output'
+C = Config()
+input_root = C.IMG_ROOT
+output_root = C.OUTPUT_ROOT
 
 
 for i in os.listdir(input_root):
 
     start = time.clock()
-    # org, gray = pre.read_img(os.path.join(input_root, i), (0, 3000))  # cut out partial img
-    org, gray = pre.read_img('input/' + i, (0, 3000))  # cut out partial img
+    org, gray = pre.read_img(os.path.join(input_root, i), (0, 3000))  # cut out partial img
     binary = pre.preprocess(gray, 1)
     boundary_all, boundary_rec = det.boundary_detection(binary)
     corners = det.get_corner(boundary_rec)
@@ -26,11 +27,12 @@ for i in os.listdir(input_root):
 
     print(time.clock() - start)  # running time
 
-    cv2.imwrite('output/bounding/' + i[:-4] + '.png', bounding_drawn)
-    cv2.imwrite('output/boundary/' + i[:-4] + '.png', boundary_drawn)
-    cv2.imwrite('output/gradient/' + i[:-4] + '.png', binary)
+    cv2.imwrite(os.path.join(output_root, ('labeled/' + i[:-4] + '.png')), bounding_drawn)
+    cv2.imwrite(os.path.join(output_root, ('boundary/' + i[:-4] + '.png')), boundary_drawn)
+    cv2.imwrite(os.path.join(output_root, ('gradient/' + i[:-4] + '.png')), binary)
 
-# cv2.imshow('org', bounding_drawn)
-# cv2.imshow('boundary', boundary_drawn)
-# cv2.imshow('gradient', binary)
-# cv2.waitKey(0)
+
+    # cv2.imshow('org', bounding_drawn)
+    # cv2.imshow('boundary', boundary_drawn)
+    # cv2.imshow('gradient', binary)
+    # cv2.waitKey(0)
