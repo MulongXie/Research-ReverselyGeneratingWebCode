@@ -19,7 +19,6 @@ for i in os.listdir(input_root):
     boundary_all, boundary_rec = det.boundary_detection(binary)
     corners = det.get_corner(boundary_rec)
     wire_corners, rec_corners = det.is_wireframe(binary, corners)
-    # corners = det.rec_compress(binary, corners)
     # draw result
     bounding_drawn = draw.draw_bounding_box(wire_corners, org, (0, 255, 0))
     bounding_drawn = draw.draw_bounding_box(rec_corners, bounding_drawn, (0, 0, 255))
