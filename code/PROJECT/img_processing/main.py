@@ -31,7 +31,6 @@ for i in os.listdir(input_root):
     cv2.imwrite(os.path.join(output_root, ('boundary/' + i[:-4] + '.png')), boundary_drawn)
     cv2.imwrite(os.path.join(output_root, ('gradient/' + i[:-4] + '.png')), binary)
 
-
     # cv2.imshow('org', bounding_drawn)
     # cv2.imshow('boundary', boundary_drawn)
     # cv2.imshow('gradient', binary)
