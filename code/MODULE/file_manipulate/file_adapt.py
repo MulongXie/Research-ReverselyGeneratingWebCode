@@ -3,15 +3,15 @@ import os
 
 
 def move_file():
-    root_label = 'D:\datasets\dataset_webpage\data\img_segment\label_refine'
+    scr_label = 'D:\datasets\dataset_webpage\data\img_segment\label_refine'
     des_label = 'D:\datasets\dataset_webpage\data\img_relabelled\label'
 
     scr = 'D:\datasets\dataset_webpage\data\img_segment\img'
     des = 'D:\datasets\dataset_webpage\data\img_relabelled\img'
-    for f in os.listdir(root_label):
+    for f in os.listdir(scr_label):
         index = f[:-4]
         os.renames(os.path.join(scr, index), os.path.join(des, index))
-        os.renames(os.path.join(root_label, f), os.path.join(des_label, f))
+        os.renames(os.path.join(scr_label, f), os.path.join(des_label, f))
 
 
 def box_convert(label):
