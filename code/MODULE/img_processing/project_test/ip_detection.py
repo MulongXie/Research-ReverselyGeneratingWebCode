@@ -45,14 +45,15 @@ def get_boundary(area):
     boundary = [border_up, border_bottom, border_left, border_right]
     for i in range(len(boundary)):
         boundary[i] = sorted(boundary[i].items(), key=lambda x: x[0])
+
     return boundary
 
 
 def get_corner(boundaries):
     corners = []
-    for boundary in boundaries:
-        up_left = (boundary[0][0][0], boundary[2][0][0])
-        bottom_right = (boundary[1][-1][0], boundary[3][-1][0])
+    for bounary in boundaries:
+        up_left = (bounary[0][0][0], bounary[2][0][0])
+        bottom_right = (bounary[1][-1][0], bounary[3][-1][0])
         corners.append((up_left, bottom_right))
     return corners
 
@@ -70,11 +71,11 @@ def is_line(boundary, min_gap=10):
     # too slim
     if most < min_gap:
         return True
+
     return False
 
 
 def is_wireframe(binary, corners, max_thickness=6):
-
     wireframes = []
     non_wireframe = []
     for corner in corners:
@@ -110,7 +111,7 @@ def is_wireframe(binary, corners, max_thickness=6):
 
 
 # detect if it is rectangle by evenness of each border
-def is_rectangle(boundary, min_parameter=400, min_evenness=0.8, min_filling_degree=0.5):
+def is_rectangle(boundary, min_parameter=400, min_evenness=0.8):
     if is_line(boundary):
         return False
 
@@ -128,72 +129,26 @@ def is_rectangle(boundary, min_parameter=400, min_evenness=0.8, min_filling_degr
     # ignore text and irregular shape
     if parameter < min_parameter or (evenness / parameter) < min_evenness:
         return False
+
     return True
 
 
-# def rec_compress(binary, corners, max_thickness=6):
-#
-#     compressed_corners = []
-#     for corner in corners:
-#         (up_left, bottom_right) = corner
-#         (y_min, x_min) = up_left
-#         (y_max, x_max) = bottom_right
-#
-#         # up down
-#         if np.sum(binary[x_min + max_thickness, y_min + max_thickness: y_max - max_thickness]) == 0:
-#             for x in range(x_min + max_thickness, x_max):
-#                 if np.mean(binary[x, y_min: y_max]) >= 250:
-#                     x_min = x
-#                     break
-#
-#         # bottom-up
-#         if np.sum(binary[x_max - max_thickness, y_min + max_thickness: y_max - max_thickness]) == 0:
-#             for x in range(x_max - max_thickness, x_min, -1):
-#                 if np.mean(binary[x, y_min: y_max]) >= 252:
-#                     x_max = x
-#                     break
-#
-#         # left to right
-#         if np.sum(binary[x_min + max_thickness: x_max - max_thickness, y_min + max_thickness]) == 0:
-#             for y in range(y_min + max_thickness, y_max):
-#                 if np.mean(binary[x_min: x_max, y]) >= 252:
-#                     y_min = y
-#                     break
-#
-#         # right to left
-#         if np.sum(binary[x_min + max_thickness: x_max - max_thickness, y_max - max_thickness]) == 0:
-#             for y in range(y_max - max_thickness, y_min, -1):
-#                 if np.mean(binary[x_min: x_max, y]) >= 252:
-#                     y_max = y
-#                     break
-#
-#         up_left = (y_min, x_min)
-#         bottom_right = (y_max, x_max)
-#         compressed_corners.append((up_left, bottom_right))
-#
-#     return compressed_corners
-
-
 # take the binary image as input
-def boundary_detection(binary, min_area=400):
-    mark = np.full(binary.shape, 0, dtype=np.uint8)
+def boundary_detection(bin, min_area=400):
+    mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
-    row, column = binary.shape[0], binary.shape[1]
+    row, column = bin.shape[0], bin.shape[1]
 
     for i in range(row):
         for j in range(column):
-            if binary[i, j] == 255 and mark[i, j] == 0:
-                area = bfs_connected_area(binary, i, j, mark)
+            if bin[i, j] == 255 and mark[i, j] == 0:
+                area = bfs_connected_area(bin, i, j, mark)
                 # ignore all small area
                 if len(area) > min_area:
                     boundary = get_boundary(area)
                     boundary_all.append(boundary)
                     if is_rectangle(boundary):
                         boundary_rec.append(boundary)
-
-                        # broad = draw.draw_boundary(boundary, binary)
-                        # cv2.imshow('bond', broad)
-                        # cv2.waitKey(0)
 
     return boundary_all, boundary_rec
