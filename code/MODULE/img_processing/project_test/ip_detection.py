@@ -137,8 +137,9 @@ def rec_compress(binary, corners, max_thickness=3):
 
             # left inner border: current column is line (all one) + previous column is background (all zero)
             if count_divide_column > 0.9 and count_divide_column_pre == 0:
-                if y_max - y > max_thickness:
+                if y_max - y > max_thickness and y - y_min > max_thickness:
                     y_min = y
+                    y += max_thickness
                     draw_coners.pop()
                     draw_coners.append(((y_min, x_min), (y_min, x_max)))
                     broad = draw.draw_bounding_box(draw_coners, broad, (255, 0, 0))
@@ -146,8 +147,9 @@ def rec_compress(binary, corners, max_thickness=3):
                     cv2.waitKey(0)
             # right inner border: current column is background (all zero) + previous column is
             elif count_divide_column == 0 and count_divide_column_pre > 0.9:
-                if y - y_min > max_thickness:
+                if y - y_min > max_thickness and y_max - y > max_thickness:
                     y_max = y
+                    y += max_thickness
                     draw_coners.pop()
                     draw_coners.append(((y_max, x_min), (y_max, x_max)))
                     broad = draw.draw_bounding_box(draw_coners, broad, (0, 255, 0))
