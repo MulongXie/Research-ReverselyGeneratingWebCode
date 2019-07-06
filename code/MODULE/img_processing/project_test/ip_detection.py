@@ -76,6 +76,7 @@ def is_line(boundary, min_gap=10):
 
 
 def is_wireframe(binary, corners, max_thickness=6):
+
     wireframes = []
     non_wireframe = []
     for corner in corners:
@@ -87,16 +88,16 @@ def is_wireframe(binary, corners, max_thickness=6):
         vacancy = [0, 0, 0, 0]
         for i in range(1, max_thickness):
             # up down
-            if vacancy[0] == 0 and np.sum(binary[x_min + i, y_min + i: y_max - i]) == 0:
+            if vacancy[0] == 0 and (np.sum(binary[x_min + i, y_min + i: y_max - i])/255)/(y_max-y_min-2*i) <= 0.1:
                 vacancy[0] = 1
             # bottom-up
-            if vacancy[1] == 0 and np.sum(binary[x_max - i, y_min + i: y_max - i]) == 0:
+            if vacancy[1] == 0 and (np.sum(binary[x_max - i, y_min + i: y_max - i])/255)/(y_max-y_min-2*i) <= 0.1:
                 vacancy[1] = 1
             # left to right
-            if vacancy[2] == 0 and np.sum(binary[x_min + i: x_max - i, y_min + i]) == 0:
+            if vacancy[2] == 0 and (np.sum(binary[x_min + i: x_max - i, y_min + i])/255)/(x_max-x_min-2*i) <= 0.1:
                 vacancy[2] = 1
             # right to left
-            if vacancy[3] == 0 and np.sum(binary[x_min + i: x_max - i, y_max - i]) == 0:
+            if vacancy[3] == 0 and (np.sum(binary[x_min + i: x_max - i, y_max - i])/255)/(x_max-x_min-2*i) <= 0.1:
                 vacancy[3] = 1
 
             if np.sum(vacancy) == 4:
@@ -110,8 +111,38 @@ def is_wireframe(binary, corners, max_thickness=6):
     return wireframes, non_wireframe
 
 
+def rec_compress(binary, corners, max_thickness=6):
+
+    compressed_corners = []
+    for corner in corners:
+        (up_left, bottom_right) = corner
+        (y_min, x_min) = up_left
+        (y_max, x_max) = bottom_right
+
+        width = y_max - y_min - 2 * max_thickness
+        height = x_max - x_min - 2 * max_thickness
+
+        # scan vertically
+        count_divide_column_pre = np.sum(binary[x_min + max_thickness: x_max - max_thickness, y_min + max_thickness])/255/height
+        for y in range(y_min + max_thickness + 1, y_max - max_thickness):
+            count_divide_column = np.sum(binary[x_min + max_thickness: x_max - max_thickness, y])/255/height
+
+            # left inner border: current column is line (all one) + previous column is background (all zero)
+            if count_divide_column > 0.9 and count_divide_column_pre == 0:
+                y_min = y
+            # right inner border: current column is background (all zero) + previous column is line (all one)
+            if count_divide_column == 0 and count_divide_column_pre > 0.9:
+                y_max = y
+
+            count_divide_column_pre = count_divide_column
+
+        compressed_corners.append(((y_min, x_min), (y_max, x_max)))
+
+    return compressed_corners
+
+
 # detect if it is rectangle by evenness of each border
-def is_rectangle(boundary, min_parameter=400, min_evenness=0.8):
+def is_rectangle(boundary, min_parameter=100, min_evenness=0.8):
     if is_line(boundary):
         return False
 
@@ -134,7 +165,7 @@ def is_rectangle(boundary, min_parameter=400, min_evenness=0.8):
 
 
 # take the binary image as input
-def boundary_detection(bin, min_area=400):
+def boundary_detection(bin, min_area=200):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
