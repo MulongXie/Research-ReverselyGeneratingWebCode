@@ -18,7 +18,7 @@ is_show = False
 start = time.clock()
 
 # pre-processing: gray, gradient, binary
-org, gray = pre.read_img('1.png', (0, 3000))  # cut out partial img
+org, gray = pre.read_img('6.png', (0, 3000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 # processing: connected areas, boundary, rectangle check, corners, wireframe check
@@ -29,8 +29,7 @@ compressed_corners = det.rec_compress(binary, rec_corners)
 
 # draw results
 bounding_drawn = draw.draw_bounding_box(wire_corners, org, (0, 255, 0))
-bounding_drawn = draw.draw_bounding_box(rec_corners, bounding_drawn, (0, 0, 255))
-bounding_drawn = draw.draw_bounding_box(compressed_corners, bounding_drawn, (100, 100, 100))
+bounding_drawn = draw.draw_bounding_box(compressed_corners, bounding_drawn, (0, 0, 255))
 boundary_drawn = draw.draw_boundary(boundary_all, org.shape)
 
 # save results

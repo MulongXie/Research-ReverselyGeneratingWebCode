@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-def draw_bounding_box(corners, org, color=(0, 255, 0), line=3):
+def draw_bounding_box(corners, org, color=(0, 255, 0), line=1):
     broad = org.copy()
     for corner in corners:
         broad = cv2.rectangle(broad, corner[0], corner[1], color, line)

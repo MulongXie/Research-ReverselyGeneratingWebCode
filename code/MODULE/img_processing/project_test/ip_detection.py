@@ -111,7 +111,10 @@ def is_wireframe(binary, corners, max_thickness=6):
     return wireframes, non_wireframe
 
 
-def rec_compress(binary, corners, max_thickness=6):
+def rec_compress(binary, corners, max_thickness=3):
+
+    broad = np.zeros((binary.shape[0], binary.shape[1], 3), dtype=np.uint8)
+    draw_coners = []
 
     compressed_corners = []
     for corner in corners:
@@ -119,25 +122,39 @@ def rec_compress(binary, corners, max_thickness=6):
         (y_min, x_min) = up_left
         (y_max, x_max) = bottom_right
 
+        draw_coners.append(((y_min, x_min), (y_max, x_max)))
+        broad = draw.draw_bounding_box(draw_coners, broad, (255, 0, 0))
+
         width = y_max - y_min - 2 * max_thickness
         height = x_max - x_min - 2 * max_thickness
 
         # scan vertically
-        count_divide_column_pre = np.sum(binary[x_min + max_thickness: x_max - max_thickness, y_min + max_thickness])/255/height
-        for y in range(y_min + max_thickness + 1, y_max - max_thickness):
-            count_divide_column = np.sum(binary[x_min + max_thickness: x_max - max_thickness, y])/255/height
+        # line: count_divide_column > 0.9
+        # background: count_divide_column < 0.1
+        for y in range(y_min + max_thickness, y_max - max_thickness):
+            count_divide_column = np.sum(binary[x_min+max_thickness: x_max-max_thickness, y])/255/height
+            count_divide_column_pre = np.sum(binary[x_min+max_thickness: x_max-max_thickness, y-max_thickness])/255/height
 
             # left inner border: current column is line (all one) + previous column is background (all zero)
             if count_divide_column > 0.9 and count_divide_column_pre == 0:
-                y_min = y
-            # right inner border: current column is background (all zero) + previous column is line (all one)
-            if count_divide_column == 0 and count_divide_column_pre > 0.9:
-                y_max = y
-
-            count_divide_column_pre = count_divide_column
+                if y_max - y > max_thickness:
+                    y_min = y
+                    draw_coners.pop()
+                    draw_coners.append(((y_min, x_min), (y_min, x_max)))
+                    broad = draw.draw_bounding_box(draw_coners, broad, (255, 0, 0))
+                    cv2.imshow('broad', broad)
+                    cv2.waitKey(0)
+            # right inner border: current column is background (all zero) + previous column is
+            elif count_divide_column == 0 and count_divide_column_pre > 0.9:
+                if y - y_min > max_thickness:
+                    y_max = y
+                    draw_coners.pop()
+                    draw_coners.append(((y_max, x_min), (y_max, x_max)))
+                    broad = draw.draw_bounding_box(draw_coners, broad, (0, 255, 0))
+                    cv2.imshow('broad', broad)
+                    cv2.waitKey(0)
 
         compressed_corners.append(((y_min, x_min), (y_max, x_max)))
-
     return compressed_corners
 
 
