@@ -14,11 +14,10 @@ output_root = C.OUTPUT_ROOT
 is_save = True
 is_show = False
 
-
 start = time.clock()
 
 # pre-processing: gray, gradient, binary
-org, gray = pre.read_img('6.png', (0, 3000))  # cut out partial img
+org, gray = pre.read_img('7.png', (0, 3000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 # processing: connected areas, boundary, rectangle check, corners, wireframe check

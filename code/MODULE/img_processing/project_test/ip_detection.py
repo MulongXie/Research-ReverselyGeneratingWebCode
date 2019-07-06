@@ -141,8 +141,8 @@ def rec_compress(binary, corners, max_thickness=3):
             # right inner border: current column is background (all zero) + previous column is
             elif count_divide_column == 0 and count_divide_column_pre > 0.9:
                 if x - x_min > max_thickness and x_max - x > max_thickness:
-                    x_max = x
-                    
+                    x_max = x - max_thickness
+
         # scan vertically
         for y in range(y_min + max_thickness, y_max - max_thickness):
             count_divide_column = np.sum(binary[x_min+max_thickness: x_max-max_thickness, y])/255/height
@@ -154,7 +154,7 @@ def rec_compress(binary, corners, max_thickness=3):
             # right inner border: current column is background (all zero) + previous column is
             elif count_divide_column == 0 and count_divide_column_pre > 0.9:
                 if y - y_min > max_thickness and y_max - y > max_thickness:
-                    y_max = y
+                    y_max = y - max_thickness
 
         compressed_corners.append(((y_min, x_min), (y_max, x_max)))
     return compressed_corners
