@@ -28,11 +28,11 @@ for i in os.listdir(input_root):
                                                         C.THRESHOLD_MIN_LINE_THICKNESS)
     corners = det.get_corner(boundary_rec)
     wire_corners, rec_corners = det.is_wireframe(binary, corners, C.THRESHOLD_MAX_BORDER_THICKNESS)
-    compressed_rec_corners = det.rec_compress(binary, rec_corners, C.THRESHOLD_MAX_BORDER_THICKNESS)
+    refined_rec_corners = det.rec_refine(binary, rec_corners, C.THRESHOLD_MAX_BORDER_THICKNESS)
 
     # draw results
     bounding_drawn = draw.draw_bounding_box(wire_corners, org, (0, 255, 0))
-    bounding_drawn = draw.draw_bounding_box(compressed_rec_corners, bounding_drawn, (0, 0, 255))
+    bounding_drawn = draw.draw_bounding_box(refined_rec_corners, bounding_drawn, (0, 0, 255))
     boundary_drawn = draw.draw_boundary(boundary_all, org.shape)
     # save results
     if is_save:

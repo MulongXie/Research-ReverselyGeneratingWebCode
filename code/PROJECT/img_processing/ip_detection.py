@@ -112,19 +112,42 @@ def is_wireframe(binary, corners, max_thickness):
     return wireframes, non_wireframe
 
 
-def rec_compress(binary, corners, max_thickness):
+def rm_inner_rec(corners):
+    inner = np.full((len(corners), 1), False)
+    for i in range(len(corners)):
+        (up_left_a, bottom_right_a) = corners[i]
+        (y_min_a, x_min_a) = up_left_a
+        (y_max_a, x_max_a) = bottom_right_a
 
-    broad = np.zeros((binary.shape[0], binary.shape[1], 3), dtype=np.uint8)
-    draw_coners = []
+        for j in range(i+1, len(corners)):
+            (up_left_b, bottom_right_b) = corners[j]
+            (y_min_b, x_min_b) = up_left_b
+            (y_max_b, x_max_b) = bottom_right_b
 
-    compressed_corners = []
+            # if rec[i] is in rec[j]
+            if y_min_a > y_min_b and x_min_a > x_min_b and y_max_a < y_max_b and x_max_a < x_max_b:
+                inner[i] = True
+            # if rec[i] is in rec[j]
+            elif y_min_a < y_min_b and x_min_a < x_min_b and y_max_a > y_max_b and x_max_a > x_max_b:
+                inner[j] = True
+
+    refined_corners = []
+    for i in range(len(inner)):
+        if not inner[i]:
+            refined_corners.append(corners[i])
+    return refined_corners
+
+
+# get the more accurate bounding box of rectangles
+def rec_refine(binary, corners, max_thickness):
+    refined_corners = []
+    # remove inner rectangles
+    corners = rm_inner_rec(corners)
+
     for corner in corners:
         (up_left, bottom_right) = corner
         (y_min, x_min) = up_left
         (y_max, x_max) = bottom_right
-
-        draw_coners.append(((y_min, x_min), (y_max, x_max)))
-        broad = draw.draw_bounding_box(draw_coners, broad, (255, 0, 0))
 
         width = y_max - y_min - 2 * max_thickness
         height = x_max - x_min - 2 * max_thickness
@@ -157,8 +180,8 @@ def rec_compress(binary, corners, max_thickness):
                 if y - y_min > max_thickness and y_max - y > max_thickness:
                     y_max = y - max_thickness
 
-        compressed_corners.append(((y_min, x_min), (y_max, x_max)))
-    return compressed_corners
+        refined_corners.append(((y_min, x_min), (y_max, x_max)))
+    return refined_corners
 
 
 # detect if it is rectangle by evenness of each border
