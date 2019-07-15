@@ -43,6 +43,7 @@ def get_boundary(area):
             border_right[point[0]] = point[1]
 
     boundary = [border_up, border_bottom, border_left, border_right]
+    # descending sort
     for i in range(len(boundary)):
         boundary[i] = sorted(boundary[i].items(), key=lambda x: x[0])
 
@@ -58,24 +59,25 @@ def get_corner(boundaries):
     return corners
 
 
-def is_line(boundary, min_gap=10):
+def is_line(boundary, min_line_thickness):
     # up and bottom
     difference = [abs(boundary[0][i][1] - boundary[1][i][1]) for i in range(len(boundary[1]))]
     most, number = Counter(difference).most_common(1)[0]
     # too slim
-    if most < min_gap:
+    if most < min_line_thickness:
         return True
     # left and right
     difference = [abs(boundary[2][i][1] - boundary[3][i][1]) for i in range(len(boundary[2]))]
     most, number = Counter(difference).most_common(1)[0]
     # too slim
-    if most < min_gap:
+    if most < min_line_thickness:
         return True
 
     return False
 
 
-def is_wireframe(binary, corners, max_thickness=6):
+def is_wireframe(binary, corners, max_thickness):
+
     wireframes = []
     non_wireframe = []
     for corner in corners:
@@ -110,7 +112,7 @@ def is_wireframe(binary, corners, max_thickness=6):
     return wireframes, non_wireframe
 
 
-def rec_compress(binary, corners, max_thickness=3):
+def rec_compress(binary, corners, max_thickness):
 
     broad = np.zeros((binary.shape[0], binary.shape[1], 3), dtype=np.uint8)
     draw_coners = []
@@ -160,8 +162,9 @@ def rec_compress(binary, corners, max_thickness=3):
 
 
 # detect if it is rectangle by evenness of each border
-def is_rectangle(boundary, min_parameter=100, min_evenness=0.8):
-    if is_line(boundary):
+# @boundary: [border_up, border_bottom, border_left, border_right]
+def is_rectangle(boundary, min_rec_parameter, min_rec_evenness, max_rec_edge_ratio, min_line_thickness):
+    if is_line(boundary, min_line_thickness):
         return False
 
     # up, bottom: (column_index, min/max row border)
@@ -174,16 +177,16 @@ def is_rectangle(boundary, min_parameter=100, min_evenness=0.8):
         for i in range(len(border) - 1):
             if border[i][1] - border[i + 1][1] == 0:
                 evenness += 1
+    edge_ratio = len(boundary[0]) / len(boundary[2]) if len(boundary[0]) >= len(boundary[2]) else len(boundary[2]) / len(boundary[0])
 
     # ignore text and irregular shape
-    if parameter < min_parameter or (evenness / parameter) < min_evenness:
+    if parameter < min_rec_parameter or edge_ratio > max_rec_edge_ratio or (evenness / parameter) < min_rec_evenness:
         return False
-
     return True
 
 
 # take the binary image as input
-def boundary_detection(bin, min_area=200):
+def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, max_rec_edge_ratio, min_line_thickness):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
@@ -194,10 +197,10 @@ def boundary_detection(bin, min_area=200):
             if bin[i, j] == 255 and mark[i, j] == 0:
                 area = bfs_connected_area(bin, i, j, mark)
                 # ignore all small area
-                if len(area) > min_area:
+                if len(area) > min_obj_area:
                     boundary = get_boundary(area)
                     boundary_all.append(boundary)
-                    if is_rectangle(boundary):
+                    if is_rectangle(boundary, min_rec_parameter, min_rec_evenness, max_rec_edge_ratio, min_line_thickness):
                         boundary_rec.append(boundary)
 
     return boundary_all, boundary_rec

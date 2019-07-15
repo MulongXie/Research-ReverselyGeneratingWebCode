@@ -23,10 +23,12 @@ for i in os.listdir(input_root):
     binary = pre.preprocess(gray, 1)
 
     # processing: connected areas, boundary, rectangle check, rectangle compression, corners, wireframe check
-    boundary_all, boundary_rec = det.boundary_detection(binary)
+    boundary_all, boundary_rec = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA, C.THRESHOLD_MIN_REC_PARAMETER,
+                                                        C.THRESHOLD_MIN_REC_EVENNESS, C.THRESHOLD_MAX_EDGE_RATIO,
+                                                        C.THRESHOLD_MIN_LINE_THICKNESS)
     corners = det.get_corner(boundary_rec)
-    wire_corners, rec_corners = det.is_wireframe(binary, corners)
-    compressed_rec_corners = det.rec_compress(binary, rec_corners)
+    wire_corners, rec_corners = det.is_wireframe(binary, corners, C.THRESHOLD_MAX_BORDER_THICKNESS)
+    compressed_rec_corners = det.rec_compress(binary, rec_corners, C.THRESHOLD_MAX_BORDER_THICKNESS)
 
     # draw results
     bounding_drawn = draw.draw_bounding_box(wire_corners, org, (0, 255, 0))
