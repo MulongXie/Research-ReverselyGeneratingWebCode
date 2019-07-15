@@ -46,4 +46,5 @@ for i in os.listdir(input_root):
         cv2.imshow('gradient', binary)
         cv2.waitKey(0)
 
+    print("Saved to " + os.path.join(output_root, ('labeled/' + i[:-4] + '.png')))
     print(time.clock() - start)  # running time
