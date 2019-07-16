@@ -11,7 +11,7 @@ def html_head():
 <head>
    <meta charset="UTF-8">
    <title>Title</title>
-   <link rel="stylesheet" href="regenerated.css" type="text/css">
+   <link rel="stylesheet" href="a.css" type="text/css">
 </head>
 <body>
 <div class="generated_container">\n'''
@@ -34,6 +34,7 @@ def css_container():
     # container
     container = '''
 .generated_container{
+    width: 100%; height: 80%;
     margin-top: 40px;
     border: lightslategray solid 2px;
 }
@@ -46,13 +47,21 @@ def generate_css(css, compo, index):
     css += '\twidth: ' + str(compo['width']) + 'px; '
     css += 'height: ' + str(compo['height']) + 'px;\n'
     css += '\tmargin-top: ' + str(compo['x_min']) + 'px; '
-    css += 'margin-left: ' + str(compo['y_min']) + 'px\n'
+    css += 'margin-left: ' + str(compo['y_min']) + 'px;\n'
 
-    css += '\tbackground: black;\n}\n'
+    css += '\tposition: absolute;\n'
+    if str(compo['component']) == 'img':
+        css += '\tbackground: black;\n'
+    elif str(compo['component']) == 'div':
+        css += '\tborder: grey solid 1px;\n'
+
+    css += '}\n'
     return css
 
 
 components = pd.read_csv('output/corners.csv', index_col=0)
+file_html = open('webpage/a.html', 'w')
+file_css = open('webpage/a.css', 'w')
 
 html = html_head()
 css = css_container()
@@ -62,5 +71,8 @@ for i in range(len(components)):
     css = generate_css(css, compo, i)
 
 html += html_tail()
+
+file_html.write(html)
+file_css.write(css)
 print(html)
 print(css)
