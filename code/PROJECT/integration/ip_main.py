@@ -35,7 +35,8 @@ if is_save:
     cv2.imwrite('output/labeled.png', bounding_drawn)
     cv2.imwrite('output/boundary.png', boundary_drawn)
     cv2.imwrite('output/gradient.png', binary)
-    file.save_corners(refined_img_corners)
+    file.save_corners('output/corners.csv', frame_corners, 'div')
+    file.save_corners('output/corners.csv', refined_img_corners, 'img', False)
 
 # show results
 if is_show:
