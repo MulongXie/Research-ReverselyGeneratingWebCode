@@ -15,6 +15,7 @@ def get_corner(boundaries):
 
 
 # check if the objects are img components or just frame
+# return corners ((y_min, x_min),(y_max, x_max))
 def frame_or_img(binary, corners, max_thickness):
     frames = []
     imgs = []

@@ -1,0 +1,10 @@
+import os
+import pandas as pd
+
+
+def save_corners(corners):
+    df = pd.DataFrame(index=['component', 'left_up', 'bottom_right', 'width', 'height'])
+    for corner in corners:
+        print(corner)
+
+

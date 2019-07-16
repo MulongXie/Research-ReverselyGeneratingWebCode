@@ -1,11 +1,11 @@
 import ip_detection as det
 import ip_preprocessing as pre
 import ip_draw as draw
+import file_utils as file
 from CONFIG import Config
 
 import cv2
 import time
-import os
 
 C = Config()
 input_root = C.IMG_ROOT
@@ -17,7 +17,7 @@ is_show = False
 start = time.clock()
 
 # pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/1.png', (0, 3000))  # cut out partial img
+org, gray = pre.read_img('input/2.png', (0, 3000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 # processing: get connected areas -> get boundary -> rectangle check -> get corner of boundaries -> img or frame check -> refine img component
@@ -35,6 +35,8 @@ if is_save:
     cv2.imwrite('output/labeled.png', bounding_drawn)
     cv2.imwrite('output/boundary.png', boundary_drawn)
     cv2.imwrite('output/gradient.png', binary)
+    file.save_corners(refined_img_corners)
+
 # show results
 if is_show:
     cv2.imshow('org', bounding_drawn)
