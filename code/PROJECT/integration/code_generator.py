@@ -57,22 +57,3 @@ def generate_css(css, compo, index):
 
     css += '}\n'
     return css
-
-
-components = pd.read_csv('output/corners.csv', index_col=0)
-file_html = open('webpage/a.html', 'w')
-file_css = open('webpage/a.css', 'w')
-
-html = html_head()
-css = css_container()
-for i in range(len(components)):
-    compo = components.iloc[i]
-    html = generate_html(html, compo, i)
-    css = generate_css(css, compo, i)
-
-html += html_tail()
-
-file_html.write(html)
-file_css.write(css)
-print(html)
-print(css)
