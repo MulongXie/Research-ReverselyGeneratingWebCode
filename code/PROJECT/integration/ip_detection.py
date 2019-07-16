@@ -72,7 +72,6 @@ def is_line(boundary, min_line_thickness):
     # too slim
     if most < min_line_thickness:
         return True
-
     return False
 
 
@@ -100,7 +99,6 @@ def is_wireframe(binary, corners, max_thickness):
             # right to left
             if vacancy[3] == 0 and (np.sum(binary[x_min + i: x_max - i, y_max - i])/255)/(x_max-x_min-2*i) <= 0.1:
                 vacancy[3] = 1
-
             if np.sum(vacancy) == 4:
                 is_wire = True
 
@@ -130,7 +128,6 @@ def rm_inner_rec(corners):
             # if rec[i] is in rec[j]
             elif y_min_a < y_min_b and x_min_a < x_min_b and y_max_a > y_max_b and x_max_a > x_max_b:
                 inner[j] = True
-
     refined_corners = []
     for i in range(len(inner)):
         if not inner[i]:
@@ -148,7 +145,6 @@ def rec_refine(binary, corners, max_thickness):
         (up_left, bottom_right) = corner
         (y_min, x_min) = up_left
         (y_max, x_max) = bottom_right
-
         width = y_max - y_min - 2 * max_thickness
         height = x_max - x_min - 2 * max_thickness
 
@@ -184,9 +180,24 @@ def rec_refine(binary, corners, max_thickness):
     return refined_corners
 
 
+def rec_refine2(rec_corners, max_img_edge_ratio):
+    refined_corners = []
+    for corner in rec_corners:
+        (up_left, bottom_right) = corner
+        (y_min, x_min) = up_left
+        (y_max, x_max) = bottom_right
+        width = y_max - y_min
+        height = x_max - x_min
+        edge_ratio = width/height if width > height else height/width
+        if edge_ratio < max_img_edge_ratio:
+            refined_corners.append(corner)
+
+    return refined_corners
+
+
 # detect if it is rectangle by evenness of each border
 # @boundary: [border_up, border_bottom, border_left, border_right]
-def is_rectangle(boundary, min_rec_parameter, min_rec_evenness, max_rec_edge_ratio, min_line_thickness):
+def is_rectangle(boundary, min_rec_parameter, min_rec_evenness, min_line_thickness):
     if is_line(boundary, min_line_thickness):
         return False
 
@@ -200,16 +211,15 @@ def is_rectangle(boundary, min_rec_parameter, min_rec_evenness, max_rec_edge_rat
         for i in range(len(border) - 1):
             if border[i][1] - border[i + 1][1] == 0:
                 evenness += 1
-    edge_ratio = len(boundary[0]) / len(boundary[2]) if len(boundary[0]) >= len(boundary[2]) else len(boundary[2]) / len(boundary[0])
 
     # ignore text and irregular shape
-    if parameter < min_rec_parameter or edge_ratio > max_rec_edge_ratio or (evenness / parameter) < min_rec_evenness:
+    if parameter < min_rec_parameter or (evenness / parameter) < min_rec_evenness:
         return False
     return True
 
 
 # take the binary image as input
-def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, max_rec_edge_ratio, min_line_thickness):
+def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, min_line_thickness):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
@@ -223,7 +233,7 @@ def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, m
                 if len(area) > min_obj_area:
                     boundary = get_boundary(area)
                     boundary_all.append(boundary)
-                    if is_rectangle(boundary, min_rec_parameter, min_rec_evenness, max_rec_edge_ratio, min_line_thickness):
+                    if is_rectangle(boundary, min_rec_parameter, min_rec_evenness, min_line_thickness):
                         boundary_rec.append(boundary)
 
     return boundary_all, boundary_rec
