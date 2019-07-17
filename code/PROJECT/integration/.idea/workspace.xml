@@ -17,8 +17,8 @@
       <file leaf-file-name="a.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webpage/a.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" column="7" lean-forward="true" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
+            <state relative-caret-position="408">
+              <caret line="24" column="26" lean-forward="true" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -26,8 +26,8 @@
       <file leaf-file-name="a.css" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/webpage/a.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="27" column="23" lean-forward="true" selection-start-line="27" selection-start-column="23" selection-end-line="27" selection-end-column="23" />
+            <state relative-caret-position="119">
+              <caret line="7" column="6" lean-forward="true" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -47,6 +47,7 @@
         <option value="$PROJECT_DIR$/regenerated.html" />
         <option value="$PROJECT_DIR$/webpage/regenerated.css" />
         <option value="$PROJECT_DIR$/webpage/regenerated.html" />
+        <option value="$PROJECT_DIR$/../../../../UP/index.html" />
         <option value="$PROJECT_DIR$/webpage/a.css" />
       </list>
     </option>
@@ -61,9 +62,9 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="2836" />
+    <option name="x" value="2872" />
     <option name="y" value="1" />
-    <option name="width" value="1011" />
+    <option name="width" value="975" />
     <option name="height" value="1047" />
   </component>
   <component name="ProjectView">
@@ -92,7 +93,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../UP" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -119,18 +120,18 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1563242430524</updated>
-      <workItem from="1563242431764" duration="6096000" />
+      <workItem from="1563242431764" duration="16081000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6096000" />
+    <option name="totallyTimeSpent" value="16081000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="2836" y="1" width="1011" height="1047" extended-state="0" />
+    <frame x="2872" y="1" width="975" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18191162" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18890075" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
@@ -173,13 +174,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../../UP/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webpage/regenerated.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -194,17 +188,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/Desktop/YouTube_files/saved_resource.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-11505">
+          <caret line="2" column="8736" lean-forward="true" selection-start-line="2" selection-start-column="8736" selection-end-line="2" selection-end-column="8736" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../../UP/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1411">
+          <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../../UP/firebase.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../../UP/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="70" column="10" selection-start-line="70" selection-start-column="10" selection-end-line="70" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/webpage/a.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="7" lean-forward="true" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
+        <state relative-caret-position="408">
+          <caret line="24" column="26" lean-forward="true" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webpage/a.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="27" column="23" lean-forward="true" selection-start-line="27" selection-start-column="23" selection-end-line="27" selection-end-column="23" />
+        <state relative-caret-position="119">
+          <caret line="7" column="6" lean-forward="true" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
         </state>
       </provider>
     </entry>

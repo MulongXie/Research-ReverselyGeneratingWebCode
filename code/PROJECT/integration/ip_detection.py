@@ -24,7 +24,7 @@ def frame_or_img(binary, corners, max_thickness):
         (y_min, x_min) = up_left
         (y_max, x_max) = bottom_right
 
-        is_wire = False
+        is_frame = False
         vacancy = [0, 0, 0, 0]
         for i in range(1, max_thickness):
             # up down
@@ -40,9 +40,9 @@ def frame_or_img(binary, corners, max_thickness):
             if vacancy[3] == 0 and (np.sum(binary[x_min + i: x_max - i, y_max - i])/255)/(x_max-x_min-2*i) <= 0.1:
                 vacancy[3] = 1
             if np.sum(vacancy) == 4:
-                is_wire = True
+                is_frame = True
 
-        if is_wire:
+        if is_frame:
             frames.append(corner)
         else:
             imgs.append(corner)
@@ -94,7 +94,7 @@ def img_refine(binary, corners, max_thickness):
     return refined_corners
 
 
-# check the edge ratio for img components
+# check the edge ratio for img components to avoid text misrecognition
 def img_refine2(rec_corners, max_img_edge_ratio):
     refined_corners = []
     for corner in rec_corners:
@@ -103,9 +103,13 @@ def img_refine2(rec_corners, max_img_edge_ratio):
         (y_max, x_max) = bottom_right
         width = y_max - y_min
         height = x_max - x_min
-        edge_ratio = width/height if width > height else height/width
-        if edge_ratio < max_img_edge_ratio:
+        # assumption: large one must be img component no matter its edge ratio
+        if height > 100 and width > 100:
             refined_corners.append(corner)
+        else:
+            edge_ratio = width/height if width > height else height/width
+            if edge_ratio < max_img_edge_ratio:
+                refined_corners.append(corner)
     return refined_corners
 
 
