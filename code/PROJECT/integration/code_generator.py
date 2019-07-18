@@ -35,8 +35,6 @@ def css_container():
     container = '''
 .generated_container{
     width: 100%; height: 80%;
-    margin-top: 40px;
-    border: lightslategray solid 2px;
 }
 '''
     return container
