@@ -1,53 +1,8 @@
 import cv2
 import numpy as np
-from collections import Counter
 
 import ip_draw as draw
-
-
-def neighbor(img, x, y, mark, stack):
-    for i in range(x - 1, x + 2):
-        if i < 0 or i >= img.shape[0]: continue
-        for j in range(y - 1, y + 2):
-            if j < 0 or j >= img.shape[1]: continue
-            if img[i, j] == 255 and mark[i, j] == 0:
-                stack.append([i, j])
-                mark[i, j] = 255
-
-
-def bfs_connected_area(img, x, y, mark):
-    stack = [[x, y]]    # points waiting for inspection
-    area = [[x, y]]   # points of this area
-    mark[x, y] = 255    # drawing broad
-
-    while len(stack) > 0:
-        point = stack.pop()
-        area.append(point)
-        neighbor(img, point[0], point[1], mark, stack)
-    return area
-
-
-def get_boundary(area):
-    border_up, border_bottom, border_left, border_right = ({}, {}, {}, {})
-    for point in area:
-        # point: (row_index, column_index)
-        # up, bottom: (column_index, min/max row border) detect range of each column
-        if point[1] not in border_up or border_up[point[1]] > point[0]:
-            border_up[point[1]] = point[0]
-        if point[1] not in border_bottom or border_bottom[point[1]] < point[0]:
-            border_bottom[point[1]] = point[0]
-        # left, right: (row_index, min/max column border) detect range of each row
-        if point[0] not in border_left or border_left[point[0]] > point[1]:
-            border_left[point[0]] = point[1]
-        if point[0] not in border_right or border_right[point[0]] < point[1]:
-            border_right[point[0]] = point[1]
-
-    boundary = [border_up, border_bottom, border_left, border_right]
-    # descending sort
-    for i in range(len(boundary)):
-        boundary[i] = sorted(boundary[i].items(), key=lambda x: x[0])
-
-    return boundary
+import ip_detection_utils as util
 
 
 def get_corner(boundaries):
@@ -59,33 +14,17 @@ def get_corner(boundaries):
     return corners
 
 
-def is_line(boundary, min_line_thickness):
-    # up and bottom
-    difference = [abs(boundary[0][i][1] - boundary[1][i][1]) for i in range(len(boundary[1]))]
-    most, number = Counter(difference).most_common(1)[0]
-    # too slim
-    if most < min_line_thickness:
-        return True
-    # left and right
-    difference = [abs(boundary[2][i][1] - boundary[3][i][1]) for i in range(len(boundary[2]))]
-    most, number = Counter(difference).most_common(1)[0]
-    # too slim
-    if most < min_line_thickness:
-        return True
-
-    return False
-
-
-def is_wireframe(binary, corners, max_thickness):
-
-    wireframes = []
-    non_wireframe = []
+# check if the objects are img components or just frame
+# return corners ((y_min, x_min),(y_max, x_max))
+def frame_or_img(binary, corners, max_thickness):
+    frames = []
+    imgs = []
     for corner in corners:
         (up_left, bottom_right) = corner
         (y_min, x_min) = up_left
         (y_max, x_max) = bottom_right
 
-        is_wire = False
+        is_frame = False
         vacancy = [0, 0, 0, 0]
         for i in range(1, max_thickness):
             # up down
@@ -100,55 +39,26 @@ def is_wireframe(binary, corners, max_thickness):
             # right to left
             if vacancy[3] == 0 and (np.sum(binary[x_min + i: x_max - i, y_max - i])/255)/(x_max-x_min-2*i) <= 0.1:
                 vacancy[3] = 1
-
             if np.sum(vacancy) == 4:
-                is_wire = True
+                is_frame = True
 
-        if is_wire:
-            wireframes.append(corner)
+        if is_frame:
+            frames.append(corner)
         else:
-            non_wireframe.append(corner)
-
-    return wireframes, non_wireframe
-
-
-def rm_inner_rec(corners):
-    inner = np.full((len(corners), 1), False)
-    for i in range(len(corners)):
-        (up_left_a, bottom_right_a) = corners[i]
-        (y_min_a, x_min_a) = up_left_a
-        (y_max_a, x_max_a) = bottom_right_a
-
-        for j in range(i+1, len(corners)):
-            (up_left_b, bottom_right_b) = corners[j]
-            (y_min_b, x_min_b) = up_left_b
-            (y_max_b, x_max_b) = bottom_right_b
-
-            # if rec[i] is in rec[j]
-            if y_min_a > y_min_b and x_min_a > x_min_b and y_max_a < y_max_b and x_max_a < x_max_b:
-                inner[i] = True
-            # if rec[i] is in rec[j]
-            elif y_min_a < y_min_b and x_min_a < x_min_b and y_max_a > y_max_b and x_max_a > x_max_b:
-                inner[j] = True
-
-    refined_corners = []
-    for i in range(len(inner)):
-        if not inner[i]:
-            refined_corners.append(corners[i])
-    return refined_corners
+            imgs.append(corner)
+    return frames, imgs
 
 
-# get the more accurate bounding box of rectangles
-def rec_refine(binary, corners, max_thickness):
+# get the more accurate bounding box of img components
+def img_refine(binary, corners, max_thickness):
     refined_corners = []
     # remove inner rectangles
-    corners = rm_inner_rec(corners)
+    # corners = util.rm_inner_rec(corners)
 
     for corner in corners:
         (up_left, bottom_right) = corner
         (y_min, x_min) = up_left
         (y_max, x_max) = bottom_right
-
         width = y_max - y_min - 2 * max_thickness
         height = x_max - x_min - 2 * max_thickness
 
@@ -184,32 +94,29 @@ def rec_refine(binary, corners, max_thickness):
     return refined_corners
 
 
-# detect if it is rectangle by evenness of each border
-# @boundary: [border_up, border_bottom, border_left, border_right]
-def is_rectangle(boundary, min_rec_parameter, min_rec_evenness, max_rec_edge_ratio, min_line_thickness):
-    if is_line(boundary, min_line_thickness):
-        return False
-
-    # up, bottom: (column_index, min/max row border)
-    # left, right: (row_index, min/max column border)
-    evenness = 0
-    parameter = 0
-    for border in boundary:
-        parameter += len(border)
-        # calculate the evenness of each border
-        for i in range(len(border) - 1):
-            if border[i][1] - border[i + 1][1] == 0:
-                evenness += 1
-    edge_ratio = len(boundary[0]) / len(boundary[2]) if len(boundary[0]) >= len(boundary[2]) else len(boundary[2]) / len(boundary[0])
-
-    # ignore text and irregular shape
-    if parameter < min_rec_parameter or edge_ratio > max_rec_edge_ratio or (evenness / parameter) < min_rec_evenness:
-        return False
-    return True
+# check the edge ratio for img components to avoid text misrecognition
+def img_refine2(rec_corners, max_img_edge_ratio):
+    refined_corners = []
+    for corner in rec_corners:
+        (up_left, bottom_right) = corner
+        (y_min, x_min) = up_left
+        (y_max, x_max) = bottom_right
+        width = y_max - y_min
+        height = x_max - x_min
+        # assumption: large one must be img component no matter its edge ratio
+        if height > 100 and width > 100:
+            refined_corners.append(corner)
+        else:
+            edge_ratio = width/height if width > height else height/width
+            if edge_ratio < max_img_edge_ratio:
+                refined_corners.append(corner)
+    return refined_corners
 
 
 # take the binary image as input
-def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, max_rec_edge_ratio, min_line_thickness):
+# calculate the connected regions -> get the bounding boundaries of them -> check if those regions are rectangles
+# return all boundaries and boundaries of rectangles
+def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, min_line_thickness):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
@@ -218,12 +125,11 @@ def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, m
     for i in range(row):
         for j in range(column):
             if bin[i, j] == 255 and mark[i, j] == 0:
-                area = bfs_connected_area(bin, i, j, mark)
+                area = util.bfs_connected_area(bin, i, j, mark)
                 # ignore all small area
                 if len(area) > min_obj_area:
-                    boundary = get_boundary(area)
+                    boundary = util.get_boundary(area)
                     boundary_all.append(boundary)
-                    if is_rectangle(boundary, min_rec_parameter, min_rec_evenness, max_rec_edge_ratio, min_line_thickness):
+                    if util.is_rectangle(boundary, min_rec_parameter, min_rec_evenness, min_line_thickness):
                         boundary_rec.append(boundary)
-
     return boundary_all, boundary_rec
