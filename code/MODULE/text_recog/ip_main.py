@@ -17,7 +17,7 @@ is_show = False
 start = time.clock()
 
 # pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/5.png', (0, 3000))  # cut out partial img
+org, gray = pre.read_img('input/3.png', (0, 3000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 # processing: get connected areas -> get boundary -> rectangle check -> get corner of boundaries -> img or frame check -> refine img component
