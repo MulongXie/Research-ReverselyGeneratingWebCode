@@ -9,7 +9,7 @@ def read_img(path, height=(0, 600)):
     return img, gray
 
 
-def get_gradient(img):
+def gray_to_gradient(img):
     row, column = img.shape[0], img.shape[1]
     img_f = np.copy(img)
     img_f = img_f.astype("float")
@@ -30,7 +30,7 @@ def grad_to_binary(grad, min):
 
 
 def preprocess(gray, grad_min=1):
-    grad = get_gradient(gray)        # get RoI with high gradient
+    grad = gray_to_gradient(gray)        # get RoI with high gradient
     binary = grad_to_binary(grad, grad_min)   # enhance the RoI
     close = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, (5, 5))   # remove noises
     return close
