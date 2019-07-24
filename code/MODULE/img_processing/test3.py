@@ -1,5 +1,6 @@
+import numpy as np
 
-a = [1, 1, 1]
-b = [3, 3, 3]
 
-print(a - b)
+l = [1, 2, 3, 4]
+
+print(l/2)

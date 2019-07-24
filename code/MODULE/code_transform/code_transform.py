@@ -79,7 +79,7 @@ def html_assemble(img):
     return html
 
 
-img = cv2.imread('83.png')
+img = cv2.imread('2.png')
 # color_test(b, g, r)
 html_assemble(img)
 cv2.imshow('org', img)

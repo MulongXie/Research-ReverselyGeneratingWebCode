@@ -25,10 +25,12 @@ boundary_non_rec, boundary_rec = det.boundary_detection(binary, C.THRESHOLD_MIN_
 corners = det.get_corner(boundary_rec)
 frame_corners, img_corners = det.frame_or_img(binary, corners, C.THRESHOLD_MAX_BORDER_THICKNESS)
 refined_img_corners = det.img_refine2(img_corners, C.THRESHOLD_MAX_EDGE_RATIO)
+irregular_img_corners = det.is_irregular_img(boundary_non_rec, 100, 100)
 
 # draw results
 bounding_drawn = draw.draw_bounding_box(frame_corners, org, (0, 255, 0))
 bounding_drawn = draw.draw_bounding_box(refined_img_corners, bounding_drawn, (0, 0, 255))
+bounding_drawn = draw.draw_bounding_box(irregular_img_corners, bounding_drawn, (255, 0, 255))
 wireframe = draw.draw_bounding_box(refined_img_corners, org, (119, 136, 153), -1)
 boundary_drawn = draw.draw_boundary(boundary_non_rec, org.shape)
 # save results

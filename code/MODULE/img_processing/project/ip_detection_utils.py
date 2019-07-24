@@ -2,6 +2,8 @@ import numpy as np
 import cv2
 from collections import Counter
 
+import ip_detection as det
+
 
 def neighbor(img, x, y, mark, stack):
     for i in range(x - 1, x + 2):

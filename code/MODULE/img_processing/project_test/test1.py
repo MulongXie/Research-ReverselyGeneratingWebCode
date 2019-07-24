@@ -1,5 +1,5 @@
+import glob
 
-a = 2
+imgs = glob.glob('input/*.png')
 
-if 1 < a < 3:
-    print('aa')
+print(imgs)

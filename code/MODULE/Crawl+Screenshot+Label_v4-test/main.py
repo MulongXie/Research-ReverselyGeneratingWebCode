@@ -13,7 +13,7 @@ is_show_img = False
 
 root = 'D:\\datasets\\dataset_webpage\\data\\test\\'
 driver_path = 'D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\webdriver'
-initial_url = "https://youtube.com"
+initial_url = "http://mirror.co.uk"
 link_num = 1
 start_pos = 0
 
@@ -36,7 +36,7 @@ libel_format = pd.read_csv(root + 'format.csv', index_col=0)
 for i in range(start_pos, len(links)):
     start = time.clock()
 
-    p = 'sb'
+    p = 'hd'
     # output path
     label = root + 'label/' + str(p) + '.csv'
     img = root + 'screenshot/' + str(p) + '.png'

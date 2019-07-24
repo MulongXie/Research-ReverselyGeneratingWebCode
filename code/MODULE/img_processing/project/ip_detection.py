@@ -5,6 +5,7 @@ import ip_draw as draw
 import ip_detection_utils as util
 
 
+# return corners ((y_min, x_min),(y_max, x_max))
 def get_corner(boundaries):
     corners = []
     for boundary in boundaries:
@@ -134,3 +135,15 @@ def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, m
                     else:
                         boundary_non_rec.append(boundary)
     return boundary_non_rec, boundary_rec
+
+
+def is_irregular_img(boundaries, min_img_height, min_img_width):
+    img_corners = []
+    corners = get_corner(boundaries)
+    for corner in corners:
+        (top_left, bottom_right) = corner
+        height = bottom_right[0] - top_left[0]
+        width = bottom_right[1] - top_left[1]
+        if height > min_img_height and width > min_img_width:
+            img_corners.append(corner)
+    return img_corners
