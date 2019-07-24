@@ -21,15 +21,15 @@ org, gray = pre.read_img('input/1.png', (0, 3000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 # processing: get connected areas -> get boundary -> rectangle check -> get corner of boundaries -> img or frame check -> refine img component
-boundary_all, boundary_rec = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA, C.THRESHOLD_MIN_REC_PARAMETER, C.THRESHOLD_MIN_REC_EVENNESS, C.THRESHOLD_MIN_LINE_THICKNESS)
-corners = det.get_corner(boundary_rec)
-frame_corners, img_corners = det.frame_or_img(binary, corners, C.THRESHOLD_MAX_BORDER_THICKNESS)
-refined_img_corners = det.img_refine2(img_corners, C.THRESHOLD_MAX_EDGE_RATIO)
+boundary_rec, boundary_non_rec = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA, C.THRESHOLD_MIN_REC_PARAMETER, C.THRESHOLD_MIN_REC_EVENNESS, C.THRESHOLD_MIN_LINE_THICKNESS)
+corners_rec = det.get_corner(boundary_rec)
+corners_block, corners_img = det.block_or_img(binary, corners_rec, C.THRESHOLD_MAX_BORDER_THICKNESS)
+corners_img = det.img_refine2(corners_img, C.THRESHOLD_MAX_EDGE_RATIO)
 
 # draw results
-bounding_drawn = draw.draw_bounding_box(frame_corners, org, (0, 255, 0))
-bounding_drawn = draw.draw_bounding_box(refined_img_corners, bounding_drawn, (0, 0, 255))
-wireframe = draw.draw_bounding_box(refined_img_corners, org, (119, 136, 153), -1)
+bounding_drawn = draw.draw_bounding_box(corners_block, org, (0, 255, 0))
+bounding_drawn = draw.draw_bounding_box(corners_img, bounding_drawn, (0, 0, 255))
+wireframe = draw.draw_bounding_box(corners_img, org, (119, 136, 153), -1)
 boundary_drawn = draw.draw_boundary(boundary_rec, org.shape)
 # save results
 if is_save:
@@ -38,8 +38,8 @@ if is_save:
     cv2.imwrite('output/boundary.png', boundary_drawn)
     cv2.imwrite('output/gradient.png', binary)
     cv2.imwrite('output/wireframe.png', wireframe)
-    file.save_corners('output/corners.csv', frame_corners, 'div')
-    file.save_corners('output/corners.csv', refined_img_corners, 'img', False)
+    file.save_corners('output/corners.csv', corners_block, 'div')
+    file.save_corners('output/corners.csv', corners_img, 'img', False)
 
 # show results
 if is_show:
