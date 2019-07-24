@@ -14,14 +14,18 @@ def clip_text(img, label, output_path):
             cv2.imwrite(os.path.join(output_path, str(i) + '.png'), img[pos[1]:pos[3], pos[0]:pos[2]])
 
 
-label_paths = glob.glob('input/*.txt')
+# label_paths = glob.glob('input/*.txt')
+#
+# for label_path in label_paths:
+#     name = label_path.split('\\')[1][:-4]
+#     img_path = 'input/' + name + '.png'
+#
+#     img = cv2.imread(img_path)
+#     label = open(label_path, 'r')
+#     print(img.shape)
+#     clip_text(img, label, os.path.join('output', name))
 
-for label_path in label_paths:
-    name = label_path.split('\\')[1][:-4]
-    img_path = 'input/' + name + '.png'
 
-    img = cv2.imread(img_path)
-    label = open(label_path, 'r')
-    print(img.shape)
-    clip_text(img, label, os.path.join('output', name))
-
+img = cv2.imread('input/2.png')
+label = open('input/2.txt', 'r')
+clip_text(img, label, 'output/x')

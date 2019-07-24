@@ -1,7 +1,6 @@
 import cv2
 import glob
 import numpy as np
-from matplotlib import pyplot as plt
 
 import ip_preprocessing as pre
 
