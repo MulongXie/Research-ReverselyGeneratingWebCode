@@ -1,5 +1,4 @@
 import cv2
-import glob
 import numpy as np
 import os
 
@@ -42,20 +41,3 @@ def clip_word(sentences, min_pix, output_path):
                 cv2.imwrite(os.path.join(output_path, str(index) + '.png'), word)
                 index += 1
     return words
-
-
-def main_text():
-    label_paths = glob.glob('input/*.txt')
-
-    for label_path in label_paths:
-        name = label_path.split('\\')[1][:-4]
-        img_path = 'input/' + name + '.png'
-
-        img = cv2.imread(img_path, 0)
-        label = open(label_path, 'r')
-
-        sentences = clip_sentence(img, label)
-        words = clip_word(sentences, 1, os.path.join('output', name))
-        break
-
-main_text()
