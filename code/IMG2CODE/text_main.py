@@ -1,6 +1,8 @@
 import cv2
 import glob
+import os
 
+import text_split as spl
 
 label_paths = glob.glob('input/*.txt')
 
@@ -11,6 +13,6 @@ for label_path in label_paths:
     img = cv2.imread(img_path, 0)
     label = open(label_path, 'r')
 
-    sentences = clip_sentence(img, label)
-    words = clip_word(sentences, 1, os.path.join('output', name))
+    sentences = spl.clip_sentence(img, label)
+    words = spl.clip_word(sentences, 1, os.path.join('output', name))
     break
