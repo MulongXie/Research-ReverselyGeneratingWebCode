@@ -35,6 +35,7 @@ seg.segment_img(img_clean, 600, 'output/segment')
 draw_bounding = draw.draw_bounding_box(corners_block, org, (0, 255, 0))
 draw_bounding = draw.draw_bounding_box(corners_img, draw_bounding, (0, 0, 255))
 draw_boundary = draw.draw_boundary(boundary_rec, org.shape)
+
 # save results
 if is_save:
     cv2.imwrite('output/org.png', org)
@@ -44,7 +45,7 @@ if is_save:
     cv2.imwrite('output/clean.png', img_clean)
     file.save_corners('output/corners.csv', corners_block, 'div')
     file.save_corners('output/corners.csv', corners_img, 'img', False)
-
+    
 # show results
 if is_show:
     cv2.imshow('org', draw_bounding)
@@ -53,4 +54,4 @@ if is_show:
     cv2.imshow('clean', img_clean)
     cv2.waitKey(0)
 
-print(time.clock() - start)  # running time
+end = file.timer(start)

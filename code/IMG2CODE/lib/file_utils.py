@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import time
 
 
 def save_corners(file_path, corners, compo_name, clear=True):
@@ -20,3 +21,9 @@ def save_corners(file_path, corners, compo_name, clear=True):
         c['height'] = c['x_max'] - c['x_min']
         df = df.append(c, True)
     df.to_csv(file_path)
+
+
+def timer(start):
+    now = time.clock()
+    print('Time Taken:%.3f s' % (now - start))
+    return now
