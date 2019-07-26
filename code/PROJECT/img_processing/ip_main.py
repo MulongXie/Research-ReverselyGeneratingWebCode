@@ -9,8 +9,6 @@ import cv2
 import time
 
 C = Config()
-input_root = C.IMG_ROOT
-output_root = C.OUTPUT_ROOT
 
 is_save = True
 is_show = False
@@ -18,7 +16,7 @@ is_show = False
 start = time.clock()
 
 # pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/1.png', (0, 3000))  # cut out partial img
+org, gray = pre.read_img('input/1.png', (0, 300))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 # processing: get connected areas -> get boundary -> rectangle check -> get corner of boundaries -> img or frame check -> refine img component
