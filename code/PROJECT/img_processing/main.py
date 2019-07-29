@@ -19,8 +19,8 @@ is_save = True
 input_paths = glob.glob(pyjoin(input_root, '*.png'))
 input_paths = sorted(input_paths, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
-start_index = 1
-end_index = 10
+start_index = 10
+end_index = 1000
 
 for input_path in input_paths:
     index = input_path.split('\\')[-1][:-4]
@@ -68,6 +68,5 @@ for input_path in input_paths:
         file.save_corners(out_label, corners_block, 'div')
         file.save_corners(out_label, corners_img, 'img', False)
 
-    print('Save ' + index)
     end = file.timer(start)
-
+    print('Save ' + index + '\n')
