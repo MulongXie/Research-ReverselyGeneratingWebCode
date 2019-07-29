@@ -5,7 +5,6 @@ import ip_draw as draw
 import ip_detection_utils as util
 
 
-# return corners ((y_min, x_min),(y_max, x_max))
 def get_corner(boundaries):
     corners = []
     for boundary in boundaries:
@@ -15,17 +14,17 @@ def get_corner(boundaries):
     return corners
 
 
-# check if the objects are img components or just frame
+# check if the objects are img components or just block
 # return corners ((y_min, x_min),(y_max, x_max))
-def frame_or_img(binary, corners, max_thickness):
-    frames = []
+def block_or_img(binary, corners, max_thickness):
+    blocks = []
     imgs = []
     for corner in corners:
         (up_left, bottom_right) = corner
         (y_min, x_min) = up_left
         (y_max, x_max) = bottom_right
 
-        is_frame = False
+        is_block = False
         vacancy = [0, 0, 0, 0]
         for i in range(1, max_thickness):
             # up down
@@ -41,13 +40,13 @@ def frame_or_img(binary, corners, max_thickness):
             if vacancy[3] == 0 and (np.sum(binary[x_min + i: x_max - i, y_max - i])/255)/(x_max-x_min-2*i) <= 0.1:
                 vacancy[3] = 1
             if np.sum(vacancy) == 4:
-                is_frame = True
+                is_block = True
 
-        if is_frame:
-            frames.append(corner)
+        if is_block:
+            blocks.append(corner)
         else:
             imgs.append(corner)
-    return frames, imgs
+    return blocks, imgs
 
 
 # get the more accurate bounding box of img components
@@ -119,7 +118,7 @@ def img_refine2(rec_corners, max_img_edge_ratio):
 # return all boundaries and boundaries of rectangles
 def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, min_line_thickness):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
-    boundary_non_rec = []
+    boundary_all = []
     boundary_rec = []
     row, column = bin.shape[0], bin.shape[1]
 
@@ -130,20 +129,27 @@ def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, m
                 # ignore all small area
                 if len(area) > min_obj_area:
                     boundary = util.get_boundary(area)
+                    boundary_all.append(boundary)
                     if util.is_rectangle(boundary, min_rec_parameter, min_rec_evenness, min_line_thickness):
                         boundary_rec.append(boundary)
-                    else:
-                        boundary_non_rec.append(boundary)
-    return boundary_non_rec, boundary_rec
+    return boundary_rec, boundary_all
 
 
-def is_irregular_img(boundaries, min_img_height, min_img_width):
-    img_corners = []
-    corners = get_corner(boundaries)
+def text_detection(gradient, boundary_all):
+    corners_text = []
+    corners = get_corner(boundary_all)
     for corner in corners:
-        (top_left, bottom_right) = corner
-        height = bottom_right[0] - top_left[0]
-        width = bottom_right[1] - top_left[1]
-        if height > min_img_height and width > min_img_width:
-            img_corners.append(corner)
-    return img_corners
+        (up_left, bottom_right) = corner
+        (y_min, x_min) = up_left
+        (y_max, x_max) = bottom_right
+        width = y_max - y_min
+        height = x_max - x_min
+
+        edge_ratio = width/height
+        if edge_ratio > 1.5 and height < 20:
+            corners_text.append(corner)        
+        
+        print(height)
+        print("%.3f\n" % (width/height))
+    
+    return corners_text

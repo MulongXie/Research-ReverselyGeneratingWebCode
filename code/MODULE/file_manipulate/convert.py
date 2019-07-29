@@ -1,3 +1,6 @@
+'''
+convert the labels into YOLO format
+'''
 import os
 import numpy as np
 import pandas as pd

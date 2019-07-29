@@ -1,6 +1,7 @@
 import ip_detection as det
 import ip_preprocessing as pre
 import ip_draw as draw
+import ip_segment as seg
 import file_utils as file
 from CONFIG import Config
 
@@ -8,11 +9,8 @@ import cv2
 import time
 
 C = Config()
-input_root = C.IMG_ROOT
-output_root = C.OUTPUT_ROOT
 
 is_save = True
-is_show = False
 
 start = time.clock()
 
@@ -21,34 +19,31 @@ org, gray = pre.read_img('input/3.png', (0, 3000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 # processing: get connected areas -> get boundary -> rectangle check -> get corner of boundaries -> img or frame check -> refine img component
-boundary_non_rec, boundary_rec = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA, C.THRESHOLD_MIN_REC_PARAMETER, C.THRESHOLD_MIN_REC_EVENNESS, C.THRESHOLD_MIN_LINE_THICKNESS)
-corners = det.get_corner(boundary_rec)
-frame_corners, img_corners = det.frame_or_img(binary, corners, C.THRESHOLD_MAX_BORDER_THICKNESS)
-refined_img_corners = det.img_refine2(img_corners, C.THRESHOLD_MAX_EDGE_RATIO)
-irregular_img_corners = det.is_irregular_img(boundary_non_rec, 100, 100)
+boundary_rec, boundary_all = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA, C.THRESHOLD_MIN_REC_PARAMETER, C.THRESHOLD_MIN_REC_EVENNESS, C.THRESHOLD_MIN_LINE_THICKNESS)
+corners_rec = det.get_corner(boundary_rec)
+corners_block, corners_img = det.block_or_img(binary, corners_rec, C.THRESHOLD_MAX_BORDER_THICKNESS)
+corners_img = det.img_refine2(corners_img, C.THRESHOLD_MAX_EDGE_RATIO)
+corners_text = det.text_detection(binary, boundary_all)
+corners_all = det.get_corner(boundary_all)
+
+# remove img elements and segment into smaller size
+img_clean = draw.draw_bounding_box(corners_img, org, (255, 255, 255), -1)
+seg.segment_img(img_clean, 600, 'output/segment')
 
 # draw results
-bounding_drawn = draw.draw_bounding_box(frame_corners, org, (0, 255, 0))
-bounding_drawn = draw.draw_bounding_box(refined_img_corners, bounding_drawn, (0, 0, 255))
-bounding_drawn = draw.draw_bounding_box(irregular_img_corners, bounding_drawn, (255, 0, 255))
-wireframe = draw.draw_bounding_box(refined_img_corners, org, (119, 136, 153), -1)
-boundary_drawn = draw.draw_boundary(boundary_non_rec, org.shape)
+draw_bounding = draw.draw_bounding_box(corners_block, org, (0, 255, 0))
+draw_bounding = draw.draw_bounding_box(corners_img, draw_bounding, (0, 0, 255))
+draw_bounding = draw.draw_bounding_box(corners_text, draw_bounding, (190, 190, 255), 1)
+draw_boundary = draw.draw_boundary(boundary_all, org.shape)
+
 # save results
 if is_save:
     cv2.imwrite('output/org.png', org)
-    cv2.imwrite('output/labeled.png', bounding_drawn)
-    cv2.imwrite('output/boundary.png', boundary_drawn)
+    cv2.imwrite('output/labeled.png', draw_bounding)
+    cv2.imwrite('output/boundary.png', draw_boundary)
     cv2.imwrite('output/gradient.png', binary)
-    cv2.imwrite('output/wireframe.png', wireframe)
-    file.save_corners('output/corners.csv', frame_corners, 'div')
-    file.save_corners('output/corners.csv', refined_img_corners, 'img', False)
+    cv2.imwrite('output/clean.png', img_clean)
+    file.save_corners('output/corners.csv', corners_block, 'div')
+    file.save_corners('output/corners.csv', corners_img, 'img', False)
 
-# show results
-if is_show:
-    cv2.imshow('org', bounding_drawn)
-    cv2.imshow('boundary', boundary_drawn)
-    cv2.imshow('gradient', binary)
-    cv2.imshow('wireframe', wireframe)
-    cv2.waitKey(0)
-
-print(time.clock() - start)  # running time
+end = file.timer(start)

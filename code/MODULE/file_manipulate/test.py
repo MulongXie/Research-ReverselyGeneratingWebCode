@@ -12,6 +12,7 @@ i = 0
 for l in os.listdir(img_root):
     shutil.copy(os.path.join(img_root, (l + '/org.png')), 'input/' + l + '.png')
 
-    if i > 20:
-        break
+    print(os.path.join(img_root, (l + '/org.png')))
     i += 1
+    if i > 5:
+        break

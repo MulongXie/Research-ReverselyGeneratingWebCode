@@ -60,7 +60,7 @@ def show(root_path="labeled_image", wait_key=0):
         cv2.waitKey(wait_key)
 
 
-def label(label, image, number):
+def label(label, image, number, output_path):
     df = pd.read_csv(label)
     img = cv2.imread(image)
     distort = 1
@@ -68,8 +68,8 @@ def label(label, image, number):
     img = cv2.resize(img, (int(np.shape(img)[1] * distort), int(np.shape(img)[0] * distort)))
     draw(df, img)
 
-    cv2.imwrite('labeled_image/' + str(number) + '.png', img)
-    print('labeled_image/' + str(number) + '.png')
+    cv2.imwrite(output_path, img)
+    print(output_path)
 
 
 # used for sorting by area
@@ -77,7 +77,7 @@ def takearea(element):
     return element['area']
 
 
-def wireframe(label, image, number):
+def wireframe(label, image, number, output_path):
     df = pd.read_csv(label)
     img = cv2.imread(image)
 
@@ -114,5 +114,27 @@ def wireframe(label, image, number):
         cv2.putText(pic, element + str(count[element]), l['top_left'], cv2.FONT_HERSHEY_SIMPLEX, 0.5, l['color'], 2,
                     cv2.LINE_AA)
 
-    cv2.imwrite('labeled_wireframe/' + str(number) + '.png', pic)
-    print('labeled_wireframe/' + str(number) + '.png')
+    cv2.imwrite(output_path, pic)
+    print(output_path)
+
+
+# avoid blank component
+def compo_screen(org_img_path, label_path):
+    # read img and its label
+    img = cv2.imread(org_img_path)
+    label = pd.read_csv(label_path, index_col=0)
+
+    label_screened = pd.DataFrame(columns=label.columns.values)
+
+    index = 0
+    for i in range(len(label)):
+        compo = label.iloc[i]
+        # get the clip img of that component
+        clip = img[compo['by']:compo['by'] + compo['bh'], compo['bx']:compo['bx'] + compo['bw'], :]
+        # calculate the average pixel value and discard blank ones that are pure withe
+        avg_pix = clip.sum() / (clip.shape[0] * clip.shape[1] * clip.shape[2])
+        if avg_pix < 245:
+            label_screened.loc[index] = compo
+            index += 1
+
+    label_screened.to_csv(label_path)

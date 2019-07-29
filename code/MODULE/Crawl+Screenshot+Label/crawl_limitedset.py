@@ -7,26 +7,29 @@ import pandas as pd
 def fetch_links(address, new, old, stack_size):
     print(address)
 
-    response = url.urlopen(address)
-    if response.getcode() != 200:
-        print('bad url')
-        return
-    content = response.read()
-    soup = bs(content, 'html.parser')
-    links = soup.find_all('a')
-
-    for l in links:
-        try:
-            link = l['href']
-            if link[:5] == 'http:':
-                if link not in old:
-                    new.add(link)
-                    if len(new) >= stack_size:
-                        return
-        except:
-            print("No href in a")
-
-
+    try:
+        response = url.urlopen(address)
+        if response.getcode() != 200:
+            print('bad url')
+            return
+        content = response.read()
+        soup = bs(content, 'html.parser')
+        links = soup.find_all('a')
+    
+        for l in links:
+            try:
+                link = l['href']
+                if link[:5] == 'http:':
+                    if link not in old:
+                        new.add(link)
+                        if len(new) >= stack_size:
+                            return
+            except:
+                print("No href in a")
+    except:
+        print("bad URL")
+        
+        
 def crawl(initial_link, iter_num, stack_size):
     old_url = set()
     new_url = set()
