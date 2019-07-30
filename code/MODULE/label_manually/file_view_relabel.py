@@ -19,7 +19,7 @@ def draw_label(label, img):
         color = (255, 0, 255)
     elif gb_element == 'input':
         color = (255, 160, 0)
-    elif gb_element == 'icon':
+    elif gb_element == 'select':
         color = (0, 150, 255)
 
     if not gb_is_labeling:
@@ -36,7 +36,7 @@ def draw_label(label, img):
 
 def add_label(label, ix, iy, x, y, segment_no, element):
     l = {'bx': ix, 'by': iy, 'bh': int(y - iy), 'bw': int(x - ix), 'segment_no': segment_no,
-         'element': element, 'p': 1}
+         'element': element}
     label = label.append(l, ignore_index=True)
     return label
 
@@ -78,6 +78,10 @@ def add_tips(flag):
     elif flag == 1:
         cv2.putText(img, 'd: Quit Relabelling Mode', (0, 20), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
         cv2.putText(img, 'z: Delete the Last Label', (0, 40), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
+
+        cv2.putText(img, '1: button', (0, 100), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
+        cv2.putText(img, '2: input', (0, 120), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
+        cv2.putText(img, '3: icon', (0, 140), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
     cv2.imshow('tips', img)
     cv2.moveWindow('tips', 2000, 0)
 
@@ -93,10 +97,12 @@ def view_data(start_point, data_position='E:\Mulong\Datasets\dataset_webpage'):
     # *** step 2 *** Iterate Web Pages
     # iterate all web pages from the start point
     img_dirs = glob(pjoin(img_root, '*'))
-    indices = sorted([int(d.split('\\')[-1]) for d in img_dirs])
+    img_dirs.sort(key=lambda x: int(x.split('\\')[-1]))
     for dir in img_dirs:
-        # set paths
         index = dir.split('\\')[-1]
+        if start_point > int(index):
+            continue
+        # set paths
         path_img_segs = glob(pjoin(dir, '*.png'))
         path_relabel = pjoin(relabel_root, index + '.csv')
         print("\n*** Start Checking %s ***" % (dir))
@@ -196,7 +202,7 @@ def view_data(start_point, data_position='E:\Mulong\Datasets\dataset_webpage'):
                     elif k == ord('2'):
                         gb_element = 'input'
                     elif k == ord('3'):
-                        gb_element = 'icon'
+                        gb_element = 'select'
 
             else:
                 continue
@@ -206,8 +212,8 @@ def view_data(start_point, data_position='E:\Mulong\Datasets\dataset_webpage'):
             passed[str(seg_index)] = 1
             print('... Number of Current Labels: %d ...' % len(label))
 
-        if save:
+        if save and len(label) > 0:
             label.to_csv(path_relabel)
             print('*** %d Labels Saved to %s ***\n' % (len(label), path_relabel))
 
-view_data(0)
+view_data(25)
