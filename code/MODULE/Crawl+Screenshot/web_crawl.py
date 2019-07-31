@@ -41,7 +41,7 @@ def crawl(initial_link, iter_num, stack_size):
         fetch_links(link, new_url, old_url, stack_size)
         iter_num -= 1
 
-        print('size of new stack:' + str(len(new_url)) + '   size of old stack:' + str(len(old_url)))
+        print('number of new urls:' + str(len(new_url)) + '   size of selected urls:' + str(len(old_url)))
 
     return old_url
 

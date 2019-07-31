@@ -1,8 +1,3 @@
-# *** bug ***
-# the importing image's size is changed when show by opencv
-# *** provisional solution ***
-# defining a distort parameter (0.66) to manually correct the size
-
 import pandas as pd
 import cv2
 import numpy as np
@@ -49,27 +44,17 @@ def draw(label, pic):
         cv2.putText(pic, element + str(count[element]), top_left, cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
 
 
-def show(root_path="labeled_image", wait_key=0):
-    imgs = []
-    for _, _, imgs in os.walk('./labeled_image'):
-        pass
-    for img in imgs:
-        print('./' + root_path + '/' + img)
-        i = cv2.imread('./' + root_path + '/' + img)
-        cv2.imshow('img', i)
-        cv2.waitKey(wait_key)
+def label(label, img, output_path, show=False):
+    if np.shape(img) == ():
+        return
+    img = cv2.resize(img, (int(np.shape(img)[1]), int(np.shape(img)[0])))
+    draw(label, img)
 
-
-def label(label, image, number, output_path):
-    df = pd.read_csv(label)
-    img = cv2.imread(image)
-    distort = 1
-
-    img = cv2.resize(img, (int(np.shape(img)[1] * distort), int(np.shape(img)[0] * distort)))
-    draw(df, img)
+    if show:
+        cv2.imshow('img', img)
+        cv2.waitKey(0)
 
     cv2.imwrite(output_path, img)
-    print(output_path)
 
 
 # used for sorting by area
@@ -77,16 +62,13 @@ def takearea(element):
     return element['area']
 
 
-def wireframe(label, image, number, output_path):
-    df = pd.read_csv(label)
-    img = cv2.imread(image)
-
-    pic = np.zeros(np.shape(img), np.uint8)
+def wireframe(label, image, output_path):
+    pic = np.zeros(np.shape(image), np.uint8)
     pic.fill(255)
 
     layers = []
-    for i in range(0, len(df)):
-        item = df.iloc[i]
+    for i in range(0, len(label)):
+        item = label.iloc[i]
         element = item.element
         if element == 'div':
             continue
@@ -119,12 +101,12 @@ def wireframe(label, image, number, output_path):
 
 
 # avoid blank component
-def compo_screen(org_img_path, label_path):
+def compo_scan(org_img_path, label_path):
     # read img and its label
     img = cv2.imread(org_img_path)
     label = pd.read_csv(label_path, index_col=0)
 
-    label_screened = pd.DataFrame(columns=label.columns.values)
+    label_scanned = pd.DataFrame(columns=label.columns.values)
 
     index = 0
     for i in range(len(label)):
@@ -134,7 +116,7 @@ def compo_screen(org_img_path, label_path):
         # calculate the average pixel value and discard blank ones that are pure withe
         avg_pix = clip.sum() / (clip.shape[0] * clip.shape[1] * clip.shape[2])
         if avg_pix < 245:
-            label_screened.loc[index] = compo
+            label_scanned.loc[index] = compo
             index += 1
 
-    label_screened.to_csv(label_path)
+    label_scanned.to_csv(label_path)
