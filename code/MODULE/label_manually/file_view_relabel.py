@@ -35,7 +35,7 @@ def draw_label(label, img):
 
 
 def add_label(label, ix, iy, x, y, segment_no, element):
-    l = {'bx': ix, 'by': iy, 'bh': int(y - iy), 'bw': int(x - ix), 'segment_no': segment_no,
+    l = {'bx': ix, 'by': iy, 'bh': int(y - iy), 'bw': int(x - ix), 'segment_no': int(segment_no),
          'element': element}
     label = label.append(l, ignore_index=True)
     return label
@@ -113,7 +113,7 @@ def view_data(start_point, data_position='E:\Mulong\Datasets\dataset_webpage'):
         move = True
         passed = {}
         s = 0
-        label = pd.read_csv(pjoin(relabel_root, 'format.csv'), index_col=0)
+        label = pd.read_csv(pjoin(data_position, 'format.csv'), index_col=0)
         while s < len(path_img_segs):
             # show tips
             add_tips(0)
@@ -216,4 +216,4 @@ def view_data(start_point, data_position='E:\Mulong\Datasets\dataset_webpage'):
             label.to_csv(path_relabel)
             print('*** %d Labels Saved to %s ***\n' % (len(label), path_relabel))
 
-view_data(25)
+view_data(207)
