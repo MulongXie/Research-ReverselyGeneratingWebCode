@@ -33,4 +33,5 @@ def preprocess(gray, grad_min=1):
     grad = gray_to_gradient(gray)        # get RoI with high gradient
     binary = grad_to_binary(grad, grad_min)   # enhance the RoI
     close = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, (5, 5))   # remove noises
-    return close
+    dilate = cv2.morphologyEx(close, cv2.MORPH_DILATE, (3, 3))
+    return dilate

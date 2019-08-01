@@ -118,7 +118,7 @@ def img_refine2(rec_corners, max_img_edge_ratio):
 # return all boundaries and boundaries of rectangles
 def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, min_line_thickness):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
-    boundary_non_rec = []
+    boundary_all = []
     boundary_rec = []
     row, column = bin.shape[0], bin.shape[1]
 
@@ -129,8 +129,27 @@ def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, m
                 # ignore all small area
                 if len(area) > min_obj_area:
                     boundary = util.get_boundary(area)
+                    boundary_all.append(boundary)
                     if util.is_rectangle(boundary, min_rec_parameter, min_rec_evenness, min_line_thickness):
                         boundary_rec.append(boundary)
-                    else:
-                        boundary_non_rec.append(boundary)
-    return boundary_rec, boundary_non_rec
+    return boundary_rec, boundary_all
+
+
+def text_detection(gradient, boundary_all):
+    corners_text = []
+    corners = get_corner(boundary_all)
+    for corner in corners:
+        (up_left, bottom_right) = corner
+        (y_min, x_min) = up_left
+        (y_max, x_max) = bottom_right
+        width = y_max - y_min
+        height = x_max - x_min
+
+        edge_ratio = width/height
+        if edge_ratio > 1.5 and height < 20:
+            corners_text.append(corner)        
+        
+        print(height)
+        print("%.3f\n" % (width/height))
+    
+    return corners_text
