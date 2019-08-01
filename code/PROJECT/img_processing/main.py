@@ -44,7 +44,7 @@ for input_path in input_paths:
     binary = pre.preprocess(gray, 1)
 
     # processing: get connected areas -> get boundary -> rectangle check -> get corner of boundaries -> img or frame check -> refine img component
-    boundary_rec, boundary_non_rec = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA,
+    boundary_rec, boundary_all = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA,
                                                             C.THRESHOLD_MIN_REC_PARAMETER, C.THRESHOLD_MIN_REC_EVENNESS,
                                                             C.THRESHOLD_MIN_LINE_THICKNESS)
     corners_rec = det.get_corner(boundary_rec)
