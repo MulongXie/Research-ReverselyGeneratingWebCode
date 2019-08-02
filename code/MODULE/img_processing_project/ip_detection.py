@@ -14,7 +14,7 @@ def get_corner(boundaries):
     return corners
 
 
-# check if the objects are img components or just block
+# check if the objects are img components or just block with borders
 # return corners ((y_min, x_min),(y_max, x_max))
 def block_or_img(binary, corners, max_thickness):
     blocks = []
@@ -95,7 +95,7 @@ def img_refine(binary, corners, max_thickness):
 
 
 # check the edge ratio for img components to avoid text misrecognition
-def img_refine2(rec_corners, max_img_edge_ratio):
+def img_refine2(rec_corners, max_img_edge_ratio, min_img_width, min_img_height):
     refined_corners = []
     for corner in rec_corners:
         (up_left, bottom_right) = corner
@@ -104,7 +104,7 @@ def img_refine2(rec_corners, max_img_edge_ratio):
         width = y_max - y_min
         height = x_max - x_min
         # assumption: large one must be img component no matter its edge ratio
-        if height > 100 and width > 100:
+        if height > min_img_width and width > min_img_height:
             refined_corners.append(corner)
         else:
             edge_ratio = width/height if width > height else height/width
@@ -135,7 +135,7 @@ def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, m
     return boundary_rec, boundary_all
 
 
-def text_detection(gradient, boundary_all):
+def text_detection(gradient, boundary_all, min_text_ratio, max_text_height):
     corners_text = []
     corners = get_corner(boundary_all)
     for corner in corners:
@@ -146,7 +146,7 @@ def text_detection(gradient, boundary_all):
         height = x_max - x_min
 
         edge_ratio = width/height
-        if edge_ratio > 1.5 and height < 20:
+        if edge_ratio > min_text_ratio and height < max_text_height:
             corners_text.append(corner)        
         
         print(height)

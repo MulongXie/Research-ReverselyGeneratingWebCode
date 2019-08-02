@@ -16,14 +16,14 @@ is_show = False
 start = time.clock()
 
 # pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/1.png', (0, 300))  # cut out partial img
+org, gray = pre.read_img('input/4.png', (0, 3000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 # processing: get connected areas -> get boundary -> rectangle check -> get corner of boundaries -> img or frame check -> refine img component
 boundary_rec, boundary_all = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA, C.THRESHOLD_MIN_REC_PARAMETER, C.THRESHOLD_MIN_REC_EVENNESS, C.THRESHOLD_MIN_LINE_THICKNESS)
 corners_rec = det.get_corner(boundary_rec)
 corners_block, corners_img = det.block_or_img(binary, corners_rec, C.THRESHOLD_MAX_BORDER_THICKNESS)
-corners_img = det.img_refine2(corners_img, C.THRESHOLD_MAX_EDGE_RATIO)
+corners_img = det.img_refine2(corners_img, C.THRESHOLD_MAX_EDGE_RATIO, C.THRESHOLD_MIN_IMG_WIDTH, C.THRESHOLD_MIN_IMG_HEIGHT)
 
 # remove img elements and segment into smaller size
 img_clean = draw.draw_bounding_box(corners_img, org, (255, 255, 255), -1)

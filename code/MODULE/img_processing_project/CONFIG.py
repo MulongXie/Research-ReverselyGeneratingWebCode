@@ -14,6 +14,8 @@ class Config:
         self.THRESHOLD_MAX_EDGE_RATIO = 2.2
         self.THRESHOLD_MAX_BORDER_THICKNESS = 5
         self.THRESHOLD_MIN_LINE_THICKNESS = 10
+        self.THRESHOLD_MIN_IMG_WIDTH = 100
+        self.THRESHOLD_MIN_IMG_HEIGHT = 100
 
 
 
