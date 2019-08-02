@@ -27,10 +27,10 @@ def search_line(binary, min_line_length=100, max_thickness=3):
                 if end - head > min_line_length:
                     # check if this line is too thick to be line
                     clear_top, clear_bottom = False, False
-                    for x in range(max_thickness + 1):
-                        if not clear_top and (i - x <= 0 or np.sum(binary[i - x, head:end])/255 < 5):
+                    for t in range(max_thickness + 1):
+                        if not clear_top and (i - t <= 0 or np.sum(binary[i - t, head:end])/255 < 5):
                             clear_top = True
-                        if not clear_bottom and (i + x >= row - 1 or np.sum(binary[i + x, head:end])/255 < 5):
+                        if not clear_bottom and (i + t >= row - 1 or np.sum(binary[i + t, head:end])/255 < 5):
                             clear_bottom = True
                         if clear_top and clear_bottom:
                             lines.append(((head, i), (end, i)))
