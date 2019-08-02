@@ -6,10 +6,9 @@ import ip_preprocessing as pre
 def draw_line(img, lines, color):
     for line in lines:
         cv2.line(img, line[0], line[1], color)
-    cv2.imshow('line', img)
 
 
-def search_line(binary, min_line_length=300, max_thickness=3, max_cross_points=30):
+def search_line(binary, min_line_length_h=200, min_line_length_v=300, max_thickness=3, max_cross_points=30):
     row, column = binary.shape[0], binary.shape[1]
 
     lines_h = []
@@ -26,7 +25,7 @@ def search_line(binary, min_line_length=300, max_thickness=3, max_cross_points=3
             elif binary[x][j] == 0 and line:
                 end = j
                 line = False
-                if end - head > min_line_length:
+                if end - head > min_line_length_h:
                     # check if this line is too thick to be line
                     clear_top, clear_bottom = False, False
                     for t in range(max_thickness + 1):
@@ -47,7 +46,7 @@ def search_line(binary, min_line_length=300, max_thickness=3, max_cross_points=3
             elif (binary[i][y] == 0 or i >= row - 1) and line:
                 end = i
                 line = False
-                if end - head > min_line_length:
+                if end - head > min_line_length_v:
                     # check if this line is too thick to be line
                     clear_left, clear_right = False, False
                     for t in range(max_thickness + 1):
@@ -56,7 +55,6 @@ def search_line(binary, min_line_length=300, max_thickness=3, max_cross_points=3
                         if not clear_right and (y + t >= column - 1 or np.sum(binary[head:end, y + t])/255 < max_cross_points):
                             clear_right = True
                         if clear_left and clear_right:
-                            print(head, end)
                             lines_v.append(((y, head), (y, end)))
                             break
         if x < row - 1:
@@ -73,5 +71,5 @@ lines_h, lines_v = search_line(binary)
 draw_line(org, lines_h, (0, 255, 0))
 draw_line(org, lines_v, (0, 0, 255))
 
-cv2.imshow('bin', binary)
-cv2.waitKey(0)
+cv2.imwrite('output/labeled.png', org)
+cv2.imwrite('output/grad.png', binary)
