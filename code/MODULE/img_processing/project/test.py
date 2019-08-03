@@ -18,38 +18,37 @@ def read_lines(lines):
     return lines_converted
 
 
-def tight_set(list, thresh):
-    list = sorted(list)
-    list_tight = [list[0]]
-    anchor = 0
-    mark = anchor
-    for i in range(1, len(list)):
-        if list[i] - list[mark] <= thresh:
-            mark = i
-            continue
-        else:
-            list_tight.append(list[i])
-            anchor = i
-            mark = anchor
-    return list_tight
-
-
 # axi = 0 divide horizontally
 # axi = 1 divide vertically
 def divide_blocks(lines, axi):
-    # group lines in {'[range]': row/column index}
-    hier = {}
-    for line in lines:
-        pos = '[' + str(line[0][0]) + '-' + str(line[1][0]) + ']'
-        if pos not in hier:
-            hier[pos] = [line[0][1]]
-        else:
-            hier[pos].append(line[0][1])
 
-    blocks = []
-    for h in hier:
-        hier[h] = tight_set(hier[h], 3)
-        print(h, hier[h])
+    def tight_set(list, thresh):
+        index_row = [i[0] for i in list]
+        index_row = sorted(index_row)
+        list_tight = [list[0]]
+        anchor = 0
+        mark = anchor
+        for i in range(1, len(index_row)):
+            if index_row[i] - index_row[mark] <= thresh:
+                mark = i
+                continue
+            else:
+                list_tight.append(list[i])
+                anchor = i
+                mark = anchor
+        return list_tight
+
+    # group lines in {'[range of column]': (row index, line index)}
+    lines_formatted = {}
+    for i, line in enumerate(lines):
+        pos = '[' + str(line[0][0]) + '~' + str(line[1][0]) + ']'
+        if pos not in lines_formatted:
+            lines_formatted[pos] = [(line[0][1], i)]
+        else:
+            lines_formatted[pos].append((line[0][1], i))
+    l = []
+    for r in lines_formatted:
+        print([t[1] for t in tight_set(lines_formatted[r], 3)])
 
 
 img = cv2.imread('input/4.png')
