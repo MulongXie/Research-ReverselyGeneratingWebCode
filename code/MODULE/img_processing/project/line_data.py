@@ -22,30 +22,44 @@ def tight_set(list, thresh):
     list = sorted(list)
     list_tight = [list[0]]
     anchor = 0
-    for i in range(1, len(list) - 1):
-        if list[i] - list[anchor] < thresh:
+    mark = anchor
+    for i in range(1, len(list)):
+        if list[i] - list[mark] <= thresh:
+            mark = i
             continue
         else:
-            list_tight.append(i)
+            list_tight.append(list[i])
             anchor = i
+            mark = anchor
     return list_tight
+
+
+# remove those lines getting too close with others
+def tidy_border(borders, thresh):
+    pos = [int(k) for k in list(borders.keys())]
+    pos = tight_set(pos, thresh)
+    borders_tidied = {}
+    for p in pos:
+        borders_tidied[p] = borders[str(p)]
+    return borders_tidied
 
 
 # axi = 0 divide horizontally
 # axi = 1 divide vertically
 def divide_blocks(lines, axi):
-    # group lines in {'[range]': row/column index}
-    hier = {}
+    # group lines in {row/column index: '[range]'}
+    borders = {}
     for line in lines:
-        pos = '[' + str(line[0][0]) + '-' + str(line[1][0]) + ']'
-        if pos not in hier:
-            hier[pos] = [line[0][1]]
+        pos = str(line[0][1])
+        if pos not in borders:
+            borders[pos] = [(line[0][0], line[1][0])]
         else:
-            hier[pos].append(line[0][1])
+            borders[pos].append((line[0][0], line[1][0]))
 
-    blocks = []
-    for h in hier:
-        print(h, hier[h])
+    borders = tidy_border(borders, 3)
+
+    for key in sorted(borders.keys()):
+        print(key, borders[key])
 
 
 img = cv2.imread('input/4.png')

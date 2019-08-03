@@ -18,38 +18,14 @@ def read_lines(lines):
     return lines_converted
 
 
-def tight_set(list, thresh):
-    list = sorted(list)
-    list_tight = [list[0]]
-    anchor = 0
-    mark = anchor
-    for i in range(1, len(list)):
-        if list[i] - list[mark] <= thresh:
-            mark = i
-            continue
-        else:
-            list_tight.append(list[i])
-            anchor = i
-            mark = anchor
-    return list_tight
-
-
 # axi = 0 divide horizontally
 # axi = 1 divide vertically
 def divide_blocks(lines, axi):
-    # group lines in {'[range]': row/column index}
-    hier = {}
-    for line in lines:
-        pos = '[' + str(line[0][0]) + '-' + str(line[1][0]) + ']'
-        if pos not in hier:
-            hier[pos] = [line[0][1]]
-        else:
-            hier[pos].append(line[0][1])
 
-    blocks = []
-    for h in hier:
-        hier[h] = tight_set(hier[h], 3)
-        print(h, hier[h])
+    top = np.zeros(len(lines))
+    for line in lines:
+
+
 
 
 img = cv2.imread('input/4.png')
