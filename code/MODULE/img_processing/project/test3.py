@@ -1,6 +1,6 @@
 import numpy as np
 
 list = [1, 2, 3, 4]
-z = np.full(len(list), 1)
 
-print(z)
+for i, l in enumerate(list):
+    print(i)
