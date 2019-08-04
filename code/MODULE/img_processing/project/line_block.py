@@ -45,14 +45,26 @@ def merge_close_lines(lines):
                 mark = anchor
         return list_tight
 
+    # check if there is any existing approximate range of line (column of head to column of end)
+    def approximate_range(range, ranges, thresh=5):
+        for r in ranges:
+            if abs(range[0] - r[0]) + abs(range[1] - r[1]) < thresh:
+                return r
+        return -1
+
     # group lines in {'[range of column]': (row index, line index)}
     lines_formatted = {}
     for i, line in enumerate(lines):
-        pos = '[' + str(line[0][0]) + '~' + str(line[1][0]) + ']'
-        if pos not in lines_formatted:
-            lines_formatted[pos] = [(line[0][1], i)]
+        pos = (line[0][0], line[1][0])
+        key = approximate_range(pos, lines_formatted.keys())
+        # no approximate range existing
+        if key == -1:
+            if pos not in lines_formatted:
+                lines_formatted[pos] = [(line[0][1], i)]
+            else:
+                lines_formatted[pos].append((line[0][1], i))
         else:
-            lines_formatted[pos].append((line[0][1], i))
+            lines_formatted[key].append((line[0][1], i))
 
     new_lines = []
     for r in lines_formatted:
@@ -67,8 +79,6 @@ def merge_close_lines(lines):
 # axi = 1 divide vertically
 def divide_blocks(lines, height, axi):
     lines = merge_close_lines(lines)
-    print(sorted([l[0][1] for l in lines]))
-    print(len(lines))
 
     upper = np.zeros(len(lines), dtype=int)  # y of upper bound for each line
     lower = np.full(len(lines), height)  # y of lower bound for each line
@@ -84,9 +94,6 @@ def divide_blocks(lines, height, axi):
                     upper[i] = head_j[1]
                 if head_i[1] < head_j[1] < lower[i]:
                     lower[i] = head_j[1]
-    print([l[1][0] - l[0][0] for l in lines])
-    print(upper)
-    print(lower)
 
     broad = np.zeros(img.shape, dtype=np.uint8)
     draw_block(broad, lines, upper, lower)

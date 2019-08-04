@@ -58,6 +58,7 @@ def divide_blocks(lines, axi):
 
     borders = tidy_border(borders, 3)
 
+    print(len(borders))
     for key in sorted(borders.keys()):
         print(key, borders[key])
 

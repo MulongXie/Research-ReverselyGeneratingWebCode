@@ -1,6 +1,6 @@
 import numpy as np
 
-list = [1, 2, 3, 4]
+l1 =[1, 2]
+l2 = [3,6]
 
-for i, l in enumerate(list):
-    print(i)
+print(l1 + l2)

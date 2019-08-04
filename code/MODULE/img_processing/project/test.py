@@ -3,9 +3,17 @@ import cv2
 import numpy as np
 
 
-def draw_line(img, lines, color):
-    for line in lines:
-        cv2.line(img, line[0], line[1], color)
+def draw_block(img, lines, upper, lower):
+    r, g, b = 255, 255, 255
+    for i, line in enumerate(lines):
+        t_l = line[0]
+        b_r = (line[1][0], lower[i])
+        cv2.rectangle(img, t_l, b_r, (b, g, r), -1)
+        cv2.imwrite('f' + str(i) + '.png', img)
+        if b > 0:
+            b -= 25
+        else:
+            r -= 25
 
 
 def read_lines(lines):
@@ -18,10 +26,9 @@ def read_lines(lines):
     return lines_converted
 
 
-# axi = 0 divide horizontally
-# axi = 1 divide vertically
-def divide_blocks(lines, axi):
-
+# clean those lines so close to others that can be treated as the part of other line
+def merge_close_lines(lines):
+    # merge list members that are closer than the threshold
     def tight_set(list, thresh):
         index_row = [i[0] for i in list]
         index_row = sorted(index_row)
@@ -41,14 +48,62 @@ def divide_blocks(lines, axi):
     # group lines in {'[range of column]': (row index, line index)}
     lines_formatted = {}
     for i, line in enumerate(lines):
-        pos = '[' + str(line[0][0]) + '~' + str(line[1][0]) + ']'
+        pos = (line[0][0], line[1][0])
         if pos not in lines_formatted:
             lines_formatted[pos] = [(line[0][1], i)]
         else:
             lines_formatted[pos].append((line[0][1], i))
-    l = []
+
+    lines_formatted_refine = {}
+    range_c = list(lines_formatted.keys())
+    remove = np.zeros(len(range_c), dtype=int)
+    for i in range(len(range_c)):
+        if remove[i] == 1:
+            continue
+        for j in range(len(range_c)):
+            if i != j and remove[j] == 0:
+                # merge those approximate lines by checking their end points
+                if abs(range_c[i][0] - range_c[j][0]) + abs(range_c[i][1] - range_c[j][1]) < 5:
+                    remove[j] = 1
+                    lines_formatted_refine[range_c[i]] = lines_formatted[range_c[i]] + lines_formatted[range_c[j]]
+
+    for k in lines_formatted_refine.keys():
+        print(k, lines_formatted_refine[k])
+
+    new_lines = []
     for r in lines_formatted:
-        print([t[1] for t in tight_set(lines_formatted[r], 3)])
+        for l in [lines[t[1]] for t in tight_set(lines_formatted[r], 3)]:
+            new_lines.append(l)
+
+    return new_lines
+
+
+# lines: [(head, end)] -> [((col, row), (col, row))]
+# axi = 0 divide horizontally
+# axi = 1 divide vertically
+def divide_blocks(lines, height, axi):
+    lines = merge_close_lines(lines)
+
+    upper = np.zeros(len(lines), dtype=int)  # y of upper bound for each line
+    lower = np.full(len(lines), height)  # y of lower bound for each line
+
+    for i in range(len(lines)):
+        for j in range(len(lines)):
+            if i == j:
+                continue
+            head_i, end_i = lines[i][0], lines[i][1]
+            head_j, end_j = lines[j][0], lines[j][1]
+            if not (head_i[0] < head_j[0] and end_i[0] > end_j[0]):
+                if head_i[1] > head_j[1] > upper[i]:
+                    upper[i] = head_j[1]
+                if head_i[1] < head_j[1] < lower[i]:
+                    lower[i] = head_j[1]
+
+    broad = np.zeros(img.shape, dtype=np.uint8)
+    draw_block(broad, lines, upper, lower)
+    cv2.imwrite('output/block.png', broad)
+
+    return upper, lower
 
 
 img = cv2.imread('input/4.png')
@@ -58,9 +113,8 @@ line_v = pd.read_csv('output/line_v.csv', index_col=0)
 line_h = read_lines(line_h)
 line_v = read_lines(line_v)
 
-divide_blocks(line_h, 0)
+upper, lower = divide_blocks(line_h, img.shape[0], 0)
 
-# broad = np.zeros(img.shape, dtype=np.uint8)
 # draw_line(broad, line_h, (255, 0, 0))
 # draw_line(broad, line_v, (0, 0, 255))
 # cv2.imwrite('output/lines.png', broad)
