@@ -89,7 +89,7 @@ def divide_blocks(lines, height, axi):
                 continue
             head_i, end_i = lines[i][0], lines[i][1]
             head_j, end_j = lines[j][0], lines[j][1]
-            if not (head_i[0] < head_j[0] and end_i[0] > end_j[0]):
+            if not ((head_i[0] <= head_j[0] and end_i[0] > end_j[0]) or (head_i[0] < head_j[0] and end_i[0] >= end_j[0])):
                 if head_i[1] > head_j[1] > upper[i]:
                     upper[i] = head_j[1]
                 if head_i[1] < head_j[1] < lower[i]:
