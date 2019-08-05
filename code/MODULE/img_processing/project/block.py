@@ -7,14 +7,28 @@ class BLOCK:
         self.id = id
         self.top_left = top_left
         self.bottom_right = bottom_right
+        self.parent = None
+        self.child = None
+        self.layer = None
+
+        self.center = (int((bottom_right[0] - top_left[0])/2), int((bottom_right[1] - top_left[1])/2))
         self.width = bottom_right[0] - top_left[0]
         self.height = bottom_right[1] - top_left[1]
         self.area = self.width * self.height
-        self.parent = None
-        self.child = None
+
+        # calculate according to its parent block
+        self.margin = []
+
+    # only judged by the area of block
+    def __le__(self, block):
+        return True if self.area < block.area else False
+
+    def __gt__(self, block):
+        return True if self.area > block.area else False
 
     def draw_block(self, broad, color, thickness=-1, is_write=False, output=None):
         cv2.rectangle(broad, self.top_left, self.bottom_right, tuple(color), thickness)
+        cv2.putText(broad, str(self.layer), self.center, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 1, cv2.LINE_AA)
         if is_write:
             cv2.imwrite(output, broad)
 
@@ -35,9 +49,9 @@ class BLOCK:
         else:
             return 0
 
-    # only judged by the area of block
-    def __le__(self, block):
-        return True if self.area < block.area else False
-
-    def __gt__(self, block):
-        return True if self.area > block.area else False
+    def get_relative_position(self):
+        # top, right, bottom
+        parent = self.parent
+        self.margin = [abs(self.top_left[1] - parent.top_left[1]),
+                       abs(self.bottom_right[0] - parent.bottom_right[0]),
+                       abs(self.bottom_right[1] - parent.bottom_right[1])]

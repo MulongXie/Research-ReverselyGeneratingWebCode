@@ -126,7 +126,8 @@ def divide_blocks_by_lines(lines, height, min_block_height):
 
 
 # @blocks: [(top_left, bottom_right)] -> [((col, row), (col, row))]
-def hierarchical_blocks(blocks):
+# @is_sored: if true, sorted by hierarchy and return list of tuples -> [(id, hierarchy)]
+def hierarchical_blocks(blocks, is_sorted=True):
 
     for i in range(len(blocks)):
         for j in range(len(blocks)):
@@ -145,24 +146,29 @@ def hierarchical_blocks(blocks):
         if block.child is None:
             surface.append(block.id)
 
-    hiers = np.zeros(len(blocks), dtype=int)
+    hierarchies = np.zeros(len(blocks), dtype=int)  # layer
     cur = surface
     parents = []
     layer = 0
     while len(cur) > 0:
         for i in cur:
+            blocks[i].layer = hierarchies[i]
             if blocks[i].parent is not None:
                 parents.append(blocks[i].parent.id)
-                layer = max(hiers[blocks[i].id], 0)
+                layer = max(hierarchies[blocks[i].id], 0)
         # remove redundancy
         parents = list(set(parents))
         for i in parents:
-            hiers[i] = layer + 1
+            hierarchies[i] = layer + 1
 
         cur = parents
         parents = []
 
-    return hiers
+    if is_sorted:
+        hierarchies = [(id, hierarchies[id]) for id in range(len(hierarchies))]
+        hierarchies.sort(key=lambda x: x[1], reverse=True)
+
+    return hierarchies
 
 
 img = cv2.imread('input/4.png')
@@ -174,8 +180,7 @@ line_v = read_lines(line_v)
 
 blocks = divide_blocks_by_lines(line_h, img.shape[0], 20)
 hie = hierarchical_blocks(blocks)
-
 print(hie)
 
-# broad = np.zeros(img.shape, dtype=np.uint8)
-# draw_blocks(broad, blocks, 'output/blocks/')
+broad = np.zeros(img.shape, dtype=np.uint8)
+draw_blocks(broad, blocks, 'output/blocks/')
