@@ -5,14 +5,27 @@ class DIV:
     def __init__(self, id):
         self.head = '<div id="' + str(id) + '">\n'
         self.body = ''
-        self.tail = '</div>'
+        self.tail = '</div>' + str(id) + '\n'
         self.code = self.head + self.body + self.tail
 
-    def insert_body(self, div):
-        self.body += '\t' + div.code + '\n'
+    def insert_body(self, code):
+        self.body += code
+        self.merge()
 
     def merge(self):
         self.code = self.head + self.body + self.tail
+
+    def indent(self):
+        head = '\t' + self.head
+        if self.body is not '':
+            lines = self.body.split('\n')
+            lines = ['\t' + l + '\n' for l in lines]
+            body = ''.join(lines)[:-1]
+        else:
+            body = ''
+        tail = '\t' + self.tail
+        code = head + body + tail
+        return code
 
 
 def gen_html(blocks, hierarchies):
@@ -35,11 +48,13 @@ def gen_html(blocks, hierarchies):
             divs[id].merge()
             if blocks[id].parent is not None:
                 parent_id = blocks[id].parent.id
-                divs[parent_id].insert_body(divs[id])
+                divs[parent_id].insert_body(divs[id].indent())
                 parents.append(parent_id)
+                print(divs[parent_id].code)
         # remove redundancy
         cur = list(set(parents))
         parents = []
 
-    for r in roots:
-        print(divs[r].code)
+    for i, r in enumerate(roots):
+        f = open('output/webpage/' + str(i) + '.html', 'w')
+        f.write(r)

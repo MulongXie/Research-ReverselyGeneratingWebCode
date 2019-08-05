@@ -187,6 +187,8 @@ line_v = read_lines(line_v)
 blocks = divide_blocks_by_lines(line_h, img.shape[0], 20)
 hierarchies = hierarchical_blocks(blocks)
 
+print(hierarchies)
+
 code.gen_html(blocks, hierarchies)
 
 # broad = np.zeros(img.shape, dtype=np.uint8)
