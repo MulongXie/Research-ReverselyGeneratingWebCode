@@ -1,6 +1,7 @@
 import pandas as pd
 import cv2
 import numpy as np
+from block import BLOCK as B
 
 
 def read_lines(lines):
@@ -13,17 +14,16 @@ def read_lines(lines):
     return lines_converted
 
 
-def draw_blocks(img, blocks):
+def draw_blocks(img, blocks, output):
     c = 0
     bin = 256 * 3 / len(blocks)
     color = [255, 255, 255]
-    for i, block in enumerate(blocks):
-        cv2.rectangle(img, block[0], block[1], tuple(color), -1)
+    for i in range(len(blocks)):
+        blocks[i].draw_block(img, color, -1, True, output + str(i) + '.png')
         color[c] -= bin
         if color[c] < 0:
             c = (c+1)%3
             color[c] = 255
-        cv2.imwrite('output/blocks/' + str(i) + '.png', img)
 
 
 # clean those lines so close to others that can be treated as the part of other line
@@ -66,40 +66,44 @@ def merge_close_lines(lines):
         else:
             lines_formatted[key].append((line[0][1], i))
 
-    new_lines = []
+    lines_merged = []
     for r in lines_formatted:
         for l in [lines[t[1]] for t in tight_set(lines_formatted[r], 3)]:
-            new_lines.append(l)
-
-    return new_lines
+            lines_merged.append(l)
+    return lines_merged
 
 
 # @lines: [(head, end)] -> [((col, row), (col, row))]
 # @axi = 0 divide horizontally
 # @axi = 1 divide vertically
-def divide_blocks(lines, height, min_block_height):
+def divide_blocks_by_lines(lines, height, min_block_height):
 
     # package blocks according to the upper and lower bounds
     # @lines: [(head, end)] -> [((col, row), (col, row))]
     # @upper: upper bound row index for each line [row, row, row]
     def package_block(lines, upper, lower):
+        index = 0
+        mark = []
         blocks = []  # [(top_left, bottom_right)] -> [((column, row), (column, row)]
         for i, line in enumerate(lines):
             if lower[i] - line[0][1] > min_block_height:
                 t_l = line[0]
                 b_r = (line[1][0], lower[i])
-                blocks.append((t_l, b_r))
+                blocks.append(B(index, t_l, b_r))
+                mark.append((t_l, b_r))
+                index += 1
 
         for i, line in enumerate(lines):
             if line[0][1] - upper[i] > min_block_height:
                 t_l = (line[0][0], upper[i])
                 b_r = line[1]
-                if (t_l, b_r) not in blocks:
-                    blocks.append((t_l, b_r))
+                if (t_l, b_r) not in mark:
+                    blocks.append(B(index, t_l, b_r))
+                    mark.append((t_l, b_r))
+                    index += 1
         return blocks
 
     lines = merge_close_lines(lines)
-
     upper = np.zeros(len(lines), dtype=int)  # y of upper bound for each line
     lower = np.full(len(lines), height)  # y of lower bound for each line
 
@@ -117,9 +121,48 @@ def divide_blocks(lines, height, min_block_height):
 
     # [(top_left, bottom_right)] -> [((col, row), (col, row))]
     blocks = package_block(lines, upper, lower)
-    blocks.sort(key=lambda x: (x[1][0] - x[0][0])*(x[1][1] - x[0][1]), reverse=True)
     print(len(blocks))
     return blocks
+
+
+# @blocks: [(top_left, bottom_right)] -> [((col, row), (col, row))]
+def hierarchical_blocks(blocks):
+
+    for i in range(len(blocks)):
+        for j in range(len(blocks)):
+            if i == j:
+                continue
+            h = blocks[i].hierarchy(blocks[j])
+            if h == 1:
+                if blocks[i].child is None or blocks[i].child < blocks[j]:
+                    blocks[i].child = blocks[j]
+            elif h == -1:
+                if blocks[i].parent is None or blocks[i].parent > blocks[j]:
+                    blocks[i].parent = blocks[j]
+
+    surface = []
+    for block in blocks:
+        if block.child is None:
+            surface.append(block.id)
+
+    hiers = np.zeros(len(blocks), dtype=int)
+    cur = surface
+    parents = []
+    layer = 0
+    while len(cur) > 0:
+        for i in cur:
+            if blocks[i].parent is not None:
+                parents.append(blocks[i].parent.id)
+                layer = max(hiers[blocks[i].id], 0)
+        # remove redundancy
+        parents = list(set(parents))
+        for i in parents:
+            hiers[i] = layer + 1
+
+        cur = parents
+        parents = []
+
+    return hiers
 
 
 img = cv2.imread('input/4.png')
@@ -129,7 +172,10 @@ line_v = pd.read_csv('output/line_v.csv', index_col=0)
 line_h = read_lines(line_h)
 line_v = read_lines(line_v)
 
-blocks = divide_blocks(line_h, img.shape[0], 20)
+blocks = divide_blocks_by_lines(line_h, img.shape[0], 20)
+hie = hierarchical_blocks(blocks)
 
-broad = np.zeros(img.shape, dtype=np.uint8)
-draw_blocks(broad, blocks)
+print(hie)
+
+# broad = np.zeros(img.shape, dtype=np.uint8)
+# draw_blocks(broad, blocks, 'output/blocks/')
