@@ -3,19 +3,6 @@ import cv2
 import numpy as np
 
 
-def draw_block(img, lines, upper, lower):
-    r, g, b = 255, 255, 255
-    for i, line in enumerate(lines):
-        t_l = line[0]
-        b_r = (line[1][0], lower[i])
-        cv2.rectangle(img, t_l, b_r, (b, g, r), -1)
-        cv2.imwrite('f' + str(i) + '.png', img)
-        if b > 0:
-            b -= 25
-        else:
-            r -= 25
-
-
 def read_lines(lines):
     lines_converted = []
     for i in range(len(lines)):
@@ -24,6 +11,19 @@ def read_lines(lines):
         end = tuple([int(h) for h in line['end'][1:-1].split(', ')])
         lines_converted.append((head, end))
     return lines_converted
+
+
+def draw_blocks(img, blocks):
+    c = 0
+    bin = 256 * 3 / len(blocks)
+    color = [255, 255, 255]
+    for i, block in enumerate(blocks):
+        cv2.rectangle(img, block[0], block[1], tuple(color), -1)
+        color[c] -= bin
+        if color[c] < 0:
+            c = (c+1)%3
+            color[c] = 255
+        cv2.imwrite('output/blocks/' + str(i) + '.png', img)
 
 
 # clean those lines so close to others that can be treated as the part of other line
@@ -74,10 +74,30 @@ def merge_close_lines(lines):
     return new_lines
 
 
-# lines: [(head, end)] -> [((col, row), (col, row))]
-# axi = 0 divide horizontally
-# axi = 1 divide vertically
-def divide_blocks(lines, height, axi):
+# @lines: [(head, end)] -> [((col, row), (col, row))]
+# @axi = 0 divide horizontally
+# @axi = 1 divide vertically
+def divide_blocks(lines, height, min_block_height):
+
+    # package blocks according to the upper and lower bounds
+    # @lines: [(head, end)] -> [((col, row), (col, row))]
+    # @upper: upper bound row index for each line [row, row, row]
+    def package_block(lines, upper, lower):
+        blocks = []  # [(top_left, bottom_right)] -> [((column, row), (column, row)]
+        for i, line in enumerate(lines):
+            if lower[i] - line[0][1] > min_block_height:
+                t_l = line[0]
+                b_r = (line[1][0], lower[i])
+                blocks.append((t_l, b_r))
+
+        for i, line in enumerate(lines):
+            if line[0][1] - upper[i] > min_block_height:
+                t_l = (line[0][0], upper[i])
+                b_r = line[1]
+                if (t_l, b_r) not in blocks:
+                    blocks.append((t_l, b_r))
+        return blocks
+
     lines = merge_close_lines(lines)
 
     upper = np.zeros(len(lines), dtype=int)  # y of upper bound for each line
@@ -95,11 +115,11 @@ def divide_blocks(lines, height, axi):
                 if head_i[1] < head_j[1] < lower[i]:
                     lower[i] = head_j[1]
 
-    broad = np.zeros(img.shape, dtype=np.uint8)
-    draw_block(broad, lines, upper, lower)
-    cv2.imwrite('output/block.png', broad)
-
-    return upper, lower
+    # [(top_left, bottom_right)] -> [((col, row), (col, row))]
+    blocks = package_block(lines, upper, lower)
+    blocks.sort(key=lambda x: (x[1][0] - x[0][0])*(x[1][1] - x[0][1]), reverse=True)
+    print(len(blocks))
+    return blocks
 
 
 img = cv2.imread('input/4.png')
@@ -109,8 +129,7 @@ line_v = pd.read_csv('output/line_v.csv', index_col=0)
 line_h = read_lines(line_h)
 line_v = read_lines(line_v)
 
-upper, lower = divide_blocks(line_h, img.shape[0], 0)
+blocks = divide_blocks(line_h, img.shape[0], 20)
 
-# draw_line(broad, line_h, (255, 0, 0))
-# draw_line(broad, line_v, (0, 0, 255))
-# cv2.imwrite('output/lines.png', broad)
+broad = np.zeros(img.shape, dtype=np.uint8)
+draw_blocks(broad, blocks)

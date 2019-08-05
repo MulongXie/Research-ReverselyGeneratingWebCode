@@ -1,6 +1,6 @@
 import numpy as np
 
-l1 =[1, 2]
-l2 = [3,6]
+l = [(6,12), (1,2), (2,6)]
+l.sort(key=lambda x: x[1] - x[0])
 
-print(l1 + l2)
+print(l)

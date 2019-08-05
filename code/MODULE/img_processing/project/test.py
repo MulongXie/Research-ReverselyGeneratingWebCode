@@ -3,13 +3,13 @@ import cv2
 import numpy as np
 
 
-def draw_block(img, lines, upper, lower):
+def draw_block(lines, upper, lower, is_drawn=False):
     r, g, b = 255, 255, 255
     for i, line in enumerate(lines):
         t_l = line[0]
         b_r = (line[1][0], lower[i])
         cv2.rectangle(img, t_l, b_r, (b, g, r), -1)
-        cv2.imwrite('f' + str(i) + '.png', img)
+        cv2.imwrite('output/low/' + str(i) + '.png', img)
         if b > 0:
             b -= 25
         else:
@@ -45,30 +45,26 @@ def merge_close_lines(lines):
                 mark = anchor
         return list_tight
 
+    # check if there is any existing approximate range of line (column of head to column of end)
+    def approximate_range(range, ranges, thresh=5):
+        for r in ranges:
+            if abs(range[0] - r[0]) + abs(range[1] - r[1]) < thresh:
+                return r
+        return -1
+
     # group lines in {'[range of column]': (row index, line index)}
     lines_formatted = {}
     for i, line in enumerate(lines):
         pos = (line[0][0], line[1][0])
-        if pos not in lines_formatted:
-            lines_formatted[pos] = [(line[0][1], i)]
+        key = approximate_range(pos, lines_formatted.keys())
+        # no approximate range existing
+        if key == -1:
+            if pos not in lines_formatted:
+                lines_formatted[pos] = [(line[0][1], i)]
+            else:
+                lines_formatted[pos].append((line[0][1], i))
         else:
-            lines_formatted[pos].append((line[0][1], i))
-
-    lines_formatted_refine = {}
-    range_c = list(lines_formatted.keys())
-    remove = np.zeros(len(range_c), dtype=int)
-    for i in range(len(range_c)):
-        if remove[i] == 1:
-            continue
-        for j in range(len(range_c)):
-            if i != j and remove[j] == 0:
-                # merge those approximate lines by checking their end points
-                if abs(range_c[i][0] - range_c[j][0]) + abs(range_c[i][1] - range_c[j][1]) < 5:
-                    remove[j] = 1
-                    lines_formatted_refine[range_c[i]] = lines_formatted[range_c[i]] + lines_formatted[range_c[j]]
-
-    for k in lines_formatted_refine.keys():
-        print(k, lines_formatted_refine[k])
+            lines_formatted[key].append((line[0][1], i))
 
     new_lines = []
     for r in lines_formatted:
@@ -93,15 +89,13 @@ def divide_blocks(lines, height, axi):
                 continue
             head_i, end_i = lines[i][0], lines[i][1]
             head_j, end_j = lines[j][0], lines[j][1]
-            if not (head_i[0] < head_j[0] and end_i[0] > end_j[0]):
+            if not ((head_i[0] <= head_j[0] and end_i[0] > end_j[0]) or (head_i[0] < head_j[0] and end_i[0] >= end_j[0])):
                 if head_i[1] > head_j[1] > upper[i]:
                     upper[i] = head_j[1]
                 if head_i[1] < head_j[1] < lower[i]:
                     lower[i] = head_j[1]
 
-    broad = np.zeros(img.shape, dtype=np.uint8)
-    draw_block(broad, lines, upper, lower)
-    cv2.imwrite('output/block.png', broad)
+    pack_block(lines, upper, lower)
 
     return upper, lower
 
