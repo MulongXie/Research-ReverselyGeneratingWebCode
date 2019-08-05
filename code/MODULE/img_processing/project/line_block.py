@@ -1,7 +1,9 @@
 import pandas as pd
 import cv2
 import numpy as np
+
 from block import BLOCK as B
+import code_transformation as code
 
 
 def read_lines(lines):
@@ -14,12 +16,12 @@ def read_lines(lines):
     return lines_converted
 
 
-def draw_blocks(img, blocks, output):
+def draw_blocks(img, blocks, hierarchy, output):
     c = 0
     bin = 256 * 3 / len(blocks)
     color = [255, 255, 255]
-    for i in range(len(blocks)):
-        blocks[i].draw_block(img, color, -1, True, output + str(i) + '.png')
+    for i, hier in enumerate(hierarchy):
+        blocks[hier[0]].draw_block(img, color, -1, True, output + str(i) + '.png')
         color[c] -= bin
         if color[c] < 0:
             c = (c+1)%3
@@ -135,19 +137,21 @@ def hierarchical_blocks(blocks, is_sorted=True):
                 continue
             h = blocks[i].hierarchy(blocks[j])
             if h == 1:
-                if blocks[i].child is None or blocks[i].child < blocks[j]:
-                    blocks[i].child = blocks[j]
+                if blocks[i].child is None:
+                    blocks[i].child = [blocks[j]]
+                else:
+                    blocks[i].child.append([blocks[j]])
             elif h == -1:
                 if blocks[i].parent is None or blocks[i].parent > blocks[j]:
                     blocks[i].parent = blocks[j]
 
-    surface = []
+    leaves = []
     for block in blocks:
         if block.child is None:
-            surface.append(block.id)
+            leaves.append(block.id)
 
     hierarchies = np.zeros(len(blocks), dtype=int)  # layer
-    cur = surface
+    cur = leaves
     parents = []
     layer = 0
     while len(cur) > 0:
@@ -156,6 +160,8 @@ def hierarchical_blocks(blocks, is_sorted=True):
             if blocks[i].parent is not None:
                 parents.append(blocks[i].parent.id)
                 layer = max(hierarchies[blocks[i].id], 0)
+                # calculate the 'margin' attribute according to the relative position to its parent
+                blocks[i].get_relative_position()
         # remove redundancy
         parents = list(set(parents))
         for i in parents:
@@ -179,8 +185,9 @@ line_h = read_lines(line_h)
 line_v = read_lines(line_v)
 
 blocks = divide_blocks_by_lines(line_h, img.shape[0], 20)
-hie = hierarchical_blocks(blocks)
-print(hie)
+hierarchies = hierarchical_blocks(blocks)
 
-broad = np.zeros(img.shape, dtype=np.uint8)
-draw_blocks(broad, blocks, 'output/blocks/')
+code.gen_html(blocks, hierarchies)
+
+# broad = np.zeros(img.shape, dtype=np.uint8)
+# draw_blocks(broad, blocks, hie, 'output/blocks/')

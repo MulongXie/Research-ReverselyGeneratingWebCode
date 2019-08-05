@@ -3,15 +3,15 @@ import cv2
 
 class BLOCK:
     # (column, row)
-    def __init__(self, id, top_left, bottom_right):
+    def __init__(self, id, top_left, bottom_right, parent=None, child=None, layer=None):
         self.id = id
         self.top_left = top_left
         self.bottom_right = bottom_right
-        self.parent = None
-        self.child = None
-        self.layer = None
+        self.parent = parent
+        self.child = child
+        self.layer = layer
 
-        self.center = (int((bottom_right[0] - top_left[0])/2), int((bottom_right[1] - top_left[1])/2))
+        self.center = (int((bottom_right[0] + top_left[0])/2), int((bottom_right[1] + top_left[1])/2))
         self.width = bottom_right[0] - top_left[0]
         self.height = bottom_right[1] - top_left[1]
         self.area = self.width * self.height
@@ -28,7 +28,8 @@ class BLOCK:
 
     def draw_block(self, broad, color, thickness=-1, is_write=False, output=None):
         cv2.rectangle(broad, self.top_left, self.bottom_right, tuple(color), thickness)
-        cv2.putText(broad, str(self.layer), self.center, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 1, cv2.LINE_AA)
+        cv2.putText(broad, str(self.layer), self.center, cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255,0,0), 2, cv2.LINE_AA)
+        print(self.margin)
         if is_write:
             cv2.imwrite(output, broad)
 
