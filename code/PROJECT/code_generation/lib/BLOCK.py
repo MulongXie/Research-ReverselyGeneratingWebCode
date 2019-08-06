@@ -29,7 +29,6 @@ class BLOCK:
     def draw_block(self, broad, color, thickness=-1, is_write=False, output=None):
         cv2.rectangle(broad, self.top_left, self.bottom_right, tuple(color), thickness)
         cv2.putText(broad, str(self.layer), self.center, cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255,0,0), 2, cv2.LINE_AA)
-        print(self.margin)
         if is_write:
             cv2.imwrite(output, broad)
 

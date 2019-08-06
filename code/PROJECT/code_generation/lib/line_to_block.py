@@ -3,17 +3,6 @@ import cv2
 import numpy as np
 
 from BLOCK import BLOCK as B
-import code_generation as code
-
-
-def read_lines(lines):
-    lines_converted = []
-    for i in range(len(lines)):
-        line = lines.iloc[i]
-        head = tuple([int(h) for h in line['head'][1:-1].split(', ')])
-        end = tuple([int(h) for h in line['end'][1:-1].split(', ')])
-        lines_converted.append((head, end))
-    return lines_converted
 
 
 def draw_blocks(img, blocks, hierarchy, output):
@@ -123,7 +112,7 @@ def divide_blocks_by_lines(lines, height, min_block_height):
 
     # [(top_left, bottom_right)] -> [((col, row), (col, row))]
     blocks = package_block(lines, upper, lower)
-    print(len(blocks))
+    print('*** Number of Blocks: %d ***' % len(blocks))
     return blocks
 
 
