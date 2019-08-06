@@ -13,7 +13,7 @@ is_read_existed_links = not is_crawl_link
 is_catch_element = True
 is_draw_label = True
 
-data_position = 'E:\Mulong\Datasets\dataset_webpage\data2'
+data_position = 'E:\Mulong\Datasets\dataset_webpage\page500_2'
 img_root = os.path.join(data_position, 'org')
 label_root = os.path.join(data_position, 'label')
 drawn_root = os.path.join(data_position, 'drawn')
@@ -32,12 +32,12 @@ if is_crawl_link:
 
 if is_read_existed_links:
     # read links
-    csv = pd.read_csv(os.path.join(data_position, 'preset_500_2.csv'))
+    csv = pd.read_csv(os.path.join(data_position, 'link_500_2.csv'))
     links = csv.link
 
-print("*** Links Fetched ***\n")
+print("*** %d Links Fetched ***\n" % len(links))
 
-start_pos = 1
+start_pos = 380
 for index in range(start_pos, len(links)):
     start_time = time.clock()
     # set path
@@ -50,7 +50,7 @@ for index in range(start_pos, len(links)):
     if is_catch_element:
         # set the format of libel
         libel_format = pd.read_csv(os.path.join(data_position, 'format.csv'), index_col=0)
-        url = 'http://' + links.iloc[index]
+        url = 'http://' + links.iloc[index] if 'http://' not in links.iloc[index] else links.iloc[index]
         img, label = catch.catch(url, label_path, org_img_path, libel_format, driver_path)
 
     # read and draw label on segment img
