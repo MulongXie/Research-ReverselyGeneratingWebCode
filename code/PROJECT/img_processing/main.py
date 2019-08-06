@@ -19,7 +19,7 @@ is_save = True
 input_paths = glob.glob(pyjoin(input_root, '*.png'))
 input_paths = sorted(input_paths, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
-start_index = 1
+start_index = 4
 end_index = 1000
 
 for input_path in input_paths:
@@ -48,8 +48,8 @@ for input_path in input_paths:
                                                             C.THRESHOLD_MIN_REC_PARAMETER, C.THRESHOLD_MIN_REC_EVENNESS,
                                                             C.THRESHOLD_MIN_LINE_THICKNESS)
     corners_rec = det.get_corner(boundary_rec)
-    corners_block, corners_img = det.block_or_img(binary, corners_rec, C.THRESHOLD_MAX_BORDER_THICKNESS)
-    corners_img = det.img_refine2(corners_img, C.THRESHOLD_MAX_EDGE_RATIO)
+    corners_block, corners_img = det.block_or_img(binary, corners_rec, C.THRESHOLD_MAX_BLOCK_BORDER_THICKNESS, C.THRESHOLD_MAX_BLOCK_CROSS_POINT)
+    corners_img = det.img_refine2(corners_img, C.THRESHOLD_MAX_IMG_EDGE_RATIO, C.THRESHOLD_MIN_IMG_EDGE_LENGTH)
 
     # remove img elements and segment into smaller size
     img_clean = draw.draw_bounding_box(corners_img, org, (255, 255, 255), -1)
