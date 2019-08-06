@@ -33,9 +33,6 @@ def block_or_img(binary, corners, max_thickness, max_block_cross_points):
             if vacancy[0] == 0 and (np.sum(binary[x_min + i, y_min + i: y_max - i])/255)/(y_max-y_min-2*i) <= max_block_cross_points:
                 vacancy[0] = 1
             # bottom-up
-            if height > 1000:
-                print('b')
-                print((np.sum(binary[x_max - i, y_min + i: y_max - i]) / 255) / (y_max - y_min - 2 * i))
             if vacancy[1] == 0 and (np.sum(binary[x_max - i, y_min + i: y_max - i])/255)/(y_max-y_min-2*i) <= max_block_cross_points:
                 vacancy[1] = 1
             # left to right
