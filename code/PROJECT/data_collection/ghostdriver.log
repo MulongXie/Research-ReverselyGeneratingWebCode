@@ -1,0 +1,34 @@
+[INFO  - 2019-08-06T07:50:54.817Z] GhostDriver - Main - running on port 61161
+[INFO  - 2019-08-06T07:50:59.297Z] Session [edfe81c0-b81e-11e9-b7c5-d30946301307] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
+[INFO  - 2019-08-06T07:50:59.297Z] Session [edfe81c0-b81e-11e9-b7c5-d30946301307] - page.customHeaders:  - {}
+[INFO  - 2019-08-06T07:50:59.297Z] Session [edfe81c0-b81e-11e9-b7c5-d30946301307] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2019-08-06T07:50:59.297Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: edfe81c0-b81e-11e9-b7c5-d30946301307
+[ERROR - 2019-08-06T07:51:00.123Z] Session [edfe81c0-b81e-11e9-b7c5-d30946301307] - page.onError - msg: ReferenceError: Can't find variable: Symbol
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-08-06T07:51:00.124Z] Session [edfe81c0-b81e-11e9-b7c5-d30946301307] - page.onError - stack:
+  _iterableToArray (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  _toConsumableArray (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  o (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  o (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  o (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  o (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  o (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  o (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  o (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  r (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+
+  phantomjs://platform/console++.js:263 in error

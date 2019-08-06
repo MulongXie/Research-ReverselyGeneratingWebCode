@@ -73,12 +73,10 @@ def find_element(element, df, driver):
             continue
         dic = {}
         dic['element'] = element
-        dic['p'] = 1
         dic['bx'] = compo.location['x']
         dic['by'] = compo.location['y']
         dic['bw'] = compo.size['width']
         dic['bh'] = compo.size['height']
-        dic['c_' + element] = 1
         df = df.append(dic, True)
     return df
 
@@ -88,7 +86,7 @@ def find_element(element, df, driver):
 def catch(url, out_label, out_img, libel_format, driver_path, browser='PhantomJS'):
     try:
         print("*** catching element from %s ***" % url)
-        csv = libel_format
+        label = libel_format
 
         # initialize the webdriver to get the full screen-shot and attributes
         if browser == 'PhantomJS':
@@ -101,27 +99,33 @@ def catch(url, out_label, out_img, libel_format, driver_path, browser='PhantomJS
         driver.get(url)
 
         # fetch the attributes
-        # csv = find_element('div', csv, driver)
-        csv = find_element('img', csv, driver)
-        # csv = find_element('a', csv, driver)
-        # csv = find_element('h1', csv, driver)
-        # csv = find_element('h2', csv, driver)
-        # csv = find_element('button', csv, driver)
-        # csv = find_element('input', csv, driver)
+        # label = find_element('div', label, driver)
+        label = find_element('img', label, driver)
+        # label = find_element('a', label, driver)
+        # label = find_element('h1', label, driver)
+        # label = find_element('h2', label, driver)
+        # label = find_element('button', label, driver)
+        # label = find_element('input', label, driver)
 
         if take_screen(driver, out_img):
             img = cv2.imread(out_img)
             if img is None:
                 print("Screenshot is None")
-                return False
+                return None, None
 
-            csv.to_csv(out_label)
+            label.to_csv(out_label)
             print("Catch Elements Successfully")
-            return True
+            return img, label
         else:
             print("Screenshot Failed")
-            return False
+            return None, None
 
     except Exception as e:
         print(e)
-        return False
+        return None, None
+
+
+def screenshot(output_path, url, driver_path):
+    driver = webdriver.PhantomJS(executable_path=os.path.join(driver_path, 'phantomjs.exe'))
+    driver.get(url)
+    driver.save_screenshot(output_path)
