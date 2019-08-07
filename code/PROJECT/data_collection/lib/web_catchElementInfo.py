@@ -102,8 +102,6 @@ def catch(url, out_label, out_img, libel_format, driver_path, browser='PhantomJS
             driver.get(url)
         except:
             print('Time out')
-        finally:
-            return None, None
 
         # fetch the attributes
         # label = find_element('div', label, driver)
