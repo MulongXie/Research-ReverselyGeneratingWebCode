@@ -86,6 +86,7 @@ def find_element(element, df, driver):
 def catch(url, out_label, out_img, libel_format, driver_path, browser='PhantomJS'):
     try:
         print("*** catching element from %s ***" % url)
+        print(time.ctime())
         label = libel_format
 
         # initialize the webdriver to get the full screen-shot and attributes

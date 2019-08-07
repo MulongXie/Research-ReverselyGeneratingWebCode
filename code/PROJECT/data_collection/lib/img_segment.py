@@ -80,7 +80,6 @@ def segment_img(org, segment_size, output_path, overlap=50):
         os.mkdir(output_path)
 
     height, width = np.shape(org)[0], np.shape(org)[1]
-    print(np.shape(org))
 
     top = 0
     bottom = segment_size
