@@ -75,22 +75,19 @@ def segment_label(label_path, segment_size=600):
 
 
 # cut the original img into fixed-size segment img
-def segment_img(org_img_path, output_segment_path, segment_size=600, show=True):
-    img = cv2.imread(org_img_path)
-    height_bottom = np.shape(img)[0]
+def segment_img(org, segment_size, output_path, overlap=50):
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
 
-    h = 0
+    height, width = np.shape(org)[0], np.shape(org)[1]
+    print(np.shape(org))
+
+    top = 0
+    bottom = segment_size
     segment_no = 0
-    while h < height_bottom:
-        segment_range = {}
-        segment_range['top'] = h
-        segment_range['bottom'] = h + segment_size if h + segment_size <= height_bottom else height_bottom
-        segment_img = img[segment_range['top']:segment_range['bottom'], :, :]
-        cv2.imwrite(os.path.join(output_segment_path, str(segment_no) + '.png'), segment_img)
-
-        h += segment_size
+    while top < height and bottom < height:
+        segment = org[top:bottom]
+        cv2.imwrite(os.path.join(output_path, str(segment_no) + '.png'), segment)
         segment_no += 1
-
-        if show:
-            cv2.imshow('img', segment_img)
-            cv2.waitKey(0)
+        top += segment_size - overlap
+        bottom = bottom + segment_size - overlap if bottom + segment_size - overlap <= height else height

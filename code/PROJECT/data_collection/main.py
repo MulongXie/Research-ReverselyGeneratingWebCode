@@ -11,12 +11,14 @@ import time
 is_crawl_link = False
 is_read_existed_links = not is_crawl_link
 is_catch_element = True
-is_draw_label = True
+is_segment = True
+is_draw_label = False
 
 data_position = 'E:\Mulong\Datasets\dataset_webpage\page10000'
 img_root = os.path.join(data_position, 'org')
 label_root = os.path.join(data_position, 'label')
 drawn_root = os.path.join(data_position, 'drawn')
+segment_root = os.path.join(data_position, 'segment')
 driver_path = 'D:\webdriver'
 
 if is_crawl_link:
@@ -37,13 +39,14 @@ if is_read_existed_links:
 
 print("*** %d Links Fetched ***\n" % len(links))
 
-start_pos = 75
+start_pos = 103
 end_pos = 1000
 for index in range(start_pos, len(links)):
     start_time = time.clock()
     # set path
-    org_img_path = os.path.join(img_root, str(index) + '.png')
-    drawn_img_path = os.path.join(drawn_root, str(index) + '.png')
+    img_org_path = os.path.join(img_root, str(index) + '.png')
+    img_drawn_path = os.path.join(drawn_root, str(index) + '.png')
+    img_segment_path = os.path.join(segment_root, str(index))
     label_path = os.path.join(label_root, str(index) + '.csv')
 
     # catch label and screenshot img and segment them into smaller size
@@ -53,11 +56,15 @@ for index in range(start_pos, len(links)):
         # set the format of libel
         libel_format = pd.read_csv(os.path.join(data_position, 'format.csv'), index_col=0)
         url = 'http://' + links.iloc[index] if 'http://' not in links.iloc[index] else links.iloc[index]
-        img, label = catch.catch(url, label_path, org_img_path, libel_format, driver_path)
+        img, label = catch.catch(url, label_path, img_org_path, libel_format, driver_path)
+
+    # segment the lengthy images
+    if is_segment:
+        seg.segment_img(img, 600, img_segment_path)
 
     # read and draw label on segment img
     if is_draw_label and img is not None and label is not None:
-        draw.label(label, img, drawn_img_path)
+        draw.label(label, img, img_drawn_path)
 
     end_time = time.clock()
     print("*** %d Time taken:%ds ***\n" % (index, int(end_time - start_time)))
