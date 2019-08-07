@@ -39,7 +39,7 @@ if is_read_existed_links:
 
 print("*** %d Links Fetched ***\n" % len(links))
 
-start_pos = 103
+start_pos = 331
 end_pos = 1000
 for index in range(start_pos, len(links)):
     start_time = time.clock()
@@ -59,8 +59,8 @@ for index in range(start_pos, len(links)):
         img, label = catch.catch(url, label_path, img_org_path, libel_format, driver_path)
 
     # segment the lengthy images
-    if is_segment:
-        seg.segment_img(img, 600, img_segment_path)
+    if is_segment and img is not None:
+        seg.segment_img(img, 600, img_segment_path, 0)
 
     # read and draw label on segment img
     if is_draw_label and img is not None and label is not None:

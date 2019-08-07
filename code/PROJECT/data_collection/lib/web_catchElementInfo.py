@@ -96,7 +96,14 @@ def catch(url, out_label, out_img, libel_format, driver_path, browser='PhantomJS
             options.add_argument('--headless')  # do not show the browser every time
             driver = webdriver.Chrome(executable_path=os.path.join(driver_path, 'chromedriver.exe'), options=options)
         driver.maximize_window()
-        driver.get(url)
+        driver.set_page_load_timeout(50)
+
+        try:
+            driver.get(url)
+        except:
+            print('Time out')
+        finally:
+            return None, None
 
         # fetch the attributes
         # label = find_element('div', label, driver)
