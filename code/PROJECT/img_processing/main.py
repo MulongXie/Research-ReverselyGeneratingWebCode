@@ -19,7 +19,7 @@ is_save = True
 input_paths = glob.glob(pyjoin(input_root, '*.png'))
 input_paths = sorted(input_paths, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
-start_index = 257
+start_index = 284
 end_index = 1000
 
 for input_path in input_paths:
@@ -33,6 +33,7 @@ for input_path in input_paths:
 
     # set paths
     print(input_path)
+    print(time.ctime())
     out_img_draw = pyjoin(C.ROOT_IMG_DRAWN, index + '.png')
     out_img_clean = pyjoin(C.ROOT_IMG_CLEAN, index + '.png')
     out_img_gradient = pyjoin(C.ROOT_IMG_GRADIENT, index + '.png')
