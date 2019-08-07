@@ -113,7 +113,8 @@ def catch(url, out_label, out_img, libel_format, driver_path, browser='PhantomJS
                 print("Screenshot is None")
                 return None, None
 
-            label.to_csv(out_label)
+            if len(label) > 0:
+                label.to_csv(out_label)
             print("Catch Elements Successfully")
             return img, label
         else:

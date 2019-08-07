@@ -1,38 +1,48 @@
+from glob import glob
+from os.path import join as pjoin
 import cv2
 import os
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 ix, iy = -1, -1
 # global variables for visualisation
 gb_img = None  # record the new label
 gb_label = None  # label of this web page
 gb_label_index = None  # index of the new line of label
-gb_newlabelnum = 0
-
-
-def add_label(label, ix, iy, x, y, segment_no):
-    l = {'bx': ix, 'by': iy, 'bh': int(y - iy), 'bw': int(x - ix), 'segment_no': segment_no,
-         'element': 'img', 'p': 1, 'c_img': 1}
-    label = label.append(l, ignore_index=True)
-    print('... Number of New Labels: %d ...' % gb_newlabelnum)
-    return label
-
-
-def overlap(bottom, top, board):
-    cv2.addWeighted(bottom, 0.7, top, 0.3, 0, board)
-    cv2.imshow('segment', board)
+gb_element = None
+gb_is_labeling = False
 
 
 def draw_label(label, img):
+    if gb_element == 'button':
+        color = (255, 0, 255)
+    elif gb_element == 'input':
+        color = (255, 160, 0)
+    elif gb_element == 'select':
+        color = (0, 150, 255)
+
+    if not gb_is_labeling:
+        color = (0, 0, 255)
+    else:
+        label = label[label['element'] == gb_element]
     for i in range(len(label)):
         l = label.iloc[i]
-        cv2.rectangle(img, (int(l['bx']), int(l['by'])), (int(l['bx'] + l['bw']), int(l['by'] + l['bh'])), (0, 0, 255), 1)
+        element = l['element'] if not gb_is_labeling else gb_element
+        cv2.rectangle(img, (int(l['bx']), int(l['by'])), (int(l['bx'] + l['bw']), int(l['by'] + l['bh'])), color, 1)
+        cv2.putText(img, element, (int(l['bx']), int(l['by'])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
     cv2.imshow('img', img)
 
 
+def add_label(label, ix, iy, x, y, segment_no, element):
+    l = {'bx': ix, 'by': iy, 'bh': int(y - iy), 'bw': int(x - ix), 'segment_no': int(segment_no),
+         'element': element}
+    label = label.append(l, ignore_index=True)
+    return label
+
+
 def relabel(event, x, y, flags, param):
-    global ix, iy, gb_img, gb_label, gb_label_index, gb_newlabelnum
+    global ix, iy, gb_img, gb_label, gb_label_index, gb_element
     seg_index = param[0]
 
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -42,12 +52,12 @@ def relabel(event, x, y, flags, param):
         # draw the rectangle
         img = gb_img.copy()
         cv2.rectangle(img, (ix, iy), (x, y), (0, 255, 0), 1)
+        cv2.putText(img, gb_element, (ix, iy), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
         cv2.imshow('img', img)
     elif event == cv2.EVENT_LBUTTONUP:
         # save the labeled area
         gb_label_index += 1
-        gb_newlabelnum += 1
-        gb_label = add_label(gb_label, ix, iy, x, y, seg_index)
+        gb_label = add_label(gb_label, ix, iy, x, y, seg_index, gb_element)
         draw_label(gb_label, gb_img)
 
 
@@ -68,42 +78,34 @@ def add_tips(flag):
     elif flag == 1:
         cv2.putText(img, 'd: Quit Relabelling Mode', (0, 20), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
         cv2.putText(img, 'z: Delete the Last Label', (0, 40), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
+
+        cv2.putText(img, '1: button', (0, 100), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
+        cv2.putText(img, '2: input', (0, 120), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
+        cv2.putText(img, '3: icon', (0, 140), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
     cv2.imshow('tips', img)
     cv2.moveWindow('tips', 2000, 0)
 
 
-def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
+def view_data(start_point, data_position='E:\Mulong\Datasets\dataset_webpage'):
     # *** step 1 *** Root Path
     # retrieve global variables for relabel
-    global gb_img, gb_label, gb_label_index, gb_newlabelnum
+    global gb_img, gb_label, gb_label_index, gb_element, gb_is_labeling
     # set root path
-    root = os.path.join(data_position, 'img_segment')
-    img_root = os.path.join(root, 'img')
-    label_root = os.path.join(root, 'label')
-    relabel_root = os.path.join(root, 'label_refine')  # relabels path
+    img_root = pjoin(data_position, 'img_segment')
+    relabel_root = pjoin(data_position, 'relabel')  # relabels path
 
     # *** step 2 *** Iterate Web Pages
     # iterate all web pages from the start point
-    indices = sorted([int(l[:-4]) for l in os.listdir(label_root)])
-    for index in indices[indices.index(start_point):]:
+    img_dirs = glob(pjoin(img_root, '*'))
+    img_dirs.sort(key=lambda x: int(x.split('\\')[-1]))
+    for dir in img_dirs:
+        index = dir.split('\\')[-1]
+        if start_point > int(index):
+            continue
         # set paths
-        img_path = os.path.join(os.path.join(img_root, str(index)), 'segment')
-        label_path = os.path.join(label_root, str(index) + '.csv')
-        relabel_path = os.path.join(relabel_root, str(index) + '.csv')
-        # read paths of images
-        seg_img_paths = []
-        if os.path.exists(img_path):
-            seg_img_paths = [p for p in os.listdir(img_path)]
-            seg_img_paths.sort(key=lambda v: int(v[:-4]))  # sort by img index
-            seg_img_paths = [os.path.join(img_path, p) for p in seg_img_paths]
-        # read existing label
-        if os.path.exists(label_path):
-            label = pd.read_csv(label_path, index_col=0)
-            label_new = label.drop(index=label.index.values)
-            gb_newlabelnum = 0
-
-        print("\n*** Start Checking %s ***" % (img_path))
-        print("*** Number of Labels: %d ***" % (len(label)))
+        path_img_segs = glob(pjoin(dir, '*.png'))
+        path_relabel = pjoin(relabel_root, index + '.csv')
+        print("\n*** Start Checking %s ***" % (dir))
 
         # *** step 3 *** Iterate Segment Images
         # iterate all image segments for each web page
@@ -111,23 +113,23 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
         move = True
         passed = {}
         s = 0
-        while s < len(seg_img_paths):
-            if not os.path.exists(seg_img_paths[s]):
-                break
+        label = pd.read_csv(pjoin(data_position, 'format.csv'), index_col=0)
+        while s < len(path_img_segs):
             # show tips
             add_tips(0)
 
             # read segment image
-            seg_img = cv2.imread(seg_img_paths[s])
-            seg_index = int(seg_img_paths[s].split('\\')[-1][:-4])
+            seg_img = cv2.imread(path_img_segs[s])
+            seg_index = int(path_img_segs[s].split('\\')[-1][:-4])
             if move:
-                if seg_img_paths[s] is not '':
-                    print(seg_img_paths[s])
+                if path_img_segs[s] is not '':
+                    print(path_img_segs[s])
                 gb_img = seg_img.copy()
-                if str(seg_index) not in passed:
+                gb_element = 'button'
+                try:
                     gb_label = label[label['segment_no'] == seg_index]
-                else:
-                    gb_label = label_new[label_new['segment_no'] == seg_index]
+                except:
+                    gb_label = label.copy()
                 move = False
 
             # *** step 4 *** Web Page-Level Options
@@ -150,7 +152,7 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
             elif key == ord('r'):
                 gb_img = seg_img.copy()
                 gb_label = gb_label.drop(index=gb_label.index.values)
-                label_new = label_new.drop(index=label_new[label_new['segment_no']==seg_index].index.values)
+                label = label.drop(index=label[label['segment_no'] == seg_index].index.values)
                 print('*** Remove Labels of Image %d ***' % seg_index)
             # skip rest segment images and discard the current relabel
             elif key == ord('q'):
@@ -173,38 +175,45 @@ def view_data(start_point, data_position='D:\datasets\dataset_webpage\data'):
                 # show tips
                 add_tips(1)
 
-                print('------ Revise Labels Start ------')
                 gb_label_index = len(gb_label) - 1
+                gb_is_labeling = True
                 # set mouse callback function
                 cv2.setMouseCallback('img', relabel, [seg_index])
                 while (1):
+                    print('Label for <%s>' % gb_element)
                     k = cv2.waitKey(0)
                     # withdraw the last label
                     if k == ord('z'):
                         if gb_label_index >= 0:
                             gb_label = gb_label.drop(index=gb_label.index[gb_label_index])
                             gb_label_index -= 1
-                        gb_newlabelnum = gb_newlabelnum - 1 if gb_newlabelnum >= 1 else 0
                         gb_img = seg_img.copy()
                         draw_label(gb_label, gb_img)
 
                     # quit label mode
                     elif k == ord('d'):
-                        print('------ ReLabel End ------')
                         move = True
+                        gb_is_labeling = False
                         break
+
+                    # different kinds of elements
+                    elif k == ord('1'):
+                        gb_element = 'button'
+                    elif k == ord('2'):
+                        gb_element = 'input'
+                    elif k == ord('3'):
+                        gb_element = 'select'
+
             else:
                 continue
 
             cv2.destroyAllWindows()
-            label_new = label_new.append(gb_label, ignore_index=True, sort=False)
+            label = label.append(gb_label, ignore_index=True, sort=False)
             passed[str(seg_index)] = 1
-            print('... Number of Current Labels: %d ...' % len(label_new))
+            print('... Number of Current Labels: %d ...' % len(label))
 
+        if save and len(label) > 0:
+            label.to_csv(path_relabel)
+            print('*** %d Labels Saved to %s ***\n' % (len(label), path_relabel))
 
-        if save:
-            label_new.to_csv(relabel_path)
-            print('*** %d Labels Saved to %s ***\n' % (len(label_new), relabel_path))
-
-
-view_data(122)
+view_data(207)
