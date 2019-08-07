@@ -19,7 +19,7 @@ is_save = True
 input_paths = glob.glob(pyjoin(input_root, '*.png'))
 input_paths = sorted(input_paths, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
-start_index = 59
+start_index = 257
 end_index = 1000
 
 for input_path in input_paths:
@@ -41,6 +41,7 @@ for input_path in input_paths:
 
     # pre-processing: gray, gradient, binary
     org, gray = pre.read_img(input_path, (0, 2600))  # cut out partial img
+    if org is None or gray is None: continue
     binary = pre.preprocess(gray, 1)
 
     # processing: get connected areas -> get boundary -> rectangle check -> get corner of boundaries -> img or frame check -> refine img component

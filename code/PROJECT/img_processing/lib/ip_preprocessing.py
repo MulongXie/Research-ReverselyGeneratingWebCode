@@ -9,7 +9,7 @@ def read_img(path, height=(0, 600)):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         return img, gray
     except:
-        print("*** Img Reading Failed ***")
+        print("*** Img Reading Failed ***\n")
         return None, None
 
 
