@@ -4,7 +4,7 @@ from os.path import join as pjoin
 class Config:
 
     def __init__(self):
-        self.ROOT = "E:\Mulong\Datasets\dataset_webpage\page500_2"
+        self.ROOT = "E:\Mulong\Datasets\dataset_webpage\page10000"
         self.ROOT_LABEL = pjoin(self.ROOT, "ip_label_rec")
         self.ROOT_IMG_ORG = pjoin(self.ROOT, "org")
         self.ROOT_IMG_DRAWN = pjoin(self.ROOT, "ip_img_drawn")

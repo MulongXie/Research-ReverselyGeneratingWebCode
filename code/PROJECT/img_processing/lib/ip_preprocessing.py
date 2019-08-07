@@ -3,10 +3,14 @@ import numpy as np
 
 
 def read_img(path, height=(0, 600)):
-    img = cv2.imread(path)
-    img = img[height[0]:height[1]]
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    return img, gray
+    try:
+        img = cv2.imread(path)
+        img = img[height[0]:height[1]]
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        return img, gray
+    except:
+        print("*** Img Reading Failed ***")
+        return None, None
 
 
 def gray_to_gradient(img):
