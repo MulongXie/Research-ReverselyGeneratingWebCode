@@ -34,6 +34,7 @@ def grad_to_binary(grad, min):
 
 
 def preprocess(gray, grad_min=1):
+    gray = cv2.medianBlur(gray, 3)
     grad = gray_to_gradient(gray)        # get RoI with high gradient
     binary = grad_to_binary(grad, grad_min)   # enhance the RoI
     close = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, (5, 5))   # remove noises

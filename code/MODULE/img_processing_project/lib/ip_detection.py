@@ -118,7 +118,7 @@ def img_refine2(rec_corners, max_img_edge_ratio, min_img_edge_length):
 # take the binary image as input
 # calculate the connected regions -> get the bounding boundaries of them -> check if those regions are rectangles
 # return all boundaries and boundaries of rectangles
-def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, min_line_thickness):
+def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, min_line_thickness, max_dent_ratio):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
@@ -132,7 +132,7 @@ def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, m
                 if len(area) > min_obj_area:
                     boundary = util.get_boundary(area)
                     boundary_all.append(boundary)
-                    if util.is_rectangle(boundary, min_rec_parameter, min_rec_evenness, min_line_thickness):
+                    if util.is_rectangle(boundary, min_rec_parameter, min_rec_evenness, min_line_thickness, max_dent_ratio):
                         boundary_rec.append(boundary)
     return boundary_rec, boundary_all
 
