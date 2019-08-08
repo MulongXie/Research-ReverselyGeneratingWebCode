@@ -7,6 +7,7 @@ import file_utils as file
 import pandas as pd
 import os
 import time
+from func_timeout import func_set_timeout, FunctionTimedOut
 
 is_crawl_link = False
 is_read_existed_links = not is_crawl_link
@@ -39,8 +40,8 @@ if is_read_existed_links:
 
 print("*** %d Links Fetched ***\n" % len(links))
 
-start_pos = 359
-end_pos = 1000
+start_pos = 1804
+end_pos = 5000
 for index in range(start_pos, len(links)):
     start_time = time.clock()
     # set path
@@ -56,7 +57,11 @@ for index in range(start_pos, len(links)):
         # set the format of libel
         libel_format = pd.read_csv(os.path.join(data_position, 'format.csv'), index_col=0)
         url = 'http://' + links.iloc[index] if 'http://' not in links.iloc[index] else links.iloc[index]
-        img, label = catch.catch(url, label_path, img_org_path, libel_format, driver_path)
+        try:
+            img, label = catch.catch(url, label_path, img_org_path, libel_format, driver_path)
+        except FunctionTimedOut:
+            print('Catch Time Out')
+            continue
 
     # segment the lengthy images
     if is_segment and img is not None:

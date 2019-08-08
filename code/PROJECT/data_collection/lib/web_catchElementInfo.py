@@ -3,6 +3,7 @@ import pandas as pd
 import time
 import os
 import cv2
+from func_timeout import func_set_timeout
 
 
 # refine the data
@@ -35,7 +36,7 @@ def take_screen(driver, output_path):
                 var y = 0;
                 var step = 100;
                 window.scroll(0, 0);
-    
+
                 function f() {
                     if (y < document.body.scrollHeight) {
                         y += step;
@@ -46,7 +47,7 @@ def take_screen(driver, output_path):
                         document.title += "scroll-done";
                     }
                 }
-    
+
                 setTimeout(f, 1000);
             })();
         """)
@@ -83,6 +84,7 @@ def find_element(element, df, driver):
 
 # fetch the elements information into csv
 # and save the screenshot
+@func_set_timeout(60)
 def catch(url, out_label, out_img, libel_format, driver_path, browser='PhantomJS'):
     try:
         print("*** catching element from %s ***" % url)
@@ -97,13 +99,14 @@ def catch(url, out_label, out_img, libel_format, driver_path, browser='PhantomJS
             options.add_argument('--headless')  # do not show the browser every time
             driver = webdriver.Chrome(executable_path=os.path.join(driver_path, 'chromedriver.exe'), options=options)
         driver.maximize_window()
-        driver.set_page_load_timeout(50)
+        driver.set_page_load_timeout(40)
 
         try:
             driver.get(url)
         except:
             print('Time out')
             return None, None
+        print('Link Connected Successfully')
 
         # fetch the attributes
         # label = find_element('div', label, driver)

@@ -21,6 +21,10 @@ def draw_label(label, img):
         color = (255, 160, 0)
     elif gb_element == 'select':
         color = (0, 150, 255)
+    elif gb_element == 'search':
+        color = (255, 150, 255)
+    elif gb_element == 'list':
+        color = (255, 255, 0)
 
     if not gb_is_labeling:
         color = (0, 0, 255)
@@ -59,6 +63,11 @@ def relabel(event, x, y, flags, param):
         gb_label_index += 1
         gb_label = add_label(gb_label, ix, iy, x, y, seg_index, gb_element)
         draw_label(gb_label, gb_img)
+    elif event == cv2.EVENT_MOUSEMOVE:
+        img = gb_img.copy()
+        cv2.line(img, (x, y), (x + 40, y), (0, 0, 255), 1, cv2.LINE_AA)
+        cv2.line(img, (x, y), (x, y + 40), (0, 0, 255), 1, cv2.LINE_AA)
+        cv2.imshow('img', img)
 
 
 def add_tips(flag):
@@ -79,20 +88,25 @@ def add_tips(flag):
         cv2.putText(img, 'd: Quit Relabelling Mode', (0, 20), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
         cv2.putText(img, 'z: Delete the Last Label', (0, 40), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
 
-        cv2.putText(img, '1: button', (0, 100), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
-        cv2.putText(img, '2: input', (0, 120), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
-        cv2.putText(img, '3: icon', (0, 140), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
+        cv2.putText(img, '1: button', (0, 60), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
+        cv2.putText(img, '2: input', (0, 80), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
+        cv2.putText(img, '3: select', (0, 100), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
+        cv2.putText(img, '4: search', (0, 120), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
+        cv2.putText(img, '5: list', (0, 140), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thick)
     cv2.imshow('tips', img)
     cv2.moveWindow('tips', 2000, 0)
 
 
-def view_data(start_point, data_position='E:\Mulong\Datasets\dataset_webpage'):
+def view_data(start_point, data_position='E:\Mulong\Datasets\dataset_webpage\page10000'):
     # *** step 1 *** Root Path
     # retrieve global variables for relabel
     global gb_img, gb_label, gb_label_index, gb_element, gb_is_labeling
     # set root path
-    img_root = pjoin(data_position, 'img_segment')
+    img_root = pjoin(data_position, 'ip_img_segment')
     relabel_root = pjoin(data_position, 'relabel')  # relabels path
+    if not os.path.exists(img_root):
+        print('No such dataset')
+        return 0
 
     # *** step 2 *** Iterate Web Pages
     # iterate all web pages from the start point
@@ -203,6 +217,10 @@ def view_data(start_point, data_position='E:\Mulong\Datasets\dataset_webpage'):
                         gb_element = 'input'
                     elif k == ord('3'):
                         gb_element = 'select'
+                    elif k == ord('4'):
+                        gb_element = 'search'
+                    elif k == ord('5'):
+                        gb_element = 'list'
 
             else:
                 continue
@@ -216,4 +234,5 @@ def view_data(start_point, data_position='E:\Mulong\Datasets\dataset_webpage'):
             label.to_csv(path_relabel)
             print('*** %d Labels Saved to %s ***\n' % (len(label), path_relabel))
 
-view_data(207)
+
+view_data(545)
