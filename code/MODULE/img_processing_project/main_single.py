@@ -15,7 +15,7 @@ is_save = True
 start = time.clock()
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/10.png', (0, 3000))  # cut out partial img
+org, gray = pre.read_img('input/6.png', (0, 3000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 
@@ -47,5 +47,4 @@ if is_save:
     file.save_corners('output/corners.csv', corners_block, 'div')
     file.save_corners('output/corners.csv', corners_img, 'img', False)
 
-    open('output/blocks.txt', 'w').write(str(corners_block))
 end = file.timer(start)
