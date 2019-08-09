@@ -132,12 +132,12 @@ def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, m
                     boundary = util.get_boundary(area)
                     boundary_all.append(boundary)
                     if util.is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio):
-                        boundary_rec.append(boundary)
-
                         # means this object can be divided into two sub objects connected by line
                         if len(lines) > 0:
                             print(lines)
-                            p = util.clipping_by_line(boundary, lines, bin.shape)
+                            util.clipping_by_line(boundary, boundary_rec, lines, bin.shape)
+                        else:
+                            boundary_rec.append(boundary)
                     # draw.draw_test(boundary_all, bin.shape)
     return boundary_rec, boundary_all
 
