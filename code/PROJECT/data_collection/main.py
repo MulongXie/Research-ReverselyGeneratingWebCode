@@ -34,14 +34,15 @@ if is_crawl_link:
     links = csv.link
 
 if is_read_existed_links:
+
     # read links
     csv = pd.read_csv(os.path.join(data_position, 'link_10000.csv'))
     links = csv.link
 
 print("*** %d Links Fetched ***\n" % len(links))
 
-start_pos = 1804
-end_pos = 5000
+start_pos = 6072
+end_pos = 10000
 for index in range(start_pos, len(links)):
     start_time = time.clock()
     # set path
