@@ -17,7 +17,8 @@ class Config:
         self.THRESHOLD_MIN_REC_EVENNESS = 0.8
         
         self.THRESHOLD_MAX_IMG_EDGE_RATIO = 2.2
-        self.THRESHOLD_MIN_IMG_EDGE_LENGTH = 100
+        self.THRESHOLD_MUST_IMG_HEIGHT = 100
+        self.THRESHOLD_MUST_IMG_WIDTH = 150
         self.THRESHOLD_MAX_IMG_DENT_RATIO = 0.1
         
         self.THRESHOLD_MAX_BLOCK_BORDER_THICKNESS = 8

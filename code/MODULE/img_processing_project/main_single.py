@@ -27,7 +27,7 @@ boundary_rec, boundary_all = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_
 corners_rec = det.get_corner(boundary_rec)
 corners_block, corners_img = det.block_or_img(binary, corners_rec, C.THRESHOLD_MAX_BLOCK_BORDER_THICKNESS, C.THRESHOLD_MAX_BLOCK_CROSS_POINT)
 # refine img component
-corners_img = det.img_refine2(corners_img, C.THRESHOLD_MAX_IMG_EDGE_RATIO, C.THRESHOLD_MIN_IMG_EDGE_LENGTH)
+corners_img = det.img_refine2(corners_img, C.THRESHOLD_MAX_IMG_EDGE_RATIO, C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH)
 
 
 # *** Step 3 *** post-processing: remove img elements from original image and segment into smaller size

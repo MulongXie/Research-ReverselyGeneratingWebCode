@@ -97,7 +97,7 @@ def img_refine(binary, corners, max_thickness):
 
 
 # check the edge ratio for img components to avoid text misrecognition
-def img_refine2(rec_corners, max_img_edge_ratio, min_img_edge_length):
+def img_refine2(rec_corners, max_img_edge_ratio, must_img_height, must_img_width):
     refined_corners = []
     for corner in rec_corners:
         (up_left, bottom_right) = corner
@@ -106,7 +106,7 @@ def img_refine2(rec_corners, max_img_edge_ratio, min_img_edge_length):
         width = y_max - y_min
         height = x_max - x_min
         # assumption: large one must be img component no matter its edge ratio
-        if height > min_img_edge_length and width > min_img_edge_length:
+        if height > must_img_height or width > must_img_width:
             refined_corners.append(corner)
         else:
             edge_ratio = width/height if width > height else height/width
@@ -134,7 +134,7 @@ def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, m
                     boundary_all.append(boundary)
                     if util.is_rectangle(boundary, min_rec_parameter, min_rec_evenness, min_line_thickness, max_dent_ratio):
                         boundary_rec.append(boundary)
-                    draw.draw_test(boundary_all, bin.shape)
+                    # draw.draw_test(boundary_all, bin.shape)
     return boundary_rec, boundary_all
 
 

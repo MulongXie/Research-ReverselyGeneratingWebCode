@@ -70,7 +70,6 @@ def is_line(boundary, min_line_thickness):
 # @boundary: [border_up, border_bottom, border_left, border_right]
 def is_rectangle(boundary, min_rec_parameter, min_rec_evenness, min_line_thickness, max_dent_ratio):
     if is_line(boundary, min_line_thickness):
-        print('line')
         return False
     # up, bottom: (column_index, min/max row border)
     # left, right: (row_index, min/max column border)
@@ -88,7 +87,6 @@ def is_rectangle(boundary, min_rec_parameter, min_rec_evenness, min_line_thickne
             # check dent
             else:
                 depth += difference
-                print(depth)
                 if n <= 1:
                     edge = max(len(boundary[2]), len(boundary[3]))
                 else:
@@ -96,10 +94,8 @@ def is_rectangle(boundary, min_rec_parameter, min_rec_evenness, min_line_thickne
                 if abs(depth) / edge > 0.2:
                     dent += 1
         if dent / len(border) > max_dent_ratio:
-            print(dent, len(border))
-            print('dent')
             return False
-        
+
     # ignore text and irregular shape
     if parameter < min_rec_parameter or (flat / parameter) < min_rec_evenness:
         return False
