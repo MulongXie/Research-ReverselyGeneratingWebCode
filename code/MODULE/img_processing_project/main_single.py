@@ -15,14 +15,15 @@ is_save = True
 start = time.clock()
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/6.png', (0, 3000))  # cut out partial img
+org, gray = pre.read_img('input/clean.png', (0, 3000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 
 # *** Step 2 *** processing: get connected areas -> get boundary -> rectangle check
 boundary_rec, boundary_all = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA,
                                                         C.THRESHOLD_MIN_REC_PARAMETER, C.THRESHOLD_MIN_REC_EVENNESS,
-                                                        C.THRESHOLD_MIN_LINE_THICKNESS, C.THRESHOLD_MAX_IMG_DENT_RATIO)
+                                                        C.THRESHOLD_MAX_LINE_THICKNESS, C.THRESHOLD_MIN_LIN_LENGTH, 
+                                                        C.THRESHOLD_MAX_IMG_DENT_RATIO)
 # get corner of boundaries -> img or block check
 corners_rec = det.get_corner(boundary_rec)
 corners_block, corners_img = det.block_or_img(binary, corners_rec, C.THRESHOLD_MAX_BLOCK_BORDER_THICKNESS, C.THRESHOLD_MAX_BLOCK_CROSS_POINT)

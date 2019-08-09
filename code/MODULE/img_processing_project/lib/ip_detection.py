@@ -23,8 +23,6 @@ def block_or_img(binary, corners, max_thickness, max_block_cross_points):
         (up_left, bottom_right) = corner
         (y_min, x_min) = up_left
         (y_max, x_max) = bottom_right
-        width = y_max - y_min
-        height = x_max - x_min
 
         is_block = False
         vacancy = [0, 0, 0, 0]
@@ -118,7 +116,7 @@ def img_refine2(rec_corners, max_img_edge_ratio, must_img_height, must_img_width
 # take the binary image as input
 # calculate the connected regions -> get the bounding boundaries of them -> check if those regions are rectangles
 # return all boundaries and boundaries of rectangles
-def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, min_line_thickness, max_dent_ratio):
+def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
@@ -130,10 +128,16 @@ def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, m
                 area = util.bfs_connected_area(bin, i, j, mark)
                 # ignore all small area
                 if len(area) > min_obj_area:
+                    lines = {}  # connected lines inner boundary
                     boundary = util.get_boundary(area)
                     boundary_all.append(boundary)
-                    if util.is_rectangle(boundary, min_rec_parameter, min_rec_evenness, min_line_thickness, max_dent_ratio):
+                    if util.is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio):
                         boundary_rec.append(boundary)
+
+                        # means this object can be divided into two sub objects connected by line
+                        if len(lines) > 0:
+                            print(lines)
+                            p = util.clipping_by_line(boundary, lines, bin.shape)
                     # draw.draw_test(boundary_all, bin.shape)
     return boundary_rec, boundary_all
 
