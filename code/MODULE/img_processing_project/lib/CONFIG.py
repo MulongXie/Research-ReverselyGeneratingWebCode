@@ -21,7 +21,7 @@ class Config:
         self.THRESHOLD_MAX_IMG_DENT_RATIO = 0.1
         
         self.THRESHOLD_MAX_BLOCK_BORDER_THICKNESS = 8
-        self.THRESHOLD_MAX_BLOCK_CROSS_POINT = 0.1
+        self.THRESHOLD_MAX_BLOCK_CROSS_POINT = 0.3
         
         self.THRESHOLD_MIN_LINE_THICKNESS = 10
 
