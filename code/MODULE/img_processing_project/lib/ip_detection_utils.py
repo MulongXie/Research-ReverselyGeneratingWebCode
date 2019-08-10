@@ -58,7 +58,8 @@ def get_boundary(area):
 # @boundary: [border_up, border_bottom, border_left, border_right]
 # -> up, bottom: (column_index, min/max row border)
 # -> left, right: (row_index, min/max column border) detect range of each row
-def clipping_by_line(boundary_all, boundary_rec, lines, shape):
+def clipping_by_line(boundary, boundary_rec, lines):
+    boundary = boundary.copy()
     for orient in lines:
         # horizontal
         if orient == 'h':
@@ -69,22 +70,20 @@ def clipping_by_line(boundary_all, boundary_rec, lines, shape):
                     r1 = line[1]
                     continue
                 r2 = line[0]
-
-                print(r1, r2)
                 b_top = []
                 b_bottom = []
-                for i in range(len(boundary_all[0])):
-                    if r2 > boundary_all[0][i][0] >= r1:
-                        b_top.append(boundary_all[0][i])
-                for i in range(len(boundary_all[1])):
-                    if r2 > boundary_all[1][i][0] >= r1:
-                        b_bottom.append(boundary_all[1][i])
+                for i in range(len(boundary[0])):
+                    if r2 > boundary[0][i][0] >= r1:
+                        b_top.append(boundary[0][i])
+                for i in range(len(boundary[1])):
+                    if r2 > boundary[1][i][0] >= r1:
+                        b_bottom.append(boundary[1][i])
 
-                b_left = [x for x in boundary_all[2]]   # (row_index, min column border)
+                b_left = [x for x in boundary[2]]   # (row_index, min column border)
                 for i in range(len(b_left)):
                     if b_left[i][1] < r1:
                         b_left[i][1] = r1
-                b_right = [x for x in boundary_all[3]]  # (row_index, max column border)
+                b_right = [x for x in boundary[3]]  # (row_index, max column border)
                 for i in range(len(b_right)):
                     if b_right[i][1] > r2:
                         b_right[i][1] = r2
