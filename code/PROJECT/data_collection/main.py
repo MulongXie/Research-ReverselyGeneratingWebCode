@@ -12,7 +12,7 @@ from func_timeout import func_set_timeout, FunctionTimedOut
 is_crawl_link = False
 is_read_existed_links = not is_crawl_link
 is_catch_element = True
-is_segment = True
+is_segment = False
 is_draw_label = False
 
 data_position = 'E:\Mulong\Datasets\dataset_webpage\page10000'
@@ -41,7 +41,7 @@ if is_read_existed_links:
 
 print("*** %d Links Fetched ***\n" % len(links))
 
-start_pos = 6072
+start_pos = 6073
 end_pos = 10000
 for index in range(start_pos, len(links)):
     start_time = time.clock()
