@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 from collections import Counter
 
+import ip_draw as draw
 
 def neighbor(img, x, y, mark, stack):
     for i in range(x - 1, x + 2):
@@ -27,8 +28,11 @@ def bfs_connected_area(img, x, y, mark):
 
 
 # get the bounding boundary of an object(region)
+# @boundary: [top, bottom, left, right]
+# -> up, bottom: (column_index, min/max row border)
+# -> left, right: (row_index, min/max column border) detect range of each row
 def get_boundary(area):
-    border_up, border_bottom, border_left, border_right = ({}, {}, {}, {})
+    border_up, border_bottom, border_left, border_right = {}, {}, {}, {}
     for point in area:
         # point: (row_index, column_index)
         # up, bottom: (column_index, min/max row border) detect range of each column
@@ -45,44 +49,113 @@ def get_boundary(area):
     boundary = [border_up, border_bottom, border_left, border_right]
     # descending sort
     for i in range(len(boundary)):
-        boundary[i] = sorted(boundary[i].items(), key=lambda x: x[0])
+        boundary[i] = [[k, boundary[i][k]] for k in boundary[i].keys()]
+        boundary[i] = sorted(boundary[i], key=lambda x: x[0])
     return boundary
 
 
 # check if an object is so slim
-def is_line(boundary, min_line_thickness):
-    # up and bottom
-    difference = [abs(boundary[0][i][1] - boundary[1][i][1]) for i in range(len(boundary[1]))]
-    most, number = Counter(difference).most_common(1)[0]
-    # too slim
-    if most < min_line_thickness:
-        return True
-    # left and right
-    difference = [abs(boundary[2][i][1] - boundary[3][i][1]) for i in range(len(boundary[2]))]
-    most, number = Counter(difference).most_common(1)[0]
-    # too slim
-    if most < min_line_thickness:
-        return True
-    return False
-
-
-# detect if an object is rectangle by evenness of each border
 # @boundary: [border_up, border_bottom, border_left, border_right]
-def is_rectangle(boundary, min_rec_parameter, min_rec_evenness, min_line_thickness):
-    if is_line(boundary, min_line_thickness):
-        return False
+# -> up, bottom: (column_index, min/max row border)
+# -> left, right: (row_index, min/max column border) detect range of each row
+def clipping_by_line(boundary, boundary_rec, lines):
+    boundary = boundary.copy()
+    for orient in lines:
+        # horizontal
+        if orient == 'h':
+            # column range of sub area
+            r1, r2 = 0, 0
+            for line in lines[orient]:
+                if line[0] == 0:
+                    r1 = line[1]
+                    continue
+                r2 = line[0]
+                b_top = []
+                b_bottom = []
+                for i in range(len(boundary[0])):
+                    if r2 > boundary[0][i][0] >= r1:
+                        b_top.append(boundary[0][i])
+                for i in range(len(boundary[1])):
+                    if r2 > boundary[1][i][0] >= r1:
+                        b_bottom.append(boundary[1][i])
+
+                b_left = [x for x in boundary[2]]   # (row_index, min column border)
+                for i in range(len(b_left)):
+                    if b_left[i][1] < r1:
+                        b_left[i][1] = r1
+                b_right = [x for x in boundary[3]]  # (row_index, max column border)
+                for i in range(len(b_right)):
+                    if b_right[i][1] > r2:
+                        b_right[i][1] = r2
+
+                boundary_rec.append([b_top, b_bottom, b_left, b_right])
+                r1 = line[1]
+
+
+# i. detect if an object is rectangle by evenness of each border
+# ii. add dent detection
+# iii. add connected line detection
+# @boundary: [border_up, border_bottom, border_left, border_right]
+# -> up, bottom: (column_index, min/max row border)
+# -> left, right: (row_index, min/max column border) detect range of each row
+def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio):
     # up, bottom: (column_index, min/max row border)
     # left, right: (row_index, min/max column border)
-    evenness = 0
+    opposite_side = [1, 0, 3, 2]
+    flat = 0
     parameter = 0
-    for border in boundary:
+    for n, border in enumerate(boundary):
         parameter += len(border)
-        # calculate the evenness of each border
+        # dent detection
+        dent = 0  # length of dent
+        depth = 0  # depth of dent, vector
+        # line detection
+        head, end = -1, -1  # start and end point of a line
+        line = []  # line detected
+        
+        # -> up, bottom: (column_index, min/max row border)
+        # -> left, right: (row_index, min/max column border) detect range of each row
         for i in range(len(border) - 1):
-            if border[i][1] - border[i + 1][1] == 0:
-                evenness += 1
+            # line detection
+            if n == 0 or n == 2:
+                gap = abs(boundary[opposite_side[n]][i][1] - border[i][1])  # distance between points of opposite sides
+                if gap < min_line_thickness:
+                    if head == -1:
+                        head = border[i][0]  # new line start
+                    else:
+                        end = border[i][0]  # existing line extend
+                if head is not -1 and (gap >= min_line_thickness or i == len(border) - 2):
+                    # line end
+                    if end - head >= min_line_length:
+                        line.append([head, end])
+                    head, end = -1, -1
+
+            # calculate gradient
+            difference = border[i][1] - border[i + 1][1]
+            if abs(difference) == 0:
+                flat += 1
+
+            # dent detection
+            else:
+                depth += difference
+                # get maximum length of adjacent edge
+                if n <= 1:
+                    edge = max(len(boundary[2]), len(boundary[3]))
+                else:
+                    edge = max(len(boundary[0]), len(boundary[1]))
+                # if too deep, then counted as dent
+                if abs(depth) / edge > 0.2:
+                    dent += 1
+        if dent / len(border) > max_dent_ratio:
+            return False
+
+        if n == 0 and len(line) > 0:
+            lines['h'] = line   # horizontally
+        elif n == 2 and len(line) > 0:
+            lines['v'] = line   # vertically
+
     # ignore text and irregular shape
-    if parameter < min_rec_parameter or (evenness / parameter) < min_rec_evenness:
+    if parameter < min_rec_parameter or (flat / parameter) < min_rec_evenness:
         return False
     return True
 
