@@ -98,7 +98,7 @@ def clipping_by_line(boundary, boundary_rec, lines):
 # @boundary: [border_up, border_bottom, border_left, border_right]
 # -> up, bottom: (column_index, min/max row border)
 # -> left, right: (row_index, min/max column border) detect range of each row
-def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio):
+def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, is_line_detect):
     # up, bottom: (column_index, min/max row border)
     # left, right: (row_index, min/max column border)
     opposite_side = [1, 0, 3, 2]
@@ -117,18 +117,19 @@ def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_
         # -> left, right: (row_index, min/max column border) detect range of each row
         for i in range(len(border) - 1):
             # line detection
-            if n == 0 or n == 2:
-                gap = abs(boundary[opposite_side[n]][i][1] - border[i][1])  # distance between points of opposite sides
-                if gap < min_line_thickness:
-                    if head == -1:
-                        head = border[i][0]  # new line start
-                    else:
-                        end = border[i][0]  # existing line extend
-                if head is not -1 and (gap >= min_line_thickness or i == len(border) - 2):
-                    # line end
-                    if end - head >= min_line_length:
-                        line.append([head, end])
-                    head, end = -1, -1
+            if is_line_detect:
+                if n == 0 or n == 2:
+                    gap = abs(boundary[opposite_side[n]][i][1] - border[i][1])  # distance between points of opposite sides
+                    if gap < min_line_thickness:
+                        if head == -1:
+                            head = border[i][0]  # new line start
+                        else:
+                            end = border[i][0]  # existing line extend
+                    if head is not -1 and (gap >= min_line_thickness or i == len(border) - 2):
+                        # line end
+                        if end - head >= min_line_length:
+                            line.append([head, end])
+                        head, end = -1, -1
 
             # calculate gradient
             difference = border[i][1] - border[i + 1][1]
@@ -149,10 +150,11 @@ def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_
         if dent / len(border) > max_dent_ratio:
             return False
 
-        if n == 0 and len(line) > 0:
-            lines['h'] = line   # horizontally
-        elif n == 2 and len(line) > 0:
-            lines['v'] = line   # vertically
+        if is_line_detect:
+            if n == 0 and len(line) > 0:
+                lines['h'] = line   # horizontally
+            elif n == 2 and len(line) > 0:
+                lines['v'] = line   # vertically
 
     # ignore text and irregular shape
     if parameter < min_rec_parameter or (flat / parameter) < min_rec_evenness:
