@@ -7,7 +7,7 @@ import os
 # dataset1: ip500 0-302 in keras-yolo3_new/data
 # dataset2: page10000 303-1103 in keras-yolo3_new/data
 stamp = 302
-start_point = 1103
+start_point = 1619 - stamp
 # original path of datasets
 img_root = 'E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment/'
 label_root = 'E:/Mulong/Datasets/dataset_webpage/page10000/relabel/'
@@ -24,7 +24,7 @@ def move_selected_img(stamp, start_point, img_root, label_root):
 
     for label_path in label_paths:
         index = label_path.split('\\')[-1][:-4]
-        if int(index) < start_point:
+        if int(index) <= start_point:
             continue
         label = pd.read_csv(label_path)
         pre_seg_no = -1
@@ -70,7 +70,7 @@ def label_convert(stamp, start_point, label_root, img_root):
     indices = [int(i[:-4]) for i in indices]
     indices.sort(key=lambda x: x)
     for index in indices:
-        if index < start_point:
+        if index <= start_point:
             continue
         label_path = label_root + '/' + str(index) + '.csv'
         img_path = img_root + '/' + str(index + stamp)
@@ -94,4 +94,4 @@ def label_convert(stamp, start_point, label_root, img_root):
 
 
 # covert labels into YOLO and colab format
-# l = label_convert(stamp, start_point, label_root, img_root)
+l = label_convert(stamp, start_point, label_root, img_root)
