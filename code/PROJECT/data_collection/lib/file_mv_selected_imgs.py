@@ -7,7 +7,7 @@ import os
 # dataset1: ip500 0-302 in keras-yolo3_new/data
 # dataset2: page10000 303-1103 in keras-yolo3_new/data
 stamp = 302
-start_point = 1619 - stamp
+start_point = 2178 - stamp
 # original path of datasets
 img_root = 'E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment/'
 label_root = 'E:/Mulong/Datasets/dataset_webpage/page10000/relabel/'
@@ -44,7 +44,7 @@ def move_selected_img(stamp, start_point, img_root, label_root):
 
 
 # Move relabeled images
-# move_selected_img(stamp, start_point, img_root, label_root)
+move_selected_img(stamp, start_point, img_root, label_root)
 
 
 def label_convert(stamp, start_point, label_root, img_root):
