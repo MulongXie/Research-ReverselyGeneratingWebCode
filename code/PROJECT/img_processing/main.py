@@ -19,7 +19,7 @@ is_save = True
 input_paths = glob.glob(pyjoin(input_root, '*.png'))
 input_paths = sorted(input_paths, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
-start_index = 9772
+start_index = 9775
 end_index = 10000
 
 for input_path in input_paths:
