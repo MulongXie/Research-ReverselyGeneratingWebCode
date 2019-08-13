@@ -7,7 +7,7 @@ import os
 # dataset1: ip500 0-302 in keras-yolo3_new/data
 # dataset2: page10000 303-1103 in keras-yolo3_new/data
 stamp = 302
-start_point = 2178 - stamp
+start_point = 2965 - stamp
 # original path of datasets
 img_root = 'E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment/'
 label_root = 'E:/Mulong/Datasets/dataset_webpage/page10000/relabel/'

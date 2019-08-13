@@ -41,8 +41,8 @@ if is_read_existed_links:
 
 print("*** %d Links Fetched ***\n" % len(links))
 
-start_pos = 10000
-end_pos = 12000
+start_pos = 12347
+end_pos = 15000
 for index in range(start_pos, len(links)):
     start_time = time.clock()
     # set path
