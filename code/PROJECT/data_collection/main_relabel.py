@@ -235,4 +235,4 @@ def view_data(start_point, data_position='E:\Mulong\Datasets\dataset_webpage\pag
             print('*** %d Labels Saved to %s ***\n' % (len(label), path_relabel))
 
 
-view_data(2665)
+view_data(4102)

@@ -1,354 +1,190 @@
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2306/0.png 1019,401,1240,443,0 299,41,911,78,1 877,43,908,75,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2307/3.png 618,305,748,342,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2307/0.png 568,252,812,291,1 811,253,870,291,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2310/0.png 495,297,550,350,0 507,306,538,339,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2320/3.png 361,309,476,346,0 480,308,594,345,0 359,252,401,291,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2328/3.png 119,103,574,154,0 701,487,1155,538,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2328/1.png 168,331,411,376,0 168,331,411,376,0 113,460,465,509,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2328/0.png 735,12,881,32,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2328/2.png 176,377,403,417,0 176,377,403,417,0 699,244,1157,296,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2329/1.png 856,447,987,491,0 1017,444,1147,490,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2329/0.png 801,444,1185,501,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2330/3.png 198,19,290,38,0 198,83,240,101,0 198,146,241,165,0 199,211,292,229,0 523,59,567,78,0 522,125,568,143,0 523,188,566,206,0 197,550,241,567,0 522,574,568,591,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2330/1.png 197,138,242,155,0 197,221,242,238,0 196,305,242,322,0 642,57,686,75,0 641,196,727,215,0 641,356,685,372,0 642,498,685,517,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2330/0.png 196,346,243,365,0 197,409,242,428,0 196,493,241,511,0 641,522,687,539,0 1219,14,1247,41,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2331/1.png 864,387,1032,419,1 1037,387,1140,419,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2336/0.png 938,52,1138,91,1 1109,60,1134,84,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2337/0.png 978,83,1119,117,0 217,277,340,312,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2340/3.png 512,47,687,80,0 125,131,397,164,0 893,515,990,559,0 1136,515,1252,560,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2340/2.png 514,44,631,77,0 122,1,316,34,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2340/0.png 1031,11,1128,42,0 1137,9,1254,41,0 697,104,1251,136,1 113,2,190,52,0 190,3,313,51,0 315,2,404,54,0 404,2,493,52,0 490,0,603,54,0 1031,11,1128,42,0 1137,9,1254,41,0 697,104,1251,136,1 113,2,190,52,0 190,3,313,51,0 315,2,404,54,0 404,2,493,52,0 490,0,603,54,0 892,410,955,449,0 959,411,1024,447,0 1025,408,1087,447,0 1089,410,1171,448,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2341/0.png 962,283,1139,332,0 594,287,948,335,1 229,286,582,335,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2345/1.png 954,286,1042,305,0 954,386,1014,410,0 955,486,1014,509,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2348/0.png 55,305,276,350,0 1279,84,1307,110,3 1277,23,1306,53,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2351/0.png 1082,21,1332,50,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2352/2.png 615,445,752,489,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2352/0.png 612,244,755,288,0 1159,18,1306,47,0 1068,16,1153,48,0 968,18,1060,49,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2354/1.png 712,49,871,87,1 887,34,1048,106,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2355/0.png 1163,50,1253,76,0 1066,48,1151,77,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2357/1.png 128,98,428,148,0 521,98,815,145,0 908,99,1207,147,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2360/3.png 1057,400,1223,446,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2360/2.png 141,521,363,568,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2360/0.png 1236,3,1269,34,0 1199,2,1234,34,0 379,135,415,172,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2362/0.png 362,93,1004,138,1 953,103,986,132,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2364/1.png 503,258,671,302,0 685,258,864,300,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2366/1.png 931,5,1051,29,0 930,62,1049,87,0 930,92,1052,117,0 649,165,934,198,0 930,335,1051,360,0 931,364,1052,391,0 930,424,1051,450,0 931,454,1051,481,0 929,513,1050,538,0 932,546,1051,568,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2366/0.png 931,483,1050,508,0 931,514,1052,540,0 928,572,1052,597,0 1137,19,1253,53,0 831,19,1043,54,1 1018,26,1036,46,3 1014,21,1040,50,0 1055,16,1127,54,0 1060,26,1082,45,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2370/0.png 491,486,849,522,1 490,532,849,566,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2375/0.png 1179,52,1214,89,3 1237,53,1263,83,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2376/0.png 763,330,863,357,0 1223,66,1263,103,3 421,77,439,95,2 529,77,546,91,2 629,77,648,93,2 764,171,834,197,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2382/0.png 739,256,844,295,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2384/0.png 964,367,1241,402,0 964,422,1241,457,0 963,475,1241,513,0 965,530,1241,564,0 1064,112,1214,144,1 1217,111,1253,144,0 1227,118,1242,136,3 104,114,154,147,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2389/3.png 19,297,121,322,0 17,479,122,504,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2389/2.png 21,541,121,567,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2389/0.png 647,13,693,55,0 657,22,682,50,3 173,14,646,55,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2392/0.png 82,228,245,269,0 87,282,250,318,0 273,282,393,318,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2397/0.png 175,97,723,133,1 181,101,209,126,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2398/3.png 508,293,862,332,1 634,332,732,375,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2398/0.png 687,28,788,65,0 693,36,712,58,3 881,118,925,143,0 180,26,687,67,1 687,28,788,65,0 693,36,712,58,3 881,118,925,143,0 180,26,687,67,1 167,118,192,139,2 687,28,788,65,0 693,36,712,58,3 881,118,925,143,0 180,26,687,67,1 687,28,788,65,0 693,36,712,58,3 881,118,925,143,0 180,26,687,67,1 167,118,192,139,2 933,45,952,66,2 1124,45,1145,64,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2402/3.png 35,299,216,332,0 34,427,214,457,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2402/1.png 33,53,215,82,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2402/0.png 810,26,1042,53,1 1007,29,1030,51,3 1231,21,1314,58,0 32,164,213,195,0 32,256,214,288,0 34,506,215,538,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2402/2.png 34,430,214,461,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2404/0.png 550,75,1021,111,1 921,81,951,109,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2408/0.png 1519,20,1595,58,0 1681,21,1718,56,3 364,22,410,55,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2415/2.png 23,3,214,32,1 222,3,300,34,0 25,78,58,113,0 68,81,99,112,0 108,78,141,113,0 533,417,678,438,0 717,417,864,437,0 1087,416,1232,439,0 720,30,863,49,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2415/0.png 1016,72,1131,111,0 1018,79,1048,104,3 1150,72,1346,111,0 241,73,1013,113,1 184,71,241,111,0 216,81,235,103,2 1329,45,1347,65,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2417/0.png 839,414,1121,454,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2418/0.png 465,230,614,280,0 113,228,463,280,1 1143,9,1242,52,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2423/3.png 113,287,263,329,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2424/0.png 915,215,1073,267,0 292,217,605,267,1 299,227,325,255,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2433/0.png 190,273,429,334,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2434/0.png 696,401,1008,463,0 1185,18,1336,53,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2435/0.png 83,295,215,344,0 61,140,364,188,1 70,142,108,180,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2437/2.png 272,534,495,577,0 872,535,1094,577,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2437/0.png 370,76,997,119,1 946,83,973,109,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2438/0.png 932,63,1154,86,1 1130,63,1146,81,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2441/1.png 156,27,323,84,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2441/0.png 1122,55,1242,94,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2442/0.png 1018,45,1122,84,0 1134,45,1266,86,0 1282,49,1312,78,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2443/0.png 631,23,670,56,3 416,31,447,53,2 260,31,279,55,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2445/0.png 975,212,1346,258,0 975,65,1346,106,1 975,116,1346,159,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2451/0.png 1002,424,1109,463,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2452/1.png 1045,382,1155,413,0 842,206,1153,237,1 848,209,869,231,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2458/0.png 299,228,470,261,0 496,226,664,261,0 688,226,861,260,0 885,225,1059,263,0 299,288,470,322,0 490,290,667,323,0 689,290,864,324,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2467/1.png 588,280,696,310,0 1065,281,1167,310,0 1544,280,1644,309,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2467/0.png 1137,164,1223,186,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2469/1.png 1013,1,1092,45,0 267,1,503,44,1 515,2,752,44,1 764,0,1002,45,0 959,7,989,31,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2474/1.png 458,557,605,586,0 83,556,267,585,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2475/3.png 1009,71,1084,87,0 1008,166,1066,186,0 148,409,215,443,0 498,536,550,554,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2475/2.png 148,187,224,219,0 1010,286,1086,306,0 1009,385,1064,402,0 1009,478,1060,495,0 1011,576,1064,593,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2476/1.png 299,19,364,62,0 380,19,444,62,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2476/0.png 157,537,442,597,0 288,67,359,100,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2477/1.png 1027,28,1130,67,0 227,21,1139,76,1 239,32,271,62,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2479/0.png 1230,9,1340,52,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2481/3.png 620,275,1010,313,1 451,275,599,311,1 356,274,428,312,1 406,286,423,301,2 575,283,595,302,2 981,287,1007,301,2 186,275,334,312,0 307,283,330,304,2 1031,276,1180,312,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2481/2.png 525,148,641,182,0 1114,147,1226,180,0 526,523,639,557,0 1046,525,1227,559,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2481/0.png 460,62,1029,123,1 985,77,1015,108,3 1177,75,1222,112,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2483/0.png 1041,250,1145,281,0 940,42,1141,72,1 1149,39,1175,73,3 1041,250,1145,281,0 940,42,1141,72,1 1149,39,1175,73,3 964,289,997,322,0 928,288,962,324,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2484/0.png 1209,111,1249,150,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2487/1.png 965,82,1172,130,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2489/0.png 18,34,71,68,4 1300,32,1332,70,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2490/0.png 962,197,1156,239,0 35,292,82,328,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2494/1.png 72,153,314,210,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2494/0.png 884,94,1002,132,0 1158,13,1253,51,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2495/1.png 274,101,450,152,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2495/0.png 618,35,751,67,0 761,37,829,65,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2496/1.png 144,0,544,46,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2496/0.png 1128,76,1350,113,0 1059,11,1188,40,0 143,516,541,579,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2496/2.png 557,230,808,270,0 813,485,1030,520,1 1052,484,1267,520,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2499/0.png 33,74,317,102,1 348,71,683,105,1 712,72,778,102,0 185,211,422,246,0 429,212,667,246,0 673,210,910,245,0 918,212,1156,244,0 916,266,1153,297,0 673,266,910,300,0 427,266,665,298,0 185,266,422,300,0 185,320,422,353,0 429,320,665,353,0 674,319,910,353,0 918,323,1154,354,0 917,373,1153,408,0 672,374,912,407,0 429,374,667,407,0 184,374,421,407,0 185,429,421,459,0 428,428,666,460,0 674,429,910,459,0 918,429,1154,460,0 916,482,1155,515,0 672,482,910,514,0 430,481,666,513,0 183,482,423,515,0 183,537,424,569,0 430,535,665,569,0 673,536,910,570,0 914,536,1152,569,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2500/3.png 540,442,821,485,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2500/1.png 541,456,823,497,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2500/0.png 541,482,822,521,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2500/2.png 543,397,824,438,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2501/3.png 1099,104,1209,144,0 1099,104,1209,144,0 1967,367,2111,406,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2501/1.png 1031,172,1272,213,0 1077,520,1219,559,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2501/0.png 1389,82,1640,126,1 1595,89,1627,121,3 1651,83,1752,125,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2501/2.png 1088,181,1213,219,0 1056,444,1245,483,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2502/0.png 1006,23,1081,50,0 564,378,683,436,0 282,377,563,435,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2503/0.png 75,11,109,37,4 1120,7,1147,39,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2504/2.png 802,172,1128,221,0 802,504,1127,550,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2504/0.png 1207,2,1344,37,0 1018,2,1200,35,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2506/3.png 1015,561,1135,598,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2506/1.png 731,404,801,425,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2506/2.png 166,407,234,432,0 257,393,325,419,0 349,392,416,417,0 531,506,602,527,0 922,469,991,488,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2509/0.png 973,23,1224,64,0 347,23,515,65,0 148,30,177,58,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2510/0.png 912,518,1081,562,0 766,15,799,45,2 579,2,639,59,0 588,11,623,42,3 0,170,180,210,0 0,210,37,248,0 2,248,40,290,0 2,331,39,368,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2511/1.png 793,82,862,114,0 1172,81,1242,114,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2511/2.png 736,216,833,252,0 1113,214,1211,248,0 790,551,900,580,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2512/2.png 81,130,238,176,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2512/0.png 357,392,1012,455,1 540,57,572,92,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2513/0.png 385,484,683,526,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2517/3.png 191,217,479,250,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2517/1.png 193,341,376,374,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2517/0.png 187,32,237,75,4 193,200,416,239,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2517/2.png 193,428,415,464,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2518/0.png 1227,57,1347,115,0 716,58,1165,117,1 1164,56,1217,117,0 1171,69,1209,107,3 1134,9,1157,30,4 891,2,956,37,0 957,2,996,36,0 995,2,1036,37,0 217,278,294,335,0 293,279,370,336,0 372,279,449,335,0 450,280,526,334,0 528,280,604,335,0 604,279,679,337,0 682,281,759,334,0 759,281,836,335,0 836,280,916,334,0 916,279,991,336,0 989,279,1072,335,0 1071,279,1150,335,0 715,60,1165,116,1 1227,57,1347,115,0 716,58,1165,117,1 1164,56,1217,117,0 1171,69,1209,107,3 1134,9,1157,30,4 891,2,956,37,0 957,2,996,36,0 995,2,1036,37,0 217,278,294,335,0 293,279,370,336,0 372,279,449,335,0 450,280,526,334,0 528,280,604,335,0 604,279,679,337,0 682,281,759,334,0 759,281,836,335,0 836,280,916,334,0 916,279,991,336,0 989,279,1072,335,0 1071,279,1150,335,0 715,60,1165,116,1 619,11,639,33,2 551,10,570,28,2 462,12,480,28,2 355,13,377,27,2 246,10,271,29,2 125,9,141,27,2 0,2,57,37,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2519/3.png 525,502,726,545,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2519/2.png 983,200,1183,241,0 525,79,727,123,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2527/0.png 1239,40,1288,80,3 1071,303,1174,334,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2530/1.png 957,340,1248,390,0 956,275,1248,325,0 956,211,1248,260,0 956,145,1248,199,0 958,81,1247,131,0 960,24,1098,62,0 1110,23,1245,59,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2530/0.png 1066,107,1213,139,1 1217,109,1251,139,0 1224,112,1247,133,3 104,111,148,141,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2535/0.png 838,159,1089,184,1 1096,153,1157,187,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2536/1.png 347,495,606,542,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2536/2.png 997,286,1190,331,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2537/1.png 129,445,249,482,0 518,444,636,481,0 901,463,1024,500,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2537/0.png 147,481,277,520,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2539/1.png 564,450,803,495,0 992,558,1124,599,0 823,560,983,598,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2539/0.png 468,22,572,54,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2539/2.png 854,531,1159,564,0 209,558,509,593,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2541/3.png 537,98,806,145,0 818,342,1004,381,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2541/0.png 863,37,1293,84,1 1290,34,1334,84,0 1298,43,1326,76,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2542/2.png 787,153,986,183,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2544/0.png 514,524,854,597,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2546/3.png 629,199,737,246,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2546/2.png 628,11,740,57,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2546/0.png 473,405,893,454,0 469,500,896,545,0 471,341,895,378,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2549/0.png 700,103,928,142,1 898,111,921,133,3 956,97,1179,145,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2552/1.png 968,2,1038,42,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2553/0.png 599,280,745,325,0 1332,36,1363,62,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2555/0.png 742,137,927,158,1 751,246,893,270,1 893,246,919,271,2 26,442,143,472,0 150,444,347,472,0 356,444,448,471,0 142,308,264,333,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2556/0.png 680,115,756,155,0 385,114,679,156,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2557/0.png 886,76,1167,107,1 891,82,908,102,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2558/2.png 528,401,840,475,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2559/0.png 1211,22,1331,58,1 1306,30,1327,55,3 955,384,1021,460,0 1030,383,1095,444,0 1103,380,1168,460,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2560/0.png 1006,129,1172,165,0 992,94,1174,121,1 1144,98,1165,115,3 876,94,990,118,1 963,97,983,115,3 192,174,399,220,0 446,385,580,418,0 205,367,294,393,0 204,297,378,324,1 205,231,378,262,1 204,333,381,357,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2564/3.png 456,446,907,494,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2564/2.png 501,49,863,97,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2564/0.png 1253,48,1302,91,3 1253,48,1302,91,3 789,54,818,82,2 1215,56,1236,81,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2567/0.png 706,308,989,358,0 939,432,970,461,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2568/0.png 1056,20,1150,57,0 1101,235,1155,257,0 1102,265,1156,287,0 1102,295,1156,317,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2570/3.png 550,150,816,195,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2570/1.png 820,472,1144,516,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2570/0.png 908,176,1015,223,0 1230,129,1267,175,0 1237,138,1263,167,3 908,132,1230,174,1 81,391,340,433,1 307,400,338,423,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2571/3.png 34,140,180,181,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2571/1.png 720,395,956,436,0 28,395,239,436,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2571/0.png 29,389,191,430,0 1241,24,1315,56,0 1322,24,1388,56,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2573/0.png 12,37,109,71,0 120,56,166,89,0 1282,16,1352,48,0 129,59,158,84,3 74,42,102,65,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2574/2.png 169,247,370,293,0 582,247,782,293,0 996,247,1198,295,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2578/3.png 398,60,468,88,0 936,59,1010,88,0 938,514,1009,539,0 393,507,471,539,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2578/2.png 398,176,496,199,0 398,211,469,240,0 941,179,1033,199,0 1044,178,1079,198,0 939,210,1007,242,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2578/0.png 313,12,929,48,1 890,14,922,46,3 1304,22,1324,42,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2583/0.png 1122,39,1295,75,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2586/0.png 748,19,784,55,3 113,14,180,59,4 1216,28,1234,49,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2588/1.png 842,293,1154,326,1 845,297,869,320,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2595/0.png 1080,1,1195,38,0 577,503,792,555,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2598/3.png 500,450,608,483,0 622,451,722,483,0 737,449,842,479,0 112,430,224,462,0 239,431,332,459,0 351,428,455,458,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2598/1.png 887,104,1254,157,0 737,419,843,451,0 498,419,612,451,0 622,421,725,451,0 350,420,454,450,0 237,419,334,452,0 112,418,223,452,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2598/0.png 886,261,1253,313,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2598/2.png 500,497,610,528,0 623,495,723,529,0 739,495,841,527,0 350,539,454,571,0 236,541,334,572,0 113,541,221,571,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2599/2.png 112,7,264,45,0 112,308,263,346,0 952,214,1254,256,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2599/0.png 808,92,864,118,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2601/0.png 844,124,1163,164,1 1128,133,1153,157,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2604/0.png 1058,31,1162,66,0 1171,31,1275,65,0 1307,30,1340,65,0 1316,39,1333,59,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2609/0.png 28,467,172,506,0 493,79,644,113,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2610/2.png 537,284,829,338,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2611/3.png 564,249,801,309,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2611/1.png 127,147,927,208,1 961,148,1239,210,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2611/0.png 901,138,1019,179,0 127,542,333,599,0 1147,45,1240,78,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2617/1.png 703,71,948,124,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2617/2.png 701,211,957,263,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2619/0.png 968,234,1130,266,1 1137,236,1168,267,0 1142,240,1162,261,3 968,234,1130,266,1 1137,236,1168,267,0 1142,240,1162,261,3 196,235,303,269,0 311,236,417,270,0 427,237,529,268,0 537,235,646,270,0 654,238,759,270,0 747,480,833,522,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2623/1.png 1009,31,1154,69,0 822,39,993,62,1 586,39,807,64,1 397,37,571,65,1 207,38,381,65,1 361,41,379,62,2 551,42,565,62,2 791,42,805,63,2 975,42,991,61,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2624/1.png 1580,80,1783,139,0 1808,83,2017,140,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2633/3.png 91,367,299,403,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2633/2.png 613,484,752,518,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2636/1.png 727,167,853,215,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2636/0.png 1009,49,1230,96,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2640/1.png 966,258,1184,294,1 875,258,957,296,1 171,547,503,594,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2640/0.png 176,211,478,272,0 434,397,474,417,0 1153,5,1191,24,0 481,11,786,36,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2640/2.png 184,464,216,482,0 526,463,559,480,0 649,1,684,14,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2642/0.png 993,92,1132,123,1 1098,96,1121,121,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2645/3.png 952,53,1252,100,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2645/0.png 1064,110,1214,138,1 1218,111,1252,140,0 1226,112,1246,133,3 1064,110,1214,138,1 1218,111,1252,140,0 1226,112,1246,133,3 1064,110,1214,138,1 1218,111,1252,140,0 1226,112,1246,133,3 1064,110,1214,138,1 1218,111,1252,140,0 1226,112,1246,133,3 109,109,149,141,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2650/1.png 967,389,1202,438,0 1058,235,1146,256,0 745,234,831,256,0 433,235,517,257,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2650/0.png 1025,2,1347,35,1 1309,7,1336,30,3 1025,2,1347,35,1 1309,7,1336,30,3 209,8,233,28,2 315,8,341,31,2 434,8,463,30,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2650/2.png 583,493,672,515,0 1101,493,1201,515,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2651/0.png 15,44,61,71,0 1268,44,1300,79,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2652/1.png 297,298,408,334,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2652/0.png 856,265,1048,294,0 942,16,1011,48,0 1043,14,1116,48,0 1127,15,1214,48,0 759,15,943,47,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2653/0.png 909,337,1296,396,0 907,415,1298,474,0 907,495,1298,551,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2659/1.png 85,180,281,212,0 84,220,281,255,0 474,547,812,575,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2660/2.png 136,94,368,139,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2661/2.png 497,89,751,132,1 752,88,828,134,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2661/0.png 429,65,856,98,1 808,66,843,96,3 429,65,856,98,1 808,66,843,96,3 1065,70,1083,91,2 1182,69,1196,87,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2665/0.png 1086,44,1309,82,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2668/1.png 162,137,319,185,0 118,500,376,548,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2672/2.png 716,146,852,172,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2673/1.png 1046,194,1163,226,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2673/0.png 1127,180,1253,215,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2674/3.png 568,265,702,305,0 442,270,544,297,1 528,271,545,295,2 310,269,416,297,1 391,270,413,294,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2674/1.png 588,261,742,305,0 382,271,473,297,1 486,271,577,297,1 561,269,577,296,2 457,271,473,293,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2681/3.png 741,491,884,543,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2681/2.png 100,431,253,483,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2683/0.png 469,487,671,535,0 1104,84,1176,119,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2687/0.png 608,393,758,433,0 1228,19,1341,42,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2688/2.png 961,15,1140,56,0 960,141,1140,183,0 963,269,1141,308,0 961,377,1140,419,0 961,521,1141,563,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2689/2.png 953,204,1254,249,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2689/0.png 1064,109,1214,140,1 111,112,149,140,4 1217,110,1251,140,0 1226,115,1247,134,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2690/0.png 1682,310,2000,350,1 1680,359,2002,395,1 1681,415,1788,459,0 1680,567,1831,599,0 1842,567,1993,599,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2694/0.png 1179,18,1282,59,0 964,366,1157,406,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2698/3.png 696,556,950,597,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2698/0.png 296,21,909,65,1 909,23,971,64,0 925,27,958,58,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2699/2.png 521,262,670,306,0 697,259,846,307,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2702/2.png 1010,94,1261,119,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2708/1.png 1087,137,1253,193,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2709/0.png 844,14,988,39,0 882,243,1173,281,1 1142,250,1169,274,3 857,502,1174,539,1 1145,510,1167,531,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2710/0.png 1029,250,1201,284,0 803,103,1227,130,1 101,97,201,135,0 1227,100,1253,129,0 1233,106,1248,125,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2711/2.png 569,396,848,440,0 570,342,844,377,1 884,491,1109,546,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2712/0.png 575,37,714,71,0 723,36,791,71,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2714/0.png 1098,79,1322,117,0 1332,85,1354,112,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2719/3.png 112,323,386,367,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2728/1.png 235,535,483,564,1 235,576,483,600,1 235,500,483,523,1 466,500,479,520,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2728/2.png 416,19,482,49,0 213,66,505,138,0 213,153,506,203,0 211,223,505,271,0 211,287,503,336,0 214,356,505,407,0 214,425,505,473,0 215,491,503,538,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2729/3.png 155,135,359,181,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2729/1.png 152,325,328,369,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2732/1.png 519,317,588,347,0 521,259,610,297,0 870,258,936,297,0 167,259,266,297,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2732/2.png 166,175,364,213,0 170,282,275,317,0 168,344,251,367,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2734/0.png 1065,110,1213,140,1 1218,109,1253,141,0 1226,112,1243,133,3 109,112,144,142,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2735/0.png 331,467,534,515,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2743/0.png 1150,77,1343,132,0 407,538,554,588,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2750/0.png 1081,60,1168,107,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2753/0.png 630,398,782,440,0 119,399,355,439,1 364,398,488,442,1 499,399,622,441,1 1185,17,1270,58,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2754/0.png 1062,1,1108,48,0 1110,2,1157,48,0 1157,2,1205,48,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2763/0.png 467,9,778,39,1 777,9,817,38,0 787,15,804,34,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2765/1.png 1478,49,1621,88,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2766/0.png 951,266,1068,300,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2767/0.png 13,36,110,70,0 76,40,97,64,4 120,54,165,91,0 131,56,157,87,3 1285,16,1355,47,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2768/0.png 570,373,796,408,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2769/0.png 1110,33,1221,75,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2771/0.png 690,41,758,71,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2772/0.png 785,431,962,464,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2774/3.png 333,63,460,102,0 333,301,460,340,0 154,504,317,545,0 155,300,317,339,0 158,61,318,103,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2774/1.png 1010,147,1175,173,0 207,542,336,581,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2774/2.png 155,160,317,204,0 334,165,460,202,0 335,426,461,464,0 156,425,318,465,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2779/0.png 133,387,387,433,0 260,466,389,508,0 132,467,248,507,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2781/0.png 119,323,395,380,0 11,36,110,71,0 70,39,98,65,4 119,56,166,88,0 130,61,157,83,3 1233,15,1352,49,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2782/0.png 412,296,952,357,1 647,357,717,419,0 670,374,698,404,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2783/1.png 1194,27,1316,64,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2784/0.png 860,344,944,395,0 886,348,921,391,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2785/3.png 953,439,1253,477,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2785/2.png 764,131,857,155,0 765,167,858,192,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2785/0.png 1063,109,1213,140,1 1218,108,1250,140,0 1229,114,1245,135,3 1066,176,1175,207,0 952,439,1252,473,0 110,113,150,142,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2789/2.png 473,87,619,132,0 755,89,882,130,0 1031,89,1151,130,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2796/0.png 746,99,886,142,0 1094,26,1126,60,4 1218,25,1254,63,3 223,97,465,141,1 486,96,725,143,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2797/3.png 613,113,754,151,0 611,408,754,447,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2797/1.png 238,402,382,443,0 612,401,754,442,0 982,403,1127,440,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2801/0.png 812,113,893,142,0 883,10,963,34,0 968,10,1055,32,0 520,11,594,32,0 601,11,662,32,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2803/0.png 1204,152,1236,176,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2805/3.png 608,144,758,178,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2806/0.png 383,304,982,339,0 385,205,983,241,1 383,255,983,288,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2807/1.png 393,32,474,73,0 110,28,388,75,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2807/0.png 992,23,1161,71,0 1133,100,1211,139,0 992,23,1161,71,0 1133,100,1211,139,0 188,32,221,60,3 93,31,125,61,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2807/2.png 847,396,1125,441,1 1134,396,1215,438,0 125,515,320,551,0 435,515,610,551,0 716,515,929,551,0 1029,516,1217,551,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2812/0.png 509,42,908,81,1 876,49,901,72,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2813/3.png 628,77,739,123,0 625,257,740,309,0 639,442,732,487,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2813/1.png 629,299,738,345,0 630,466,736,513,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2813/0.png 152,20,181,46,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2813/2.png 629,34,737,80,0 631,200,739,247,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2818/0.png 458,428,550,465,0 740,301,909,332,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2834/0.png 502,492,803,537,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2835/0.png 20,20,51,48,4 89,20,126,53,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2836/0.png 903,275,947,318,0 1278,55,1367,95,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2840/1.png 937,132,1046,163,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2840/2.png 926,403,958,433,0 960,401,989,433,0 1059,402,1089,435,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2843/0.png 922,29,1138,61,1 1110,33,1135,60,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2845/3.png 947,526,1250,568,0 948,473,1248,516,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2847/0.png 1781,46,1982,83,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2851/0.png 1065,70,1223,110,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2852/0.png 1016,160,1103,200,0 956,20,1148,59,0 1219,170,1240,190,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2854/1.png 495,489,539,520,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2854/0.png 1066,110,1214,139,1 1219,109,1252,139,0 1229,113,1243,130,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2856/1.png 951,496,1254,532,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2856/0.png 1066,112,1215,138,1 1219,109,1250,139,0 1225,117,1246,135,3 953,507,1252,540,0 955,562,1250,599,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2857/0.png 603,24,835,55,1 433,127,663,158,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2866/0.png 1055,33,1152,66,0 50,29,94,68,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2867/0.png 13,73,110,108,0 118,93,166,127,0 133,97,157,122,3 70,77,99,101,4 1234,54,1353,85,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2870/0.png 1180,118,1313,165,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2871/2.png 462,2,598,31,0 180,362,330,403,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2873/0.png 167,397,249,431,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2874/0.png 326,461,483,504,0 182,461,304,505,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2879/0.png 102,345,223,384,0 1164,85,1263,125,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2880/2.png 113,434,476,482,0 502,433,865,482,0 501,501,864,553,0 113,503,478,553,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2881/0.png 976,37,1100,74,0 1327,167,1364,275,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2889/1.png 582,158,785,212,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2890/3.png 594,224,769,275,0 874,486,1062,535,0 1061,484,1110,536,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2895/0.png 83,388,356,434,0 378,387,653,433,0 946,512,1247,561,0 945,320,1246,370,1 949,389,1246,438,1 83,388,356,434,0 378,387,653,433,0 946,512,1247,561,0 945,320,1246,370,1 949,389,1246,438,1 1329,149,1364,233,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2896/2.png 265,226,679,277,0 266,295,679,345,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2897/3.png 378,224,593,300,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2897/2.png 349,46,623,119,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2897/0.png 122,168,209,207,0 300,166,404,205,0 413,168,553,206,0 562,167,648,205,0 658,166,778,207,0 918,343,1233,380,1 925,554,1225,599,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2898/0.png 1054,139,1235,180,0 1051,14,1168,48,0 203,13,585,52,1 559,26,576,42,2 594,24,612,43,3 583,14,623,53,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2904/2.png 1176,106,1316,145,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2905/0.png 546,368,817,416,0 546,307,817,361,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2913/0.png 7,3,121,36,0 149,5,298,33,0 995,6,1099,39,0 1113,2,1207,38,0 1122,8,1148,32,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2917/0.png 645,239,760,309,0 566,487,801,561,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2918/3.png 1039,215,1165,289,0 202,216,539,288,1 539,214,875,286,1 874,214,1037,288,1 1039,215,1165,289,0 202,216,539,288,1 539,214,875,286,1 874,214,1037,288,1 839,237,864,265,2 1003,239,1031,264,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2920/0.png 713,268,880,307,0 995,194,1099,225,0 1286,7,1347,25,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2923/1.png 220,240,290,267,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2923/0.png 853,239,1148,270,1 854,367,1148,400,1 918,5,1030,30,1 219,296,300,328,1 326,295,438,328,1 916,493,1037,512,1 1043,493,1154,514,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2924/3.png 114,260,241,299,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2925/3.png 284,49,332,74,0 336,50,451,71,0 341,192,388,219,0 392,195,553,216,0 119,358,933,432,0 200,269,222,298,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2925/1.png 358,142,550,166,0 307,143,354,167,0 303,287,349,311,0 353,288,458,312,0 317,433,363,458,0 366,434,528,457,0 275,551,320,574,0 326,550,529,576,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2925/0.png 890,138,1011,169,0 805,9,882,40,0 144,357,908,411,1 144,448,198,472,0 204,448,275,472,0 280,448,432,472,0 437,450,535,471,0 543,449,644,474,0 648,449,733,473,0 740,448,806,473,0 804,480,884,505,0 719,481,797,506,0 715,514,853,535,0 572,514,710,537,0 633,481,715,503,0 890,138,1011,169,0 805,9,882,40,0 144,357,908,411,1 144,448,198,472,0 204,448,275,472,0 280,448,432,472,0 437,450,535,471,0 543,449,644,474,0 648,449,733,473,0 740,448,806,473,0 804,480,884,505,0 719,481,797,506,0 715,514,853,535,0 572,514,710,537,0 633,481,715,503,0 511,479,630,505,0 510,513,567,536,0 401,512,506,537,0 376,480,509,505,0 289,479,370,506,0 310,511,395,537,0 145,481,284,505,0 141,512,212,536,0 219,513,304,537,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2925/2.png 321,96,408,119,0 413,96,457,118,0 467,93,602,123,0 284,241,333,265,0 338,243,457,264,0 323,386,410,412,0 415,384,507,410,0 513,385,559,410,0 565,386,755,409,0 288,531,333,555,0 337,530,468,555,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2928/0.png 411,360,673,423,0 697,358,954,418,0 1187,16,1310,64,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2929/1.png 115,77,319,106,0 408,77,613,103,0 702,75,808,106,0 997,72,1159,107,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2929/0.png 537,539,760,576,0 777,539,1001,575,0 101,366,232,407,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2932/0.png 98,11,328,38,0 1307,124,1333,219,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2935/3.png 891,254,1213,307,1 1169,266,1202,296,3 152,552,309,594,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2935/1.png 994,565,1112,597,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2935/0.png 1032,86,1212,120,1 1179,92,1206,117,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2935/2.png 915,240,1138,292,1
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2945/0.png 770,509,1091,572,0 16,13,56,52,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2949/2.png 262,58,445,109,0 921,60,1105,109,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2956/0.png 497,14,935,48,1 1211,139,1294,170,0 942,13,969,53,3
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2959/3.png 786,355,853,374,0 879,354,938,375,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2959/1.png 785,231,861,252,0 878,231,938,253,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2959/0.png 891,204,1011,235,0 1150,120,1350,153,1 1319,126,1346,146,3 1022,119,1150,153,0 1120,125,1143,147,2 891,204,1011,235,0 1150,120,1350,153,1 1319,126,1346,146,3 1022,119,1150,153,0 1120,125,1143,147,2 303,125,324,146,2 190,125,214,145,2 57,126,78,145,2
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2959/2.png 785,259,861,280,0 875,257,939,279,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2961/2.png 110,71,201,88,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2961/0.png 1046,33,1156,70,0 1164,29,1253,70,0 963,118,1219,158,1 1046,33,1156,70,0 1164,29,1253,70,0 963,118,1219,158,1 923,263,1033,292,0 110,115,150,146,4
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2963/2.png 112,408,290,451,0
-E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//2965/0.png 87,275,267,322,0 927,235,984,291,0 1082,237,1139,294,0 21,36,48,62,4 87,275,267,322,0 927,235,984,291,0 1082,237,1139,294,0 21,36,48,62,4 1126,22,1168,62,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3940/1.png 842,23,950,61,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3945/2.png 920,197,1158,229,1 1159,197,1192,231,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3948/2.png 483,471,882,515,0 484,347,884,389,1 485,400,882,442,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3948/0.png 1084,46,1197,84,0 1208,49,1267,84,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3953/0.png 44,232,372,268,1 44,283,372,315,1 48,356,166,385,0 246,90,336,151,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3955/0.png 1103,21,1180,56,0 1195,25,1310,54,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3956/0.png 1106,16,1168,46,0 1106,16,1168,46,0 1124,18,1149,41,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3958/3.png 553,513,812,566,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3958/0.png 1098,20,1251,60,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3966/0.png 707,479,944,533,0 931,88,1032,129,0 279,88,930,128,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3968/3.png 578,549,788,599,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3972/2.png 109,97,380,159,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3972/0.png 109,404,384,469,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3973/3.png 863,502,998,542,0 1019,502,1154,541,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3973/1.png 930,73,1098,103,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3974/0.png 53,30,94,68,4 1065,33,1162,64,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3978/0.png 212,17,733,53,1 734,14,783,55,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3979/2.png 660,272,863,337,0 900,274,1102,336,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3979/0.png 816,429,1136,476,0 504,428,796,458,1 775,428,796,459,2
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3980/0.png 23,58,61,103,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3983/0.png 1102,22,1180,56,0 1191,20,1310,57,0 1316,17,1354,59,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3993/0.png 132,384,267,433,0 315,385,489,434,0 901,17,1018,59,0 1028,17,1114,58,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3994/3.png 121,320,282,374,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//3994/2.png 122,251,283,302,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4006/0.png 109,111,149,139,4 1063,110,1214,139,1 1216,107,1253,142,0 1225,114,1244,133,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4009/3.png 928,227,1276,264,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4010/0.png 1097,0,1246,30,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4018/2.png 886,335,1154,377,0 120,559,322,598,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4018/0.png 1243,70,1332,99,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4021/0.png 874,77,1345,121,1 886,82,919,111,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4023/3.png 131,33,158,56,0 164,31,189,58,0 194,33,219,57,0 133,180,264,212,0 131,487,160,515,0 161,494,188,513,0 194,493,223,515,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4023/1.png 132,420,265,450,0 130,257,157,283,0 163,258,191,285,0 193,260,221,285,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4023/2.png 131,152,156,178,0 164,152,186,178,0 197,153,222,177,0 131,302,224,331,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4023/0.png 1012,264,1186,297,0 913,480,1211,513,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4025/2.png 632,304,847,338,0 630,44,849,78,0 287,90,423,110,1 427,89,463,115,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4029/3.png 574,455,793,497,0 909,339,1027,366,0 130,339,222,365,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4033/1.png 245,13,453,51,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4033/0.png 254,88,446,127,0 134,217,565,255,1 135,264,566,302,1 132,309,567,349,1 134,355,566,394,1 134,467,269,496,1 280,465,420,497,1 427,466,567,495,1 405,504,567,542,1 549,468,566,493,2 401,467,417,494,2 256,468,270,494,2
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4035/0.png 109,487,229,542,0 238,488,404,539,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4043/0.png 203,513,448,536,1 429,511,443,536,2 460,510,706,537,1 689,512,704,532,2 850,494,1149,552,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4049/0.png 1109,4,1213,45,0 1218,3,1333,44,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4054/0.png 763,289,1124,341,0 763,360,1122,413,0 764,463,1123,515,0 1219,14,1291,44,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4056/3.png 127,314,263,363,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4057/0.png 208,43,398,79,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4063/2.png 532,409,585,431,0 591,410,630,430,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4064/2.png 156,52,398,96,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4064/0.png 1240,105,1268,138,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4067/0.png 1167,65,1329,91,0 1167,65,1329,91,0 1152,13,1174,41,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4074/0.png 564,248,674,281,0 681,248,804,281,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4077/0.png 865,474,1053,524,0 633,69,797,119,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4078/0.png 166,276,282,301,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4082/1.png 861,181,993,218,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4089/2.png 1077,432,1229,463,0 1077,432,1229,463,0 535,151,866,226,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4090/0.png 1158,34,1298,67,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4092/0.png 838,17,979,49,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4093/1.png 957,502,1268,556,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4095/0.png 158,334,346,375,0 1119,31,1279,73,0 1284,29,1325,72,0 1296,41,1313,61,2 158,334,346,375,0 1119,31,1279,73,0 1284,29,1325,72,0 1296,41,1313,61,2 341,54,357,74,0 463,54,484,71,0 591,53,612,72,0 1020,54,1043,69,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4103/3.png 197,123,242,143,0 198,168,241,187,0 522,165,568,184,0 524,228,566,247,0 525,311,567,330,0 196,295,244,315,0 197,232,243,250,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4103/1.png 643,117,727,135,0 641,267,688,284,0 641,544,687,562,0 196,387,242,408,0 201,302,242,321,0 198,156,274,172,0 198,220,241,239,0 957,443,1079,469,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4103/2.png 959,476,1078,505,0 197,176,243,193,0 197,91,243,111,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4106/0.png 888,311,1247,352,0 1216,319,1241,341,2 1084,183,1118,222,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4109/1.png 147,264,509,305,1 145,316,511,356,1 191,369,466,409,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4116/3.png 356,339,500,388,0 940,159,1084,209,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4116/1.png 986,394,1131,444,0 400,518,544,566,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4116/0.png 462,556,672,598,0 692,554,905,598,0 1222,58,1248,91,3 462,556,672,598,0 692,554,905,598,0 1222,58,1248,91,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4118/3.png 384,532,571,595,0 161,532,353,595,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4118/0.png 405,0,594,63,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4119/0.png 1235,21,1328,57,0 855,19,1154,59,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4123/3.png 71,389,224,422,0 70,104,156,134,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4123/2.png 1026,559,1237,588,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4125/2.png 700,172,868,213,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4125/0.png 127,474,288,526,0 308,474,509,528,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4126/0.png 1049,112,1196,147,1 1197,113,1238,147,0 1206,115,1228,141,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4134/0.png 232,558,552,598,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4141/2.png 936,361,1230,402,0 935,409,1230,451,0 937,454,1230,499,0 933,503,1226,550,0 936,548,1229,593,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4141/0.png 524,36,934,70,1 932,30,977,73,0 944,39,966,63,3 1157,32,1197,73,0 1199,32,1239,71,0 1078,129,1094,150,2 876,129,893,148,2 736,127,757,152,2 589,126,611,150,2 354,128,386,151,2 207,128,229,152,2
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4144/2.png 101,503,350,538,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4146/1.png 859,163,1180,215,0 873,87,914,130,0 925,88,962,128,0 972,88,1015,129,0 1024,89,1064,129,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4148/1.png 169,14,362,60,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4149/0.png 253,21,737,52,1 738,21,783,52,0 747,23,772,48,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4152/0.png 108,551,286,590,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4157/3.png 231,212,966,273,1 966,213,1135,274,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4158/3.png 531,28,848,86,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4158/1.png 513,492,835,549,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4159/0.png 413,40,853,79,1 816,44,842,75,3 413,40,853,79,1 816,44,842,75,3 431,203,455,225,2 236,244,260,265,2
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4160/0.png 317,9,641,41,1 642,9,677,41,0 647,11,668,35,3 317,9,641,41,1 642,9,677,41,0 647,11,668,35,3 1,397,49,445,0 0,445,48,496,0 0,495,49,546,0 1,544,48,597,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4161/0.png 314,401,573,446,0 314,401,573,446,0 787,385,1059,429,0 786,435,1059,485,0 1206,12,1284,44,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4163/0.png 241,8,857,43,0 858,7,896,42,0 867,14,890,39,3 126,50,320,93,0 290,62,307,82,2
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4164/2.png 133,62,282,95,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4164/0.png 959,328,1115,361,0 1202,337,1235,365,4 1160,336,1189,363,3 1056,287,1156,318,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4170/1.png 567,325,798,366,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4170/0.png 1155,9,1232,42,0 385,8,831,40,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4171/3.png 332,517,731,557,1 788,515,1033,558,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4171/2.png 137,372,323,414,0 136,28,273,69,0 284,28,424,68,0 434,27,573,69,0 141,91,571,126,0 138,146,572,185,0 537,152,563,176,2 534,96,559,117,2
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4171/0.png 1211,4,1364,45,0 39,563,240,598,0 243,563,450,599,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4174/3.png 362,6,511,35,0 525,8,659,35,0 1089,69,1223,99,0 362,6,511,35,0 525,8,659,35,0 1089,69,1223,99,0 335,444,553,475,0 566,445,684,474,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4174/1.png 358,229,512,259,0 527,231,662,260,0 1127,43,1183,68,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4174/2.png 376,111,513,139,0 526,111,643,139,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4176/3.png 514,539,668,584,0 700,537,850,586,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4190/3.png 921,462,982,482,0 922,495,1036,517,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4194/2.png 971,446,1196,500,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4198/0.png 236,371,527,416,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4199/0.png 75,181,116,216,4
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4201/1.png 473,204,892,249,0 472,310,893,354,0 472,360,893,404,0 475,148,893,187,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4202/0.png 112,377,565,421,0 111,428,567,475,0 111,482,567,535,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4203/2.png 575,233,791,290,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4205/3.png 798,535,1118,577,0 798,395,1118,437,1 799,477,1117,520,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4205/1.png 597,343,768,387,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4205/0.png 880,360,1202,404,0 1242,14,1349,56,0 1156,15,1234,57,0 882,264,1200,306,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4206/1.png 214,496,582,535,1 592,494,752,535,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4206/0.png 405,14,622,49,1 630,11,848,49,1 854,12,892,48,0 405,14,622,49,1 630,11,848,49,1 854,12,892,48,0 286,91,751,167,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4208/1.png 859,314,1181,363,0 876,238,913,280,0 922,239,964,279,0 971,238,1016,279,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4212/2.png 819,9,1139,39,1 1139,7,1182,37,0 1147,12,1172,32,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4212/0.png 259,487,536,532,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4218/0.png 1037,10,1202,45,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4222/2.png 974,353,1106,388,0 974,402,1107,440,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4230/1.png 858,163,1182,214,0 872,87,913,127,0 922,87,963,128,0 975,88,1014,129,0 1026,88,1065,127,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4237/0.png 927,16,1125,57,0 1146,12,1188,52,0 1203,14,1243,57,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4239/0.png 1063,108,1212,140,1 1217,111,1253,140,0 1229,114,1244,132,3 108,110,152,145,4
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4241/1.png 114,115,323,159,0 331,117,513,161,0 518,116,738,160,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4241/0.png 1054,63,1141,99,0 1159,62,1261,101,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4242/0.png 1189,14,1290,44,0 1314,13,1340,43,3 1189,14,1290,44,0 1314,13,1340,43,3 15,11,57,44,4
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4243/2.png 129,192,438,234,0 525,192,836,233,0 929,193,1237,234,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4243/0.png 1101,242,1258,281,0 739,66,792,119,0 752,78,780,108,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4255/3.png 722,140,846,172,0 186,14,326,57,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4256/1.png 92,109,186,141,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4259/0.png 782,64,1076,100,1 1041,67,1065,94,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4262/0.png 641,114,725,147,0 300,379,452,412,0 716,278,874,311,0 1028,350,1169,380,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4272/0.png 1503,315,1805,364,0 1502,367,1803,419,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4273/0.png 370,148,445,186,0 451,147,527,185,0 534,147,605,184,0 611,150,681,185,0 687,148,774,185,0 776,144,834,183,0 844,145,929,183,0 856,155,871,177,3 1085,149,1167,185,0 1172,148,1265,183,0 1013,283,1231,325,0 303,150,365,186,0 982,510,1044,541,0 1047,511,1101,540,0 1102,514,1173,540,0 1175,510,1219,540,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4277/3.png 117,370,313,406,0 116,495,264,537,0 884,496,1044,535,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4277/2.png 644,256,722,299,0 885,487,973,533,0 114,487,259,530,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4277/0.png 461,381,862,410,1 863,380,904,410,0 872,387,892,405,3 461,381,862,410,1 863,380,904,410,0 872,387,892,405,3 107,451,246,492,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4284/0.png 50,29,97,69,4 1054,32,1152,65,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4285/3.png 67,365,230,407,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4285/1.png 67,503,230,546,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4285/2.png 686,419,845,457,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4286/0.png 501,205,864,240,1 502,266,864,302,1 520,518,846,564,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4288/1.png 669,48,842,97,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4288/0.png 904,251,1019,293,0 939,453,1185,502,0 1001,33,1173,83,0 1183,103,1217,132,3 904,251,1019,293,0 939,453,1185,502,0 1001,33,1173,83,0 1183,103,1217,132,3 518,109,536,130,2 222,113,247,129,2
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4289/0.png 1182,10,1323,75,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4294/1.png 875,450,914,488,0 922,448,964,490,0 860,524,1179,572,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4299/3.png 586,498,777,546,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4303/2.png 1055,298,1221,328,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4304/2.png 534,490,800,545,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4306/0.png 571,492,794,550,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4308/0.png 607,70,755,102,0 1041,9,1121,35,0 997,10,1024,35,3 607,70,755,102,0 1041,9,1121,35,0 997,10,1024,35,3 18,8,111,35,0 80,11,98,29,4
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4310/3.png 556,396,811,446,0 156,395,412,447,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4310/1.png 956,212,1209,262,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4310/0.png 1236,152,1263,177,4 724,11,861,39,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4312/2.png 278,117,429,148,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4312/0.png 903,266,977,299,0 956,534,1109,566,0 903,266,977,299,0 956,534,1109,566,0 884,213,1106,249,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4316/1.png 876,349,1005,385,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4317/2.png 169,77,397,117,0 435,76,663,116,0 701,78,929,116,0 967,78,1195,117,0 966,136,1195,173,0 701,136,929,172,0 438,136,662,171,0 170,133,400,173,0 1048,348,1253,382,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4318/1.png 956,437,1103,466,1 1114,438,1156,469,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4318/0.png 868,283,1168,317,0 1300,120,1328,145,3 868,283,1168,317,0 1300,120,1328,145,3 18,157,53,191,4
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4321/3.png 1110,285,1238,316,1 1108,327,1199,361,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4323/1.png 603,250,761,287,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4323/0.png 1069,14,1088,37,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4325/3.png 1047,271,1218,321,0 1048,330,1218,378,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4326/3.png 586,420,777,465,0 887,567,1174,599,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4326/2.png 587,457,778,502,0 1,116,40,248,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4326/0.png 1126,127,1318,157,1 1287,132,1306,149,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4329/0.png 533,364,674,422,0 214,366,511,421,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4338/1.png 188,109,278,149,0 232,46,361,87,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4345/1.png 553,131,811,181,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4345/0.png 915,58,1087,103,0 1096,56,1275,106,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4346/0.png 1062,47,1157,82,0 1020,45,1060,84,0 1029,54,1051,77,3 202,38,384,89,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4354/1.png 66,2,359,79,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4354/0.png 1275,21,1411,65,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4356/3.png 880,387,1090,453,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4356/1.png 897,446,1109,503,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4356/2.png 137,451,348,511,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4357/3.png 570,34,795,69,0 603,430,762,462,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4357/2.png 231,239,348,272,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4357/0.png 204,316,379,389,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4366/1.png 581,539,781,588,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4366/2.png 518,385,845,437,0 698,526,908,572,1 904,527,956,573,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4366/0.png 1161,19,1325,71,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4371/0.png 1149,88,1321,124,1 1290,93,1320,123,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4374/0.png 137,83,509,124,1 466,89,497,116,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4375/0.png 450,334,517,364,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4377/1.png 721,546,841,578,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4378/0.png 55,60,90,90,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4379/3.png 878,19,1323,63,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4379/0.png 1502,29,1661,66,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4382/0.png 901,443,1147,488,0 404,441,652,488,0 586,577,676,599,0 715,345,849,390,1 861,349,994,390,1 1018,346,1113,391,1 209,347,424,390,1 435,346,652,389,1 901,443,1147,488,0 404,441,652,488,0 586,577,676,599,0 715,345,849,390,1 861,349,994,390,1 1018,346,1113,391,1 209,347,424,390,1 435,346,652,389,1 1048,72,1215,102,0 1189,77,1205,95,3
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4393/1.png 76,91,345,143,0
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4401/0.png 948,62,1182,84,1
+E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment//4402/0.png 283,33,1082,69,1 1054,39,1073,63,3
