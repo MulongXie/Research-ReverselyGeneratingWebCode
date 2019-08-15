@@ -19,8 +19,8 @@ is_save = True
 input_paths = glob.glob(pyjoin(input_root, '*.png'))
 input_paths = sorted(input_paths, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
-start_index = 3
-end_index = 3
+start_index = 16
+end_index = 16
 
 for input_path in input_paths:
     index = input_path.split('\\')[-1][:-4]
@@ -51,8 +51,8 @@ for input_path in input_paths:
     boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA,
                                                                          C.THRESHOLD_MIN_REC_PERIMETER,
                                                                          C.THRESHOLD_MIN_REC_EVENNESS,
-                                                                         C.THRESHOLD_MAX_LINE_THICKNESS,
-                                                                         C.THRESHOLD_MIN_LIN_LENGTH,
+                                                                         C.THRESHOLD_MIN_LINE_THICKNESS,
+                                                                         C.THRESHOLD_MIN_LINE_LENGTH,
                                                                          C.THRESHOLD_MAX_IMG_DENT_RATIO)
     # get corner of boundaries -> img or block check
     corners_rec = det.get_corner(boundary_rec)

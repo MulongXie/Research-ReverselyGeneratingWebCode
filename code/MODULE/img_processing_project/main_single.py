@@ -22,7 +22,7 @@ binary = pre.preprocess(gray, 1)
 # *** Step 2 *** processing: get connected areas -> get boundary -> rectangle check
 boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA,
                                                         C.THRESHOLD_MIN_REC_PERIMETER, C.THRESHOLD_MIN_REC_EVENNESS,
-                                                        C.THRESHOLD_MAX_LINE_THICKNESS, C.THRESHOLD_MIN_LIN_LENGTH, 
+                                                        C.THRESHOLD_MIN_LINE_THICKNESS, C.THRESHOLD_MIN_LINE_LENGTH,
                                                         C.THRESHOLD_MAX_IMG_DENT_RATIO)
 # get corner of boundaries -> img or block check
 corners_rec = det.get_corner(boundary_rec)
