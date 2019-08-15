@@ -142,6 +142,9 @@ def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_
 
             # calculate gradient
             difference = border[i][1] - border[i + 1][1]
+            # abnormal to be a regular shape
+            if abs(difference) / edge > 0.5:
+                return False
             if abs(difference) == 0:
                 flat += 1
 
