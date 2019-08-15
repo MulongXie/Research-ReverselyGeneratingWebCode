@@ -92,6 +92,13 @@ def clipping_by_line(boundary, boundary_rec, lines):
                 r1 = line[1]
 
 
+def is_line(boundary, min_line_thickness):
+    # check if it is line by checking the length of edges
+    if True in [len(boundary[i]) < min_line_thickness for i in range(len(boundary))]:
+        return True
+    return False
+
+
 # i. detect if an object is rectangle by evenness of each border
 # ii. add dent detection
 # iii. add connected line detection
@@ -99,10 +106,6 @@ def clipping_by_line(boundary, boundary_rec, lines):
 # -> up, bottom: (column_index, min/max row border)
 # -> left, right: (row_index, min/max column border) detect range of each row
 def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, is_line_detect):
-    # check if it is line by checking the length of edges
-    if True in [len(boundary[i]) < min_line_thickness for i in range(len(boundary))]:
-        return False
-
     opposite_side = [1, 0, 3, 2]  # opposite sides for each edges
     dent_direction = [-1, 1, -1, 1]
 

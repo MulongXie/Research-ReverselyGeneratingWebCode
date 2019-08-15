@@ -24,8 +24,8 @@ class Config:
         self.THRESHOLD_MAX_BLOCK_BORDER_THICKNESS = 8
         self.THRESHOLD_MAX_BLOCK_CROSS_POINT = 0.3
         
-        self.THRESHOLD_MAX_LINE_THICKNESS = 5
-        self.THRESHOLD_MIN_LIN_LENGTH = 10
+        self.THRESHOLD_MIN_LINE_THICKNESS = 5
+        self.THRESHOLD_MIN_LINE_LENGTH = 10
 
         self.OCR_PADDING = 3
         self.OCR_MIN_WORD_AREA = 0.2

@@ -19,8 +19,8 @@ is_save = True
 input_paths = glob.glob(pyjoin(input_root, '*.png'))
 input_paths = sorted(input_paths, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
-start_index = 3
-end_index = 3
+start_index = 16
+end_index = 16
 
 for input_path in input_paths:
     index = input_path.split('\\')[-1][:-4]
@@ -40,17 +40,19 @@ for input_path in input_paths:
     out_img_segment = pyjoin(C.ROOT_IMG_SEGMENT, index)
     out_label = pyjoin(C.ROOT_LABEL, index)
 
+
     # *** Step 1 *** pre-processing: gray, gradient, binary
     org, gray = pre.read_img(input_path, (0, 3000))  # cut out partial img
     if org is None or gray is None: continue
     binary = pre.preprocess(gray, 1)
 
+
     # *** Step 2 *** processing: get connected areas -> get boundary -> rectangle check
     boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA,
                                                                          C.THRESHOLD_MIN_REC_PERIMETER,
                                                                          C.THRESHOLD_MIN_REC_EVENNESS,
-                                                                         C.THRESHOLD_MAX_LINE_THICKNESS,
-                                                                         C.THRESHOLD_MIN_LIN_LENGTH,
+                                                                         C.THRESHOLD_MIN_LINE_THICKNESS,
+                                                                         C.THRESHOLD_MIN_LINE_LENGTH,
                                                                          C.THRESHOLD_MAX_IMG_DENT_RATIO)
     # get corner of boundaries -> img or block check
     corners_rec = det.get_corner(boundary_rec)
@@ -62,6 +64,7 @@ for input_path in input_paths:
     corners_img += det.irregular_img(org, corners_nonrec, C.THRESHOLD_MAX_IMG_EDGE_RATIO, C.THRESHOLD_MUST_IMG_HEIGHT,
                                      C.THRESHOLD_MUST_IMG_WIDTH, C.THRESHOLD_MIN_REC_PERIMETER, C.OCR_PADDING,
                                      C.OCR_MIN_WORD_AREA)
+
 
     # *** Step 3 *** post-processing: remove img elements from original image and segment into smaller size
     img_clean = draw.draw_bounding_box(corners_img, org, (255, 255, 255), -1)
