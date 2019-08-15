@@ -13,8 +13,8 @@ class Config:
         self.ROOT_IMG_SEGMENT = pjoin(self.ROOT, "ip_img_segment")
 
         self.THRESHOLD_MIN_OBJ_AREA = 200
-        self.THRESHOLD_MIN_REC_PARAMETER = 200
-        self.THRESHOLD_MIN_REC_EVENNESS = 0.7
+        self.THRESHOLD_MIN_REC_PARAMETER = 150
+        self.THRESHOLD_MIN_REC_EVENNESS = 0.65
         
         self.THRESHOLD_MAX_IMG_EDGE_RATIO = 2.2
         self.THRESHOLD_MUST_IMG_HEIGHT = 100
