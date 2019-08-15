@@ -32,7 +32,8 @@ corners_block, corners_img = det.block_or_img(binary, corners_rec, C.THRESHOLD_M
                                               C.THRESHOLD_MAX_BLOCK_CROSS_POINT, C.THRESHOLD_MAX_IMG_EDGE_RATIO)
 # identify irregular-shape img from irregular shapes
 corners_img += det.irregular_img(org, corners_nonrec, C.THRESHOLD_MAX_IMG_EDGE_RATIO, C.THRESHOLD_MUST_IMG_HEIGHT,
-                                 C.THRESHOLD_MUST_IMG_WIDTH, C.THRESHOLD_MIN_REC_PERIMETER)
+                                 C.THRESHOLD_MUST_IMG_WIDTH, C.THRESHOLD_MIN_REC_PERIMETER, C.OCR_PADDING,
+                                 C.OCR_MIN_WORD_AREA)
 
 
 # *** Step 3 *** post-processing: remove img elements from original image and segment into smaller size

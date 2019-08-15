@@ -2,7 +2,7 @@ import pytesseract as pyt
 import cv2
 
 
-def is_text(img, show=False):
+def is_text(img, min_word_area, show=False):
     broad = img.copy()
     area_word = 0
     area_total = img.shape[0] * img.shape[1]
@@ -22,7 +22,7 @@ def is_text(img, show=False):
                 cv2.rectangle(broad, t_l, b_r, (0,0,255), 1)
 
     # no text in this clip or relatively small text area
-    if len(word) == 0 or area_word/area_total < 0.2:
+    if len(word) == 0 or area_word/area_total < min_word_area:
         return False
 
     if show:

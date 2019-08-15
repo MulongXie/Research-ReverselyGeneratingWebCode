@@ -106,7 +106,7 @@ def img_refine(binary, corners, max_thickness):
 
 
 # check the edge ratio for img components to avoid text misrecognition
-def irregular_img(org, corners, max_img_edge_ratio, must_img_height, must_img_width, min_perimeter):
+def irregular_img(org, corners, max_img_edge_ratio, must_img_height, must_img_width, min_perimeter, ocr_padding, ocr_min_word_area):
     img_corners = []
     for corner in corners:
         (up_left, bottom_right) = corner
@@ -120,10 +120,10 @@ def irregular_img(org, corners, max_img_edge_ratio, must_img_height, must_img_wi
         if height > must_img_height and width > must_img_width:
             img_corners.append(corner)
         else:
-            if perimeter > min_perimeter:
+            if perimeter > min_perimeter and width/height < max_img_edge_ratio:
                 # check if this area is text
-                clip = org[x_min: x_max, y_min: y_max]
-                if not ocr.is_text(clip, show=True):
+                clip = org[x_min-ocr_padding: x_max+ocr_padding, y_min-ocr_padding: y_max+ocr_padding]
+                if not ocr.is_text(clip, ocr_min_word_area, show=False):
                     img_corners.append(corner)
 
     return img_corners
