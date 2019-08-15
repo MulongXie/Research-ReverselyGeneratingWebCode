@@ -60,51 +60,6 @@ def block_or_img(binary, corners, max_thickness, max_block_cross_points, max_img
     return blocks, imgs
 
 
-# get the more accurate bounding box of img components
-def img_refine(binary, corners, max_thickness):
-    refined_corners = []
-    # remove inner rectangles
-    # corners = util.rm_inner_rec(corners)
-
-    for corner in corners:
-        (up_left, bottom_right) = corner
-        (y_min, x_min) = up_left
-        (y_max, x_max) = bottom_right
-        width = y_max - y_min - 2 * max_thickness
-        height = x_max - x_min - 2 * max_thickness
-
-        # line: count_divide_column > 0.9
-        # background: count_divide_column < 0.1
-        # scan horizontally
-        for x in range(x_min + max_thickness, x_max - max_thickness):
-            count_divide_column = np.sum(binary[x, y_min+max_thickness: y_max-max_thickness])/255/width
-            count_divide_column_pre = np.sum(binary[x-max_thickness, y_min+max_thickness: y_max-max_thickness])/255/width
-            # left inner border: current column is line (all one) + previous column is background (all zero)
-            if count_divide_column > 0.9 and count_divide_column_pre == 0:
-                if x_max - x > max_thickness and x - x_min > max_thickness:
-                    x_min = x
-            # right inner border: current column is background (all zero) + previous column is
-            elif count_divide_column == 0 and count_divide_column_pre > 0.9:
-                if x - x_min > max_thickness and x_max - x > max_thickness:
-                    x_max = x - max_thickness
-
-        # scan vertically
-        for y in range(y_min + max_thickness, y_max - max_thickness):
-            count_divide_column = np.sum(binary[x_min+max_thickness: x_max-max_thickness, y])/255/height
-            count_divide_column_pre = np.sum(binary[x_min+max_thickness: x_max-max_thickness, y-max_thickness])/255/height
-            # left inner border: current column is line (all one) + previous column is background (all zero)
-            if count_divide_column > 0.9 and count_divide_column_pre == 0:
-                if y_max - y > max_thickness and y - y_min > max_thickness:
-                    y_min = y
-            # right inner border: current column is background (all zero) + previous column is
-            elif count_divide_column == 0 and count_divide_column_pre > 0.9:
-                if y - y_min > max_thickness and y_max - y > max_thickness:
-                    y_max = y - max_thickness
-
-        refined_corners.append(((y_min, x_min), (y_max, x_max)))
-    return refined_corners
-
-
 # check the edge ratio for img components to avoid text misrecognition
 def irregular_img(org, corners, max_img_edge_ratio, must_img_height, must_img_width, min_perimeter, ocr_padding, ocr_min_word_area):
     img_corners = []
@@ -125,8 +80,33 @@ def irregular_img(org, corners, max_img_edge_ratio, must_img_height, must_img_wi
                 clip = org[x_min-ocr_padding: x_max+ocr_padding, y_min-ocr_padding: y_max+ocr_padding]
                 if not ocr.is_text(clip, ocr_min_word_area, show=False):
                     img_corners.append(corner)
-
     return img_corners
+
+
+# remove imgs that are in others
+def rm_inner_rec(corners):
+    inner = np.full((len(corners), 1), False)
+    for i in range(len(corners)):
+        (up_left_a, bottom_right_a) = corners[i]
+        (y_min_a, x_min_a) = up_left_a
+        (y_max_a, x_max_a) = bottom_right_a
+
+        for j in range(i+1, len(corners)):
+            (up_left_b, bottom_right_b) = corners[j]
+            (y_min_b, x_min_b) = up_left_b
+            (y_max_b, x_max_b) = bottom_right_b
+
+            # if [i] is in [j]
+            if util.contain(corners[i], corners[j]) == -1:
+                inner[i] = True
+            # if [j] is in [i]
+            elif util.contain(corners[i], corners[j]) == 1:
+                inner[j] = True
+    refined_corners = []
+    for i in range(len(inner)):
+        if not inner[i]:
+            refined_corners.append(corners[i])
+    return refined_corners
 
 
 # take the binary image as input

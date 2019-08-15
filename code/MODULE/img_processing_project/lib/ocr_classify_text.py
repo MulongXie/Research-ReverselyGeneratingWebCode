@@ -21,15 +21,15 @@ def is_text(img, min_word_area, show=False):
                 area_word += int(d[-4]) * int(d[-3])
                 cv2.rectangle(broad, t_l, b_r, (0,0,255), 1)
 
-    # no text in this clip or relatively small text area
-    if len(word) == 0 or area_word/area_total < min_word_area:
-        return False
-
     if show:
         for d in word: print(d)
         print(area_word, area_total)
         cv2.imshow('a', broad)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
+    # no text in this clip or relatively small text area
+    if len(word) == 0 or area_word/area_total < min_word_area:
+        return False
+
 
     return True

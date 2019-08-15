@@ -172,27 +172,19 @@ def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_
     return True
 
 
-# remove imgs that are in others
-def rm_inner_rec(corners):
-    inner = np.full((len(corners), 1), False)
-    for i in range(len(corners)):
-        (up_left_a, bottom_right_a) = corners[i]
-        (y_min_a, x_min_a) = up_left_a
-        (y_max_a, x_max_a) = bottom_right_a
+def contain(corner_a, corner_b):
+    (up_left_a, bottom_right_a) = corner_a
+    (y_min_a, x_min_a) = up_left_a
+    (y_max_a, x_max_a) = bottom_right_a
+    (up_left_b, bottom_right_b) = corner_b
+    (y_min_b, x_min_b) = up_left_b
+    (y_max_b, x_max_b) = bottom_right_b
 
-        for j in range(i+1, len(corners)):
-            (up_left_b, bottom_right_b) = corners[j]
-            (y_min_b, x_min_b) = up_left_b
-            (y_max_b, x_max_b) = bottom_right_b
+    # if a is in b
+    if y_min_a > y_min_b and x_min_a > x_min_b and y_max_a < y_max_b and x_max_a < x_max_b:
+        return -1
+    # if b is in a
+    elif y_min_a < y_min_b and x_min_a < x_min_b and y_max_a > y_max_b and x_max_a > x_max_b:
+        return 1
+    return 0
 
-            # if rec[i] is in rec[j]
-            if y_min_a > y_min_b and x_min_a > x_min_b and y_max_a < y_max_b and x_max_a < x_max_b:
-                inner[i] = True
-            # if rec[i] is in rec[j]
-            elif y_min_a < y_min_b and x_min_a < x_min_b and y_max_a > y_max_b and x_max_a > x_max_b:
-                inner[j] = True
-    refined_corners = []
-    for i in range(len(inner)):
-        if not inner[i]:
-            refined_corners.append(corners[i])
-    return refined_corners
