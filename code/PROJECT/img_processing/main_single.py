@@ -15,7 +15,7 @@ is_save = True
 start = time.clock()
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/0.png', (0, 3000))  # cut out partial img
+org, gray = pre.read_img('input/9833.png', (600, 2000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 
