@@ -19,7 +19,7 @@ is_save = True
 input_paths = glob.glob(pyjoin(input_root, '*.png'))
 input_paths = sorted(input_paths, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
-start_index = 4112
+start_index = 9840
 end_index = 10000
 
 for input_path in input_paths:
@@ -41,7 +41,7 @@ for input_path in input_paths:
     out_label = pyjoin(C.ROOT_LABEL, index)
 
     # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img(input_path, (0, 2600))  # cut out partial img
+    org, gray = pre.read_img(input_path, (0, 3000))  # cut out partial img
     if org is None or gray is None: continue
     binary = pre.preprocess(gray, 1)
 

@@ -27,25 +27,27 @@ def block_or_img(binary, corners, max_thickness, max_block_cross_points):
         is_block = False
         vacancy = [0, 0, 0, 0]
         for i in range(1, max_thickness):
-            # up down
-            if vacancy[0] == 0 and (y_max - y_min - 2 * i) is not 0 and (
-                    np.sum(binary[x_min + i, y_min + i: y_max - i]) / 255) / (y_max - y_min - 2 * i) <= max_block_cross_points:
-                vacancy[0] = 1
-            # bottom-up
-            if vacancy[1] == 0 and (y_max - y_min - 2 * i) is not 0 and (
-                    np.sum(binary[x_max - i, y_min + i: y_max - i]) / 255) / (y_max - y_min - 2 * i) <= max_block_cross_points:
-                vacancy[1] = 1
-            # left to right
-            if vacancy[2] == 0 and (x_max - x_min - 2 * i) is not 0 and (
-                    np.sum(binary[x_min + i: x_max - i, y_min + i]) / 255) / (x_max - x_min - 2 * i) <= max_block_cross_points:
-                vacancy[2] = 1
-            # right to left
-            if vacancy[3] == 0 and (x_max - x_min - 2 * i) is not 0 and (
-                    np.sum(binary[x_min + i: x_max - i, y_max - i]) / 255) / (x_max - x_min - 2 * i) <= max_block_cross_points:
-                vacancy[3] = 1
-            if np.sum(vacancy) == 4:
-                is_block = True
-
+            try:
+                # up down
+                if vacancy[0] == 0 and (y_max - y_min - 2 * i) is not 0 and (
+                        np.sum(binary[x_min + i, y_min + i: y_max - i]) / 255) / (y_max - y_min - 2 * i) <= max_block_cross_points:
+                    vacancy[0] = 1
+                # bottom-up
+                if vacancy[1] == 0 and (y_max - y_min - 2 * i) is not 0 and (
+                        np.sum(binary[x_max - i, y_min + i: y_max - i]) / 255) / (y_max - y_min - 2 * i) <= max_block_cross_points:
+                    vacancy[1] = 1
+                # left to right
+                if vacancy[2] == 0 and (x_max - x_min - 2 * i) is not 0 and (
+                        np.sum(binary[x_min + i: x_max - i, y_min + i]) / 255) / (x_max - x_min - 2 * i) <= max_block_cross_points:
+                    vacancy[2] = 1
+                # right to left
+                if vacancy[3] == 0 and (x_max - x_min - 2 * i) is not 0 and (
+                        np.sum(binary[x_min + i: x_max - i, y_max - i]) / 255) / (x_max - x_min - 2 * i) <= max_block_cross_points:
+                    vacancy[3] = 1
+                if np.sum(vacancy) == 4:
+                    is_block = True
+            except:
+                pass
         if is_block:
             blocks.append(corner)
         else:
@@ -120,7 +122,7 @@ def img_refine2(rec_corners, max_img_edge_ratio, must_img_height, must_img_width
 # take the binary image as input
 # calculate the connected regions -> get the bounding boundaries of them -> check if those regions are rectangles
 # return all boundaries and boundaries of rectangles
-def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, is_clipping=False):
+def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, is_line_detect=False):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
@@ -135,13 +137,12 @@ def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, m
                     lines = {}  # connected lines inner boundary
                     boundary = util.get_boundary(area)
                     boundary_all.append(boundary)
-                    if util.is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio):
+                    if util.is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, is_line_detect):
                         # means this object can be divided into two sub objects connected by line
-                        if len(lines) > 0 and is_clipping:
+                        if is_line_detect and len(lines) > 0:
                             util.clipping_by_line(boundary, boundary_rec, lines)
                         else:
                             boundary_rec.append(boundary)
-    # draw.draw_test(boundary_rec, bin.shape)
     return boundary_rec, boundary_all
 
 

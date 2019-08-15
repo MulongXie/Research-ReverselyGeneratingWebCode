@@ -98,10 +98,14 @@ def clipping_by_line(boundary, boundary_rec, lines):
 # @boundary: [border_up, border_bottom, border_left, border_right]
 # -> up, bottom: (column_index, min/max row border)
 # -> left, right: (row_index, min/max column border) detect range of each row
-def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio):
-    # up, bottom: (column_index, min/max row border)
-    # left, right: (row_index, min/max column border)
-    opposite_side = [1, 0, 3, 2]
+def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, is_line_detect):
+    # check if it is line by checking the length of edges
+    if True in [len(boundary[i]) < min_line_thickness for i in range(len(boundary))]:
+        return False
+
+    opposite_side = [1, 0, 3, 2]  # opposite sides for each edges
+    dent_direction = [-1, 1, -1, 1]
+
     flat = 0
     parameter = 0
     for n, border in enumerate(boundary):
@@ -109,26 +113,32 @@ def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_
         # dent detection
         dent = 0  # length of dent
         depth = 0  # depth of dent, vector
+        if n <= 1:
+            edge = max(len(boundary[2]), len(boundary[3]))  # get maximum length of adjacent edge
+        else:
+            edge = max(len(boundary[0]), len(boundary[1]))
+
         # line detection
         head, end = -1, -1  # start and end point of a line
         line = []  # line detected
-        
+
         # -> up, bottom: (column_index, min/max row border)
         # -> left, right: (row_index, min/max column border) detect range of each row
         for i in range(len(border) - 1):
             # line detection
-            if n == 0 or n == 2:
-                gap = abs(boundary[opposite_side[n]][i][1] - border[i][1])  # distance between points of opposite sides
-                if gap < min_line_thickness:
-                    if head == -1:
-                        head = border[i][0]  # new line start
-                    else:
-                        end = border[i][0]  # existing line extend
-                if head is not -1 and (gap >= min_line_thickness or i == len(border) - 2):
-                    # line end
-                    if end - head >= min_line_length:
-                        line.append([head, end])
-                    head, end = -1, -1
+            if is_line_detect:
+                if n == 0 or n == 2:
+                    gap = abs(boundary[opposite_side[n]][i][1] - border[i][1])  # distance between points of opposite sides
+                    if gap < min_line_thickness:
+                        if head == -1:
+                            head = border[i][0]  # new line start
+                        else:
+                            end = border[i][0]  # existing line extend
+                    if head is not -1 and (gap >= min_line_thickness or i == len(border) - 2):
+                        # line end
+                        if end - head >= min_line_length:
+                            line.append([head, end])
+                        head, end = -1, -1
 
             # calculate gradient
             difference = border[i][1] - border[i + 1][1]
@@ -136,23 +146,19 @@ def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_
                 flat += 1
 
             # dent detection
-            else:
-                depth += difference
-                # get maximum length of adjacent edge
-                if n <= 1:
-                    edge = max(len(boundary[2]), len(boundary[3]))
-                else:
-                    edge = max(len(boundary[0]), len(boundary[1]))
-                # if too deep, then counted as dent
-                if abs(depth) / edge > 0.2:
-                    dent += 1
+            depth += difference
+            # if dent and too deep, then counted as dent
+            if dent_direction[n] * depth > 0 and abs(depth) / edge > 0.2:
+                dent += 1
+
         if dent / len(border) > max_dent_ratio:
             return False
 
-        if n == 0 and len(line) > 0:
-            lines['h'] = line   # horizontally
-        elif n == 2 and len(line) > 0:
-            lines['v'] = line   # vertically
+        if is_line_detect:
+            if n == 0 and len(line) > 0:
+                lines['h'] = line   # horizontally
+            elif n == 2 and len(line) > 0:
+                lines['v'] = line   # vertically
 
     # ignore text and irregular shape
     if parameter < min_rec_parameter or (flat / parameter) < min_rec_evenness:
