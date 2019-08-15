@@ -3,6 +3,7 @@ import numpy as np
 
 import ip_draw as draw
 import ip_detection_utils as util
+import ocr_classify_text as ocr
 
 
 def get_corner(boundaries):
@@ -16,13 +17,15 @@ def get_corner(boundaries):
 
 # check if the objects are img components or just block
 # return corners ((y_min, x_min),(y_max, x_max))
-def block_or_img(binary, corners, max_thickness, max_block_cross_points):
+def block_or_img(binary, corners, max_thickness, max_block_cross_points, max_img_edge_ratio):
     blocks = []
     imgs = []
     for corner in corners:
         (up_left, bottom_right) = corner
         (y_min, x_min) = up_left
         (y_max, x_max) = bottom_right
+        width = y_max - y_min
+        height = x_max - x_min
 
         is_block = False
         vacancy = [0, 0, 0, 0]
@@ -51,7 +54,9 @@ def block_or_img(binary, corners, max_thickness, max_block_cross_points):
         if is_block:
             blocks.append(corner)
         else:
-            imgs.append(corner)
+            edge_ratio = width / height if width > height else height / width
+            if edge_ratio <= max_img_edge_ratio:
+                imgs.append(corner)
     return blocks, imgs
 
 
@@ -101,22 +106,27 @@ def img_refine(binary, corners, max_thickness):
 
 
 # check the edge ratio for img components to avoid text misrecognition
-def img_refine2(rec_corners, max_img_edge_ratio, must_img_height, must_img_width):
-    refined_corners = []
-    for corner in rec_corners:
+def irregular_img(org, corners, max_img_edge_ratio, must_img_height, must_img_width, min_perimeter):
+    img_corners = []
+    for corner in corners:
         (up_left, bottom_right) = corner
         (y_min, x_min) = up_left
         (y_max, x_max) = bottom_right
-        width = y_max - y_min
         height = x_max - x_min
+        width = y_max - y_min
+        perimeter = width * 2 + height * 2
+
         # assumption: large one must be img component no matter its edge ratio
-        if height > must_img_height or width > must_img_width:
-            refined_corners.append(corner)
+        if height > must_img_height and width > must_img_width:
+            img_corners.append(corner)
         else:
-            edge_ratio = width/height if width > height else height/width
-            if edge_ratio < max_img_edge_ratio:
-                refined_corners.append(corner)
-    return refined_corners
+            if perimeter > min_perimeter:
+                # check if this area is text
+                clip = org[x_min: x_max, y_min: y_max]
+                if not ocr.is_text(clip, show=True):
+                    img_corners.append(corner)
+
+    return img_corners
 
 
 # take the binary image as input
@@ -126,6 +136,7 @@ def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, m
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
+    boundary_nonrec = []
     row, column = bin.shape[0], bin.shape[1]
 
     for i in range(row):
@@ -143,24 +154,8 @@ def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, m
                             util.clipping_by_line(boundary, boundary_rec, lines)
                         else:
                             boundary_rec.append(boundary)
-    return boundary_rec, boundary_all
+                    else:
+                        boundary_nonrec.append(boundary)
 
+    return boundary_all, boundary_rec, boundary_nonrec
 
-def text_detection(gradient, boundary_all):
-    corners_text = []
-    corners = get_corner(boundary_all)
-    for corner in corners:
-        (up_left, bottom_right) = corner
-        (y_min, x_min) = up_left
-        (y_max, x_max) = bottom_right
-        width = y_max - y_min
-        height = x_max - x_min
-
-        edge_ratio = width/height
-        if edge_ratio > 1.5 and height < 20:
-            corners_text.append(corner)
-
-        print(height)
-        print("%.3f\n" % (width/height))
-
-    return corners_text
