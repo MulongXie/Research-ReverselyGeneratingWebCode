@@ -4,18 +4,18 @@ from collections import Counter
 
 import ip_draw as draw
 
-def neighbor(img, x, y, mark, stack):
-    for i in range(x - 1, x + 2):
-        if i < 0 or i >= img.shape[0]: continue
-        for j in range(y - 1, y + 2):
-            if j < 0 or j >= img.shape[1]: continue
-            if img[i, j] == 255 and mark[i, j] == 0:
-                stack.append([i, j])
-                mark[i, j] = 255
-
 
 # detect object(connected region)
 def bfs_connected_area(img, x, y, mark):
+    def neighbor(img, x, y, mark, stack):
+        for i in range(x - 1, x + 2):
+            if i < 0 or i >= img.shape[0]: continue
+            for j in range(y - 1, y + 2):
+                if j < 0 or j >= img.shape[1]: continue
+                if img[i, j] == 255 and mark[i, j] == 0:
+                    stack.append([i, j])
+                    mark[i, j] = 255
+                    
     stack = [[x, y]]    # points waiting for inspection
     area = [[x, y]]   # points of this area
     mark[x, y] = 255    # drawing broad
@@ -142,11 +142,11 @@ def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_
 
             # calculate gradient
             difference = border[i][1] - border[i + 1][1]
-            # abnormal to be a regular shape
-            if abs(difference) / edge > 0.5:
-                return False
             if abs(difference) == 0:
                 flat += 1
+            # too abnormal to be a regular shape
+            elif abs(difference) / edge > 0.6:
+                return False
 
             # dent detection
             depth += difference

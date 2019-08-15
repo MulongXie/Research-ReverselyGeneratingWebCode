@@ -19,8 +19,8 @@ is_save = True
 input_paths = glob.glob(pyjoin(input_root, '*.png'))
 input_paths = sorted(input_paths, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
-start_index = 9868
-end_index = 10000
+start_index = 3
+end_index = 3
 
 for input_path in input_paths:
     index = input_path.split('\\')[-1][:-4]
@@ -46,15 +46,22 @@ for input_path in input_paths:
     binary = pre.preprocess(gray, 1)
 
     # *** Step 2 *** processing: get connected areas -> get boundary -> rectangle check
-    boundary_rec, boundary_all = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA,
-                                                        C.THRESHOLD_MIN_REC_PARAMETER, C.THRESHOLD_MIN_REC_EVENNESS,
-                                                        C.THRESHOLD_MAX_LINE_THICKNESS, C.THRESHOLD_MIN_LIN_LENGTH,
-                                                        C.THRESHOLD_MAX_IMG_DENT_RATIO)
+    boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA,
+                                                                         C.THRESHOLD_MIN_REC_PERIMETER,
+                                                                         C.THRESHOLD_MIN_REC_EVENNESS,
+                                                                         C.THRESHOLD_MAX_LINE_THICKNESS,
+                                                                         C.THRESHOLD_MIN_LIN_LENGTH,
+                                                                         C.THRESHOLD_MAX_IMG_DENT_RATIO)
     # get corner of boundaries -> img or block check
     corners_rec = det.get_corner(boundary_rec)
-    corners_block, corners_img = det.block_or_img(binary, corners_rec, C.THRESHOLD_MAX_BLOCK_BORDER_THICKNESS, C.THRESHOLD_MAX_BLOCK_CROSS_POINT)
-    # refine img component
-    corners_img = det.img_refine2(corners_img, C.THRESHOLD_MAX_IMG_EDGE_RATIO, C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH)
+    corners_nonrec = det.get_corner(boundary_nonrec)
+    # identify rectangular block and rectangular img from rectangular shapes
+    corners_block, corners_img = det.block_or_img(binary, corners_rec, C.THRESHOLD_MAX_BLOCK_BORDER_THICKNESS,
+                                                  C.THRESHOLD_MAX_BLOCK_CROSS_POINT, C.THRESHOLD_MAX_IMG_EDGE_RATIO)
+    # identify irregular-shape img from irregular shapes
+    corners_img += det.irregular_img(org, corners_nonrec, C.THRESHOLD_MAX_IMG_EDGE_RATIO, C.THRESHOLD_MUST_IMG_HEIGHT,
+                                     C.THRESHOLD_MUST_IMG_WIDTH, C.THRESHOLD_MIN_REC_PERIMETER, C.OCR_PADDING,
+                                     C.OCR_MIN_WORD_AREA)
 
     # *** Step 3 *** post-processing: remove img elements from original image and segment into smaller size
     img_clean = draw.draw_bounding_box(corners_img, org, (255, 255, 255), -1)
