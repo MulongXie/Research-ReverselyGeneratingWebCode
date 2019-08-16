@@ -83,7 +83,7 @@ def irregular_img(corners, must_img_height, must_img_width, text_edge_ratio, tex
 
 
 # remove imgs that contain text
-def rm_text(org, corners, ocr_padding, ocr_min_word_area, must_img_height, must_img_width, show=False):
+def rm_text(org, corners,  must_img_height, must_img_width, ocr_padding, ocr_min_word_area, show=False):
     new_corners = []
     for corner in corners:
         (up_left, bottom_right) = corner
@@ -123,7 +123,7 @@ def rm_inner_rec(corners):
 # take the binary image as input
 # calculate the connected regions -> get the bounding boundaries of them -> check if those regions are rectangles
 # return all boundaries and boundaries of rectangles
-def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, detect_line=False):
+def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_line_thickness, min_line_length, min_rec_evenness, max_dent_ratio, detect_line=False):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
