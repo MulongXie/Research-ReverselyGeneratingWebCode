@@ -15,7 +15,7 @@ is_save = True
 start = time.clock()
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/5.png', (0, 500))  # cut out partial img
+org, gray = pre.read_img('input/16.png', (0, 1000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 
@@ -35,6 +35,8 @@ corners_block, corners_img = det.block_or_img(org, binary, corners_rec,
 corners_img += det.irregular_img(org, corners_nonrec,
                                  C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH,   # img assertion
                                  C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)      # ignore text area
+# merge overlapped corners, and remove nested corners
+corners_img = det.merge_corners(corners_img)
 # remove text area
 corners_block = det.rm_text(org, corners_block,
                             C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH,    # img assertion

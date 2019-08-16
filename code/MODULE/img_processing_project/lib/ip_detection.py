@@ -9,49 +9,13 @@ import ocr_classify_text as ocr
 # @corners: [(top_left, bottom_right)]
 # -> top_left: (column_min, row_min)
 # -> bottom_right: (column_max, row_max)
-def get_corner(boundaries, merge=True):
-
-    def merge_overlapped(corner_a, corner_b):
-        (up_left_a, bottom_right_a) = corner_a
-        (y_min_a, x_min_a) = up_left_a
-        (y_max_a, x_max_a) = bottom_right_a
-        (up_left_b, bottom_right_b) = corner_b
-        (y_min_b, x_min_b) = up_left_b
-        (y_max_b, x_max_b) = bottom_right_b
-
-        y_min = min(y_min_a, y_min_b)
-        y_max = max(y_max_a, y_max_b)
-        x_min = min(x_min_a, x_min_b)
-        x_max = max(x_max_a, x_max_b)
-        return ((y_min, x_min), (y_max, x_max))
-
+def get_corner(boundaries):
     corners = []
     for boundary in boundaries:
         top_left = (boundary[0][0][0], boundary[2][0][0])
         bottom_right = (boundary[1][-1][0], boundary[3][-1][0])
         corner = (top_left, bottom_right)
-        is_intersected = False
-
-        # i. merge overlapped corners
-        # ii. remove nested corners
-        if merge:
-            for i in range(len(corners)):
-                r = util.relation(corner, corners[i])
-                # if overlapped, merge into larger one
-                if r == 2:
-                    corners[i] = merge_overlapped(corner, corners[i])
-                    is_intersected = True
-                # corners[i] is in corner, replace corners[i] with corner
-                elif r == 1:
-                    corners[i] = corner
-                    is_intersected = True
-                # corner is in corners[i], ignore corner
-                elif r == -1:
-                    is_intersected = True
-                    break
-
-        if not is_intersected:
-            corners.append(corner)
+        corners.append(corner)
 
     return corners
 
@@ -140,22 +104,46 @@ def rm_text(org, corners, must_img_height, must_img_width, ocr_padding, ocr_min_
     return new_corners
 
 
-# remove imgs that are in others
-def rm_inner_rec(corners):
-    inner = np.full((len(corners), 1), False)
-    for i in range(len(corners)):
-        for j in range(i+1, len(corners)):
-            # if [i] is in [j]
-            if util.relation(corners[i], corners[j]) == -1:
-                inner[i] = True
-            # if [j] is in [i]
-            elif util.relation(corners[i], corners[j]) == 1:
-                inner[j] = True
-    refined_corners = []
-    for i in range(len(inner)):
-        if not inner[i]:
-            refined_corners.append(corners[i])
-    return refined_corners
+# i. merge overlapped corners
+# ii. remove nested corners
+def merge_corners(corners):
+
+    def merge_overlapped(corner_a, corner_b):
+        (up_left_a, bottom_right_a) = corner_a
+        (y_min_a, x_min_a) = up_left_a
+        (y_max_a, x_max_a) = bottom_right_a
+        (up_left_b, bottom_right_b) = corner_b
+        (y_min_b, x_min_b) = up_left_b
+        (y_max_b, x_max_b) = bottom_right_b
+
+        y_min = min(y_min_a, y_min_b)
+        y_max = max(y_max_a, y_max_b)
+        x_min = min(x_min_a, x_min_b)
+        x_max = max(x_max_a, x_max_b)
+        return ((y_min, x_min), (y_max, x_max))
+
+    new_corners = []
+    is_intersected = False
+    for corner in corners:
+        for i in range(len(new_corners)):
+            r = util.relation(corner, new_corners[i])
+            # if corner is in new_corners[i], ignore corner
+            if r == -1:
+                is_intersected = True
+                break
+            # if new_corners[i] is in corner, replace corners[i] with corner
+            elif r == 1:
+                is_intersected = True
+                new_corners[i] = corner
+            # if [i] and [j] are overlapped
+            elif r == 2:
+                is_intersected = True
+                new_corners[i] = merge_overlapped(corner, new_corners[i])
+
+        if not is_intersected:
+            new_corners.append(corner)
+            
+    return new_corners
 
 
 # take the binary image as input
