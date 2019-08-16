@@ -30,11 +30,12 @@ corners_nonrec = det.get_corner(boundary_nonrec)
 # identify rectangular block and rectangular img from rectangular shapes
 corners_block, corners_img = det.block_or_img(binary, corners_rec, C.THRESHOLD_MAX_BLOCK_BORDER_THICKNESS,
                                               C.THRESHOLD_MAX_BLOCK_CROSS_POINT, C.THRESHOLD_MAX_IMG_EDGE_RATIO)
+corners_block = det.rm_text(org, corners_block, C.OCR_PADDING, C.OCR_MIN_WORD_AREA, C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH)
 # identify irregular-shape img from irregular shapes
 corners_img += det.irregular_img(org, corners_nonrec, C.THRESHOLD_MAX_IMG_EDGE_RATIO, C.THRESHOLD_MUST_IMG_HEIGHT,
                                  C.THRESHOLD_MUST_IMG_WIDTH, C.THRESHOLD_MIN_REC_PERIMETER, C.OCR_PADDING,
                                  C.OCR_MIN_WORD_AREA)
-
+corners_img = det.rm_text(org, corners_img, C.OCR_PADDING, C.OCR_MIN_WORD_AREA, C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH)
 corners_img = det.rm_inner_rec(corners_img)
 
 

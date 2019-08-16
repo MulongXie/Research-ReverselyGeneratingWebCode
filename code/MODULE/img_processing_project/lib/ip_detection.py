@@ -75,12 +75,29 @@ def irregular_img(org, corners, max_img_edge_ratio, must_img_height, must_img_wi
         if height > must_img_height and width > must_img_width:
             img_corners.append(corner)
         else:
-            if perimeter > min_perimeter and width/height < max_img_edge_ratio:
-                # check if this area is text
-                clip = org[x_min-ocr_padding: x_max+ocr_padding, y_min-ocr_padding: y_max+ocr_padding]
-                if not ocr.is_text(clip, ocr_min_word_area, show=False):
-                    img_corners.append(corner)
+            if width/height < max_img_edge_ratio:
+                img_corners.append(corner)
     return img_corners
+
+
+# remove imgs that contain text
+def rm_text(org, corners, ocr_padding, ocr_min_word_area, must_img_height, must_img_width, show=False):
+    new_corners = []
+    for corner in corners:
+        (up_left, bottom_right) = corner
+        (y_min, x_min) = up_left
+        (y_max, x_max) = bottom_right
+        height = x_max - x_min
+        width = y_max - y_min
+        # highly likely to be block or img if too large
+        if height > must_img_height and width > must_img_width:
+            new_corners.append(corner)
+        else:
+            # check if this area is text
+            clip = org[x_min - ocr_padding: x_max + ocr_padding, y_min - ocr_padding: y_max + ocr_padding]
+            if not ocr.is_text(clip, ocr_min_word_area, show=show):
+                new_corners.append(corner)
+    return new_corners
 
 
 # remove imgs that are in others
