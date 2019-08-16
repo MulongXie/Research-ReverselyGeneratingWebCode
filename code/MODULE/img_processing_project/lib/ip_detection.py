@@ -16,8 +16,24 @@ def get_corner(boundaries):
         bottom_right = (max(boundary[0][0][0], boundary[1][-1][0]), max(boundary[2][0][0], boundary[3][-1][0]))
         corner = (top_left, bottom_right)
         corners.append(corner)
-
     return corners
+
+
+def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio):
+    compos = []
+    blocks = []
+    for corner in corners:
+        (up_left, bottom_right) = corner
+        (y_min, x_min) = up_left
+        (y_max, x_max) = bottom_right
+        height = x_max - x_min
+        width = y_max - y_min
+
+        if height <= compo_max_height and width/height >= compo_min_edge_ratio:
+            compos.append(corner)
+        else:
+            blocks.append(corner)
+    return blocks, compos
 
 
 # check if the objects are img components or just block
@@ -94,7 +110,6 @@ def img_refine(org_shape, corners, max_img_height_ratio, text_edge_ratio, text_h
         elif height <= text_height and width / height > text_edge_ratio:
             continue
         refined_imgs.append(corner)
-
     return refined_imgs
 
 
@@ -160,25 +175,7 @@ def merge_corners(corners):
 
         if not is_intersected:
             new_corners.append(corner)
-
     return new_corners
-
-
-def uicomponent_or_block(corners, compo_max_height, compo_min_edge_ratio):
-    compos = []
-    blocks = []
-    for corner in corners:
-        (up_left, bottom_right) = corner
-        (y_min, x_min) = up_left
-        (y_max, x_max) = bottom_right
-        height = x_max - x_min
-        width = y_max - y_min
-
-        if height <= compo_max_height and width/height >= compo_min_edge_ratio:
-            compos.append(corner)
-        else:
-            blocks.append(corners)
-    return blocks, compos
 
 
 # take the binary image as input
@@ -220,5 +217,4 @@ def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_line_thickness,
                     boundary_rec.append(boundary)
                 else:
                     boundary_nonrec.append(boundary)
-
     return boundary_all, boundary_rec, boundary_nonrec

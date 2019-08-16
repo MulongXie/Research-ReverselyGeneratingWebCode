@@ -136,10 +136,10 @@ def is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
             # if dent and too deep, then counted as dent
             if dent_direction[n] * depth > 0 and abs(depth) / edge > 0.2:
                 dent += 1
-
         if dent / len(border) > max_dent_ratio:
             return False
 
+    # print('flat:', (flat / parameter))
     # ignore text and irregular shape
     if (flat / parameter) < min_rec_evenness:
         return False
