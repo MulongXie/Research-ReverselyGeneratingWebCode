@@ -6,12 +6,41 @@ import ip_detection_utils as util
 import ocr_classify_text as ocr
 
 
-def get_corner(boundaries):
+# @corners: [(top_left, bottom_right)]
+# -> top_left: (column_min, row_min)
+# -> bottom_right: (column_max, row_max)
+def get_corner(boundaries, merge=True):
+
+    def merge_overlapped(corner_a, corner_b):
+        (up_left_a, bottom_right_a) = corner_a
+        (y_min_a, x_min_a) = up_left_a
+        (y_max_a, x_max_a) = bottom_right_a
+        (up_left_b, bottom_right_b) = corner_b
+        (y_min_b, x_min_b) = up_left_b
+        (y_max_b, x_max_b) = bottom_right_b
+
+        y_min = min(y_min_a, y_min_b)
+        y_max = max(y_max_a, y_max_b)
+        x_min = min(x_min_a, x_min_b)
+        x_max = max(x_max_a, x_max_b)
+
+        return ((y_min, x_min), (y_max, x_max))
+
     corners = []
     for boundary in boundaries:
-        up_left = (boundary[0][0][0], boundary[2][0][0])
+        top_left = (boundary[0][0][0], boundary[2][0][0])
         bottom_right = (boundary[1][-1][0], boundary[3][-1][0])
-        corners.append((up_left, bottom_right))
+        corner = (top_left, bottom_right)
+        is_ovlp = False
+
+        if merge:
+            for i in range(len(corners)):
+                if util.relation(corner, corners[i]) == 2:
+                    corners[i] = merge_overlapped(corner, corners[i])
+                    is_ovlp = True
+        if not is_ovlp:
+            corners.append(corner)
+
     return corners
 
 
@@ -105,10 +134,10 @@ def rm_inner_rec(corners):
     for i in range(len(corners)):
         for j in range(i+1, len(corners)):
             # if [i] is in [j]
-            if util.contain(corners[i], corners[j]) == -1:
+            if util.relation(corners[i], corners[j]) == -1:
                 inner[i] = True
             # if [j] is in [i]
-            elif util.contain(corners[i], corners[j]) == 1:
+            elif util.relation(corners[i], corners[j]) == 1:
                 inner[j] = True
     refined_corners = []
     for i in range(len(inner)):
@@ -120,6 +149,9 @@ def rm_inner_rec(corners):
 # take the binary image as input
 # calculate the connected regions -> get the bounding boundaries of them -> check if those regions are rectangles
 # return all boundaries and boundaries of rectangles
+# @boundary: [top, bottom, left, right]
+# -> up, bottom: (column_index, min/max row border)
+# -> left, right: (row_index, min/max column border) detect range of each row
 def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_line_thickness, min_line_length, min_rec_evenness, max_dent_ratio):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
@@ -148,6 +180,7 @@ def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_line_thickness,
                 if util.is_line(boundary, min_line_thickness):
                     continue
 
+                # rectangle check
                 if util.is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
                     boundary_rec.append(boundary)
                 else:

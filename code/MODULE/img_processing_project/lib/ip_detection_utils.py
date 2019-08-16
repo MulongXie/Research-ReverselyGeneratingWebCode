@@ -146,7 +146,10 @@ def is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
     return True
 
 
-def contain(corner_a, corner_b):
+# @corners: [(top_left, bottom_right)]
+# -> top_left: (column_min, row_min)
+# -> bottom_right: (column_max, row_max)
+def relation(corner_a, corner_b):
     (up_left_a, bottom_right_a) = corner_a
     (y_min_a, x_min_a) = up_left_a
     (y_max_a, x_max_a) = bottom_right_a
@@ -160,5 +163,9 @@ def contain(corner_a, corner_b):
     # if b is in a
     elif y_min_a < y_min_b and x_min_a < x_min_b and y_max_a > y_max_b and x_max_a > x_max_b:
         return 1
-    return 0
-
+    # a and b are non-intersect
+    elif (y_min_a > y_max_b or x_min_a > x_max_b) or (y_min_b > y_max_a or x_min_b > x_max_a):
+        return 0
+    # intersection
+    else:
+        return 2
