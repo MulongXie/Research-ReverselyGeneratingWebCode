@@ -105,7 +105,7 @@ def is_line(boundary, min_line_thickness):
 # @boundary: [border_up, border_bottom, border_left, border_right]
 # -> up, bottom: (column_index, min/max row border)
 # -> left, right: (row_index, min/max column border) detect range of each row
-def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, is_line_detect):
+def is_rectangle(boundary, lines, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, is_line_detect):
     opposite_side = [1, 0, 3, 2]  # opposite sides for each edges
     dent_direction = [-1, 1, -1, 1]
 
@@ -167,7 +167,7 @@ def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_
                 lines['v'] = line  # vertically
 
     # ignore text and irregular shape
-    if parameter < min_rec_parameter or (flat / parameter) < min_rec_evenness:
+    if (flat / parameter) < min_rec_evenness:
         return False
     return True
 

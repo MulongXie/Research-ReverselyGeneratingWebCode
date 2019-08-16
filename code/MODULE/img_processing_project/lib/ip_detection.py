@@ -55,8 +55,8 @@ def block_or_img(binary, corners, max_thickness, max_block_cross_points, max_img
             blocks.append(corner)
         else:
             edge_ratio = width / height if width > height else height / width
-            if edge_ratio <= max_img_edge_ratio:
-                imgs.append(corner)
+            # if edge_ratio <= max_img_edge_ratio:
+            imgs.append(corner)
     return blocks, imgs
 
 
@@ -131,12 +131,15 @@ def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_rec_evenness, m
     for i in range(row):
         for j in range(column):
             if bin[i, j] == 255 and mark[i, j] == 0:
+                # get connected area
                 area = util.bfs_connected_area(bin, i, j, mark)
-                # ignore all small area
+                # ignore small area
                 if len(area) < min_obj_area:
                     continue
 
+                # calculate the boundary of the connected area
                 boundary = util.get_boundary(area)
+                # ignore small area
                 perimeter = np.sum([len(b) for b in boundary])
                 if perimeter < min_obj_perimeter:
                     continue
@@ -147,7 +150,7 @@ def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_rec_evenness, m
                     continue
 
                 lines = {}  # connected lines inner boundary
-                if util.is_rectangle(boundary, lines, min_obj_perimeter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, detect_line):
+                if util.is_rectangle(boundary, lines, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, detect_line):
                     # means this object can be divided into two sub objects connected by line
                     if detect_line and len(lines) > 0:
                         util.clipping_by_line(boundary, boundary_rec, lines)
