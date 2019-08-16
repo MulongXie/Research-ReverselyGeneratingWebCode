@@ -7,8 +7,11 @@ def is_text(img, min_word_area, show=False):
     area_word = 0
     area_total = img.shape[0] * img.shape[1]
 
-    # ocr text detection
-    data = pyt.image_to_data(img).split('\n')
+    try:
+        # ocr text detection
+        data = pyt.image_to_data(img).split('\n')
+    except:
+        return -1
     word = []
     for d in data[1:]:
         d = d.split()
@@ -23,7 +26,7 @@ def is_text(img, min_word_area, show=False):
 
     if show:
         for d in word: print(d)
-        print(area_word, area_total)
+        print(area_word/area_total, img.shape[0], img.shape[1]/img.shape[0])
         cv2.imshow('a', broad)
         cv2.waitKey(0)
         cv2.destroyAllWindows()

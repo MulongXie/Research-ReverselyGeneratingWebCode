@@ -17,7 +17,7 @@ def get_corner(boundaries):
 
 # check if the objects are img components or just block
 # return corners ((y_min, x_min),(y_max, x_max))
-def block_or_img(binary, corners, max_thickness, max_block_cross_points, text_edge_ratio, text_height):
+def block_or_img(org, binary, corners, max_thickness, max_block_cross_points, text_edge_ratio, text_height):
     blocks = []
     imgs = []
     for corner in corners:
@@ -54,17 +54,15 @@ def block_or_img(binary, corners, max_thickness, max_block_cross_points, text_ed
         if is_block:
             blocks.append(corner)
         else:
-            edge_ratio = width / height if width > height else height / width
             # likely to be text, ignore
-            if edge_ratio > text_edge_ratio and height <= text_height:
-                continue
-            imgs.append(corner)
+            if not (height <= text_height and width/height > text_edge_ratio):
+                imgs.append(corner)
     return blocks, imgs
 
 
 # check the edge ratio for img components to avoid text misrecognition
-def irregular_img(corners, must_img_height, must_img_width, text_edge_ratio, text_height):
-    img_corners = []
+def irregular_img(org, corners, must_img_height, must_img_width, text_edge_ratio, text_height):
+    imgs = []
     for corner in corners:
         (up_left, bottom_right) = corner
         (y_min, x_min) = up_left
@@ -73,17 +71,16 @@ def irregular_img(corners, must_img_height, must_img_width, text_edge_ratio, tex
         width = y_max - y_min
         # assumption: large one must be img component no matter its edge ratio
         if height > must_img_height and width > must_img_width:
-            img_corners.append(corner)
+            imgs.append(corner)
         else:
             # likely to be text, ignore
-            if width/height > text_edge_ratio and height <= text_height:
-                continue
-            img_corners.append(corner)
-    return img_corners
+            if not(height <= text_height and width/height > text_edge_ratio):
+                imgs.append(corner)
+    return imgs
 
 
 # remove imgs that contain text
-def rm_text(org, corners,  must_img_height, must_img_width, ocr_padding, ocr_min_word_area, show=False):
+def rm_text(org, corners, must_img_height, must_img_width, ocr_padding, ocr_min_word_area, show=False):
     new_corners = []
     for corner in corners:
         (up_left, bottom_right) = corner

@@ -26,8 +26,8 @@ class Config:
         self.THRESHOLD_MIN_LINE_THICKNESS = 5
         self.THRESHOLD_MIN_LINE_LENGTH = 10
 
-        self.THRESHOLD_TEXT_EDGE_RATIO = 3
-        self.THRESHOLD_TEXT_HEIGHT = 50
+        self.THRESHOLD_TEXT_EDGE_RATIO = 2.5
+        self.THRESHOLD_TEXT_HEIGHT = 20
 
         self.OCR_PADDING = 3
         self.OCR_MIN_WORD_AREA = 0.2

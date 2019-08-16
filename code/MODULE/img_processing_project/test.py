@@ -1,7 +1,7 @@
 import pytesseract as pyt
 import cv2
 
-img = cv2.imread('input/g.png')
+img = cv2.imread('input/y.png')
 # img = cv2.resize(img, (600, 400))
 org = img.copy()
 data = pyt.image_to_data(img)
