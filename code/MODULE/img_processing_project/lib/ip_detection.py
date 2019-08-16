@@ -22,15 +22,13 @@ def get_corner(boundaries):
 
 # check if the objects are img components or just block
 # return corners ((y_min, x_min),(y_max, x_max))
-def block_or_img(org, binary, corners, max_thickness, max_block_cross_points, text_edge_ratio, text_height):
+def img_or_block(org, binary, corners, max_thickness, max_block_cross_points):
     blocks = []
     imgs = []
     for corner in corners:
         (up_left, bottom_right) = corner
         (y_min, x_min) = up_left
         (y_max, x_max) = bottom_right
-        width = y_max - y_min
-        height = x_max - x_min
 
         is_block = False
         vacancy = [0, 0, 0, 0]
@@ -52,21 +50,19 @@ def block_or_img(org, binary, corners, max_thickness, max_block_cross_points, te
                 if vacancy[3] == 0 and (x_max - x_min - 2 * i) is not 0 and (
                         np.sum(binary[x_min + i: x_max - i, y_max - i]) / 255) / (x_max - x_min - 2 * i) <= max_block_cross_points:
                     vacancy[3] = 1
-                if np.sum(vacancy) == 4:
+                if np.sum(vacancy) >= 3:
                     is_block = True
             except:
                 pass
         if is_block:
             blocks.append(corner)
         else:
-            # likely to be text, ignore
-            if not (height <= text_height and width/height > text_edge_ratio):
-                imgs.append(corner)
+            imgs.append(corner)
     return blocks, imgs
 
 
 # check the edge ratio for img components to avoid text misrecognition
-def irregular_img(org, corners, must_img_height, must_img_width, text_edge_ratio, text_height):
+def img_irregular(org, corners, must_img_height, must_img_width):
     imgs = []
     for corner in corners:
         (up_left, bottom_right) = corner
@@ -77,11 +73,29 @@ def irregular_img(org, corners, must_img_height, must_img_width, text_edge_ratio
         # assumption: large one must be img component no matter its edge ratio
         if height > must_img_height and width > must_img_width:
             imgs.append(corner)
-        else:
-            # likely to be text, ignore
-            if not(height <= text_height and width/height > text_edge_ratio):
-                imgs.append(corner)
     return imgs
+
+
+def img_refine(org_shape, corners, max_img_height_ratio, text_edge_ratio, text_height):
+    img_height, img_width = org_shape[:2]
+
+    refined_imgs = []
+    for corner in corners:
+        (up_left, bottom_right) = corner
+        (y_min, x_min) = up_left
+        (y_max, x_max) = bottom_right
+        height = x_max - x_min
+        width = y_max - y_min
+
+        # ignore too large ones
+        if height / img_height > max_img_height_ratio:
+            continue
+        # likely to be text, ignore
+        elif height <= text_height and width / height > text_edge_ratio:
+            continue
+        refined_imgs.append(corner)
+
+    return refined_imgs
 
 
 # remove imgs that contain text

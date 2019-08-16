@@ -28,13 +28,15 @@ boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary,
 corners_rec = det.get_corner(boundary_rec)
 corners_nonrec = det.get_corner(boundary_nonrec)
 # identify rectangular block and rectangular img from rectangular shapes
-corners_block, corners_img = det.block_or_img(org, binary, corners_rec,
-                                              C.THRESHOLD_MAX_BLOCK_BORDER_THICKNESS, C.THRESHOLD_MAX_BLOCK_CROSS_POINT,  # block check
-                                              C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)                       # ignore text area
+corners_block, corners_img = det.img_or_block(org, binary, corners_rec,
+                                              C.THRESHOLD_MAX_BLOCK_BORDER_THICKNESS, C.THRESHOLD_MAX_BLOCK_CROSS_POINT)  # block check
 # identify irregular-shape img from irregular shapes
-corners_img += det.irregular_img(org, corners_nonrec,
-                                 C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH,   # img assertion
-                                 C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)      # ignore text area
+corners_img += det.img_irregular(org, corners_nonrec,
+                                 C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH)   # img assertion
+# ignore too large and highly likely text areas
+corners_img = det.img_refine(org.shape, corners_img,
+                             C.THRESHOLD_MAX_IMG_HEIGHT_RATIO,                      # ignore too large imgs
+                             C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
 # merge overlapped corners, and remove nested corners
 corners_img = det.merge_corners(corners_img)
 # remove text area

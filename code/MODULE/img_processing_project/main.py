@@ -55,19 +55,21 @@ for input_path in input_paths:
     corners_rec = det.get_corner(boundary_rec)
     corners_nonrec = det.get_corner(boundary_nonrec)
     # identify rectangular block and rectangular img from rectangular shapes
-    corners_block, corners_img = det.block_or_img(org, binary, corners_rec,
-                                                  C.THRESHOLD_MAX_BLOCK_BORDER_THICKNESS, C.THRESHOLD_MAX_BLOCK_CROSS_POINT,  # block check
-                                                  C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)                       # ignore text area
+    corners_block, corners_img = det.img_or_block(org, binary, corners_rec,
+                                                  C.THRESHOLD_MAX_BLOCK_BORDER_THICKNESS, C.THRESHOLD_MAX_BLOCK_CROSS_POINT)  # block check
     # identify irregular-shape img from irregular shapes
-    corners_img += det.irregular_img(org, corners_nonrec,
-                                     C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH,  # img assertion
-                                     C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)     # ignore text area
+    corners_img += det.img_irregular(org, corners_nonrec,
+                                     C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH)  # img assertion
+    # ignore too large and highly likely text areas
+    corners_img = det.img_refine(org.shape, corners_img,
+                                 C.THRESHOLD_MAX_IMG_HEIGHT_RATIO,                      # ignore too large imgs
+                                 C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
     # merge overlapped corners, and remove nested corners
     corners_img = det.merge_corners(corners_img)
     # remove text area
     corners_block = det.rm_text(org, corners_block,
                                 C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH,  # img assertion
-                                C.OCR_PADDING, C.OCR_MIN_WORD_AREA)                       # ignore text area
+                                C.OCR_PADDING, C.OCR_MIN_WORD_AREA)                       # ignore text areas
     corners_img = det.rm_text(org, corners_img,
                               C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH,  # img assertion
                               C.OCR_PADDING, C.OCR_MIN_WORD_AREA)                       # ignore text area
@@ -78,9 +80,10 @@ for input_path in input_paths:
     # draw results
     draw_bounding = draw.draw_bounding_box(corners_block, org, (0, 255, 0))
     draw_bounding = draw.draw_bounding_box(corners_img, draw_bounding, (0, 0, 255))
-    # draw_boundary = draw.draw_boundary(boundary_rec, org.shape)
+    draw_boundary = draw.draw_boundary(boundary_rec, org.shape)
     # save results
     if is_save:
+        cv2.imwrite('output/b.png', draw_boundary)
         cv2.imwrite(out_img_draw, draw_bounding)
         cv2.imwrite(out_img_gradient, binary)
         cv2.imwrite(out_img_clean, img_clean)
