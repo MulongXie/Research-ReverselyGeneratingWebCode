@@ -17,7 +17,7 @@ def get_corner(boundaries):
 
 # check if the objects are img components or just block
 # return corners ((y_min, x_min),(y_max, x_max))
-def block_or_img(binary, corners, max_thickness, max_block_cross_points, max_img_edge_ratio):
+def block_or_img(binary, corners, max_thickness, max_block_cross_points, text_edge_ratio, text_height):
     blocks = []
     imgs = []
     for corner in corners:
@@ -55,13 +55,15 @@ def block_or_img(binary, corners, max_thickness, max_block_cross_points, max_img
             blocks.append(corner)
         else:
             edge_ratio = width / height if width > height else height / width
-            # if edge_ratio <= max_img_edge_ratio:
+            # likely to be text, ignore
+            if edge_ratio > text_edge_ratio and height <= text_height:
+                continue
             imgs.append(corner)
     return blocks, imgs
 
 
 # check the edge ratio for img components to avoid text misrecognition
-def irregular_img(org, corners, max_img_edge_ratio, must_img_height, must_img_width, min_perimeter, ocr_padding, ocr_min_word_area):
+def irregular_img(corners, must_img_height, must_img_width, text_edge_ratio, text_height):
     img_corners = []
     for corner in corners:
         (up_left, bottom_right) = corner
@@ -69,14 +71,14 @@ def irregular_img(org, corners, max_img_edge_ratio, must_img_height, must_img_wi
         (y_max, x_max) = bottom_right
         height = x_max - x_min
         width = y_max - y_min
-        perimeter = width * 2 + height * 2
-
         # assumption: large one must be img component no matter its edge ratio
         if height > must_img_height and width > must_img_width:
             img_corners.append(corner)
         else:
-            if width/height < max_img_edge_ratio:
-                img_corners.append(corner)
+            # likely to be text, ignore
+            if width/height > text_edge_ratio and height <= text_height:
+                continue
+            img_corners.append(corner)
     return img_corners
 
 

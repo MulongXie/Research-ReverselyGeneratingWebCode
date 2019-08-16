@@ -21,7 +21,7 @@ binary = pre.preprocess(gray, 1)
 
 # *** Step 2 *** processing: get connected areas -> get boundary -> rectangle check
 boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary, C.THRESHOLD_MIN_OBJ_AREA,
-                                                        C.THRESHOLD_MIN_REC_PERIMETER, C.THRESHOLD_MIN_REC_EVENNESS,
+                                                        C.THRESHOLD_MIN_OBJ_PERIMETER, C.THRESHOLD_MIN_REC_EVENNESS,
                                                         C.THRESHOLD_MIN_LINE_THICKNESS, C.THRESHOLD_MIN_LINE_LENGTH,
                                                         C.THRESHOLD_MAX_IMG_DENT_RATIO)
 # get corner of boundaries -> img or block check
@@ -29,13 +29,15 @@ corners_rec = det.get_corner(boundary_rec)
 corners_nonrec = det.get_corner(boundary_nonrec)
 # identify rectangular block and rectangular img from rectangular shapes
 corners_block, corners_img = det.block_or_img(binary, corners_rec, C.THRESHOLD_MAX_BLOCK_BORDER_THICKNESS,
-                                              C.THRESHOLD_MAX_BLOCK_CROSS_POINT, C.THRESHOLD_MAX_IMG_EDGE_RATIO)
-corners_block = det.rm_text(org, corners_block, C.OCR_PADDING, C.OCR_MIN_WORD_AREA, C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH)
+                                              C.THRESHOLD_MAX_BLOCK_CROSS_POINT, C.THRESHOLD_TEXT_EDGE_RATIO,
+                                              C.THRESHOLD_TEXT_HEIGHT)
+corners_block = det.rm_text(org, corners_block, C.OCR_PADDING, C.OCR_MIN_WORD_AREA, C.THRESHOLD_MUST_IMG_HEIGHT,
+                            C.THRESHOLD_MUST_IMG_WIDTH)
 # identify irregular-shape img from irregular shapes
-corners_img += det.irregular_img(org, corners_nonrec, C.THRESHOLD_MAX_IMG_EDGE_RATIO, C.THRESHOLD_MUST_IMG_HEIGHT,
-                                 C.THRESHOLD_MUST_IMG_WIDTH, C.THRESHOLD_MIN_REC_PERIMETER, C.OCR_PADDING,
-                                 C.OCR_MIN_WORD_AREA)
-corners_img = det.rm_text(org, corners_img, C.OCR_PADDING, C.OCR_MIN_WORD_AREA, C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH)
+corners_img += det.irregular_img(corners_nonrec, C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH,
+                                 C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)
+corners_img = det.rm_text(org, corners_img, C.OCR_PADDING, C.OCR_MIN_WORD_AREA, C.THRESHOLD_MUST_IMG_HEIGHT,
+                          C.THRESHOLD_MUST_IMG_WIDTH)
 corners_img = det.rm_inner_rec(corners_img)
 
 
