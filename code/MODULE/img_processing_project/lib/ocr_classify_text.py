@@ -11,6 +11,7 @@ def is_text(img, min_word_area, show=False):
         # ocr text detection
         data = pyt.image_to_data(img).split('\n')
     except:
+        print(img.shape)
         return -1
     word = []
     for d in data[1:]:

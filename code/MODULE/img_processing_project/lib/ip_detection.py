@@ -12,8 +12,8 @@ import ocr_classify_text as ocr
 def get_corner(boundaries):
     corners = []
     for boundary in boundaries:
-        top_left = (boundary[0][0][0], boundary[2][0][0])
-        bottom_right = (boundary[1][-1][0], boundary[3][-1][0])
+        top_left = (min(boundary[0][0][0], boundary[1][-1][0]), min(boundary[2][0][0], boundary[3][-1][0]))
+        bottom_right = (max(boundary[0][0][0], boundary[1][-1][0]), max(boundary[2][0][0], boundary[3][-1][0]))
         corner = (top_left, bottom_right)
         corners.append(corner)
 
@@ -111,8 +111,12 @@ def rm_text(org, corners, must_img_height, must_img_width, ocr_padding, ocr_min_
         if height > must_img_height and width > must_img_width:
             new_corners.append(corner)
         else:
+            x_min = x_min - ocr_padding if x_min - ocr_padding >= 0 else 0
+            x_max = x_max + ocr_padding if x_max + ocr_padding < org.shape[0] else org.shape[0]
+            y_min = y_min - ocr_padding if y_min - ocr_padding >= 0 else 0
+            y_max = y_max + ocr_padding if y_max + ocr_padding < org.shape[1] else org.shape[1]
             # check if this area is text
-            clip = org[x_min - ocr_padding: x_max + ocr_padding, y_min - ocr_padding: y_max + ocr_padding]
+            clip = org[x_min: x_max, y_min: y_max]
             if not ocr.is_text(clip, ocr_min_word_area, show=show):
                 new_corners.append(corner)
     return new_corners
@@ -160,13 +164,30 @@ def merge_corners(corners):
     return new_corners
 
 
+def uicomponent_or_block(corners, compo_max_height, compo_min_edge_ratio):
+    compos = []
+    blocks = []
+    for corner in corners:
+        (up_left, bottom_right) = corner
+        (y_min, x_min) = up_left
+        (y_max, x_max) = bottom_right
+        height = x_max - x_min
+        width = y_max - y_min
+
+        if height <= compo_max_height and width/height >= compo_min_edge_ratio:
+            compos.append(corner)
+        else:
+            blocks.append(corners)
+    return blocks, compos
+
+
 # take the binary image as input
 # calculate the connected regions -> get the bounding boundaries of them -> check if those regions are rectangles
 # return all boundaries and boundaries of rectangles
 # @boundary: [top, bottom, left, right]
 # -> up, bottom: (column_index, min/max row border)
 # -> left, right: (row_index, min/max column border) detect range of each row
-def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_line_thickness, min_line_length, min_rec_evenness, max_dent_ratio):
+def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_line_thickness, min_rec_evenness, max_dent_ratio):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []

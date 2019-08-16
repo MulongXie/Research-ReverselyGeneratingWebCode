@@ -1,37 +1,32 @@
-# i. merge overlapped corners
-# ii. remove nested corners
-def merge_corners(corners):
+import cv2
+import numpy as np
+def nothing(x):
+    pass
 
-    def merge_overlapped(corner_a, corner_b):
-        (up_left_a, bottom_right_a) = corner_a
-        (y_min_a, x_min_a) = up_left_a
-        (y_max_a, x_max_a) = bottom_right_a
-        (up_left_b, bottom_right_b) = corner_b
-        (y_min_b, x_min_b) = up_left_b
-        (y_max_b, x_max_b) = bottom_right_b
+#创建一个黑色图像
+img = np.zeros((300,512,3),np.uint8)
+cv2.namedWindow('image')
 
-        y_min = min(y_min_a, y_min_b)
-        y_max = max(y_max_a, y_max_b)
-        x_min = min(x_min_a, x_min_b)
-        x_max = max(x_max_a, x_max_b)
-        return ((y_min, x_min), (y_max, x_max))
+cv2.createTrackbar('B','image',0,255,nothing)
+cv2.createTrackbar('G','image',0,255,nothing)
+cv2.createTrackbar('R','image',0,255,nothing)
 
-    merged_corners = []
-    inner = np.full((len(corners), 1), False)
-    for i in range(len(corners)):
-        for j in range(i+1, len(corners)):
-            r = util.relation(corners[i], corners[j])
-            # if [i] is in [j]
-            if r == -1:
-                inner[i] = True
-            # if [j] is in [i]
-            elif r == 1:
-                inner[j] = True
-            # if [i] and [j] are overlapped
-            elif r == 2:
-                merged_corners.append(merge_overlapped(corners[i], corners[j]))
+switch = '0:OFF\n1:ON'
+cv2.createTrackbar(switch,'image',0,1,nothing)
 
-    for i in range(len(inner)):
-        if not inner[i]:
-            merged_corners.append(corners[i])
-    return merged_corners
+while(1):
+    cv2.imshow('image',img)
+    k=cv2.waitKey(1)
+    if k == ord('q'):#按q键退出
+        break
+
+    r = cv2.getTrackbarPos('R','image')
+    g = cv2.getTrackbarPos('G', 'image')
+    b = cv2.getTrackbarPos('B', 'image')
+    s = cv2.getTrackbarPos(switch, 'image')
+
+    if s == 0:
+        img[:]=0
+    else:
+        img[:]=[b,g,r]
+cv2.destroyAllWindows()
