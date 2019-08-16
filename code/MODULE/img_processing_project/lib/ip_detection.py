@@ -87,15 +87,7 @@ def irregular_img(org, corners, max_img_edge_ratio, must_img_height, must_img_wi
 def rm_inner_rec(corners):
     inner = np.full((len(corners), 1), False)
     for i in range(len(corners)):
-        (up_left_a, bottom_right_a) = corners[i]
-        (y_min_a, x_min_a) = up_left_a
-        (y_max_a, x_max_a) = bottom_right_a
-
         for j in range(i+1, len(corners)):
-            (up_left_b, bottom_right_b) = corners[j]
-            (y_min_b, x_min_b) = up_left_b
-            (y_max_b, x_max_b) = bottom_right_b
-
             # if [i] is in [j]
             if util.contain(corners[i], corners[j]) == -1:
                 inner[i] = True
@@ -112,7 +104,7 @@ def rm_inner_rec(corners):
 # take the binary image as input
 # calculate the connected regions -> get the bounding boundaries of them -> check if those regions are rectangles
 # return all boundaries and boundaries of rectangles
-def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, detect_line=False):
+def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, detect_line=False):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
@@ -124,21 +116,27 @@ def boundary_detection(bin, min_obj_area, min_rec_parameter, min_rec_evenness, m
             if bin[i, j] == 255 and mark[i, j] == 0:
                 area = util.bfs_connected_area(bin, i, j, mark)
                 # ignore all small area
-                if len(area) > min_obj_area:
-                    lines = {}  # connected lines inner boundary
-                    boundary = util.get_boundary(area)
-                    boundary_all.append(boundary)
-                    # check if it is line by checking the length of edges
-                    if util.is_line(boundary, min_line_thickness):
-                        continue
-                    if util.is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, detect_line):
-                        # means this object can be divided into two sub objects connected by line
-                        if detect_line and len(lines) > 0:
-                            util.clipping_by_line(boundary, boundary_rec, lines)
-                        else:
-                            boundary_rec.append(boundary)
+                if len(area) < min_obj_area:
+                    continue
+
+                boundary = util.get_boundary(area)
+                perimeter = np.sum([len(b) for b in boundary])
+                if perimeter < min_obj_perimeter:
+                    continue
+
+                boundary_all.append(boundary)
+                # check if it is line by checking the length of edges
+                if util.is_line(boundary, min_line_thickness):
+                    continue
+
+                lines = {}  # connected lines inner boundary
+                if util.is_rectangle(boundary, lines, min_obj_perimeter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, detect_line):
+                    # means this object can be divided into two sub objects connected by line
+                    if detect_line and len(lines) > 0:
+                        util.clipping_by_line(boundary, boundary_rec, lines)
                     else:
-                        boundary_nonrec.append(boundary)
+                        boundary_rec.append(boundary)
+                else:
+                    boundary_nonrec.append(boundary)
 
     return boundary_all, boundary_rec, boundary_nonrec
-

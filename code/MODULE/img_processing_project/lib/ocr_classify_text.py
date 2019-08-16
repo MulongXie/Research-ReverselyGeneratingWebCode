@@ -30,6 +30,4 @@ def is_text(img, min_word_area, show=False):
     # no text in this clip or relatively small text area
     if len(word) == 0 or area_word/area_total < min_word_area:
         return False
-
-
     return True

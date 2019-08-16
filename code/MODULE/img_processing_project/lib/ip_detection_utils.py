@@ -15,10 +15,10 @@ def bfs_connected_area(img, x, y, mark):
                 if img[i, j] == 255 and mark[i, j] == 0:
                     stack.append([i, j])
                     mark[i, j] = 255
-                    
-    stack = [[x, y]]    # points waiting for inspection
-    area = [[x, y]]   # points of this area
-    mark[x, y] = 255    # drawing broad
+
+    stack = [[x, y]]  # points waiting for inspection
+    area = [[x, y]]  # points of this area
+    mark[x, y] = 255  # drawing broad
 
     while len(stack) > 0:
         point = stack.pop()
@@ -79,7 +79,7 @@ def clipping_by_line(boundary, boundary_rec, lines):
                     if r2 > boundary[1][i][0] >= r1:
                         b_bottom.append(boundary[1][i])
 
-                b_left = [x for x in boundary[2]]   # (row_index, min column border)
+                b_left = [x for x in boundary[2]]  # (row_index, min column border)
                 for i in range(len(b_left)):
                     if b_left[i][1] < r1:
                         b_left[i][1] = r1
@@ -162,9 +162,9 @@ def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_
 
         if is_line_detect:
             if n == 0 and len(line) > 0:
-                lines['h'] = line   # horizontally
+                lines['h'] = line  # horizontally
             elif n == 2 and len(line) > 0:
-                lines['v'] = line   # vertically
+                lines['v'] = line  # vertically
 
     # ignore text and irregular shape
     if parameter < min_rec_parameter or (flat / parameter) < min_rec_evenness:

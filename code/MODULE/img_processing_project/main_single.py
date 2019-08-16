@@ -15,7 +15,7 @@ is_save = True
 start = time.clock()
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/8.png', (0, 1000))  # cut out partial img
+org, gray = pre.read_img('input/9.png', (0, 1000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 
@@ -34,6 +34,7 @@ corners_block, corners_img = det.block_or_img(binary, corners_rec, C.THRESHOLD_M
 corners_img += det.irregular_img(org, corners_nonrec, C.THRESHOLD_MAX_IMG_EDGE_RATIO, C.THRESHOLD_MUST_IMG_HEIGHT,
                                  C.THRESHOLD_MUST_IMG_WIDTH, C.THRESHOLD_MIN_REC_PERIMETER, C.OCR_PADDING,
                                  C.OCR_MIN_WORD_AREA)
+
 corners_img = det.rm_inner_rec(corners_img)
 
 
