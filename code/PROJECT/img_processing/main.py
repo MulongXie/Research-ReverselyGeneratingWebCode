@@ -59,7 +59,7 @@ for input_path in input_paths:
     corners_block, corners_img = det.img_or_block(org, binary, corners_rec,
                                       C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS, C.THRESHOLD_BLOCK_MAX_CROSS_POINT)  # block check
     # identify potential buttons and input bars
-    corners_block, corners_compo = det.uicomponent_or_block(corners_block,
+    corners_block, corners_compo = det.uicomponent_or_block(org, corners_block,
                                        C.THRESHOLD_UICOMPO_MAX_HEIGHT,  C.THRESHOLD_UICOMPO_MIN_EDGE_RATION)   # components shape
     # identify irregular-shape img from irregular shapes
     corners_img += det.img_irregular(org, corners_nonrec,

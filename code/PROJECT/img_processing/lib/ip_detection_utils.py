@@ -139,7 +139,6 @@ def is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
         if dent / len(border) > max_dent_ratio:
             return False
 
-    # print('flat:', (flat / parameter))
     # ignore text and irregular shape
     if (flat / parameter) < min_rec_evenness:
         return False

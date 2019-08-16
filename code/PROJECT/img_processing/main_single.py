@@ -15,7 +15,7 @@ is_save = True
 start = time.clock()
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/16.png', (0, 1000))  # cut out partial img
+org, gray = pre.read_img('input/3.png', (1500, 2000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 
@@ -34,7 +34,7 @@ corners_nonrec = det.get_corner(boundary_nonrec)
 corners_block, corners_img = det.img_or_block(org, binary, corners_rec,
                                               C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS, C.THRESHOLD_BLOCK_MAX_CROSS_POINT)  # block check
 # identify potential buttons and input bars
-corners_block, corners_compo = det.uicomponent_or_block(corners_block,
+corners_block, corners_compo = det.uicomponent_or_block(org, corners_block,
                                                         C.THRESHOLD_UICOMPO_MAX_HEIGHT, C.THRESHOLD_UICOMPO_MIN_EDGE_RATION)
 # identify irregular-shape img from irregular shapes
 corners_img += det.img_irregular(org, corners_nonrec,
