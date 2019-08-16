@@ -120,7 +120,7 @@ def rm_inner_rec(corners):
 # take the binary image as input
 # calculate the connected regions -> get the bounding boundaries of them -> check if those regions are rectangles
 # return all boundaries and boundaries of rectangles
-def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_line_thickness, min_line_length, min_rec_evenness, max_dent_ratio, detect_line=False):
+def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_line_thickness, min_line_length, min_rec_evenness, max_dent_ratio):
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []
@@ -148,13 +148,8 @@ def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_line_thickness,
                 if util.is_line(boundary, min_line_thickness):
                     continue
 
-                lines = {}  # connected lines inner boundary
-                if util.is_rectangle(boundary, lines, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, detect_line):
-                    # means this object can be divided into two sub objects connected by line
-                    if detect_line and len(lines) > 0:
-                        util.clipping_by_line(boundary, boundary_rec, lines)
-                    else:
-                        boundary_rec.append(boundary)
+                if util.is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
+                    boundary_rec.append(boundary)
                 else:
                     boundary_nonrec.append(boundary)
 
