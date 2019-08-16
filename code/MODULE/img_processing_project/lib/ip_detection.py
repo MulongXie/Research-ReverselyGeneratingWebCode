@@ -23,7 +23,6 @@ def get_corner(boundaries, merge=True):
         y_max = max(y_max_a, y_max_b)
         x_min = min(x_min_a, x_min_b)
         x_max = max(x_max_a, x_max_b)
-
         return ((y_min, x_min), (y_max, x_max))
 
     corners = []
@@ -31,14 +30,27 @@ def get_corner(boundaries, merge=True):
         top_left = (boundary[0][0][0], boundary[2][0][0])
         bottom_right = (boundary[1][-1][0], boundary[3][-1][0])
         corner = (top_left, bottom_right)
-        is_ovlp = False
+        is_intersected = False
 
+        # i. merge overlapped corners
+        # ii. remove nested corners
         if merge:
             for i in range(len(corners)):
-                if util.relation(corner, corners[i]) == 2:
+                r = util.relation(corner, corners[i])
+                # if overlapped, merge into larger one
+                if r == 2:
                     corners[i] = merge_overlapped(corner, corners[i])
-                    is_ovlp = True
-        if not is_ovlp:
+                    is_intersected = True
+                # corners[i] is in corner, replace corners[i] with corner
+                elif r == 1:
+                    corners[i] = corner
+                    is_intersected = True
+                # corner is in corners[i], ignore corner
+                elif r == -1:
+                    is_intersected = True
+                    break
+
+        if not is_intersected:
             corners.append(corner)
 
     return corners

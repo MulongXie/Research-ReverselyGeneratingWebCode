@@ -15,7 +15,7 @@ is_save = True
 start = time.clock()
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/9.png', (0, 200))  # cut out partial img
+org, gray = pre.read_img('input/5.png', (0, 500))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 
@@ -42,8 +42,6 @@ corners_block = det.rm_text(org, corners_block,
 corners_img = det.rm_text(org, corners_img,
                             C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH,    # img assertion
                             C.OCR_PADDING, C.OCR_MIN_WORD_AREA)                         # ignore text area
-# remove nested imgs in others
-corners_img = det.rm_inner_rec(corners_img)
 
 
 # *** Step 3 *** post-processing: remove img elements from original image and segment into smaller size

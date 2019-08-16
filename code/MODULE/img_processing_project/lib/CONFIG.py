@@ -29,5 +29,5 @@ class Config:
         self.THRESHOLD_TEXT_EDGE_RATIO = 2.5
         self.THRESHOLD_TEXT_HEIGHT = 20
 
-        self.OCR_PADDING = 3
+        self.OCR_PADDING = 5
         self.OCR_MIN_WORD_AREA = 0.2
