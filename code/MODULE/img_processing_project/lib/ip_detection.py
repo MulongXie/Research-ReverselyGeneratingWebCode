@@ -123,8 +123,8 @@ def merge_corners(corners):
         return ((y_min, x_min), (y_max, x_max))
 
     new_corners = []
-    is_intersected = False
     for corner in corners:
+        is_intersected = False
         for i in range(len(new_corners)):
             r = util.relation(corner, new_corners[i])
             # if corner is in new_corners[i], ignore corner
@@ -136,13 +136,13 @@ def merge_corners(corners):
                 is_intersected = True
                 new_corners[i] = corner
             # if [i] and [j] are overlapped
-            elif r == 2:
+            if r == 2:
                 is_intersected = True
                 new_corners[i] = merge_overlapped(corner, new_corners[i])
 
         if not is_intersected:
             new_corners.append(corner)
-            
+
     return new_corners
 
 

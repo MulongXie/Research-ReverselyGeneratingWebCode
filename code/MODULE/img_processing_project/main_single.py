@@ -42,8 +42,8 @@ corners_block = det.rm_text(org, corners_block,
                             C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH,    # img assertion
                             C.OCR_PADDING, C.OCR_MIN_WORD_AREA)                         # ignore text area
 corners_img = det.rm_text(org, corners_img,
-                            C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH,    # img assertion
-                            C.OCR_PADDING, C.OCR_MIN_WORD_AREA)                         # ignore text area
+                          C.THRESHOLD_MUST_IMG_HEIGHT, C.THRESHOLD_MUST_IMG_WIDTH,    # img assertion
+                          C.OCR_PADDING, C.OCR_MIN_WORD_AREA)                         # ignore text area
 
 
 # *** Step 3 *** post-processing: remove img elements from original image and segment into smaller size
