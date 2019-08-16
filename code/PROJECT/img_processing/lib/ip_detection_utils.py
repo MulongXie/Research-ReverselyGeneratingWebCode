@@ -15,10 +15,10 @@ def bfs_connected_area(img, x, y, mark):
                 if img[i, j] == 255 and mark[i, j] == 0:
                     stack.append([i, j])
                     mark[i, j] = 255
-                    
-    stack = [[x, y]]    # points waiting for inspection
-    area = [[x, y]]   # points of this area
-    mark[x, y] = 255    # drawing broad
+
+    stack = [[x, y]]  # points waiting for inspection
+    area = [[x, y]]  # points of this area
+    mark[x, y] = 255  # drawing broad
 
     while len(stack) > 0:
         point = stack.pop()
@@ -79,7 +79,7 @@ def clipping_by_line(boundary, boundary_rec, lines):
                     if r2 > boundary[1][i][0] >= r1:
                         b_bottom.append(boundary[1][i])
 
-                b_left = [x for x in boundary[2]]   # (row_index, min column border)
+                b_left = [x for x in boundary[2]]  # (row_index, min column border)
                 for i in range(len(b_left)):
                     if b_left[i][1] < r1:
                         b_left[i][1] = r1
@@ -101,12 +101,10 @@ def is_line(boundary, min_line_thickness):
 
 # i. detect if an object is rectangle by evenness of each border
 # ii. add dent detection
-# iii. add connected line detection
 # @boundary: [border_up, border_bottom, border_left, border_right]
 # -> up, bottom: (column_index, min/max row border)
 # -> left, right: (row_index, min/max column border) detect range of each row
-def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_thickness, min_line_length, max_dent_ratio, is_line_detect):
-    opposite_side = [1, 0, 3, 2]  # opposite sides for each edges
+def is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
     dent_direction = [-1, 1, -1, 1]
 
     flat = 0
@@ -121,27 +119,9 @@ def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_
         else:
             edge = max(len(boundary[0]), len(boundary[1]))
 
-        # line detection
-        head, end = -1, -1  # start and end point of a line
-        line = []  # line detected
-
         # -> up, bottom: (column_index, min/max row border)
         # -> left, right: (row_index, min/max column border) detect range of each row
         for i in range(len(border) - 1):
-            # line detection
-            if is_line_detect:
-                if n == 0 or n == 2:
-                    gap = abs(boundary[opposite_side[n]][i][1] - border[i][1])  # distance between points of opposite sides
-                    if gap < min_line_thickness:
-                        if head == -1:
-                            head = border[i][0]  # new line start
-                        else:
-                            end = border[i][0]  # existing line extend
-                    if head is not -1 and (gap >= min_line_thickness or i == len(border) - 2):
-                        # line end
-                        if end - head >= min_line_length:
-                            line.append([head, end])
-                        head, end = -1, -1
 
             # calculate gradient
             difference = border[i][1] - border[i + 1][1]
@@ -156,43 +136,36 @@ def is_rectangle(boundary, lines, min_rec_parameter, min_rec_evenness, min_line_
             # if dent and too deep, then counted as dent
             if dent_direction[n] * depth > 0 and abs(depth) / edge > 0.2:
                 dent += 1
-
         if dent / len(border) > max_dent_ratio:
             return False
 
-        if is_line_detect:
-            if n == 0 and len(line) > 0:
-                lines['h'] = line   # horizontally
-            elif n == 2 and len(line) > 0:
-                lines['v'] = line   # vertically
-
+    # print('flat:', (flat / parameter))
     # ignore text and irregular shape
-    if parameter < min_rec_parameter or (flat / parameter) < min_rec_evenness:
+    if (flat / parameter) < min_rec_evenness:
         return False
     return True
 
 
-# remove imgs that are in others
-def rm_inner_rec(corners):
-    inner = np.full((len(corners), 1), False)
-    for i in range(len(corners)):
-        (up_left_a, bottom_right_a) = corners[i]
-        (y_min_a, x_min_a) = up_left_a
-        (y_max_a, x_max_a) = bottom_right_a
+# @corners: [(top_left, bottom_right)]
+# -> top_left: (column_min, row_min)
+# -> bottom_right: (column_max, row_max)
+def relation(corner_a, corner_b):
+    (up_left_a, bottom_right_a) = corner_a
+    (y_min_a, x_min_a) = up_left_a
+    (y_max_a, x_max_a) = bottom_right_a
+    (up_left_b, bottom_right_b) = corner_b
+    (y_min_b, x_min_b) = up_left_b
+    (y_max_b, x_max_b) = bottom_right_b
 
-        for j in range(i+1, len(corners)):
-            (up_left_b, bottom_right_b) = corners[j]
-            (y_min_b, x_min_b) = up_left_b
-            (y_max_b, x_max_b) = bottom_right_b
-
-            # if rec[i] is in rec[j]
-            if y_min_a > y_min_b and x_min_a > x_min_b and y_max_a < y_max_b and x_max_a < x_max_b:
-                inner[i] = True
-            # if rec[i] is in rec[j]
-            elif y_min_a < y_min_b and x_min_a < x_min_b and y_max_a > y_max_b and x_max_a > x_max_b:
-                inner[j] = True
-    refined_corners = []
-    for i in range(len(inner)):
-        if not inner[i]:
-            refined_corners.append(corners[i])
-    return refined_corners
+    # if a is in b
+    if y_min_a > y_min_b and x_min_a > x_min_b and y_max_a < y_max_b and x_max_a < x_max_b:
+        return -1
+    # if b is in a
+    elif y_min_a < y_min_b and x_min_a < x_min_b and y_max_a > y_max_b and x_max_a > x_max_b:
+        return 1
+    # a and b are non-intersect
+    elif (y_min_a > y_max_b or x_min_a > x_max_b) or (y_min_b > y_max_a or x_min_b > x_max_a):
+        return 0
+    # intersection
+    else:
+        return 2
