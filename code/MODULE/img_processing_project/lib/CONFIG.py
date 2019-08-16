@@ -15,7 +15,7 @@ class Config:
 
         self.THRESHOLD_OBJ_MIN_AREA = 200
         self.THRESHOLD_OBJ_MIN_PERIMETER = 150
-        self.THRESHOLD_REC_MIN_EVENNESS = 0.55
+        self.THRESHOLD_REC_MIN_EVENNESS = 0.6
 
         self.THRESHOLD_IMG_MUST_HEIGHT = 100
         self.THRESHOLD_IMG_MUST_WIDTH = 150

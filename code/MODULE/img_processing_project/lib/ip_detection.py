@@ -87,7 +87,7 @@ def img_irregular(org, corners, must_img_height, must_img_width):
         height = x_max - x_min
         width = y_max - y_min
         # assumption: large one must be img component no matter its edge ratio
-        if height > must_img_height and width > must_img_width:
+        if height > must_img_height:
             imgs.append(corner)
     return imgs
 
