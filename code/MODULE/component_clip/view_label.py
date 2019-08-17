@@ -7,41 +7,36 @@ import numpy as np
 import CONFIG
 
 C = CONFIG.Config()
-label_paths = glob.glob(C.ROOT_RELABEL + '/*.csv')
-label_paths = sorted(label_paths, key=lambda x: int(x.split('\\')[-1][:-4]))
-num = {'button':0, 'input':0}
+element_map = {'0':'button', '1':'input', '2':'select', '3':'search', '4':'list'}
+element_number = {'button':0, 'input':0, 'select':0, 'search':0, 'list':0}
 
 
-def view(label_path, segment_path, output_root, pad=True):
+def view(img, label):
 
-    label = pd.read_csv(label_path)
-    print(label)
-    for i in range(len(label)):
-        l = label.iloc[i]
-        seg_no = str(int(l['segment_no']))
-        seg_img = cv2.imread(pjoin(segment_path, seg_no + '.png'))
-
-        print(pjoin(segment_path, seg_no + '.png'))
-
-        x_min = int(l['bx'])
-        x_max = int(l['bx']) + int(l['bw'])
-        y_min = int(l['by'])
-        y_max = int(l['by']) + int(l['bh'])
-        element = l['element']
-        num[element] += 1
-
-        # clipping(pjoin(output_root, element, str(num[element]) + '.png'), seg_img, x_min, x_max, y_min, y_max, show=True)
-
-        cv2.rectangle(seg_img, (x_min, y_min), (x_max, y_max), (0, 0, 255), 1)
-        cv2.imshow('img', seg_img)
+    # 'x_min, y_min, x_max, y_max, element'
+    for l in label:
+        l = l.split(',')
+        print(l)
+        x_min = int(l[0])
+        y_min = int(l[1])
+        x_max = int(l[2])
+        y_max = int(l[3])
+        element = element_map[l[4]]
+        element_number[element] += 1
+        cv2.rectangle(img, (x_min, y_min), (x_max, y_max), (0, 0, 255), 1)
+        cv2.imshow('img', img)
         cv2.waitKey(0)
-    # cv2.imwrite('a.png', seg_img)
 
-for l_path in label_paths:
-    index = l_path.split('\\')[-1][:-4]
-    seg_path = pjoin(C.ROOT_IMG_SEGMENT, index)
 
-    print(l_path, seg_path)
-    view(l_path, seg_path, 'component/data3')
+def read_files():
+    labels = open(C.ROOT_RELABEL, 'r')
+    for l in labels.readlines():
+        l = l.replace('./', C.ROOT_IMG_SEGMENT).split()
+        img_path = l[0]
+        label = l[1:]
+        img = cv2.imread(img_path)
+        print(img_path)
+        view(img, label)
 
-    break
+
+read_files()
