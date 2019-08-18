@@ -4,11 +4,11 @@ import pandas as pd
 import cv2
 import numpy as np
 
-import CONFIG
-
-C = CONFIG.Config()
 element_map = {'0':'button', '1':'input', '2':'select', '3':'search', '4':'list'}
 element_number = {'button':0, 'input':0, 'select':0, 'search':0, 'list':0}
+ROOT_OUTPUT = "E:/Mulong/Datasets/dataset_webpage/elements"
+ROOT_IMG = 'E:/Mulong/GoogleDrive/research/code/keras-yolo3_new/'
+ROOT_LABEL = 'E:/Mulong/GoogleDrive/research/code/keras-yolo3_new/label_colab.txt'
 
 
 def fetch_and_clip(img, label, output_root, pad=False, show_label=False, show_clip=False, write_clip=True):
@@ -52,16 +52,16 @@ def fetch_and_clip(img, label, output_root, pad=False, show_label=False, show_cl
 
 
 def read_files():
-    labels = open(C.ROOT_RELABEL, 'r')
+    labels = open(ROOT_LABEL, 'r')
     for l in labels.readlines():
-        l = l.replace('./', C.ROOT_IMG_SEGMENT).split()
+        l = l.replace('./', ROOT_IMG).split()
         img_path = l[0]
         label = l[1:]
         img = cv2.imread(img_path)
 
         print(img_path)
 
-        fetch_and_clip(img, label, C.ROOT_OUTPUT)
+        fetch_and_clip(img, label, ROOT_OUTPUT)
 
 
 read_files()
