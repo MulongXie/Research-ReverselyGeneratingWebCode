@@ -12,6 +12,8 @@ def draw_bounding_box_class(corners, org, compo_class, color, line=3, show=False
     :param show: show or not
     :return: labeled image
     """
+    if compo_class is None:
+        compo_class = ['compo' for i in range(len(corners))]
     broad = org.copy()
     for i in range(len(corners)):
         broad = cv2.rectangle(broad, corners[i][0], corners[i][1], color[compo_class[i]], line)

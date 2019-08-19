@@ -7,7 +7,6 @@ from CONFIG import Config
 from MODEL import CNN
 
 import cv2
-import numpy as np
 import time
 
 # initialization
@@ -64,12 +63,12 @@ corners_compo = det.rm_text(org, corners_compo,
 
 
 # *** Step 5 *** classification: clip and classify the potential components
-compos_classes = None
 if is_classify:
     CNN.load()
     compos = seg.clipping(org, corners_compo)
     compos_classes = CNN.predict(compos)
-
+else:
+    compos_classes = None
 
 # *** Step 6 *** post-processing: remove img elements from original image and segment into smaller size
 img_clean = draw.draw_bounding_box(corners_img, org, color=(255, 255, 255), line=-1)
