@@ -128,7 +128,7 @@ def is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
             if abs(difference) == 0:
                 flat += 1
             # too abnormal to be a regular shape
-            elif abs(difference) / edge > 0.6:
+            elif abs(difference) / edge > 0.7:
                 return False
 
             # dent detection
@@ -138,7 +138,6 @@ def is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
                 dent += 1
         if dent / len(border) > max_dent_ratio:
             return False
-
     # ignore text and irregular shape
     if (flat / parameter) < min_rec_evenness:
         return False

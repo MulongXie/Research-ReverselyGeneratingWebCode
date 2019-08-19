@@ -35,3 +35,6 @@ class Config:
 
         self.OCR_PADDING = 5
         self.OCR_MIN_WORD_AREA = 0.3
+
+        self.COLOR = {'block':(0, 255, 0), 'img':(0, 0, 255), 'button':(0, 166, 255), 'input':(255, 166, 0),
+                      'search':(255, 0, 166), 'list':(166, 0, 255)}

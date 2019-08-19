@@ -12,11 +12,10 @@ import time
 
 # initialization
 C = Config()
-input_root = C.ROOT_IMG_ORG
 CNN = CNN()
-CNN.load()
-is_save = True
 start = time.clock()
+is_classify = True
+is_save = True
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
 org, gray = pre.read_img('input/10.png', (0, 2000))  # cut out partial img
@@ -47,7 +46,7 @@ corners_img += det.img_irregular(org, corners_nonrec,
 
 # *** Step 4 *** refine results: refine img according to size -> OCR text area filter
 # ignore too large and highly likely text areas
-corners_img = det.img_refine(org.shape, corners_img,
+corners_img = det.img_refine(org, corners_img,
                              C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,                      # ignore too large imgs
                              C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
 # merge overlapped corners, and remove nested corners
@@ -65,17 +64,20 @@ corners_compo = det.rm_text(org, corners_compo,
 
 
 # *** Step 5 *** classification: clip and classify the potential components
-compos = seg.clipping(org, corners_compo)
-compos_classes = CNN.predict(compos)
+compos_classes = None
+if is_classify:
+    CNN.load()
+    compos = seg.clipping(org, corners_compo)
+    compos_classes = CNN.predict(compos)
 
 
 # *** Step 6 *** post-processing: remove img elements from original image and segment into smaller size
 img_clean = draw.draw_bounding_box(corners_img, org, color=(255, 255, 255), line=-1)
 seg.segment_img(img_clean, 600, 'output/segment')
 # draw results
-draw_bounding = draw.draw_bounding_box(corners_block, org, ['block' for i in range(len(corners_block))], (0, 255, 0))
-draw_bounding = draw.draw_bounding_box(corners_img, draw_bounding, ['img' for j in range(len(corners_img))], (0, 0, 255))
-draw_bounding = draw.draw_bounding_box(corners_compo, draw_bounding, compos_classes, (0, 166, 255))
+draw_bounding = draw.draw_bounding_box_class(corners_block, org, ['block' for i in range(len(corners_block))], C.COLOR)
+draw_bounding = draw.draw_bounding_box_class(corners_img, draw_bounding, ['img' for j in range(len(corners_img))], C.COLOR)
+draw_bounding = draw.draw_bounding_box_class(corners_compo, draw_bounding, compos_classes, C.COLOR)
 draw_boundary = draw.draw_boundary(boundary_rec, org.shape)
 # save results
 if is_save:

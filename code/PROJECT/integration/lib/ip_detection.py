@@ -66,7 +66,7 @@ def img_or_block(org, binary, corners, max_thickness, max_block_cross_points):
                 if vacancy[3] == 0 and (x_max - x_min - 2 * i) is not 0 and (
                         np.sum(binary[x_min + i: x_max - i, y_max - i]) / 255) / (x_max - x_min - 2 * i) <= max_block_cross_points:
                     vacancy[3] = 1
-                if np.sum(vacancy) >= 3:
+                if np.sum(vacancy) == 4:
                     is_block = True
             except:
                 pass
@@ -74,6 +74,7 @@ def img_or_block(org, binary, corners, max_thickness, max_block_cross_points):
             blocks.append(corner)
         else:
             imgs.append(corner)
+
     return blocks, imgs
 
 
@@ -92,8 +93,8 @@ def img_irregular(org, corners, must_img_height, must_img_width):
     return imgs
 
 
-def img_refine(org_shape, corners, max_img_height_ratio, text_edge_ratio, text_height):
-    img_height, img_width = org_shape[:2]
+def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height):
+    img_height, img_width = org.shape[:2]
 
     refined_imgs = []
     for corner in corners:
@@ -104,12 +105,13 @@ def img_refine(org_shape, corners, max_img_height_ratio, text_edge_ratio, text_h
         width = y_max - y_min
 
         # ignore too large ones
-        if height / img_height > max_img_height_ratio:
+        if org.shape[0] > 1000 and height / img_height > max_img_height_ratio:
             continue
         # likely to be text, ignore
         elif height <= text_height and width / height > text_edge_ratio:
             continue
         refined_imgs.append(corner)
+
     return refined_imgs
 
 
@@ -217,4 +219,5 @@ def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_line_thickness,
                     boundary_rec.append(boundary)
                 else:
                     boundary_nonrec.append(boundary)
+
     return boundary_all, boundary_rec, boundary_nonrec
