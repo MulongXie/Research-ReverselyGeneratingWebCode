@@ -25,3 +25,5 @@ model.add(Dense(data.class_number, activation='softmax'))
 
 model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=['accuracy'])
 model.fit(data.X_train, data.Y_train, batch_size=64, epochs=10, verbose=1, validation_data=(data.X_test, data.Y_test))
+
+model.save('E:/Mulong/Model/ui_compos')
