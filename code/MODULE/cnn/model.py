@@ -71,9 +71,10 @@ class CNN:
         recall = TP / (TP + FN)
         precision = TP / (TP + FP)
         accuracy = (TP + TN) / (TP + FN + FP + TN)
+        balanced_accuracy = TP
         print(matrix)
-        print('TP:%.3f, FN:%.3f, FP:%.3f, TN:%.3f' % (TP, FN, FP, TN))
-        print('recall:%.3f, precision:%.3f, accuracy:%.3f' % (recall, precision, accuracy))
+        print('\nTP:%.3f \t FN:%.3f \nFP:%.3f \t TN:%.3f\n' % (TP, FN, FP, TN))
+        print('recall:%.3f \t precision:%.3f \t accuracy:%.3f \t balanced accuracy:%.3f' % (recall, precision, accuracy, balanced_accuracy))
 
     def predict(self, img_path, load=True, show=False):
         """
