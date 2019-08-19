@@ -1,4 +1,6 @@
-import numpy as np
 
-l = np.full(10, 1)
-print(l)
+a = 1
+b = 2
+assert a == b
+
+print('a')
