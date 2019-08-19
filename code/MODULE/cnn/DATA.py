@@ -2,6 +2,9 @@ import cv2
 import numpy as np
 from os.path import join as pjoin
 import glob
+from CONFIG import Config
+
+cfg = Config()
 
 
 class Data:
@@ -10,14 +13,13 @@ class Data:
         self.data_num = 0
         self.images = []
         self.labels = []
-
         self.X_train, self.Y_train = None, None
         self.X_test, self.Y_test = None, None
 
-        self.image_shape = (64, 64, 3)
-        self.class_map = {'button': 0, 'input': 1, 'select': 2, 'search': 3, 'list': 4}
-        self.class_number = len(self.class_map)
-        self.INPUT_ROOT = "E:/Mulong/Datasets/dataset_webpage/elements"
+        self.image_shape = cfg.image_shape
+        self.class_number = cfg.class_number
+        self.class_map = cfg.class_map
+        self.INPUT_PATH = cfg.DATA_PATH
 
     def load_data(self, resize=True, shape=None):
         # if customize shape
@@ -26,7 +28,7 @@ class Data:
         else:
             shape = self.image_shape
         # load data
-        element_paths = glob.glob(pjoin(self.INPUT_ROOT, '*'))
+        element_paths = glob.glob(pjoin(self.INPUT_PATH, '*'))
         for ele_path in element_paths:
             label = self.class_map[ele_path.split('\\')[-1]]
             image_paths = glob.glob(pjoin(ele_path, '*.png'))
@@ -47,7 +49,6 @@ class Data:
             y = np.eye(class_number)[label]
             y = np.squeeze(y)
             return y
-
         # reshuffle
         np.random.seed(0)
         self.images = np.random.permutation(self.images)
