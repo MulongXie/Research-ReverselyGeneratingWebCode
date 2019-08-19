@@ -19,7 +19,7 @@ class Data:
         self.image_shape = cfg.image_shape
         self.class_number = cfg.class_number
         self.class_map = cfg.class_map
-        self.INPUT_PATH = cfg.DATA_PATH
+        self.DATA_PATH = cfg.DATA_PATH
 
     def load_data(self, resize=True, shape=None):
         # if customize shape
@@ -27,12 +27,11 @@ class Data:
             self.image_shape = shape
         else:
             shape = self.image_shape
+
         # load data
-        element_paths = glob.glob(pjoin(self.INPUT_PATH, '*'))
-        for ele_path in element_paths:
-            label = self.class_map[ele_path.split('\\')[-1]]
-            image_paths = glob.glob(pjoin(ele_path, '*.png'))
-            for image_path in image_paths:
+        for p in glob.glob(pjoin(self.DATA_PATH, '*')):
+            label = self.class_map.index(p.split('\\')[-1])  # map to index of classes
+            for image_path in glob.glob(pjoin(p, '*.png')):
                 image = cv2.imread(image_path)
                 if resize:
                     image = cv2.resize(image, shape[:2])
@@ -49,6 +48,7 @@ class Data:
             y = np.eye(class_number)[label]
             y = np.squeeze(y)
             return y
+
         # reshuffle
         np.random.seed(0)
         self.images = np.random.permutation(self.images)
