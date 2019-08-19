@@ -37,7 +37,7 @@ def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio):
 
 
 # check if the objects are img components or just block
-# return corners ((y_min, x_min),(y_max, x_max))
+# return corners ((column_min, row_min),(column_max, row_max))
 def img_or_block(org, binary, corners, max_thickness, max_block_cross_points):
     blocks = []
     imgs = []

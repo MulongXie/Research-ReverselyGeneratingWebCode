@@ -76,22 +76,24 @@ class CNN:
         print('\nTP:%.3f \t FN:%.3f \nFP:%.3f \t TN:%.3f\n' % (TP, FN, FP, TN))
         print('recall:%.3f \t precision:%.3f \t accuracy:%.3f \t balanced accuracy:%.3f' % (recall, precision, accuracy, balanced_accuracy))
 
-    def predict(self, img_path, load=True, show=False):
+    def predict(self, imgs, load=False, show=False):
         """
-        :type img_path: list of img path
+        :type imgs: list of imgs
         """
+        prediction = []
         if load:
             self.load()
-        for path in img_path:
-            img = cv2.imread(path)
+        for img in imgs:
             X = cv2.resize(img, self.image_shape[:2])
             X = np.array([X])  # from (64, 64, 3) to (1, 64, 64, 3)
             Y = self.class_map[np.argmax(self.model.predict(X))]
-            print(Y)
+            prediction.append(Y)
             if show:
+                print(Y)
                 cv2.imshow('img', img)
                 cv2.waitKey(0)
                 cv2.destroyAllWindows()
+        return prediction
 
     def load(self):
         self.model = load_model(self.MODEL_PATH)

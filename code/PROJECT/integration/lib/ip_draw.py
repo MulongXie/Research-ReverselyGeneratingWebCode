@@ -2,10 +2,23 @@ import cv2
 import numpy as np
 
 
-def draw_bounding_box(corners, org, color=(0, 255, 0), line=3, show=False):
+def draw_bounding_box(corners, org, compo_class=None, color=(0, 255, 0), line=3, show=False):
+    """
+    :param corners: ((column_min, row_min),(column_max, row_max))
+    :param org: original image
+    :param color: line color
+    :param line: line thickness
+    :param compo_class: classes matching the corners of components
+    :param show: show or not
+    :return: labeled image
+    """
+    print('rinima')
     broad = org.copy()
-    for corner in corners:
-        broad = cv2.rectangle(broad, corner[0], corner[1], color, line)
+    for i in range(len(corners)):
+        broad = cv2.rectangle(broad, corners[i][0], corners[i][1], color, line)
+        if compo_class is not None:
+            broad = cv2.putText(broad, compo_class[i], (corners[i][0][0]+5, corners[i][0][1]+20),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
 
     if show:
         cv2.imshow('a', broad)
