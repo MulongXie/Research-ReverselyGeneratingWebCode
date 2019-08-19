@@ -4,16 +4,23 @@ from os.path import join as pjoin
 import glob
 
 
-def read_data(img_root):
-    element_paths = glob.glob(pjoin(ROOT_INPUT, '*'))
+class Data:
 
-    for ele_path in element_paths:
-        img_paths = glob.glob(pjoin(ele_path, '*.png'))
+    def __init__(self):
+        self.imgs = []
+        self.labels = []
+        self.imgs_shape = None
+        self.labels_shape = None
 
-        label = ele_path.split('\\')[-1]
+        self.labels_map = {'button': 0, 'input': 1, 'select': 3, 'search': 4, 'list': 5}
+        self.INPUT_ROOT = "E:/Mulong/Datasets/dataset_webpage/elements"
 
-        print(label, len(img_paths))
+    def read_data(self):
+        element_paths = glob.glob(pjoin(self.INPUT_ROOT, '*'))
 
+        for ele_path in element_paths:
+            img_paths = glob.glob(pjoin(ele_path, '*.png'))
+            label = ele_path.split('\\')[-1]
 
-ROOT_INPUT = "E:/Mulong/Datasets/dataset_webpage/elements"
-read_data(ROOT_INPUT)
+            self.imgs += [cv2.imread(path) for path in img_paths]
+            self.labels += list(np.full(len(img_paths), self.labels_map[label], dtype=int))
