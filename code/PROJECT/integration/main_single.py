@@ -18,7 +18,7 @@ is_classify = True
 is_save = True
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/10.png', (0, 2000))  # cut out partial img
+org, gray = pre.read_img('input/18.png', (0, 3000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 
@@ -50,7 +50,7 @@ corners_img = det.img_refine(org, corners_img,
                              C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,                      # ignore too large imgs
                              C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
 # merge overlapped corners, and remove nested corners
-corners_img = det.merge_corners(corners_img)
+# corners_img = det.merge_corners(corners_img)
 # remove text
 corners_block = det.rm_text(org, corners_block,
                           C.THRESHOLD_IMG_MUST_HEIGHT, C.THRESHOLD_IMG_MUST_WIDTH,    # img assertion
