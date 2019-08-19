@@ -40,6 +40,7 @@ class Data:
 
         assert len(self.images) == len(self.labels)
         self.data_num = len(self.images)
+        print('%d Data Loaded' % self.data_num)
 
     def generate_training_data(self, train_data_ratio=0.8):
         # transfer int into c dimensions one-hot array
@@ -62,3 +63,6 @@ class Data:
         self.X_test = (self.images[cut:] / 255).astype('float32')
         self.Y_train = Y[:cut]
         self.Y_test = Y[cut:]
+
+        print('X_train:%d, Y_train:%d' % (len(self.X_train), len(self.Y_train)))
+        print('X_test:%d, Y_test:%d' % (len(self.X_test), len(self.Y_test)))

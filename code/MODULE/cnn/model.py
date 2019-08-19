@@ -1,9 +1,10 @@
 from keras.models import Sequential, load_model
 from keras.layers import Conv2D, MaxPool2D, Dense, Flatten, Dropout
+from sklearn.metrics import confusion_matrix
 import cv2
 import numpy as np
-from CONFIG import Config
 
+from CONFIG import Config
 cfg = Config()
 
 
@@ -41,11 +42,45 @@ class CNN:
         self.model.save(self.MODEL_PATH)
         print("Trained model is saved to", self.MODEL_PATH)
 
-    def predict(self, img_path, show=False):
+    def evaluate(self, data, load=True):
+        # calculate TP, FN, FP, TN
+        def calculate_n_p(matrix):
+            TP, FN, FP, TN = 0, 0, 0, 0
+            for i in range(len(matrix)):
+                TP += matrix[i][i] / np.sum(matrix[i])
+                FN += (np.sum(matrix[:, i]) - matrix[i][i]) / np.sum(matrix[:, i])
+                FP += (np.sum(matrix[i]) - matrix[i][i]) / np.sum(matrix[i])
+                TN += (np.trace(matrix) - matrix[i][i]) / np.trace(matrix)
+            TP = TP / len(matrix)
+            FN = FN / len(matrix)
+            FP = FP / len(matrix)
+            TN = TN / len(matrix)
+            return TP, FN, FP, TN
+
+        if load:
+            self.load()
+        X_test = data.X_test
+        Y_test = [np.argmax(y) for y in data.Y_test]
+        Y_pre = []
+        for X in X_test:
+            X = np.array([X])
+            Y_pre.append(np.argmax(self.model.predict(X)))
+
+        matrix = confusion_matrix(Y_test, Y_pre)
+        TP, FN, FP, TN = calculate_n_p(matrix)
+        recall = TP / (TP + FN)
+        precision = TP / (TP + FP)
+        accuracy = (TP + TN) / (TP + FN + FP + TN)
+        print(matrix)
+        print('TP:%.3f, FN:%.3f, FP:%.3f, TN:%.3f' % (TP, FN, FP, TN))
+        print('recall:%.3f, precision:%.3f, accuracy:%.3f' % (recall, precision, accuracy))
+
+    def predict(self, img_path, load=True, show=False):
         """
         :type img_path: list of img path
         """
-        self.model = load_model(self.MODEL_PATH)
+        if load:
+            self.load()
         for path in img_path:
             img = cv2.imread(path)
             X = cv2.resize(img, self.image_shape[:2])
@@ -56,3 +91,7 @@ class CNN:
                 cv2.imshow('img', img)
                 cv2.waitKey(0)
                 cv2.destroyAllWindows()
+
+    def load(self):
+        self.model = load_model(self.MODEL_PATH)
+        print('Model Loaded From', self.MODEL_PATH)
