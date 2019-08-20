@@ -47,7 +47,6 @@ def take_screen(driver, output_path):
                         document.title += "scroll-done";
                     }
                 }
-
                 setTimeout(f, 1000);
             })();
         """)
@@ -57,10 +56,14 @@ def take_screen(driver, output_path):
             time.sleep(10)
         driver.save_screenshot(output_path)
         return True
-
     except:
-        print('Script execution filled')
-        return False
+        print('Script execution failed')
+        try:
+            driver.save_screenshot(output_path)
+            return True
+        except:
+            print("Screenshot Failed")
+            return False
 
 
 def find_element(element, df, driver):
@@ -128,7 +131,6 @@ def catch(url, out_label, out_img, libel_format, driver_path, browser='PhantomJS
             print("Catch Elements Successfully")
             return img, label
         else:
-            print("Screenshot Failed")
             return None, None
 
     except Exception as e:

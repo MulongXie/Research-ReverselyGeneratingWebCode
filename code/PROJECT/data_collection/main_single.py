@@ -10,10 +10,10 @@ import time
 from func_timeout import func_set_timeout, FunctionTimedOut
 
 start_time = time.clock()
-is_segment = False
-is_draw_label = False
+is_segment = True
+is_draw_label = True
 # set the web crawler
-url = "https://github.com/MulongXie"
+url = "https://store.steampowered.com/"
 # set path
 img_org_path = 'data/org.png'
 img_drawn_path = 'data/drawn.png'
@@ -39,4 +39,4 @@ if is_draw_label and img is not None and label is not None:
     draw.label(label, img, img_drawn_path)
 
 end_time = time.clock()
-print("*** Time taken:%ds ***\n" % int(end_time - start_time))
+print("*** Time taken:%ds ***" % int(end_time - start_time))
