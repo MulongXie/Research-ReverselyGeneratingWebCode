@@ -6,10 +6,16 @@ import ip_detection_utils as util
 import ocr_classify_text as ocr
 
 
-# @corners: [(top_left, bottom_right)]
-# -> top_left: (column_min, row_min)
-# -> bottom_right: (column_max, row_max)
 def get_corner(boundaries):
+    """
+    Get the top left and bottom right points of boundary
+    :param boundaries: boundary: [top, bottom, left, right]
+                        -> up, bottom: (column_index, min/max row border)
+                        -> left, right: (row_index, min/max column border) detect range of each row
+    :return: corners: [(top_left, bottom_right)]
+                        -> top_left: (column_min, row_min)
+                        -> bottom_right: (column_max, row_max)
+    """
     corners = []
     for boundary in boundaries:
         top_left = (min(boundary[0][0][0], boundary[1][-1][0]), min(boundary[2][0][0], boundary[3][-1][0]))
@@ -20,6 +26,16 @@ def get_corner(boundaries):
 
 
 def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio):
+    """
+    Select the potential ui components (button, input) from block objects
+    :param org: Original image
+    :param corners: corners: [(top_left, bottom_right)]
+                            -> top_left: (column_min, row_min)
+                            -> bottom_right: (column_max, row_max)
+    :param compo_max_height: Over the threshold won't be counted
+    :param compo_min_edge_ratio: Over the threshold won't be counted
+    :return: corners of compos and blocks
+    """
     compos = []
     blocks = []
     for corner in corners:
@@ -36,9 +52,18 @@ def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio):
     return blocks, compos
 
 
-# check if the objects are img components or just block
-# return corners ((column_min, row_min),(column_max, row_max))
 def img_or_block(org, binary, corners, max_thickness, max_block_cross_points):
+    """
+    Check if the objects are img components or just block
+    :param org: Original image
+    :param binary:  Binary image from pre-processing
+    :param corners: corners: [(top_left, bottom_right)]
+                            -> top_left: (column_min, row_min)
+                            -> bottom_right: (column_max, row_max)
+    :param max_thickness: The max thickness of border of blocks
+    :param max_block_cross_points: Ratio of point of interaction
+    :return: corners of blocks and imgs
+    """
     blocks = []
     imgs = []
     for corner in corners:
@@ -80,6 +105,17 @@ def img_or_block(org, binary, corners, max_thickness, max_block_cross_points):
 
 # check the edge ratio for img components to avoid text misrecognition
 def img_irregular(org, corners, must_img_height, must_img_width):
+    """
+    Select potential irregular shaped img elements by checking the height and width
+    check the edge ratio for img components to avoid text misrecognition
+    :param org: Original image
+    :param corners: corners: [(top_left, bottom_right)]
+                            -> top_left: (column_min, row_min)
+                            -> bottom_right: (column_max, row_max)
+    :param must_img_height: Larger is likely to be img
+    :param must_img_width: Larger is likely to be img
+    :return: corners of img
+    """
     imgs = []
     for corner in corners:
         (up_left, bottom_right) = corner
@@ -94,6 +130,17 @@ def img_irregular(org, corners, must_img_height, must_img_width):
 
 
 def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height):
+    """
+    Remove too large imgs and likely text
+    :param org: Original image
+    :param corners: corners: [(top_left, bottom_right)]
+                            -> top_left: (column_min, row_min)
+                            -> bottom_right: (column_max, row_max)
+    :param max_img_height_ratio: height of img / total height of original image
+    :param text_edge_ratio: width / height, if too large, then likely to be text
+    :param text_height: common max height of text
+    :return:
+    """
     img_height, img_width = org.shape[:2]
 
     refined_imgs = []
@@ -117,6 +164,19 @@ def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height)
 
 # remove imgs that contain text
 def rm_text(org, corners, must_img_height, must_img_width, ocr_padding, ocr_min_word_area, show=False):
+    """
+    Remove area that full of text
+    :param org: original image
+    :param corners: corners: [(top_left, bottom_right)]
+                            -> top_left: (column_min, row_min)
+                            -> bottom_right: (column_max, row_max)
+    :param must_img_height: Too large should be img
+    :param must_img_width: Too large should be img
+    :param ocr_padding: Padding for clipping
+    :param ocr_min_word_area: If too text area ratio is too large
+    :param show: Show or not
+    :return:
+    """
     new_corners = []
     for corner in corners:
         (up_left, bottom_right) = corner
@@ -139,9 +199,15 @@ def rm_text(org, corners, must_img_height, must_img_width, ocr_padding, ocr_min_
     return new_corners
 
 
-# i. merge overlapped corners
-# ii. remove nested corners
 def merge_corners(corners):
+    """
+    i. merge overlapped corners
+    ii. remove nested corners
+    :param corners: corners: [(top_left, bottom_right)]
+                            -> top_left: (column_min, row_min)
+                            -> bottom_right: (column_max, row_max)
+    :return: new corners
+    """
 
     def merge_overlapped(corner_a, corner_b):
         (up_left_a, bottom_right_a) = corner_a
@@ -180,13 +246,86 @@ def merge_corners(corners):
     return new_corners
 
 
+# detect line
+def line_detection(binary, max_cross_point=0.1, min_line_length_h=200, min_line_length_v=80, max_thickness=3, ):
+    """
+    :param binary: Binary image from pre-processing
+    :param max_cross_point: Ratio of point of interaction
+    :return: list of line
+            -> line_h: horizontal ((column_min, row), (column_max, row))
+            -> line_v: vertical ((column, row_min), (column, row_max))
+    """
+    row, column = binary.shape[0], binary.shape[1]
+
+    lines_h = []
+    lines_v = []
+    x, y = 0, 0
+    while x < row - 1 or y < column - 1:
+        # horizontal
+        line = False
+        head, end = -1, -1
+        for j in range(column):
+            if binary[x][j] > 0 and not line:
+                head = j
+                line = True
+            elif binary[x][j] == 0 and line:
+                end = j
+                line = False
+                if end - head > min_line_length_h:
+                    # check if this line is too thick to be line
+                    clear_top, clear_bottom = False, False
+                    for t in range(max_thickness + 1):
+                        if not clear_top and (x - t <= 0 or (np.sum(binary[x - t, head:end])/255) / (end-head) < max_cross_point):
+                            clear_top = True
+                        if not clear_bottom and (x + t >= row - 1 or (np.sum(binary[x + t, head:end])/255) / (end-head) < max_cross_point):
+                            clear_bottom = True
+                        if clear_top and clear_bottom:
+                            lines_h.append(((head, x), (end, x)))
+                            break
+        # vertical
+        line = False
+        head, end = -1, -1
+        for i in range(row):
+            if binary[i][y] > 0 and not line:
+                head = i
+                line = True
+            elif (binary[i][y] == 0 or i >= row - 1) and line:
+                end = i
+                line = False
+                if end - head > min_line_length_v:
+                    # check if this line is too thick to be line
+                    clear_left, clear_right = False, False
+                    for t in range(max_thickness + 1):
+                        if not clear_left and (y - t <= 0 or (np.sum(binary[head:end, y - t])/255) / (end-head) < max_cross_point):
+                            clear_left = True
+                        if not clear_right and (y + t >= column - 1 or (np.sum(binary[head:end, y + t])/255) / (end-head) < max_cross_point):
+                            clear_right = True
+                        if clear_left and clear_right:
+                            lines_v.append(((y, head), (y, end)))
+                            break
+        if x < row - 1:
+            x += 1
+        if y < column - 1:
+            y += 1
+
+    return lines_h, lines_v
+
+
 # take the binary image as input
 # calculate the connected regions -> get the bounding boundaries of them -> check if those regions are rectangles
 # return all boundaries and boundaries of rectangles
-# @boundary: [top, bottom, left, right]
-# -> up, bottom: (column_index, min/max row border)
-# -> left, right: (row_index, min/max column border) detect range of each row
 def boundary_detection(bin, min_obj_area, min_obj_perimeter, min_line_thickness, min_rec_evenness, max_dent_ratio):
+    """
+    :param bin: Binary image from pre-processing
+    :param min_obj_area: If not pass then ignore the small object
+    :param min_obj_perimeter: If not pass then ignore the small object
+    :param min_line_thickness: If not pass then ignore the slim object
+    :param min_rec_evenness: If not pass then this object cannot be rectangular
+    :param max_dent_ratio: If not pass then this object cannot be rectangular
+    :return: boundary: [top, bottom, left, right]
+                        -> up, bottom: (column_index, min/max row border)
+                        -> left, right: (row_index, min/max column border) detect range of each row
+    """
     mark = np.full(bin.shape, 0, dtype=np.uint8)
     boundary_all = []
     boundary_rec = []

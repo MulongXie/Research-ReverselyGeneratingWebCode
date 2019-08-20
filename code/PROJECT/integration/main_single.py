@@ -17,7 +17,7 @@ is_classify = True
 is_save = True
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/18.png', (0, 3000))  # cut out partial img
+org, gray = pre.read_img('input/6.png', (2500, 3000))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 
 
