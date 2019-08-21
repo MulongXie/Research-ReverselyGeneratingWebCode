@@ -65,9 +65,11 @@ def search_line(binary, min_line_length_h=200, min_line_length_v=80, max_thickne
         line = False
         head, end = -1, -1
         for i in range(row):
+            # line start
             if binary[i][y] > 0 and not line:
                 head = i
                 line = True
+            # line end
             elif (binary[i][y] == 0 or i >= row - 1) and line:
                 end = i
                 line = False
@@ -90,7 +92,7 @@ def search_line(binary, min_line_length_h=200, min_line_length_v=80, max_thickne
     return lines_h, lines_v
 
 
-org, gray = pre.read_img('input/18.png', (2000, 2600))  # cut out partial img
+org, gray = pre.read_img('input/6.png', (2000, 2600))  # cut out partial img
 binary = pre.preprocess(gray, 1)
 lines_h, lines_v = search_line(binary)
 draw_line(org, lines_h, (0, 255, 0))
