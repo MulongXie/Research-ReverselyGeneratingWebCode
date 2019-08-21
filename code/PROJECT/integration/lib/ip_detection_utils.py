@@ -93,9 +93,29 @@ def clipping_by_line(boundary, boundary_rec, lines):
 
 
 def is_line(boundary, min_line_thickness):
-    # check if it is line by checking the length of edges
-    if True in [len(boundary[i]) < min_line_thickness for i in range(len(boundary))]:
+    """
+    If this object is line by checking its boundary
+    :param boundary: boundary: [border_top, border_bottom, border_left, border_right]
+                                -> top, bottom: list of (column_index, min/max row border)
+                                -> left, right: list of (row_index, min/max column border) detect range of each row
+    :param min_line_thickness:
+    :return: Boolean
+    """
+    # horizontally
+    slim = 0
+    for i in range(len(boundary[0])):
+        if abs(boundary[1][i][1] - boundary[0][i][1]) <= min_line_thickness:
+            slim += 1
+    if slim / len(boundary[0]) > 0.8:
         return True
+    # vertically
+    slim = 0
+    for i in range(len(boundary[2])):
+        if abs(boundary[2][i][1] - boundary[3][i][1]) <= min_line_thickness:
+            slim += 1
+    if slim / len(boundary[2]) > 0.8:
+        return True
+
     return False
 
 

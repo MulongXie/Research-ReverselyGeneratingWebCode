@@ -3,6 +3,7 @@ import ip_preprocessing as pre
 import ip_draw as draw
 import ip_segment as seg
 import file_utils as file
+import ocr_classify_text as ocr
 from CONFIG import Config
 from MODEL import CNN
 
@@ -14,22 +15,25 @@ C = Config()
 CNN = CNN()
 start = time.clock()
 is_classify = True
-is_rm_line = False
+is_detect_line = False
+is_ocr = True
+is_segment = False
 is_save = True
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
 org, gray = pre.read_img('input/18.png', (0, 3000))  # cut out partial img
 bin = pre.preprocess(gray, 1)
-binary = bin
 
 
 # *** Step 2 *** detect and remove lines: for better boundary detection
-if is_rm_line:
-    line_h, line_v = det.line_detection(binary,
+if is_detect_line:
+    line_h, line_v = det.line_detection(bin,
                                         C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
                                         C.THRESHOLD_LINE_THICKNESS)
-    bin_no_line = det.rm_line(binary, [line_h, line_v])
+    bin_no_line = det.rm_line(bin, [line_h, line_v])
     binary = bin_no_line
+else:
+    binary = bin
 
 # *** Step 3 *** get data: get connected areas -> get boundary -> get corners
 boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary,
@@ -80,11 +84,20 @@ if is_classify:
 else:
     compos_classes = None
 
-# *** Step 7 *** post-processing: remove img elements from original image and segment into smaller size
+
+# *** Step 7 *** text detection from cleaned image
 img_clean = draw.draw_bounding_box(org, corners_img, color=(255, 255, 255), line=-1)
-seg.segment_img(img_clean, 600, 'output/segment')
+if is_ocr:
+    draw_bounding, word = ocr.text_detection(org, img_clean)
+else:
+    draw_bounding = org
+
+
+# *** Step 8 *** post-processing: remove img elements from original image and segment into smaller size
+if is_segment:
+    seg.segment_img(img_clean, 600, 'output/segment')
 # draw results
-draw_bounding = draw.draw_bounding_box_class(org, corners_block, ['block' for i in range(len(corners_block))], C.COLOR)
+draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_block, ['block' for i in range(len(corners_block))], C.COLOR)
 draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_img, ['img' for j in range(len(corners_img))], C.COLOR)
 draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_compo, compos_classes, C.COLOR)
 draw_boundary = draw.draw_boundary(boundary_rec, org.shape)

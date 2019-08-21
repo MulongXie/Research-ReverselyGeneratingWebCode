@@ -5,7 +5,7 @@ class Config:
 
     def __init__(self):
         self.ROOT_INPUT = "E:\Mulong\Datasets\dataset_webpage\page10000"
-        self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v4_classification_noline"
+        self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v4_ocrclassification"
         self.ROOT_IMG_ORG = pjoin(self.ROOT_INPUT, "org")
         self.ROOT_LABEL = pjoin(self.ROOT_OUTPUT, "ip_label")
         self.ROOT_IMG_DRAWN = pjoin(self.ROOT_OUTPUT, "ip_img_drawn")
