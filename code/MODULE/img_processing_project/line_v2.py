@@ -5,7 +5,7 @@ import ip_preprocessing as pre
 
 def draw_line(img, lines, color):
     for line in lines:
-        cv2.line(img, line['head'], line['end'], color)
+        cv2.line(img, line['head'], line['end'], color, line['thickness'])
         # cv2.imshow('img', img)
         # cv2.waitKey(0)
 
@@ -15,31 +15,31 @@ def rm_line(binary, lines):
     Remove lines from binary map
     :param binary: Binary image
     :param lines: [line_h, line_v]
-            -> line_h: horizontal ((column_min, row), (column_max, row))
-            -> line_v: vertical ((column, row_min), (column, row_max))
+            -> line_h: horizontal {'head':(column_min, row), 'end':(column_max, row), 'thickness':int)
+            -> line_v: vertical {'head':(column, row_min), 'end':(column, row_max), 'thickness':int}
     :return: New binary map
     """
     new_binary = binary.copy()
     line_h, line_v = lines
     for line in line_h:
-        row = line[0][1]
-        new_binary[row, line[0][0]:line[1][0]] = 0
+        row = line['head'][1]
+        new_binary[row: row + line['thickness'], line['head'][0]:line['end'][0]] = 0
     for line in line_v:
-        column = line[0][0]
-        new_binary[line[0][1]:line[1][1], column] = 0
+        column = line['head'][0]
+        new_binary[line['head'][1]:line['end'][1], column: column + line['thickness']] = 0
 
     return new_binary
 
 
 def search_line(binary, min_line_length_h=200, min_line_length_v=80, max_thickness=3):
 
-    def check(start_row, start_col, mode, thickness=None):
+    def check(start_row, start_col, mode, line=None):
         if mode == 'h':
             for t in range(max_thickness + 1):
                 if start_row + t >= binary.shape[0] or binary[start_row + t, start_col] == 0:
                     # if needed, update the thickness of this line
-                    if thickness is not None:
-                        thickness = max(thickness, t)
+                    if line is not None:
+                        line['thickness'] = max(line['thickness'], t)
                     return True
                 mark_h[start_row + t, start_col] = 255
             return False
@@ -47,8 +47,8 @@ def search_line(binary, min_line_length_h=200, min_line_length_v=80, max_thickne
             for t in range(max_thickness + 1):
                 if start_col + t >= binary.shape[1] or binary[start_row, start_col + t] == 0:
                     # if needed, update the thickness of this line
-                    if thickness is not None:
-                        thickness = max(thickness, t)
+                    if line is not None:
+                        line['thickness'] = max(line['thickness'], t)
                     return True
                 mark_v[start_row, start_col + t] = 255
             return False
@@ -70,9 +70,9 @@ def search_line(binary, min_line_length_h=200, min_line_length_v=80, max_thickne
                 head = j
                 new_line = True
                 line['head'] = (head, x)
-                line['thickness'] = 0
+                line['thickness'] = -1
             # line end
-            elif new_line and (j == column - 1 or mark_h[x][j] > 0 or binary[x][j] == 0 or not check(x, j, 'h', line['thickness'])):
+            elif new_line and (j == column - 1 or mark_h[x][j] > 0 or binary[x][j] == 0 or not check(x, j, 'h', line)):
                 end = j
                 new_line = False
                 if end - head > min_line_length_h:
@@ -92,7 +92,7 @@ def search_line(binary, min_line_length_h=200, min_line_length_v=80, max_thickne
                 line['head'] = (y, head)
                 line['thickness'] = 0
             # line end
-            elif new_line and (i == row - 1 or mark_v[i][y] > 0 or binary[i][y] == 0 or not check(i, y, 'v', line['thickness'])):
+            elif new_line and (i == row - 1 or mark_v[i][y] > 0 or binary[i][y] == 0 or not check(i, y, 'v', line)):
                 end = i
                 new_line = False
                 if end - head > min_line_length_v:
@@ -119,9 +119,9 @@ broad = np.zeros(org.shape, dtype=np.uint8)
 draw_line(broad, lines_h, (0, 255, 0))
 draw_line(broad, lines_v, (0, 0, 255))
 
-# new_bin = rm_line(binary, [lines_h, lines_v])
+new_bin = rm_line(binary, [lines_h, lines_v])
 
 cv2.imwrite('output/labeled.png', org)
 cv2.imwrite('output/lines.png', broad)
 cv2.imwrite('output/grad.png', binary)
-# cv2.imwrite('output/rm_line.png', new_bin)
+cv2.imwrite('output/rm_line.png', new_bin)
