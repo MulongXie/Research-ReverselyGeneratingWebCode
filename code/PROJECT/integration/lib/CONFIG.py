@@ -5,11 +5,12 @@ class Config:
 
     def __init__(self):
         self.ROOT_INPUT = "E:\Mulong\Datasets\dataset_webpage\page10000"
-        self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip_v3_ocr_irregular_compos"
+        self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v4_classification_noline"
         self.ROOT_IMG_ORG = pjoin(self.ROOT_INPUT, "org")
-        self.ROOT_LABEL = pjoin(self.ROOT_OUTPUT, "ip_label_rec")
+        self.ROOT_LABEL = pjoin(self.ROOT_OUTPUT, "ip_label")
         self.ROOT_IMG_DRAWN = pjoin(self.ROOT_OUTPUT, "ip_img_drawn")
         self.ROOT_IMG_GRADIENT = pjoin(self.ROOT_OUTPUT, "ip_img_gradient")
+        self.ROOT_IMG_GRADIENT_NO_LINE = pjoin(self.ROOT_OUTPUT, "ip_img_gradient_no_line")
         self.ROOT_IMG_CLEAN = pjoin(self.ROOT_OUTPUT, "ip_img_clean")
         self.ROOT_IMG_SEGMENT = pjoin(self.ROOT_OUTPUT, "ip_img_segment")
 
@@ -25,7 +26,9 @@ class Config:
         self.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS = 8
         self.THRESHOLD_BLOCK_MAX_CROSS_POINT = 0.3
 
-        self.THRESHOLD_LINE_MIN_THICKNESS = 5
+        self.THRESHOLD_LINE_THICKNESS = 5
+        self.THRESHOLD_LINE_MIN_LENGTH_H = 350
+        self.THRESHOLD_LINE_MIN_LENGTH_V = 100
 
         self.THRESHOLD_TEXT_EDGE_RATIO = 2.5
         self.THRESHOLD_TEXT_HEIGHT = 20

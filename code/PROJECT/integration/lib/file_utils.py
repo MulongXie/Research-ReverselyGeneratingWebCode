@@ -10,6 +10,8 @@ def build_output_folders(C):
         os.mkdir(C.ROOT_IMG_DRAWN)
     if not os.path.exists(C.ROOT_IMG_GRADIENT):
         os.mkdir(C.ROOT_IMG_GRADIENT)
+    if not os.path.exists(C.ROOT_IMG_GRADIENT_NO_LINE):
+        os.mkdir(C.ROOT_IMG_GRADIENT_NO_LINE)
     if not os.path.exists(C.ROOT_IMG_CLEAN):
         os.mkdir(C.ROOT_IMG_CLEAN)
     if not os.path.exists(C.ROOT_IMG_SEGMENT):

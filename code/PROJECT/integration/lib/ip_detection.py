@@ -265,7 +265,7 @@ def rm_line(binary, lines):
     return new_binary
 
 
-def line_detection(binary, min_line_length_h=200, min_line_length_v=80, max_thickness=3):
+def line_detection(binary, min_line_length_h, min_line_length_v, max_thickness):
     """
     Detect lines
     :param binary: Binary image from pre-processing
@@ -354,12 +354,12 @@ def line_detection(binary, min_line_length_h=200, min_line_length_v=80, max_thic
 # take the binary image as input
 # calculate the connected regions -> get the bounding boundaries of them -> check if those regions are rectangles
 # return all boundaries and boundaries of rectangles
-def boundary_detection(binary, min_obj_area, min_obj_perimeter, min_line_thickness, min_rec_evenness, max_dent_ratio):
+def boundary_detection(binary, min_obj_area, min_obj_perimeter, line_thickness, min_rec_evenness, max_dent_ratio):
     """
     :param binary: Binary image from pre-processing
     :param min_obj_area: If not pass then ignore the small object
     :param min_obj_perimeter: If not pass then ignore the small object
-    :param min_line_thickness: If not pass then ignore the slim object
+    :param line_thickness: If not pass then ignore the slim object
     :param min_rec_evenness: If not pass then this object cannot be rectangular
     :param max_dent_ratio: If not pass then this object cannot be rectangular
     :return: boundary: [top, bottom, left, right]
@@ -390,7 +390,7 @@ def boundary_detection(binary, min_obj_area, min_obj_perimeter, min_line_thickne
 
                 boundary_all.append(boundary)
                 # check if it is line by checking the length of edges
-                if util.is_line(boundary, min_line_thickness):
+                if util.is_line(boundary, line_thickness):
                     continue
 
                 # rectangle check

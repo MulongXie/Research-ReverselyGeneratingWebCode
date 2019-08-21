@@ -31,7 +31,7 @@ def rm_line(binary, lines):
     return new_binary
 
 
-def line_detection(binary, min_line_length_h=200, min_line_length_v=80, max_thickness=3):
+def line_detection(binary, min_line_length_h=350, min_line_length_v=100, max_thickness=3):
     """
     Detect lines
     :param binary: Binary image from pre-processing

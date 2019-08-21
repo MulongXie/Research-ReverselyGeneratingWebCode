@@ -22,14 +22,16 @@ binary = pre.preprocess(gray, 1)
 
 
 # *** Step 2 *** detect and remove lines: for better boundary detection
-line_h, line_v = det.line_detection(binary)
+line_h, line_v = det.line_detection(binary,
+                                    C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
+                                    C.THRESHOLD_LINE_THICKNESS)
 binary_no_line = det.rm_line(binary, [line_h, line_v])
 
 
 # *** Step 3 *** get data: get connected areas -> get boundary -> get corners
 boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary_no_line,
                                                         C.THRESHOLD_OBJ_MIN_AREA, C.THRESHOLD_OBJ_MIN_PERIMETER,        # size of area
-                                                        C.THRESHOLD_LINE_MIN_THICKNESS,                                 # line check
+                                                        C.THRESHOLD_LINE_THICKNESS,                                     # line check
                                                         C.THRESHOLD_REC_MIN_EVENNESS, C.THRESHOLD_IMG_MAX_DENT_RATIO)   # rectangle check
 # get corner of boundaries
 corners_rec = det.get_corner(boundary_rec)
