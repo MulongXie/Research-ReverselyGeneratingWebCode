@@ -14,22 +14,25 @@ C = Config()
 CNN = CNN()
 start = time.clock()
 is_classify = True
+is_rm_line = False
 is_save = True
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
 org, gray = pre.read_img('input/18.png', (0, 3000))  # cut out partial img
-binary = pre.preprocess(gray, 1)
+bin = pre.preprocess(gray, 1)
+binary = bin
 
 
 # *** Step 2 *** detect and remove lines: for better boundary detection
-line_h, line_v = det.line_detection(binary,
-                                    C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
-                                    C.THRESHOLD_LINE_THICKNESS)
-binary_no_line = det.rm_line(binary, [line_h, line_v])
-
+if is_rm_line:
+    line_h, line_v = det.line_detection(binary,
+                                        C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
+                                        C.THRESHOLD_LINE_THICKNESS)
+    bin_no_line = det.rm_line(binary, [line_h, line_v])
+    binary = bin_no_line
 
 # *** Step 3 *** get data: get connected areas -> get boundary -> get corners
-boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary_no_line,
+boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary,
                                                         C.THRESHOLD_OBJ_MIN_AREA, C.THRESHOLD_OBJ_MIN_PERIMETER,        # size of area
                                                         C.THRESHOLD_LINE_THICKNESS,                                     # line check
                                                         C.THRESHOLD_REC_MIN_EVENNESS, C.THRESHOLD_IMG_MAX_DENT_RATIO)   # rectangle check
@@ -40,7 +43,7 @@ corners_nonrec = det.get_corner(boundary_nonrec)
 
 # *** Step 4 *** process data: identify blocks and imgs from rectangles -> identify compos -> identify irregular imgs
 # identify rectangular block and rectangular img from rectangular shapes
-corners_block, corners_img = det.img_or_block(org, binary_no_line, corners_rec,
+corners_block, corners_img = det.img_or_block(org, binary, corners_rec,
                                               C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS, C.THRESHOLD_BLOCK_MAX_CROSS_POINT)  # block check
 # identify potential buttons and input bars
 corners_block, corners_compo = det.uicomponent_or_block(org, corners_block,
@@ -90,8 +93,8 @@ if is_save:
     cv2.imwrite('output/org.png', org)
     cv2.imwrite('output/labeled.png', draw_bounding)
     cv2.imwrite('output/boundary.png', draw_boundary)
-    cv2.imwrite('output/gradient.png', binary)
-    cv2.imwrite('output/gradient_no_line.png', binary_no_line)
+    cv2.imwrite('output/gradient.png', bin)
+    # cv2.imwrite('output/gradient_no_line.png', bin_no_line)
     cv2.imwrite('output/clean.png', img_clean)
     file.save_corners('output/corners.csv', corners_block, 'div')
     file.save_corners('output/corners.csv', corners_img, 'img', False)

@@ -23,8 +23,8 @@ CNN.load()
 is_classify = True
 is_rm_line = False
 is_save = True
-start_index = 11
-end_index = 50
+start_index = 51
+end_index = 55
 
 for input_path in input_paths:
     index = input_path.split('\\')[-1][:-4]
@@ -49,14 +49,16 @@ for input_path in input_paths:
     # gray, gradient, binary
     org, gray = pre.read_img(input_path, (0, 3000))  # cut out partial img
     if org is None or gray is None: continue
-    binary = pre.preprocess(gray, 1)
+    bin = pre.preprocess(gray, 1)
+    binary = bin
 
     # *** Step 2 *** detect and remove lines: for better boundary detection
     if is_rm_line:
         line_h, line_v = det.line_detection(binary,
                                             C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
                                             C.THRESHOLD_LINE_THICKNESS)
-        binary = det.rm_line(binary, [line_h, line_v])
+        bin_no_line = det.rm_line(binary, [line_h, line_v])
+        binary = bin_no_line
 
     # *** Step 3 *** get data: get connected areas -> get boundary -> get corners
     boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary,
@@ -81,7 +83,7 @@ for input_path in input_paths:
     # *** Step 5 *** refine results: refine img according to size -> OCR text area filter
     # ignore too large and highly likely text areas
     corners_img = det.img_refine(org, corners_img,
-                                 C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,  # ignore too large imgs
+                                 C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,                      # ignore too large imgs
                                  C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
     # merge overlapped corners, and remove nested corners
     # corners_img = det.merge_corners(corners_img)
@@ -114,8 +116,9 @@ for input_path in input_paths:
     # save results
     if is_save:
         cv2.imwrite(out_img_draw, draw_bounding)
-        cv2.imwrite(out_img_gradient, binary)
+        cv2.imwrite(out_img_gradient, bin)
         cv2.imwrite(out_img_clean, img_clean)
+        # cv2.imwrite(out_img_gradient_no_line, bin_no_line)
         file.save_corners(out_label, corners_block, 'div')
         file.save_corners(out_label, corners_img, 'img', False)
 
