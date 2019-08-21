@@ -6,8 +6,8 @@ import ip_preprocessing as pre
 def draw_line(img, lines, color, show=True):
     for line in lines:
         cv2.line(img, line[0], line[1], color)
-        cv2.imshow('img', img)
-        cv2.waitKey(0)
+        # cv2.imshow('img', img)
+        # cv2.waitKey(0)
 
 
 def rm_line(binary, lines):
@@ -31,40 +31,40 @@ def rm_line(binary, lines):
     return new_binary
 
 
-def search_line(binary, min_line_length_h=200, min_line_length_v=80, max_thickness=3, max_cross_point=0.1):
+def search_line(binary, min_line_length_h=200, min_line_length_v=80, max_thickness=3):
 
     def check(start_row, start_col, mode):
         if mode == 'h':
             for t in range(max_thickness + 1):
-                if start_row + t == binary.shape[0] or binary[start_row + t, start_col] == 0:
+                if start_row + t >= binary.shape[0] or binary[start_row + t, start_col] == 0:
                     return True
                 mark_h[start_row + t, start_col] = 255
             return False
         elif mode == 'v':
             for t in range(max_thickness + 1):
-                if start_col + t == binary.shape[1] or binary[start_row, start_col + t] == 0:
+                if start_col + t >= binary.shape[1] or binary[start_row, start_col + t] == 0:
                     return True
                 mark_v[start_row, start_col + t] = 255
             return False
 
     row, column = binary.shape[0], binary.shape[1]
 
-    mark_h = np.zeros(binary.shape)
-    mark_v = np.zeros(binary.shape)
+    mark_h = np.zeros(binary.shape, dtype=np.uint8)
+    mark_v = np.zeros(binary.shape, dtype=np.uint8)
     lines_h = []
     lines_v = []
     x, y = 0, 0
     while x < row - 1 or y < column - 1:
         # horizontal
         new_line = False
-        head, end = -1, -1
+        head, end = None, None
         for j in range(column):
             # line start
             if not new_line and mark_h[x][j] == 0 and binary[x][j] > 0 and check(x, j, 'h'):
                 head = j
                 new_line = True
             # line end
-            elif new_line and (mark_h[x][j] > 0 or binary[x][j] == 0 or not check(x, j, 'h')):
+            elif new_line and (j == column - 1 or mark_h[x][j] > 0 or binary[x][j] == 0 or not check(x, j, 'h')):
                 end = j
                 new_line = False
                 if end - head > min_line_length_h:
@@ -72,14 +72,14 @@ def search_line(binary, min_line_length_h=200, min_line_length_v=80, max_thickne
 
         # vertical
         new_line = False
-        head, end = -1, -1
+        head, end = None, None
         for i in range(row):
             # line start
-            if not new_line and mark_v[i][y] == 0 and binary[i][y] > 0 and not check(i, y, 'v'):
+            if not new_line and mark_v[i][y] == 0 and binary[i][y] > 0 and check(i, y, 'v'):
                 head = i
                 new_line = True
             # line end
-            elif new_line and (mark_v[i][y] > 0 or binary[i][y] == 0 or not check(i, y, 'v')):
+            elif new_line and (i == row - 1 or mark_v[i][y] > 0 or binary[i][y] == 0 or not check(i, y, 'v')):
                 end = i
                 new_line = False
                 if end - head > min_line_length_v:
