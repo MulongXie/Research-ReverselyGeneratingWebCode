@@ -31,7 +31,17 @@ def rm_line(binary, lines):
     return new_binary
 
 
-def search_line(binary, min_line_length_h=200, min_line_length_v=80, max_thickness=3):
+def line_detection(binary, min_line_length_h=200, min_line_length_v=80, max_thickness=3):
+    """
+    Detect lines
+    :param binary: Binary image from pre-processing
+    :param min_line_length_h: Min length for horizontal lines
+    :param min_line_length_v: Min length for vertical lines
+    :param max_thickness
+    :return: lines: [line_h, line_v]
+            -> line_h: horizontal {'head':(column_min, row), 'end':(column_max, row), 'thickness':int)
+            -> line_v: vertical {'head':(column, row_min), 'end':(column, row_max), 'thickness':int}
+    """
 
     def check(start_row, start_col, mode, line=None):
         if mode == 'h':
@@ -109,9 +119,9 @@ def search_line(binary, min_line_length_h=200, min_line_length_v=80, max_thickne
     return lines_h, lines_v
 
 
-org, gray = pre.read_img('input/6.png', (2000, 2600))  # cut out partial img
+org, gray = pre.read_img('input/18.png', (2000, 2600))  # cut out partial img
 binary = pre.preprocess(gray, 1)
-lines_h, lines_v = search_line(binary)
+lines_h, lines_v = line_detection(binary)
 draw_line(org, lines_h, (0, 255, 0))
 draw_line(org, lines_v, (0, 0, 255))
 
