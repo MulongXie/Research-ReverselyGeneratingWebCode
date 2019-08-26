@@ -71,7 +71,7 @@ def merge_corners(corners):
     return new_corners
 
 
-def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio):
+def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio, min_block_edge_length):
     """
     Select the potential ui components (button, input) from block objects
     :param org: Original image
@@ -80,6 +80,7 @@ def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio):
                             -> bottom_right: (column_max, row_max)
     :param compo_max_height: Over the threshold won't be counted
     :param compo_min_edge_ratio: Over the threshold won't be counted
+    :param min_block_edge_length: Main length for being a block
     :return: corners of compos and blocks
     """
     compos = []
@@ -94,7 +95,8 @@ def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio):
         if height <= compo_max_height and width/height >= compo_min_edge_ratio:
             compos.append(corner)
         else:
-            blocks.append(corner)
+            if width > min_block_edge_length and height > min_block_edge_length:
+                blocks.append(corner)
     return blocks, compos
 
 
