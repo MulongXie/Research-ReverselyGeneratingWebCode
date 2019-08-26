@@ -21,7 +21,7 @@ is_segment = False
 is_save = True
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/18.png', (0, 3000))  # cut out partial img
+org, gray = pre.read_img('input/7.png', (0, 1000))  # cut out partial img
 bin = pre.preprocess(gray, 1)
 
 

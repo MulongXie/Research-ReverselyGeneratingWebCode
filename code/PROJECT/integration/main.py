@@ -27,7 +27,7 @@ is_ocr = True
 is_segment = False
 is_save = True
 start_index = 1
-end_index = 18
+end_index = 100
 
 for input_path in input_paths:
     index = input_path.split('\\')[-1][:-4]
