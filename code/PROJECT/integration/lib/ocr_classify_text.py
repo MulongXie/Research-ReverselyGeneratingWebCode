@@ -38,7 +38,10 @@ def is_text(img, min_word_area, show=False):
 
 def text_detection(org, img_clean, color=(255, 0, 0)):
     board = org.copy()
-    data = pyt.image_to_data(img_clean).split('\n')
+    try:
+        data = pyt.image_to_data(img_clean).split('\n')
+    except:
+        return org, None
     word = []
     for d in data[1:]:
         d = d.split()

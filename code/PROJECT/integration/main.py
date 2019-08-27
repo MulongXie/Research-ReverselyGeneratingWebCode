@@ -27,8 +27,8 @@ is_merge_img = False
 is_ocr = True
 is_segment = False
 is_save = True
-start_index = 61
-end_index = 100
+start_index = 105
+end_index = 500
 
 for input_path in input_paths:
     index = input_path.split('\\')[-1][:-4]
@@ -52,7 +52,7 @@ for input_path in input_paths:
     # *** Step 1 *** pre-processing:
     # gray, gradient, binary
     org, gray = pre.read_img(input_path, (0, 3000))  # cut out partial img
-    if org is None or gray is None: continue
+    if org is None or gray is None or org.shape[1] > 2000: continue
     bin = pre.preprocess(gray, 1)
 
     # *** Step 2 *** detect and remove lines: for better boundary detection
