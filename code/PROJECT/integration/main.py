@@ -23,10 +23,11 @@ CNN.load()
 
 is_classify = True
 is_detect_line = False
+is_merge_img = False
 is_ocr = True
 is_segment = False
 is_save = True
-start_index = 1
+start_index = 61
 end_index = 100
 
 for input_path in input_paths:
@@ -91,7 +92,8 @@ for input_path in input_paths:
                                  C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,  # ignore too large imgs
                                  C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
     # merge overlapped corners, and remove nested corners
-    # corners_img = det.merge_corners(corners_img)
+    if is_merge_img:
+        corners_img = det.merge_corners(corners_img)
     # remove text
     corners_block = det.rm_text(org, corners_block,
                                 C.THRESHOLD_IMG_MUST_HEIGHT, C.THRESHOLD_IMG_MUST_WIDTH,    # img assertion

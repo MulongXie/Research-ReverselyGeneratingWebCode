@@ -16,16 +16,17 @@ CNN = CNN()
 start = time.clock()
 is_classify = True
 is_detect_line = False
+is_merge_img = False
 is_ocr = True
 is_segment = False
 is_save = True
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/2.png', (0, 1000))  # cut out partial img
+org, gray = pre.read_img('input/5.png', (0, 2000))  # cut out partial img
 bin = pre.preprocess(gray, 1)
 
 
-# *** Step 2 *** detect and remove lines: for better boundary detection
+# *** Step 2 *** line detection: for better boundary detection
 if is_detect_line:
     line_h, line_v = det.line_detection(bin,
                                         C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
@@ -35,7 +36,7 @@ if is_detect_line:
 else:
     binary = bin
 
-# *** Step 3 *** get data: get connected areas -> get boundary -> get corners
+# *** Step 3 *** object detection: get connected areas -> get boundary -> get corners
 boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary,
                                                         C.THRESHOLD_OBJ_MIN_AREA, C.THRESHOLD_OBJ_MIN_PERIMETER,        # size of area
                                                         C.THRESHOLD_LINE_THICKNESS,                                     # line check
@@ -64,7 +65,8 @@ corners_img = det.img_refine(org, corners_img,
                              C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,                      # ignore too large imgs
                              C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
 # merge overlapped corners, and remove nested corners
-# corners_img = det.merge_corners(corners_img)
+if is_merge_img:
+    corners_img = det.merge_corners(corners_img)
 # remove text
 corners_block = det.rm_text(org, corners_block,
                           C.THRESHOLD_IMG_MUST_HEIGHT, C.THRESHOLD_IMG_MUST_WIDTH,    # img assertion
