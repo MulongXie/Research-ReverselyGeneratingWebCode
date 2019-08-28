@@ -27,7 +27,7 @@ is_merge_img = False
 is_ocr = True
 is_segment = False
 is_save = True
-start_index = 105
+start_index = 124
 end_index = 500
 
 for input_path in input_paths:
