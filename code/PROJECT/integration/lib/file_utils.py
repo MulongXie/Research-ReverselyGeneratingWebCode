@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import json
 import time
 
 
@@ -35,6 +36,27 @@ def save_corners(file_path, corners, compo_name, clear=True):
         c['height'] = c['x_max'] - c['x_min']
         df = df.append(c, True)
     df.to_csv(file_path)
+
+
+def save_corners_json(file_path, corners, compo_name):
+    if os.path.exists(file_path):
+        f_in = open(file_path, 'r')
+        components = json.load(f_in)
+    else:
+        components = {'compos': []}
+    f_out = open(file_path, 'w')
+
+    for corner in corners:
+        (up_left, bottom_right) = corner
+        c = {'component': compo_name}
+        (c['column_min'], c['row_min']) = up_left
+        (c['column_max'], c['row_max']) = bottom_right
+        c['width'] = c['column_max'] - c['column_min']
+        c['height'] = c['row_max'] - c['row_min']
+        components['compos'].append(c)
+
+    print(components)
+    json.dump(components, f_out)
 
 
 def timer(start):

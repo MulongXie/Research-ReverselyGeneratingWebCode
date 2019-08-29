@@ -22,7 +22,7 @@ is_segment = False
 is_save = True
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/x.png', (0, 2000))  # cut out partial img
+org, gray = pre.read_img('input/2.png', (0, 2000))  # cut out partial img
 bin = pre.preprocess(gray, 1)
 
 
@@ -112,7 +112,7 @@ if is_save:
     cv2.imwrite('output/gradient.png', bin)
     # cv2.imwrite('output/gradient_no_line.png', bin_no_line)
     cv2.imwrite('output/clean.png', img_clean)
-    file.save_corners('output/corners.csv', corners_block, 'div')
-    file.save_corners('output/corners.csv', corners_img, 'img', False)
+    file.save_corners_json('output/compo.json', corners_block, 'div')
+    file.save_corners_json('output/compo.json', corners_img, 'img')
 
 end = file.timer(start)
