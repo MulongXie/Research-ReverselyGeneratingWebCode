@@ -20,6 +20,7 @@ is_merge_img = False
 is_ocr = True
 is_segment = False
 is_save = True
+is_clip = True
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
 org, gray = pre.read_img('input/2.png', (0, 2000))  # cut out partial img
@@ -112,7 +113,12 @@ if is_save:
     cv2.imwrite('output/gradient.png', bin)
     # cv2.imwrite('output/gradient_no_line.png', bin_no_line)
     cv2.imwrite('output/clean.png', img_clean)
-    file.save_corners_json('output/compo.json', corners_block, 'div')
-    file.save_corners_json('output/compo.json', corners_img, 'img')
+    file.save_corners_json('output/compo.json', corners_block, ['div' for i in range(len(corners_block))])
+    file.save_corners_json('output/compo.json', corners_img, ['img' for j in range(len(corners_img))])
+    file.save_corners_json('output/compo.json', corners_compo, compos_classes)
+if is_clip:
+    file.save_clipping(org, 'output/clip', corners_block, ['div' for k in range(len(corners_block))])
+    file.save_clipping(org, 'output/clip', corners_img, ['img' for l in range(len(corners_img))])
+    file.save_clipping(org, 'output/clip', corners_compo, compos_classes)
 
 end = file.timer(start)
