@@ -23,11 +23,12 @@ CNN.load()
 
 is_classify = True
 is_detect_line = False
+is_merge_img = False
 is_ocr = True
 is_segment = False
 is_save = True
-start_index = 18
-end_index = 18
+start_index = 124
+end_index = 500
 
 for input_path in input_paths:
     index = input_path.split('\\')[-1][:-4]
@@ -51,7 +52,7 @@ for input_path in input_paths:
     # *** Step 1 *** pre-processing:
     # gray, gradient, binary
     org, gray = pre.read_img(input_path, (0, 3000))  # cut out partial img
-    if org is None or gray is None: continue
+    if org is None or gray is None or org.shape[1] > 2000: continue
     bin = pre.preprocess(gray, 1)
 
     # *** Step 2 *** detect and remove lines: for better boundary detection
@@ -79,7 +80,8 @@ for input_path in input_paths:
                                                   C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS, C.THRESHOLD_BLOCK_MAX_CROSS_POINT)  # block check
     # identify potential buttons and input bars
     corners_block, corners_compo = det.uicomponent_or_block(org, corners_block,
-                                                            C.THRESHOLD_UICOMPO_MAX_HEIGHT, C.THRESHOLD_UICOMPO_MIN_EDGE_RATION)
+                                                            C.THRESHOLD_UICOMPO_MAX_HEIGHT,
+                                                            C.THRESHOLD_UICOMPO_MIN_EDGE_RATION, C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH)
     # identify irregular-shape img from irregular shapes
     corners_img += det.img_irregular(org, corners_nonrec,
                                      C.THRESHOLD_IMG_MUST_HEIGHT, C.THRESHOLD_IMG_MUST_WIDTH)  # img assertion
@@ -90,7 +92,8 @@ for input_path in input_paths:
                                  C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,  # ignore too large imgs
                                  C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
     # merge overlapped corners, and remove nested corners
-    # corners_img = det.merge_corners(corners_img)
+    if is_merge_img:
+        corners_img = det.merge_corners(corners_img)
     # remove text
     corners_block = det.rm_text(org, corners_block,
                                 C.THRESHOLD_IMG_MUST_HEIGHT, C.THRESHOLD_IMG_MUST_WIDTH,    # img assertion

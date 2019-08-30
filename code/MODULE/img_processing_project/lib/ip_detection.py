@@ -36,17 +36,17 @@ def merge_corners(corners):
     """
     def merge_overlapped(corner_a, corner_b):
         (up_left_a, bottom_right_a) = corner_a
-        (y_min_a, x_min_a) = up_left_a
-        (y_max_a, x_max_a) = bottom_right_a
+        (col_min_a, row_min_a) = up_left_a
+        (col_max_a, row_max_a) = bottom_right_a
         (up_left_b, bottom_right_b) = corner_b
-        (y_min_b, x_min_b) = up_left_b
-        (y_max_b, x_max_b) = bottom_right_b
+        (col_min_b, row_min_b) = up_left_b
+        (col_max_b, row_max_b) = bottom_right_b
 
-        y_min = min(y_min_a, y_min_b)
-        y_max = max(y_max_a, y_max_b)
-        x_min = min(x_min_a, x_min_b)
-        x_max = max(x_max_a, x_max_b)
-        return ((y_min, x_min), (y_max, x_max))
+        col_min = min(col_min_a, col_min_b)
+        col_max = max(col_max_a, col_max_b)
+        row_min = min(row_min_a, row_min_b)
+        row_max = max(row_max_a, row_max_b)
+        return ((col_min, row_min), (col_max, row_max))
 
     new_corners = []
     for corner in corners:
@@ -71,7 +71,7 @@ def merge_corners(corners):
     return new_corners
 
 
-def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio):
+def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio, min_block_edge_length):
     """
     Select the potential ui components (button, input) from block objects
     :param org: Original image
@@ -80,21 +80,23 @@ def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio):
                             -> bottom_right: (column_max, row_max)
     :param compo_max_height: Over the threshold won't be counted
     :param compo_min_edge_ratio: Over the threshold won't be counted
+    :param min_block_edge_length: Main length for being a block
     :return: corners of compos and blocks
     """
     compos = []
     blocks = []
     for corner in corners:
         (up_left, bottom_right) = corner
-        (y_min, x_min) = up_left
-        (y_max, x_max) = bottom_right
-        height = x_max - x_min
-        width = y_max - y_min
+        (col_min, row_min) = up_left
+        (col_max, row_max) = bottom_right
+        height = row_max - row_min
+        width = col_max - col_min
 
         if height <= compo_max_height and width/height >= compo_min_edge_ratio:
             compos.append(corner)
         else:
-            blocks.append(corner)
+            if width > min_block_edge_length and height > min_block_edge_length:
+                blocks.append(corner)
     return blocks, compos
 
 
@@ -114,28 +116,28 @@ def img_or_block(org, binary, corners, max_thickness, max_block_cross_points):
     imgs = []
     for corner in corners:
         (up_left, bottom_right) = corner
-        (y_min, x_min) = up_left
-        (y_max, x_max) = bottom_right
+        (col_min, row_min) = up_left
+        (col_max, row_max) = bottom_right
 
         is_block = False
         vacancy = [0, 0, 0, 0]
         for i in range(1, max_thickness):
             try:
                 # up down
-                if vacancy[0] == 0 and (y_max - y_min - 2 * i) is not 0 and (
-                        np.sum(binary[x_min + i, y_min + i: y_max - i]) / 255) / (y_max - y_min - 2 * i) <= max_block_cross_points:
+                if vacancy[0] == 0 and (col_max - col_min - 2 * i) is not 0 and (
+                        np.sum(binary[row_min + i, col_min + i: col_max - i]) / 255) / (col_max - col_min - 2 * i) <= max_block_cross_points:
                     vacancy[0] = 1
                 # bottom-up
-                if vacancy[1] == 0 and (y_max - y_min - 2 * i) is not 0 and (
-                        np.sum(binary[x_max - i, y_min + i: y_max - i]) / 255) / (y_max - y_min - 2 * i) <= max_block_cross_points:
+                if vacancy[1] == 0 and (col_max - col_min - 2 * i) is not 0 and (
+                        np.sum(binary[row_max - i, col_min + i: col_max - i]) / 255) / (col_max - col_min - 2 * i) <= max_block_cross_points:
                     vacancy[1] = 1
                 # left to right
-                if vacancy[2] == 0 and (x_max - x_min - 2 * i) is not 0 and (
-                        np.sum(binary[x_min + i: x_max - i, y_min + i]) / 255) / (x_max - x_min - 2 * i) <= max_block_cross_points:
+                if vacancy[2] == 0 and (row_max - row_min - 2 * i) is not 0 and (
+                        np.sum(binary[row_min + i: row_max - i, col_min + i]) / 255) / (row_max - row_min - 2 * i) <= max_block_cross_points:
                     vacancy[2] = 1
                 # right to left
-                if vacancy[3] == 0 and (x_max - x_min - 2 * i) is not 0 and (
-                        np.sum(binary[x_min + i: x_max - i, y_max - i]) / 255) / (x_max - x_min - 2 * i) <= max_block_cross_points:
+                if vacancy[3] == 0 and (row_max - row_min - 2 * i) is not 0 and (
+                        np.sum(binary[row_min + i: row_max - i, col_max - i]) / 255) / (row_max - row_min - 2 * i) <= max_block_cross_points:
                     vacancy[3] = 1
                 if np.sum(vacancy) == 4:
                     is_block = True
@@ -164,10 +166,10 @@ def img_irregular(org, corners, must_img_height, must_img_width):
     imgs = []
     for corner in corners:
         (up_left, bottom_right) = corner
-        (y_min, x_min) = up_left
-        (y_max, x_max) = bottom_right
-        height = x_max - x_min
-        width = y_max - y_min
+        (col_min, row_min) = up_left
+        (col_max, row_max) = bottom_right
+        height = row_max - row_min
+        width = col_max - col_min
         # assumption: large one must be img component no matter its edge ratio
         if height > must_img_height:
             imgs.append(corner)
@@ -191,10 +193,10 @@ def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height)
     refined_imgs = []
     for corner in corners:
         (up_left, bottom_right) = corner
-        (y_min, x_min) = up_left
-        (y_max, x_max) = bottom_right
-        height = x_max - x_min
-        width = y_max - y_min
+        (col_min, row_min) = up_left
+        (col_max, row_max) = bottom_right
+        height = row_max - row_min
+        width = col_max - col_min
 
         # ignore too large ones
         if org.shape[0] > 1000 and height / img_height > max_img_height_ratio:
@@ -205,6 +207,19 @@ def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height)
         refined_imgs.append(corner)
 
     return refined_imgs
+
+
+def img_rm_line(binary, corners, min_line_length_h, min_line_length_v, max_thickness):
+    for corner in corners:
+        (up_left, bottom_right) = corner
+        (col_min, row_min) = up_left
+        (col_max, row_max) = bottom_right
+        height = row_max - row_min
+        width = col_max - col_min
+
+        img = binary[row_min:row_max, col_min:col_max]
+        cv2.imshow('img', img)
+        cv2.waitKey(0)
 
 
 # remove imgs that contain text
@@ -225,20 +240,20 @@ def rm_text(org, corners, must_img_height, must_img_width, ocr_padding, ocr_min_
     new_corners = []
     for corner in corners:
         (up_left, bottom_right) = corner
-        (y_min, x_min) = up_left
-        (y_max, x_max) = bottom_right
-        height = x_max - x_min
-        width = y_max - y_min
+        (col_min, row_min) = up_left
+        (col_max, row_max) = bottom_right
+        height = row_max - row_min
+        width = col_max - col_min
         # highly likely to be block or img if too large
         if height > must_img_height and width > must_img_width:
             new_corners.append(corner)
         else:
-            x_min = x_min - ocr_padding if x_min - ocr_padding >= 0 else 0
-            x_max = x_max + ocr_padding if x_max + ocr_padding < org.shape[0] else org.shape[0]
-            y_min = y_min - ocr_padding if y_min - ocr_padding >= 0 else 0
-            y_max = y_max + ocr_padding if y_max + ocr_padding < org.shape[1] else org.shape[1]
+            row_min = row_min - ocr_padding if row_min - ocr_padding >= 0 else 0
+            row_max = row_max + ocr_padding if row_max + ocr_padding < org.shape[0] else org.shape[0]
+            col_min = col_min - ocr_padding if col_min - ocr_padding >= 0 else 0
+            col_max = col_max + ocr_padding if col_max + ocr_padding < org.shape[1] else org.shape[1]
             # check if this area is text
-            clip = org[x_min: x_max, y_min: y_max]
+            clip = org[row_min: row_max, col_min: col_max]
             if not ocr.is_text(clip, ocr_min_word_area, show=show):
                 new_corners.append(corner)
     return new_corners

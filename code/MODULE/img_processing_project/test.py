@@ -1,15 +1,32 @@
-import pytesseract as pyt
+import ip_detection as det
+import ip_preprocessing as pre
+import ip_draw as draw
+import ip_segment as seg
+import file_utils as file
+import ocr_classify_text as ocr
+from CONFIG import Config
+from MODEL import CNN
+
 import cv2
+import time
 
-img = cv2.imread('output/clean.png')
+# initialization
+C = Config()
+CNN = CNN()
+start = time.clock()
+is_classify = True
+is_detect_line = False
+is_merge_img = False
+is_ocr = True
+is_segment = False
+is_save = True
 
-data = pyt.image_to_data(img).split('\n')
-for d in data[1:]:
-    d = d.split()
-    if d[-1] != '-1':
-        if d[-1] != '-' and d[-1] != '—' and int(d[-3]) < 40:
-            t_l = (int(d[-6]), int(d[-5]))
-            b_r = (int(d[-6]) + int(d[-4]), int(d[-5]) + int(d[-3]))
-            cv2.rectangle(img, t_l, b_r, (0, 0, 255), 1)
+org, gray = pre.read_img('input/5.png', (0, 3000))  # cut out partial img
+bin = pre.preprocess(gray, 1)
 
-cv2.imwrite('output/ocr.png', img)
+line_h, line_v = det.line_detection(bin,
+                                    C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
+                                    C.THRESHOLD_LINE_THICKNESS)
+print(len(line_h), len(line_v))
+draw.draw_line(org, (line_h, line_v), (0,0,255))
+cv2.imwrite('output/line.png', org)

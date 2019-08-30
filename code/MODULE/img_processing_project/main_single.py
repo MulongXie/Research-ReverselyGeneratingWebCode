@@ -16,16 +16,18 @@ CNN = CNN()
 start = time.clock()
 is_classify = True
 is_detect_line = False
+is_merge_img = False
 is_ocr = True
 is_segment = False
 is_save = True
+is_clip = True
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/18.png', (0, 3000))  # cut out partial img
+org, gray = pre.read_img('input/1.png', (0, 2000))  # cut out partial img
 bin = pre.preprocess(gray, 1)
 
 
-# *** Step 2 *** detect and remove lines: for better boundary detection
+# *** Step 2 *** line detection: for better boundary detection
 if is_detect_line:
     line_h, line_v = det.line_detection(bin,
                                         C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
@@ -35,7 +37,7 @@ if is_detect_line:
 else:
     binary = bin
 
-# *** Step 3 *** get data: get connected areas -> get boundary -> get corners
+# *** Step 3 *** object detection: get connected areas -> get boundary -> get corners
 boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary,
                                                         C.THRESHOLD_OBJ_MIN_AREA, C.THRESHOLD_OBJ_MIN_PERIMETER,        # size of area
                                                         C.THRESHOLD_LINE_THICKNESS,                                     # line check
@@ -51,7 +53,8 @@ corners_block, corners_img = det.img_or_block(org, binary, corners_rec,
                                               C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS, C.THRESHOLD_BLOCK_MAX_CROSS_POINT)  # block check
 # identify potential buttons and input bars
 corners_block, corners_compo = det.uicomponent_or_block(org, corners_block,
-                                                        C.THRESHOLD_UICOMPO_MAX_HEIGHT, C.THRESHOLD_UICOMPO_MIN_EDGE_RATION)
+                                                        C.THRESHOLD_UICOMPO_MAX_HEIGHT,
+                                                        C.THRESHOLD_UICOMPO_MIN_EDGE_RATION, C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH)
 # identify irregular-shape img from irregular shapes
 corners_img += det.img_irregular(org, corners_nonrec,
                                  C.THRESHOLD_IMG_MUST_HEIGHT, C.THRESHOLD_IMG_MUST_WIDTH)   # img assertion
@@ -63,7 +66,8 @@ corners_img = det.img_refine(org, corners_img,
                              C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,                      # ignore too large imgs
                              C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
 # merge overlapped corners, and remove nested corners
-# corners_img = det.merge_corners(corners_img)
+if is_merge_img:
+    corners_img = det.merge_corners(corners_img)
 # remove text
 corners_block = det.rm_text(org, corners_block,
                           C.THRESHOLD_IMG_MUST_HEIGHT, C.THRESHOLD_IMG_MUST_WIDTH,    # img assertion
@@ -109,7 +113,12 @@ if is_save:
     cv2.imwrite('output/gradient.png', bin)
     # cv2.imwrite('output/gradient_no_line.png', bin_no_line)
     cv2.imwrite('output/clean.png', img_clean)
-    file.save_corners('output/corners.csv', corners_block, 'div')
-    file.save_corners('output/corners.csv', corners_img, 'img', False)
+    file.save_corners_json('output/compo.json', corners_block, ['div' for i in range(len(corners_block))])
+    file.save_corners_json('output/compo.json', corners_img, ['img' for j in range(len(corners_img))])
+    file.save_corners_json('output/compo.json', corners_compo, compos_classes)
+if is_clip:
+    file.save_clipping(org, 'output/clip', corners_block, ['div' for k in range(len(corners_block))])
+    file.save_clipping(org, 'output/clip', corners_img, ['img' for l in range(len(corners_img))])
+    file.save_clipping(org, 'output/clip', corners_compo, compos_classes)
 
 end = file.timer(start)
