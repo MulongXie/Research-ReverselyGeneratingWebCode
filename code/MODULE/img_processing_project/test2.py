@@ -64,9 +64,12 @@ corners_img += det.img_irregular(org, corners_nonrec,
 corners_img = det.img_refine(org, corners_img,
                              C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,                      # ignore too large imgs
                              C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
-det.img_rm_line(binary, corners_img,
+
+
+det.img_rm_line(org, binary, corners_img,
                 C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
                 C.THRESHOLD_LINE_THICKNESS)
+
 
 # merge overlapped corners, and remove nested corners
 if is_merge_img:

@@ -21,7 +21,7 @@ is_ocr = True
 is_segment = False
 is_save = True
 
-org, gray = pre.read_img('input/5.png', (0, 3000))  # cut out partial img
+org, gray = pre.read_img('input/0.png', (0, 3000))  # cut out partial img
 bin = pre.preprocess(gray, 1)
 
 line_h, line_v = det.line_detection(bin,

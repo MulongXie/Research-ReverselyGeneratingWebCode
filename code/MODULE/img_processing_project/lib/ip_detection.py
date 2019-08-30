@@ -209,16 +209,54 @@ def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height)
     return refined_imgs
 
 
-def img_rm_line(binary, corners, min_line_length_h, min_line_length_v, max_thickness):
+def img_rm_line(org, binary, corners, min_line_length_h, min_line_length_v, max_thickness):
+
+    def check_perpendicular():
+        """
+        lines: [line_h, line_v]
+            -> line_h: horizontal {'head':(column_min, row), 'end':(column_max, row), 'thickness':int)
+            -> line_v: vertical {'head':(column, row_min), 'end':(column, row_max), 'thickness':int}
+        """
+        is_per_h = np.full(len(lines_h), False)
+        is_per_v = np.full(len(lines_v), False)
+        for i in range(len(lines_h)):
+            h = lines_h[i]
+            for j in range(len(lines_v)):
+                v = lines_v[j]
+                print(h['head'], h['end'], v['head'], v['end'])
+                # if h is perpendicular to v in the endpoints
+                if abs(h['head'][1]-v['head'][1]) < max_thickness or\
+                        abs(h['head'][1]-v['end'][1]) < max_thickness:
+                    is_per_h[i] = True
+                    is_per_v[j] = True
+        per_h = []
+        per_v = []
+        for i in range(len(is_per_h)):
+            if is_per_h[i]:
+                per_h.append(lines_h[i])
+        for i in range(len(is_per_v)):
+            if is_per_v[i]:
+                per_v.append(lines_v[i])
+        return per_h, per_v
+
     for corner in corners:
         (up_left, bottom_right) = corner
         (col_min, row_min) = up_left
         (col_max, row_max) = bottom_right
-        height = row_max - row_min
-        width = col_max - col_min
 
-        img = binary[row_min:row_max, col_min:col_max]
-        cv2.imshow('img', img)
+        clip_bin = binary[row_min:row_max, col_min:col_max]
+        clip_org = org[row_min-3:row_max+3, col_min-3:col_max+3]
+
+        lines_h, lines_v = line_detection(clip_bin, min_line_length_h, min_line_length_v, max_thickness)
+        lines_h, lines_v = check_perpendicular()
+
+        if len(lines_h) + len(lines_v) > 0:
+            print(len(lines_h), len(lines_v))
+            broad = draw.draw_line(clip_org, (lines_h, lines_v), (0, 255, 0))
+            cv2.imshow('img', broad)
+
+        clip_bin = rm_line(clip_bin, (lines_h, lines_v))
+        cv2.imshow('bin', clip_bin)
         cv2.waitKey(0)
 
 
@@ -272,10 +310,10 @@ def rm_line(binary, lines):
     line_h, line_v = lines
     for line in line_h:
         row = line['head'][1]
-        new_binary[row: row + line['thickness'], line['head'][0]:line['end'][0]] = 0
+        new_binary[row: row + line['thickness'], line['head'][0]:line['end'][0] + 1] = 0
     for line in line_v:
         column = line['head'][0]
-        new_binary[line['head'][1]:line['end'][1], column: column + line['thickness']] = 0
+        new_binary[line['head'][1]:line['end'][1] + 1, column: column + line['thickness']] = 0
 
     return new_binary
 
@@ -291,11 +329,14 @@ def line_detection(binary, min_line_length_h, min_line_length_v, max_thickness):
             -> line_h: horizontal {'head':(column_min, row), 'end':(column_max, row), 'thickness':int)
             -> line_v: vertical {'head':(column, row_min), 'end':(column, row_max), 'thickness':int}
     """
-    def check(start_row, start_col, mode, line=None):
+    def no_neighbor(start_row, start_col, mode, line=None):
+        """
+        check this point has adjacent points in orthogonal direction
+        """
         if mode == 'h':
             for t in range(max_thickness + 1):
                 if start_row + t >= binary.shape[0] or binary[start_row + t, start_col] == 0:
-                    # if needed, update the thickness of this line
+                    # if not start point, update the thickness of this line
                     if line is not None:
                         line['thickness'] = max(line['thickness'], t)
                     return True
@@ -304,7 +345,7 @@ def line_detection(binary, min_line_length_h, min_line_length_v, max_thickness):
         elif mode == 'v':
             for t in range(max_thickness + 1):
                 if start_col + t >= binary.shape[1] or binary[start_row, start_col + t] == 0:
-                    # if needed, update the thickness of this line
+                    # if not start point, update the thickness of this line
                     if line is not None:
                         line['thickness'] = max(line['thickness'], t)
                     return True
@@ -324,13 +365,13 @@ def line_detection(binary, min_line_length_h, min_line_length_v, max_thickness):
         line = {}
         for j in range(column):
             # line start
-            if not new_line and mark_h[x][j] == 0 and binary[x][j] > 0 and check(x, j, 'h'):
+            if not new_line and mark_h[x][j] == 0 and binary[x][j] > 0 and no_neighbor(x, j, 'h'):
                 head = j
                 new_line = True
                 line['head'] = (head, x)
                 line['thickness'] = -1
             # line end
-            elif new_line and (j == column - 1 or mark_h[x][j] > 0 or binary[x][j] == 0 or not check(x, j, 'h', line)):
+            elif new_line and (j == column - 1 or mark_h[x][j] > 0 or binary[x][j] == 0 or not no_neighbor(x, j, 'h', line)):
                 end = j
                 new_line = False
                 if end - head > min_line_length_h:
@@ -344,13 +385,13 @@ def line_detection(binary, min_line_length_h, min_line_length_v, max_thickness):
         line = {}
         for i in range(row):
             # line start
-            if not new_line and mark_v[i][y] == 0 and binary[i][y] > 0 and check(i, y, 'v'):
+            if not new_line and mark_v[i][y] == 0 and binary[i][y] > 0 and no_neighbor(i, y, 'v'):
                 head = i
                 new_line = True
                 line['head'] = (y, head)
                 line['thickness'] = 0
             # line end
-            elif new_line and (i == row - 1 or mark_v[i][y] > 0 or binary[i][y] == 0 or not check(i, y, 'v', line)):
+            elif new_line and (i == row - 1 or mark_v[i][y] > 0 or binary[i][y] == 0 or not no_neighbor(i, y, 'v', line)):
                 end = i
                 new_line = False
                 if end - head > min_line_length_v:
