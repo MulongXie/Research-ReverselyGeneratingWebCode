@@ -35,11 +35,11 @@ def merge_corners(corners):
     :return: new corners
     """
     def merge_overlapped(corner_a, corner_b):
-        (up_left_a, bottom_right_a) = corner_a
-        (col_min_a, row_min_a) = up_left_a
+        (top_left_a, bottom_right_a) = corner_a
+        (col_min_a, row_min_a) = top_left_a
         (col_max_a, row_max_a) = bottom_right_a
-        (up_left_b, bottom_right_b) = corner_b
-        (col_min_b, row_min_b) = up_left_b
+        (top_left_b, bottom_right_b) = corner_b
+        (col_min_b, row_min_b) = top_left_b
         (col_max_b, row_max_b) = bottom_right_b
 
         col_min = min(col_min_a, col_min_b)
@@ -52,7 +52,7 @@ def merge_corners(corners):
     for corner in corners:
         is_intersected = False
         for i in range(len(new_corners)):
-            r = util.relation(corner, new_corners[i])
+            r = util.corner_relation(corner, new_corners[i])
             # if corner is in new_corners[i], ignore corner
             if r == -1:
                 is_intersected = True
@@ -86,8 +86,8 @@ def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio, m
     compos = []
     blocks = []
     for corner in corners:
-        (up_left, bottom_right) = corner
-        (col_min, row_min) = up_left
+        (top_left, bottom_right) = corner
+        (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
         height = row_max - row_min
         width = col_max - col_min
@@ -115,8 +115,8 @@ def img_or_block(org, binary, corners, max_thickness, max_block_cross_points):
     blocks = []
     imgs = []
     for corner in corners:
-        (up_left, bottom_right) = corner
-        (col_min, row_min) = up_left
+        (top_left, bottom_right) = corner
+        (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
 
         is_block = False
@@ -165,8 +165,8 @@ def img_irregular(org, corners, must_img_height, must_img_width):
     """
     imgs = []
     for corner in corners:
-        (up_left, bottom_right) = corner
-        (col_min, row_min) = up_left
+        (top_left, bottom_right) = corner
+        (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
         height = row_max - row_min
         width = col_max - col_min
@@ -192,8 +192,8 @@ def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height)
 
     refined_imgs = []
     for corner in corners:
-        (up_left, bottom_right) = corner
-        (col_min, row_min) = up_left
+        (top_left, bottom_right) = corner
+        (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
         height = row_max - row_min
         width = col_max - col_min
@@ -209,18 +209,35 @@ def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height)
     return refined_imgs
 
 
-def img_rm_line(binary, corners, min_line_length_h, min_line_length_v, max_thickness):
+def img_shrink(org, binary, corners, min_line_length_h, min_line_length_v, max_thickness):
+
+    corners_shrunken = []
+    pad = 2
     for corner in corners:
-        (up_left, bottom_right) = corner
-        (col_min, row_min) = up_left
+        (top_left, bottom_right) = corner
+        (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
-        height = row_max - row_min
-        width = col_max - col_min
 
-        img = binary[row_min:row_max, col_min:col_max]
-        cv2.imshow('img', img)
-        cv2.waitKey(0)
+        col_min = max(col_min - pad, 0)
+        col_max = min(col_max + pad, org.shape[1])
+        row_min = max(row_min - pad, 0)
+        row_max = min(row_max + pad, org.shape[0])
 
+        clip_bin = binary[row_min:row_max, col_min:col_max]
+        clip_org = org[row_min:row_max, col_min:col_max]
+
+        # detect lines in the image
+        lines_h, lines_v = line_detection(clip_bin, min_line_length_h, min_line_length_v, max_thickness)
+        # select those perpendicularly intersect with others at endpoints
+        lines_h, lines_v = util.line_check_perpendicular(lines_h, lines_v, max_thickness)
+        # convert the position of lines into relative position in the entire image
+        lines_h, lines_v = util.line_cvt_relative_position(col_min, row_min, lines_h, lines_v)
+
+        # shrink corner according to the lines
+        corner_shrunken = util.line_shrink_corners(corner, lines_h, lines_v)
+        corners_shrunken.append(corner_shrunken)
+
+    return corners_shrunken
 
 # remove imgs that contain text
 def rm_text(org, corners, must_img_height, must_img_width, ocr_padding, ocr_min_word_area, show=False):
@@ -239,8 +256,8 @@ def rm_text(org, corners, must_img_height, must_img_width, ocr_padding, ocr_min_
     """
     new_corners = []
     for corner in corners:
-        (up_left, bottom_right) = corner
-        (col_min, row_min) = up_left
+        (top_left, bottom_right) = corner
+        (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
         height = row_max - row_min
         width = col_max - col_min
@@ -272,10 +289,10 @@ def rm_line(binary, lines):
     line_h, line_v = lines
     for line in line_h:
         row = line['head'][1]
-        new_binary[row: row + line['thickness'], line['head'][0]:line['end'][0]] = 0
+        new_binary[row: row + line['thickness'], line['head'][0]:line['end'][0] + 1] = 0
     for line in line_v:
         column = line['head'][0]
-        new_binary[line['head'][1]:line['end'][1], column: column + line['thickness']] = 0
+        new_binary[line['head'][1]:line['end'][1] + 1, column: column + line['thickness']] = 0
 
     return new_binary
 
@@ -291,11 +308,14 @@ def line_detection(binary, min_line_length_h, min_line_length_v, max_thickness):
             -> line_h: horizontal {'head':(column_min, row), 'end':(column_max, row), 'thickness':int)
             -> line_v: vertical {'head':(column, row_min), 'end':(column, row_max), 'thickness':int}
     """
-    def check(start_row, start_col, mode, line=None):
+    def no_neighbor(start_row, start_col, mode, line=None):
+        """
+        check this point has adjacent points in orthogonal direction
+        """
         if mode == 'h':
             for t in range(max_thickness + 1):
                 if start_row + t >= binary.shape[0] or binary[start_row + t, start_col] == 0:
-                    # if needed, update the thickness of this line
+                    # if not start point, update the thickness of this line
                     if line is not None:
                         line['thickness'] = max(line['thickness'], t)
                     return True
@@ -304,7 +324,7 @@ def line_detection(binary, min_line_length_h, min_line_length_v, max_thickness):
         elif mode == 'v':
             for t in range(max_thickness + 1):
                 if start_col + t >= binary.shape[1] or binary[start_row, start_col + t] == 0:
-                    # if needed, update the thickness of this line
+                    # if not start point, update the thickness of this line
                     if line is not None:
                         line['thickness'] = max(line['thickness'], t)
                     return True
@@ -324,17 +344,17 @@ def line_detection(binary, min_line_length_h, min_line_length_v, max_thickness):
         line = {}
         for j in range(column):
             # line start
-            if not new_line and mark_h[x][j] == 0 and binary[x][j] > 0 and check(x, j, 'h'):
+            if not new_line and mark_h[x][j] == 0 and binary[x][j] > 0 and no_neighbor(x, j, 'h'):
                 head = j
                 new_line = True
-                line['head'] = (head, x)
+                line['head'] = [head, x]
                 line['thickness'] = -1
             # line end
-            elif new_line and (j == column - 1 or mark_h[x][j] > 0 or binary[x][j] == 0 or not check(x, j, 'h', line)):
+            elif new_line and (j == column - 1 or mark_h[x][j] > 0 or binary[x][j] == 0 or not no_neighbor(x, j, 'h', line)):
                 end = j
                 new_line = False
                 if end - head > min_line_length_h:
-                    line['end'] = (end, x)
+                    line['end'] = [end, x]
                     lines_h.append(line)
                 line = {}
 
@@ -344,17 +364,17 @@ def line_detection(binary, min_line_length_h, min_line_length_v, max_thickness):
         line = {}
         for i in range(row):
             # line start
-            if not new_line and mark_v[i][y] == 0 and binary[i][y] > 0 and check(i, y, 'v'):
+            if not new_line and mark_v[i][y] == 0 and binary[i][y] > 0 and no_neighbor(i, y, 'v'):
                 head = i
                 new_line = True
-                line['head'] = (y, head)
+                line['head'] = [y, head]
                 line['thickness'] = 0
             # line end
-            elif new_line and (i == row - 1 or mark_v[i][y] > 0 or binary[i][y] == 0 or not check(i, y, 'v', line)):
+            elif new_line and (i == row - 1 or mark_v[i][y] > 0 or binary[i][y] == 0 or not no_neighbor(i, y, 'v', line)):
                 end = i
                 new_line = False
                 if end - head > min_line_length_v:
-                    line['end'] = (y, end)
+                    line['end'] = [y, end]
                     lines_v.append(line)
                 line = {}
 
@@ -391,13 +411,13 @@ def boundary_detection(binary, min_obj_area, min_obj_perimeter, line_thickness, 
         for j in range(column):
             if binary[i, j] == 255 and mark[i, j] == 0:
                 # get connected area
-                area = util.bfs_connected_area(binary, i, j, mark)
+                area = util.boundary_bfs_connected_area(binary, i, j, mark)
                 # ignore small area
                 if len(area) < min_obj_area:
                     continue
 
                 # calculate the boundary of the connected area
-                boundary = util.get_boundary(area)
+                boundary = util.boundary_get_boundary(area)
                 # ignore small area
                 perimeter = np.sum([len(b) for b in boundary])
                 if perimeter < min_obj_perimeter:
@@ -405,11 +425,11 @@ def boundary_detection(binary, min_obj_area, min_obj_perimeter, line_thickness, 
 
                 boundary_all.append(boundary)
                 # check if it is line by checking the length of edges
-                if util.is_line(boundary, line_thickness):
+                if util.boundary_is_line(boundary, line_thickness):
                     continue
 
                 # rectangle check
-                if util.is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
+                if util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
                     boundary_rec.append(boundary)
                 else:
                     boundary_nonrec.append(boundary)
