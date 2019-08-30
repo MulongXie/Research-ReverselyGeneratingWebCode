@@ -52,7 +52,7 @@ def merge_corners(corners):
     for corner in corners:
         is_intersected = False
         for i in range(len(new_corners)):
-            r = util.relation(corner, new_corners[i])
+            r = util.corner_relation(corner, new_corners[i])
             # if corner is in new_corners[i], ignore corner
             if r == -1:
                 is_intersected = True
@@ -211,103 +211,6 @@ def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height)
 
 def img_rm_line(org, binary, corners, min_line_length_h, min_line_length_v, max_thickness):
 
-    def check_perpendicular():
-        """
-        lines: [line_h, line_v]
-            -> line_h: horizontal {'head':(column_min, row), 'end':(column_max, row), 'thickness':int)
-            -> line_v: vertical {'head':(column, row_min), 'end':(column, row_max), 'thickness':int}
-        """
-        is_per_h = np.full(len(lines_h), False)
-        is_per_v = np.full(len(lines_v), False)
-        for i in range(len(lines_h)):
-            # save the intersection point of h
-            lines_h[i]['inter_point'] = set()
-            h = lines_h[i]
-
-            for j in range(len(lines_v)):
-                # save the intersection point of v
-                if 'inter_point' not in lines_v[j]: lines_v[j]['inter_point'] = set()
-                v = lines_v[j]
-
-                # if h is perpendicular to v in head of v
-                if abs(h['head'][1]-v['head'][1]) < max_thickness:
-                    if abs(h['head'][0] - v['head'][0]) < max_thickness:
-                        lines_h[i]['inter_point'].add('head')
-                        lines_v[j]['inter_point'].add('head')
-                        is_per_h[i] = True
-                        is_per_v[j] = True
-                    elif abs(h['end'][0] - v['head'][0]) < max_thickness:
-                        lines_h[i]['inter_point'].add('end')
-                        lines_v[j]['inter_point'].add('head')
-                        is_per_h[i] = True
-                        is_per_v[j] = True
-
-                # if h is perpendicular to v in end of v
-                elif abs(h['head'][1]-v['end'][1]) < max_thickness:
-                    if abs(h['head'][0] - v['head'][0]) < max_thickness:
-                        lines_h[i]['inter_point'].add('head')
-                        lines_v[j]['inter_point'].add('end')
-                        is_per_h[i] = True
-                        is_per_v[j] = True
-                    elif abs(h['end'][0] - v['head'][0]) < max_thickness:
-                        lines_h[i]['inter_point'].add('end')
-                        lines_v[j]['inter_point'].add('end')
-                        is_per_h[i] = True
-                        is_per_v[j] = True
-        per_h = []
-        per_v = []
-        for i in range(len(is_per_h)):
-            if is_per_h[i]:
-                lines_h[i]['inter_point'] = list(lines_h[i]['inter_point'])
-                per_h.append(lines_h[i])
-        for i in range(len(is_per_v)):
-            if is_per_v[i]:
-                lines_v[i]['inter_point'] = list(lines_v[i]['inter_point'])
-                per_v.append(lines_v[i])
-        return per_h, per_v
-
-    def shrink_corners():
-        """
-        shrink the corner according to lines:
-                 col_min_shrink: shrink right (increase)
-                 col_max_shrink: shrink left  (decrease)
-                 row_min_shrink: shrink down  (increase)
-                 row_max_shrink: shrink up    (decrease)
-        :return: shrunken corner: (top_left, bottom_right)
-        """
-        col_min_shrink, row_min_shrink = col_min, row_min
-        col_max_shrink, row_max_shrink = col_max, row_max
-        # col_min_shrink, row_min_shrink = -1, -1
-        # col_max_shrink, row_max_shrink = 1000, 1000
-        for h in lines_h:
-            # ignore outer border
-            if len(h['inter_point']) == 2:
-                continue
-            # shrink right -> col_min move to end
-            if h['inter_point'][0] == 'head':
-                print('aaaaa')
-                col_min_shrink = max(h['end'][0], col_min_shrink)
-            # shrink left -> col_max move to head
-            elif h['inter_point'][0] == 'end':
-                print('bbbbb')
-                col_max_shrink = min(h['head'][0], col_max_shrink)
-
-        for v in lines_v:
-            # ignore outer border
-            if len(v['inter_point']) == 2:
-                continue
-            # shrink down -> row_min move to end
-            if v['inter_point'][0] == 'head':
-                print('ccccc')
-                row_min_shrink = max(v['end'][0], row_min_shrink)
-            # shrink up -> row_max move to head
-            elif v['inter_point'][0] == 'end':
-                print('ddddd')
-                row_max_shrink = min(v['head'][0], row_max_shrink)
-                print(v)
-
-        return (col_min_shrink, row_min_shrink), (col_max_shrink, row_max_shrink)
-
     corners_rm_lines = []
     pad = 2
     for corner in corners:
@@ -326,9 +229,9 @@ def img_rm_line(org, binary, corners, min_line_length_h, min_line_length_v, max_
         # detect lines in the image
         lines_h, lines_v = line_detection(clip_bin, min_line_length_h, min_line_length_v, max_thickness)
         # select those perpendicularly intersect with others at endpoints
-        lines_h, lines_v = check_perpendicular()
+        lines_h, lines_v = util.line_check_perpendicular(lines_h, lines_v, max_thickness)
         # shrink corner according to the lines
-        corner_shrunken = shrink_corners()
+        corner_shrunken = util.line_shrink_corners(corner, lines_h, lines_v)
         print(corner_shrunken)
         corners_rm_lines.append(corner_shrunken)
 
@@ -515,13 +418,13 @@ def boundary_detection(binary, min_obj_area, min_obj_perimeter, line_thickness, 
         for j in range(column):
             if binary[i, j] == 255 and mark[i, j] == 0:
                 # get connected area
-                area = util.bfs_connected_area(binary, i, j, mark)
+                area = util.boundary_bfs_connected_area(binary, i, j, mark)
                 # ignore small area
                 if len(area) < min_obj_area:
                     continue
 
                 # calculate the boundary of the connected area
-                boundary = util.get_boundary(area)
+                boundary = util.boundary_get_boundary(area)
                 # ignore small area
                 perimeter = np.sum([len(b) for b in boundary])
                 if perimeter < min_obj_perimeter:
@@ -529,11 +432,11 @@ def boundary_detection(binary, min_obj_area, min_obj_perimeter, line_thickness, 
 
                 boundary_all.append(boundary)
                 # check if it is line by checking the length of edges
-                if util.is_line(boundary, line_thickness):
+                if util.boundary_is_line(boundary, line_thickness):
                     continue
 
                 # rectangle check
-                if util.is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
+                if util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
                     boundary_rec.append(boundary)
                 else:
                     boundary_nonrec.append(boundary)
