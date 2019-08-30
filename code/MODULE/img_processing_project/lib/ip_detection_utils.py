@@ -252,6 +252,8 @@ def line_shrink_corners(corner, lines_h, lines_v):
              col_max_shrink: shrink left  (decrease)
              row_min_shrink: shrink down  (increase)
              row_max_shrink: shrink up    (decrease)
+    :param lines_h: horizontal {'head':(column_min, row), 'end':(column_max, row), 'thickness':int)
+    :param lines_v: vertical {'head':(column, row_min), 'end':(column, row_max), 'thickness':int}
     :return: shrunken corner: (top_left, bottom_right)
     """
     (col_min, row_min), (col_max, row_max) = corner
@@ -279,12 +281,12 @@ def line_shrink_corners(corner, lines_h, lines_v):
         # shrink down -> row_min move to end
         if v['inter_point'][0] == 'head':
             print('ccccc')
-            row_min_shrink = max(v['end'][0], row_min_shrink)
+            row_min_shrink = max(v['end'][1], row_min_shrink)
         # shrink up -> row_max move to head
         elif v['inter_point'][0] == 'end':
             print('ddddd')
-            row_max_shrink = min(v['head'][0], row_max_shrink)
-            print(v)
+            row_max_shrink = min(v['head'][1], row_max_shrink)
+            # print(v)
 
     return (col_min_shrink, row_min_shrink), (col_max_shrink, row_max_shrink)
 

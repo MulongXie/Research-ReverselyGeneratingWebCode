@@ -234,19 +234,12 @@ def img_rm_line(org, binary, corners, min_line_length_h, min_line_length_v, max_
         lines_h, lines_v = util.line_cvt_relative_position(col_min, row_min, lines_h, lines_v)
 
         # shrink corner according to the lines
-        # corner_shrunken = util.line_shrink_corners(corner, lines_h, lines_v)
-        # print(corner_shrunken)
-        # corners_rm_lines.append(corner_shrunken)
+        corner_shrunken = util.line_shrink_corners(corner, lines_h, lines_v)
+        print(corner_shrunken)
+        corners_rm_lines.append(corner_shrunken)
 
-        # if len(lines_h) + len(lines_v) > 0:
-        #     print(len(lines_h), len(lines_v))
-        #     broad = draw.draw_line(clip_org, (lines_h, lines_v), (0, 255, 0))
-        #     cv2.imshow('img', broad)
-        #
-        # clip_bin = rm_line(clip_bin, (lines_h, lines_v))
-        # cv2.imshow('bin', clip_bin)
-        # cv2.waitKey(0)
-        draw.draw_line(org, (lines_h, lines_v), (255,0,0), show=True)
+        # draw.draw_line(org, (lines_h, lines_v), (255,0,0), show=True)
+    draw.draw_bounding_box(org, corners_rm_lines, show=True)
 
 
 # remove imgs that contain text
