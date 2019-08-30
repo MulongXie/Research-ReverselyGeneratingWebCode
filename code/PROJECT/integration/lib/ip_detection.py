@@ -209,6 +209,19 @@ def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height)
     return refined_imgs
 
 
+def img_rm_line(binary, corners, min_line_length_h, min_line_length_v, max_thickness):
+    for corner in corners:
+        (up_left, bottom_right) = corner
+        (col_min, row_min) = up_left
+        (col_max, row_max) = bottom_right
+        height = row_max - row_min
+        width = col_max - col_min
+
+        img = binary[row_min:row_max, col_min:col_max]
+        cv2.imshow('img', img)
+        cv2.waitKey(0)
+
+
 # remove imgs that contain text
 def rm_text(org, corners, must_img_height, must_img_width, ocr_padding, ocr_min_word_area, show=False):
     """
