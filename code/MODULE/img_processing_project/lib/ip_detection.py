@@ -35,11 +35,11 @@ def merge_corners(corners):
     :return: new corners
     """
     def merge_overlapped(corner_a, corner_b):
-        (up_left_a, bottom_right_a) = corner_a
-        (col_min_a, row_min_a) = up_left_a
+        (top_left_a, bottom_right_a) = corner_a
+        (col_min_a, row_min_a) = top_left_a
         (col_max_a, row_max_a) = bottom_right_a
-        (up_left_b, bottom_right_b) = corner_b
-        (col_min_b, row_min_b) = up_left_b
+        (top_left_b, bottom_right_b) = corner_b
+        (col_min_b, row_min_b) = top_left_b
         (col_max_b, row_max_b) = bottom_right_b
 
         col_min = min(col_min_a, col_min_b)
@@ -86,8 +86,8 @@ def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio, m
     compos = []
     blocks = []
     for corner in corners:
-        (up_left, bottom_right) = corner
-        (col_min, row_min) = up_left
+        (top_left, bottom_right) = corner
+        (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
         height = row_max - row_min
         width = col_max - col_min
@@ -115,8 +115,8 @@ def img_or_block(org, binary, corners, max_thickness, max_block_cross_points):
     blocks = []
     imgs = []
     for corner in corners:
-        (up_left, bottom_right) = corner
-        (col_min, row_min) = up_left
+        (top_left, bottom_right) = corner
+        (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
 
         is_block = False
@@ -165,8 +165,8 @@ def img_irregular(org, corners, must_img_height, must_img_width):
     """
     imgs = []
     for corner in corners:
-        (up_left, bottom_right) = corner
-        (col_min, row_min) = up_left
+        (top_left, bottom_right) = corner
+        (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
         height = row_max - row_min
         width = col_max - col_min
@@ -192,8 +192,8 @@ def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height)
 
     refined_imgs = []
     for corner in corners:
-        (up_left, bottom_right) = corner
-        (col_min, row_min) = up_left
+        (top_left, bottom_right) = corner
+        (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
         height = row_max - row_min
         width = col_max - col_min
@@ -220,33 +220,99 @@ def img_rm_line(org, binary, corners, min_line_length_h, min_line_length_v, max_
         is_per_h = np.full(len(lines_h), False)
         is_per_v = np.full(len(lines_v), False)
         for i in range(len(lines_h)):
+            # save the intersection point of h
+            lines_h[i]['inter_point'] = set()
             h = lines_h[i]
+
             for j in range(len(lines_v)):
+                # save the intersection point of v
+                if 'inter_point' not in lines_v[j]: lines_v[j]['inter_point'] = set()
                 v = lines_v[j]
-                # if h is perpendicular to v in the endpoints
-                if (abs(h['head'][1]-v['head'][1]) < max_thickness or
-                    abs(h['head'][1]-v['end'][1]) < max_thickness) and\
-                        (abs(h['head'][0] - v['head'][0]) < max_thickness or
-                         abs(h['end'][0] - v['head'][0]) < max_thickness):
-                    print("horizontal", h['head'], h['end'])
-                    print("vertical", v['head'], v['end'])
-                    print('\n')
-                    is_per_h[i] = True
-                    is_per_v[j] = True
+
+                # if h is perpendicular to v in head of v
+                if abs(h['head'][1]-v['head'][1]) < max_thickness:
+                    if abs(h['head'][0] - v['head'][0]) < max_thickness:
+                        lines_h[i]['inter_point'].add('head')
+                        lines_v[j]['inter_point'].add('head')
+                        is_per_h[i] = True
+                        is_per_v[j] = True
+                    elif abs(h['end'][0] - v['head'][0]) < max_thickness:
+                        lines_h[i]['inter_point'].add('end')
+                        lines_v[j]['inter_point'].add('head')
+                        is_per_h[i] = True
+                        is_per_v[j] = True
+
+                # if h is perpendicular to v in end of v
+                elif abs(h['head'][1]-v['end'][1]) < max_thickness:
+                    if abs(h['head'][0] - v['head'][0]) < max_thickness:
+                        lines_h[i]['inter_point'].add('head')
+                        lines_v[j]['inter_point'].add('end')
+                        is_per_h[i] = True
+                        is_per_v[j] = True
+                    elif abs(h['end'][0] - v['head'][0]) < max_thickness:
+                        lines_h[i]['inter_point'].add('end')
+                        lines_v[j]['inter_point'].add('end')
+                        is_per_h[i] = True
+                        is_per_v[j] = True
         per_h = []
         per_v = []
         for i in range(len(is_per_h)):
             if is_per_h[i]:
+                lines_h[i]['inter_point'] = list(lines_h[i]['inter_point'])
                 per_h.append(lines_h[i])
         for i in range(len(is_per_v)):
             if is_per_v[i]:
+                lines_v[i]['inter_point'] = list(lines_v[i]['inter_point'])
                 per_v.append(lines_v[i])
         return per_h, per_v
 
+    def shrink_corners():
+        """
+        shrink the corner according to lines:
+                 col_min_shrink: shrink right (increase)
+                 col_max_shrink: shrink left  (decrease)
+                 row_min_shrink: shrink down  (increase)
+                 row_max_shrink: shrink up    (decrease)
+        :return: shrunken corner: (top_left, bottom_right)
+        """
+        col_min_shrink, row_min_shrink = col_min, row_min
+        col_max_shrink, row_max_shrink = col_max, row_max
+        # col_min_shrink, row_min_shrink = -1, -1
+        # col_max_shrink, row_max_shrink = 1000, 1000
+        for h in lines_h:
+            # ignore outer border
+            if len(h['inter_point']) == 2:
+                continue
+            # shrink right -> col_min move to end
+            if h['inter_point'][0] == 'head':
+                print('aaaaa')
+                col_min_shrink = max(h['end'][0], col_min_shrink)
+            # shrink left -> col_max move to head
+            elif h['inter_point'][0] == 'end':
+                print('bbbbb')
+                col_max_shrink = min(h['head'][0], col_max_shrink)
+
+        for v in lines_v:
+            # ignore outer border
+            if len(v['inter_point']) == 2:
+                continue
+            # shrink down -> row_min move to end
+            if v['inter_point'][0] == 'head':
+                print('ccccc')
+                row_min_shrink = max(v['end'][0], row_min_shrink)
+            # shrink up -> row_max move to head
+            elif v['inter_point'][0] == 'end':
+                print('ddddd')
+                row_max_shrink = min(v['head'][0], row_max_shrink)
+                print(v)
+
+        return (col_min_shrink, row_min_shrink), (col_max_shrink, row_max_shrink)
+
+    corners_rm_lines = []
     pad = 2
     for corner in corners:
-        (up_left, bottom_right) = corner
-        (col_min, row_min) = up_left
+        (top_left, bottom_right) = corner
+        (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
 
         col_min = max(col_min - pad, 0)
@@ -257,17 +323,24 @@ def img_rm_line(org, binary, corners, min_line_length_h, min_line_length_v, max_
         clip_bin = binary[row_min:row_max, col_min:col_max]
         clip_org = org[row_min:row_max, col_min:col_max]
 
+        # detect lines in the image
         lines_h, lines_v = line_detection(clip_bin, min_line_length_h, min_line_length_v, max_thickness)
+        # select those perpendicularly intersect with others at endpoints
         lines_h, lines_v = check_perpendicular()
+        # shrink corner according to the lines
+        corner_shrunken = shrink_corners()
+        print(corner_shrunken)
+        corners_rm_lines.append(corner_shrunken)
 
-        if len(lines_h) + len(lines_v) > 0:
-            print(len(lines_h), len(lines_v))
-            broad = draw.draw_line(clip_org, (lines_h, lines_v), (0, 255, 0))
-            cv2.imshow('img', broad)
-
-        clip_bin = rm_line(clip_bin, (lines_h, lines_v))
-        cv2.imshow('bin', clip_bin)
-        cv2.waitKey(0)
+        # if len(lines_h) + len(lines_v) > 0:
+        #     print(len(lines_h), len(lines_v))
+        #     broad = draw.draw_line(clip_org, (lines_h, lines_v), (0, 255, 0))
+        #     cv2.imshow('img', broad)
+        #
+        # clip_bin = rm_line(clip_bin, (lines_h, lines_v))
+        # cv2.imshow('bin', clip_bin)
+        # cv2.waitKey(0)
+    draw.draw_bounding_box(org, corners_rm_lines, show=True)
 
 
 # remove imgs that contain text
@@ -287,8 +360,8 @@ def rm_text(org, corners, must_img_height, must_img_width, ocr_padding, ocr_min_
     """
     new_corners = []
     for corner in corners:
-        (up_left, bottom_right) = corner
-        (col_min, row_min) = up_left
+        (top_left, bottom_right) = corner
+        (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
         height = row_max - row_min
         width = col_max - col_min

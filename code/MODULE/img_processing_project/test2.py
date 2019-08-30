@@ -22,7 +22,7 @@ is_segment = False
 is_save = True
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/2.png', (0, 2000))  # cut out partial img
+org, gray = pre.read_img('input/0.png', (0, 2000))  # cut out partial img
 bin = pre.preprocess(gray, 1)
 
 
@@ -35,6 +35,7 @@ if is_detect_line:
     binary = bin_no_line
 else:
     binary = bin
+
 
 # *** Step 3 *** object detection: get connected areas -> get boundary -> get corners
 boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary,
