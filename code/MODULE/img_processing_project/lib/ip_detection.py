@@ -223,10 +223,14 @@ def img_rm_line(org, binary, corners, min_line_length_h, min_line_length_v, max_
             h = lines_h[i]
             for j in range(len(lines_v)):
                 v = lines_v[j]
-                print(h['head'], h['end'], v['head'], v['end'])
                 # if h is perpendicular to v in the endpoints
-                if abs(h['head'][1]-v['head'][1]) < max_thickness or\
-                        abs(h['head'][1]-v['end'][1]) < max_thickness:
+                if (abs(h['head'][1]-v['head'][1]) < max_thickness or
+                    abs(h['head'][1]-v['end'][1]) < max_thickness) and\
+                        (abs(h['head'][0] - v['head'][0]) < max_thickness or
+                         abs(h['end'][0] - v['head'][0]) < max_thickness):
+                    print("horizontal", h['head'], h['end'])
+                    print("vertical", v['head'], v['end'])
+                    print('\n')
                     is_per_h[i] = True
                     is_per_v[j] = True
         per_h = []
@@ -239,13 +243,19 @@ def img_rm_line(org, binary, corners, min_line_length_h, min_line_length_v, max_
                 per_v.append(lines_v[i])
         return per_h, per_v
 
+    pad = 2
     for corner in corners:
         (up_left, bottom_right) = corner
         (col_min, row_min) = up_left
         (col_max, row_max) = bottom_right
 
+        col_min = max(col_min - pad, 0)
+        col_max = min(col_max + pad, org.shape[1])
+        row_min = max(row_min - pad, 0)
+        row_max = min(row_max + pad, org.shape[0])
+
         clip_bin = binary[row_min:row_max, col_min:col_max]
-        clip_org = org[row_min-3:row_max+3, col_min-3:col_max+3]
+        clip_org = org[row_min:row_max, col_min:col_max]
 
         lines_h, lines_v = line_detection(clip_bin, min_line_length_h, min_line_length_v, max_thickness)
         lines_h, lines_v = check_perpendicular()
