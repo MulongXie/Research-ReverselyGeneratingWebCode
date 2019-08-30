@@ -1,10 +1,6 @@
-d = {'a':1, 'b':2}
+l = [{'a':1, 'b':2}, {'a':10, 'b':50}]
 
-s = set()
+for d in l:
+    d['a'] = 10000
 
-s.add(1)
-s.add(1)
-s.add(2)
-s = set()
-
-print(s)
+print(l)

@@ -63,9 +63,9 @@ def draw_line(org, lines, color, show=False):
     board = org.copy()
     line_h, line_v = lines
     for line in line_h:
-        cv2.line(board, line['head'], line['end'], color, line['thickness'])
+        cv2.line(board, tuple(line['head']), tuple(line['end']), color, line['thickness'])
     for line in line_v:
-        cv2.line(board, line['head'], line['end'], color, line['thickness'])
+        cv2.line(board, tuple(line['head']), tuple(line['end']), color, line['thickness'])
     if show:
         cv2.imshow('img', board)
         cv2.waitKey(0)

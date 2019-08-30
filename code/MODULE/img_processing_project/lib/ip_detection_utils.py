@@ -287,3 +287,26 @@ def line_shrink_corners(corner, lines_h, lines_v):
             print(v)
 
     return (col_min_shrink, row_min_shrink), (col_max_shrink, row_max_shrink)
+
+
+def line_cvt_relative_position(col_min, row_min, lines_h, lines_v):
+    """
+    convert the relative position of lines in the entire image
+    :param col_min: based column the img lines belong to
+    :param row_min: based row the img lines belong to
+    :param lines_h: horizontal {'head':(column_min, row), 'end':(column_max, row), 'thickness':int)
+    :param lines_v: vertical {'head':(column, row_min), 'end':(column, row_max), 'thickness':int}
+    :return: lines_h_cvt, lines_v_cvt
+    """
+    for h in lines_h:
+        h['head'][0] += col_min
+        h['head'][1] += row_min
+        h['end'][0] += col_min
+        h['end'][1] += row_min
+    for v in lines_v:
+        v['head'][0] += col_min
+        v['head'][1] += row_min
+        v['end'][0] += col_min
+        v['end'][1] += row_min
+
+    return lines_h, lines_v

@@ -230,10 +230,13 @@ def img_rm_line(org, binary, corners, min_line_length_h, min_line_length_v, max_
         lines_h, lines_v = line_detection(clip_bin, min_line_length_h, min_line_length_v, max_thickness)
         # select those perpendicularly intersect with others at endpoints
         lines_h, lines_v = util.line_check_perpendicular(lines_h, lines_v, max_thickness)
+        # convert the position of lines into relative position in the entire image
+        lines_h, lines_v = util.line_cvt_relative_position(col_min, row_min, lines_h, lines_v)
+
         # shrink corner according to the lines
-        corner_shrunken = util.line_shrink_corners(corner, lines_h, lines_v)
-        print(corner_shrunken)
-        corners_rm_lines.append(corner_shrunken)
+        # corner_shrunken = util.line_shrink_corners(corner, lines_h, lines_v)
+        # print(corner_shrunken)
+        # corners_rm_lines.append(corner_shrunken)
 
         # if len(lines_h) + len(lines_v) > 0:
         #     print(len(lines_h), len(lines_v))
@@ -243,7 +246,7 @@ def img_rm_line(org, binary, corners, min_line_length_h, min_line_length_v, max_
         # clip_bin = rm_line(clip_bin, (lines_h, lines_v))
         # cv2.imshow('bin', clip_bin)
         # cv2.waitKey(0)
-    draw.draw_bounding_box(org, corners_rm_lines, show=True)
+        draw.draw_line(org, (lines_h, lines_v), (255,0,0), show=True)
 
 
 # remove imgs that contain text
@@ -354,14 +357,14 @@ def line_detection(binary, min_line_length_h, min_line_length_v, max_thickness):
             if not new_line and mark_h[x][j] == 0 and binary[x][j] > 0 and no_neighbor(x, j, 'h'):
                 head = j
                 new_line = True
-                line['head'] = (head, x)
+                line['head'] = [head, x]
                 line['thickness'] = -1
             # line end
             elif new_line and (j == column - 1 or mark_h[x][j] > 0 or binary[x][j] == 0 or not no_neighbor(x, j, 'h', line)):
                 end = j
                 new_line = False
                 if end - head > min_line_length_h:
-                    line['end'] = (end, x)
+                    line['end'] = [end, x]
                     lines_h.append(line)
                 line = {}
 
@@ -374,14 +377,14 @@ def line_detection(binary, min_line_length_h, min_line_length_v, max_thickness):
             if not new_line and mark_v[i][y] == 0 and binary[i][y] > 0 and no_neighbor(i, y, 'v'):
                 head = i
                 new_line = True
-                line['head'] = (y, head)
+                line['head'] = [y, head]
                 line['thickness'] = 0
             # line end
             elif new_line and (i == row - 1 or mark_v[i][y] > 0 or binary[i][y] == 0 or not no_neighbor(i, y, 'v', line)):
                 end = i
                 new_line = False
                 if end - head > min_line_length_v:
-                    line['end'] = (y, end)
+                    line['end'] = [y, end]
                     lines_v.append(line)
                 line = {}
 
