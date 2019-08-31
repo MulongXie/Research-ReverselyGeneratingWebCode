@@ -142,7 +142,6 @@ def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
         # -> up, bottom: (column_index, min/max row border)
         # -> left, right: (row_index, min/max column border) detect range of each row
         pit = 0
-        print('N:', n)
         for i in range(len(border) - 1):
             # calculate gradient
             difference = border[i][1] - border[i + 1][1]

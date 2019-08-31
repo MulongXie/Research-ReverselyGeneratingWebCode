@@ -433,6 +433,5 @@ def boundary_detection(binary, min_obj_area, min_obj_perimeter, line_thickness, 
                     boundary_rec.append(boundary)
                 else:
                     boundary_nonrec.append(boundary)
-                    draw.draw_boundary(boundary_nonrec, binary.shape, True)
 
     return boundary_all, boundary_rec, boundary_nonrec
