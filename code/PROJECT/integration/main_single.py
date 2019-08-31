@@ -21,10 +21,10 @@ is_shrink_img = False
 is_ocr = True
 is_segment = False
 is_save = True
-is_clip = True
+is_clip = False
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/d3.png', (0, 2000))  # cut out partial img
+org, gray = pre.read_img('input/dribbble/1.jpg', (0, 2000))  # cut out partial img
 bin = pre.preprocess(gray, 1)
 
 
