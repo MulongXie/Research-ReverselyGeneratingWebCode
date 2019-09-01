@@ -13,7 +13,7 @@ start_time = time.clock()
 is_segment = True
 is_draw_label = True
 # set the web crawler
-url = "https://store.steampowered.com/"
+url = "https://play.google.com/store/apps/details?id=com.facebook.orca"
 # set path
 img_org_path = 'data/org.png'
 img_drawn_path = 'data/drawn.png'
