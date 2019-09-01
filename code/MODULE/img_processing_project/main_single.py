@@ -17,14 +17,14 @@ start = time.clock()
 is_classify = True
 is_detect_line = False
 is_merge_img = True
-is_shrink_img = False
+is_shrink_img = True
 is_ocr = True
 is_segment = False
 is_save = True
 is_clip = False
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/app/1.png', (0, 3000))  # cut out partial img
+org, gray = pre.read_img('input/6.png', (0, 3000))  # cut out partial img
 bin = pre.preprocess(gray, 1)
 
 

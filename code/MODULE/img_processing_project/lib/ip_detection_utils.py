@@ -216,26 +216,26 @@ def line_check_perpendicular(lines_h, lines_v, max_thickness):
             v = lines_v[j]
 
             # if h is perpendicular to v in head of v
-            if abs(h['head'][1]-v['head'][1]) < max_thickness:
-                if abs(h['head'][0] - v['head'][0]) < max_thickness:
+            if abs(h['head'][1]-v['head'][1]) <= max_thickness:
+                if abs(h['head'][0] - v['head'][0]) <= max_thickness:
                     lines_h[i]['inter_point'].add('head')
                     lines_v[j]['inter_point'].add('head')
                     is_per_h[i] = True
                     is_per_v[j] = True
-                elif abs(h['end'][0] - v['head'][0]) < max_thickness:
+                elif abs(h['end'][0] - v['head'][0]) <= max_thickness:
                     lines_h[i]['inter_point'].add('end')
                     lines_v[j]['inter_point'].add('head')
                     is_per_h[i] = True
                     is_per_v[j] = True
 
             # if h is perpendicular to v in end of v
-            elif abs(h['head'][1]-v['end'][1]) < max_thickness:
-                if abs(h['head'][0] - v['head'][0]) < max_thickness:
+            elif abs(h['head'][1]-v['end'][1]) <= max_thickness:
+                if abs(h['head'][0] - v['head'][0]) <= max_thickness:
                     lines_h[i]['inter_point'].add('head')
                     lines_v[j]['inter_point'].add('end')
                     is_per_h[i] = True
                     is_per_v[j] = True
-                elif abs(h['end'][0] - v['head'][0]) < max_thickness:
+                elif abs(h['end'][0] - v['head'][0]) <= max_thickness:
                     lines_h[i]['inter_point'].add('end')
                     lines_v[j]['inter_point'].add('end')
                     is_per_h[i] = True
@@ -267,11 +267,12 @@ def line_shrink_corners(corner, lines_h, lines_v):
     (col_min, row_min), (col_max, row_max) = corner
     col_min_shrink, row_min_shrink = col_min, row_min
     col_max_shrink, row_max_shrink = col_max, row_max
-    # col_min_shrink, row_min_shrink = -1, -1
-    # col_max_shrink, row_max_shrink = 1000, 1000
+    valid_frame = False
+
     for h in lines_h:
         # ignore outer border
         if len(h['inter_point']) == 2:
+            valid_frame = True
             continue
         # shrink right -> col_min move to end
         if h['inter_point'][0] == 'head':
@@ -283,6 +284,7 @@ def line_shrink_corners(corner, lines_h, lines_v):
     for v in lines_v:
         # ignore outer border
         if len(v['inter_point']) == 2:
+            valid_frame = True
             continue
         # shrink down -> row_min move to end
         if v['inter_point'][0] == 'head':
@@ -291,7 +293,10 @@ def line_shrink_corners(corner, lines_h, lines_v):
         elif v['inter_point'][0] == 'end':
             row_max_shrink = min(v['head'][1], row_max_shrink)
 
-    return (col_min_shrink, row_min_shrink), (col_max_shrink, row_max_shrink)
+    # return the shrunken corner if only there is line intersecting with two other lines
+    if valid_frame:
+        return (col_min_shrink, row_min_shrink), (col_max_shrink, row_max_shrink)
+    return corner
 
 
 def line_cvt_relative_position(col_min, row_min, lines_h, lines_v):
