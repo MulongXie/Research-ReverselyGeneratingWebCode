@@ -24,7 +24,7 @@ is_save = True
 is_clip = False
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/dribbble/1.jpg', (0, 2000))  # cut out partial img
+org, gray = pre.read_img('input/app/1.png', (0, 3000))  # cut out partial img
 bin = pre.preprocess(gray, 1)
 
 
@@ -101,7 +101,7 @@ if is_ocr:
     draw_bounding, word = ocr.text_detection(org, img_clean)
 else:
     draw_bounding = org
-
+img_clean = draw.draw_bounding_box(img_clean, corners_compo, color=(255, 255, 255), line=-1)
 
 # *** Step 8 *** post-processing: remove img elements from original image and segment into smaller size
 if is_segment:
