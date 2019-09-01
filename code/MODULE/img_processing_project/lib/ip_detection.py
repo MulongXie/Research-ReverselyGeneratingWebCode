@@ -209,9 +209,9 @@ def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height)
     return refined_imgs
 
 
-def img_rm_line(org, binary, corners, min_line_length_h, min_line_length_v, max_thickness):
+def img_shrink(org, binary, corners, min_line_length_h, min_line_length_v, max_thickness):
 
-    corners_rm_lines = []
+    corners_shrunken = []
     pad = 2
     for corner in corners:
         (top_left, bottom_right) = corner
@@ -235,12 +235,9 @@ def img_rm_line(org, binary, corners, min_line_length_h, min_line_length_v, max_
 
         # shrink corner according to the lines
         corner_shrunken = util.line_shrink_corners(corner, lines_h, lines_v)
-        print(corner_shrunken)
-        corners_rm_lines.append(corner_shrunken)
+        corners_shrunken.append(corner_shrunken)
 
-        # draw.draw_line(org, (lines_h, lines_v), (255,0,0), show=True)
-    draw.draw_bounding_box(org, corners_rm_lines, show=True)
-
+    return corners_shrunken
 
 # remove imgs that contain text
 def rm_text(org, corners, must_img_height, must_img_width, ocr_padding, ocr_min_word_area, show=False):

@@ -16,14 +16,15 @@ CNN = CNN()
 start = time.clock()
 is_classify = True
 is_detect_line = False
-is_merge_img = False
+is_merge_img = True
+is_shrink_img = False
 is_ocr = True
 is_segment = False
 is_save = True
-is_clip = True
+is_clip = False
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
-org, gray = pre.read_img('input/1.png', (0, 2000))  # cut out partial img
+org, gray = pre.read_img('input/app/1.png', (0, 3000))  # cut out partial img
 bin = pre.preprocess(gray, 1)
 
 
@@ -65,6 +66,11 @@ corners_img += det.img_irregular(org, corners_nonrec,
 corners_img = det.img_refine(org, corners_img,
                              C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,                      # ignore too large imgs
                              C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
+# shrink images with extra borders
+if is_shrink_img:
+    corners_img = det.img_shrink(org, binary, corners_img,
+                    C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
+                    C.THRESHOLD_LINE_THICKNESS)
 # merge overlapped corners, and remove nested corners
 if is_merge_img:
     corners_img = det.merge_corners(corners_img)
@@ -95,7 +101,7 @@ if is_ocr:
     draw_bounding, word = ocr.text_detection(org, img_clean)
 else:
     draw_bounding = org
-
+img_clean = draw.draw_bounding_box(img_clean, corners_compo, color=(255, 255, 255), line=-1)
 
 # *** Step 8 *** post-processing: remove img elements from original image and segment into smaller size
 if is_segment:

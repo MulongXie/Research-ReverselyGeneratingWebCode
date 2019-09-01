@@ -67,7 +67,7 @@ corners_img = det.img_refine(org, corners_img,
                              C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
 
 
-det.img_rm_line(org, binary, corners_img,
+det.img_shrink(org, binary, corners_img,
                 C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
                 C.THRESHOLD_LINE_THICKNESS)
 

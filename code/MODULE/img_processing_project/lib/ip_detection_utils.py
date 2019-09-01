@@ -141,20 +141,28 @@ def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
 
         # -> up, bottom: (column_index, min/max row border)
         # -> left, right: (row_index, min/max column border) detect range of each row
+        pit = 0
         for i in range(len(border) - 1):
-
             # calculate gradient
             difference = border[i][1] - border[i + 1][1]
+            # dent detection
+            depth += difference
+            # ignore noise
+            if i / len(border) < 0.1 and abs(difference) / edge > 0.5:
+                depth = 0
+
             if abs(difference) == 0:
                 flat += 1
             # too abnormal to be a regular shape
-            elif abs(difference) / edge > 0.7:
-                return False
+            elif abs(depth) / edge > 0.5:
+                pit += 1
+                if pit / len(border) > 0.1:
+                    return False
+            else:
+                pit = 0
 
-            # dent detection
-            depth += difference
             # if dent and too deep, then counted as dent
-            if dent_direction[n] * depth > 0 and abs(depth) / edge > 0.2:
+            if dent_direction[n] * depth > 0 and abs(depth) / edge > 0.15:
                 dent += 1
         if dent / len(border) > max_dent_ratio:
             return False
@@ -267,11 +275,9 @@ def line_shrink_corners(corner, lines_h, lines_v):
             continue
         # shrink right -> col_min move to end
         if h['inter_point'][0] == 'head':
-            print('aaaaa')
             col_min_shrink = max(h['end'][0], col_min_shrink)
         # shrink left -> col_max move to head
         elif h['inter_point'][0] == 'end':
-            print('bbbbb')
             col_max_shrink = min(h['head'][0], col_max_shrink)
 
     for v in lines_v:
@@ -280,13 +286,10 @@ def line_shrink_corners(corner, lines_h, lines_v):
             continue
         # shrink down -> row_min move to end
         if v['inter_point'][0] == 'head':
-            print('ccccc')
             row_min_shrink = max(v['end'][1], row_min_shrink)
         # shrink up -> row_max move to head
         elif v['inter_point'][0] == 'end':
-            print('ddddd')
             row_max_shrink = min(v['head'][1], row_max_shrink)
-            # print(v)
 
     return (col_min_shrink, row_min_shrink), (col_max_shrink, row_max_shrink)
 
