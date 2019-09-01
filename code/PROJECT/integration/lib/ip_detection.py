@@ -239,6 +239,7 @@ def img_shrink(org, binary, corners, min_line_length_h, min_line_length_v, max_t
 
     return corners_shrunken
 
+
 # remove imgs that contain text
 def rm_text(org, corners, must_img_height, must_img_width, ocr_padding, ocr_min_word_area, show=False):
     """
