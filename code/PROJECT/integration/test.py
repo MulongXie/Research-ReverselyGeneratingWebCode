@@ -14,10 +14,10 @@ import time
 C = Config()
 CNN = CNN()
 start = time.clock()
-is_classify = True
-is_detect_line = False
 is_merge_img = False
 is_shrink_img = True
+is_detect_compo_in_img = True
+is_classify = True
 is_ocr = True
 is_segment = False
 is_save = True
@@ -25,26 +25,15 @@ is_clip = False
 
 # *** Step 1 *** pre-processing: gray, gradient, binary
 org, gray = pre.read_img('input/3.png', (0, 3000))  # cut out partial img
-bin = pre.preprocess(gray, 1)
+binary = pre.preprocess(gray, 1)
 
-
-# *** Step 2 *** line detection: for better boundary detection
-if is_detect_line:
-    line_h, line_v = det.line_detection(bin)
-    bin_no_line = det.rm_line(bin, [line_h, line_v])
-    binary = bin_no_line
-else:
-    binary = bin
-
-# *** Step 3 *** object detection: get connected areas -> get boundary -> get corners
+# *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
 boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary)
 # get corner of boundaries
 corners_rec = det.get_corner(boundary_rec)
 corners_nonrec = det.get_corner(boundary_nonrec)
 
-
-# *** Step 4 *** process data: identify blocks and imgs from rectangles -> identify compos -> identify irregular imgs
-# identify rectangular block and rectangular img from rectangular shapes
+# *** Step 3 *** data processing: identify blocks and imgs from rectangles -> identify compos -> identify irregular imgs
 corners_block, corners_img = det.img_or_block(org, binary, corners_rec)
 # identify potential buttons and input bars
 corners_block, corners_compo = det.uicomponent_or_block(org, corners_block)
@@ -54,22 +43,20 @@ if is_shrink_img:
 # identify irregular-shape img from irregular shapes
 corners_img += det.img_irregular(org, corners_nonrec)
 
-
-# *** Step 5 *** refine results: refine img according to size -> OCR text area filter
-# ignore too large and highly likely text element
+# *** Step 4 *** refine results: refine img according to size -> OCR text area filter
 corners_img = det.img_refine(org, corners_img)
 # merge overlapped corners, and remove nested corners
 if is_merge_img:
     corners_img = det.merge_corners(corners_img)
 # detect components in img
-corners_compo += det.uicomponent_in_img(org, bin, corners_img)
+if is_detect_compo_in_img:
+    corners_compo += det.uicomponent_in_img(org, binary, corners_img)
 # remove pure text element
 corners_block = det.rm_text(org, corners_block)
 corners_img = det.rm_text(org, corners_img)
 corners_compo = det.rm_text(org, corners_compo)
 
-
-# *** Step 6 *** classification: clip and classify the potential components
+# *** Step 5 *** classification: clip and classify the potential components
 if is_classify:
     CNN.load()
     compos = seg.clipping(org, corners_compo)
@@ -77,8 +64,7 @@ if is_classify:
 else:
     compos_classes = None
 
-
-# *** Step 7 *** text detection from cleaned image
+# *** Step 6 *** text detection from cleaned image
 img_clean = draw.draw_bounding_box(org, corners_img, color=(255, 255, 255), line=-1)
 if is_ocr:
     draw_bounding, word = ocr.text_detection(org, img_clean)
@@ -86,7 +72,7 @@ else:
     draw_bounding = org
 img_clean = draw.draw_bounding_box(img_clean, corners_compo, color=(255, 255, 255), line=-1)
 
-# *** Step 8 *** post-processing: remove img elements from original image and segment into smaller size
+# *** Step 7 *** post-processing: remove img elements from original image and segment into smaller size
 if is_segment:
     seg.segment_img(img_clean, 600, 'output/segment')
 # draw results
@@ -99,8 +85,7 @@ if is_save:
     cv2.imwrite('output/org.png', org)
     cv2.imwrite('output/labeled.png', draw_bounding)
     cv2.imwrite('output/boundary.png', draw_boundary)
-    cv2.imwrite('output/gradient.png', bin)
-    # cv2.imwrite('output/gradient_no_line.png', bin_no_line)
+    cv2.imwrite('output/gradient.png', binary)
     cv2.imwrite('output/clean.png', img_clean)
     file.save_corners_json('output/compo.json', corners_block, ['div' for i in range(len(corners_block))])
     file.save_corners_json('output/compo.json', corners_img, ['img' for j in range(len(corners_img))])
