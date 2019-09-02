@@ -26,7 +26,7 @@ is_clip = False
 if __name__ == '__main__':
 
     # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img('input/3.png', (0, 3000))  # cut out partial img
+    org, gray = pre.read_img('input/5.png', (0, 2000))  # cut out partial img
     binary = pre.preprocess(gray, 1)
 
     # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners

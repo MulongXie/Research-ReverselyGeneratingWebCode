@@ -147,7 +147,7 @@ def uicomponent_in_img(org, bin, corners,
             (col_min_rec, row_min_rec), (col_max_rec, row_max_rec) = rec
             height_rec = row_max_rec - row_min_rec
             width_rec = col_max_rec - col_min_rec
-            if height_rec / height_img < 0.9 and width_rec != width_img < 0.9 and\
+            if height_rec / height_img < 0.9 and width_rec / width_img < 0.9 and\
                     height_rec <= compo_max_height and width_rec / height_rec >= compo_min_edge_ratio:
                 corners_compo.append(rec)
 
