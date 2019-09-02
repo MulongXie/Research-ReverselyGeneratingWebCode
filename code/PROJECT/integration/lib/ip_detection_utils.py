@@ -197,6 +197,24 @@ def corner_relation(corner_a, corner_b):
         return 2
 
 
+def corner_cvt_relative_position(corners, col_min_base, row_min_base):
+    """
+    get the relative position of corners in the entire image
+    """
+    rlt_corners = []
+    for corner in corners:
+        (top_left, bottom_right) = corner
+        (col_min, row_min) = top_left
+        (col_max, row_max) = bottom_right
+        col_min += col_min_base
+        col_max += col_min_base
+        row_min += row_min_base
+        row_max += row_min_base
+        rlt_corners.append(((col_min, row_min), (col_max, row_max)))
+
+    return rlt_corners
+
+
 def line_check_perpendicular(lines_h, lines_v, max_thickness):
     """
     lines: [line_h, line_v]

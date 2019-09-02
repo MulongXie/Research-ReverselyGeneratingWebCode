@@ -74,6 +74,9 @@ corners_img = det.img_refine(org, corners_img,
 # merge overlapped corners, and remove nested corners
 if is_merge_img:
     corners_img = det.merge_corners(corners_img)
+
+corners_compo += det.uicomponent_in_img(org, bin, corners_img)
+
 # remove text
 corners_block = det.rm_text(org, corners_block,
                           C.THRESHOLD_IMG_MUST_HEIGHT, C.THRESHOLD_IMG_MUST_WIDTH,    # img assertion
