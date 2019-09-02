@@ -24,11 +24,13 @@ CNN.load()
 is_classify = True
 is_detect_line = False
 is_merge_img = False
+is_shrink_img = True
 is_ocr = True
 is_segment = False
 is_save = True
-start_index = 124
-end_index = 500
+is_clip = False
+start_index = 4
+end_index = 50
 
 for input_path in input_paths:
     index = input_path.split('\\')[-1][:-4]
@@ -91,6 +93,11 @@ for input_path in input_paths:
     corners_img = det.img_refine(org, corners_img,
                                  C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,  # ignore too large imgs
                                  C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
+    # shrink images with extra borders
+    if is_shrink_img:
+        corners_img = det.img_shrink(org, binary, corners_img,
+                                     C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
+                                     C.THRESHOLD_LINE_THICKNESS)
     # merge overlapped corners, and remove nested corners
     if is_merge_img:
         corners_img = det.merge_corners(corners_img)
@@ -133,8 +140,8 @@ for input_path in input_paths:
         cv2.imwrite(out_img_gradient, bin)
         cv2.imwrite(out_img_clean, img_clean)
         # cv2.imwrite(out_img_gradient_no_line, bin_no_line)
-        file.save_corners(out_label, corners_block, 'div')
-        file.save_corners(out_label, corners_img, 'img', False)
+        # file.save_corners(out_label, corners_block, 'div')
+        # file.save_corners(out_label, corners_img, 'img', False)
 
     end = file.timer(start)
     print('Save ' + index + '\n')
