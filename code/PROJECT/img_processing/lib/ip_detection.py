@@ -4,6 +4,9 @@ import numpy as np
 import ip_draw as draw
 import ip_detection_utils as util
 import ocr_classify_text as ocr
+from CONFIG import Config
+
+C = Config()
 
 
 def get_corner(boundaries):
@@ -98,6 +101,40 @@ def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio, m
             if width > min_block_edge_length and height > min_block_edge_length:
                 blocks.append(corner)
     return blocks, compos
+
+
+def uicomponent_in_img(org, bin, corners):
+    """
+    Detect potential UI components inner img
+    """
+    def reverse(img):
+        """
+        Reverse the input binary image
+        """
+        rec, b = cv2.threshold(img, 1, 255, cv2.THRESH_BINARY_INV)
+        return b
+
+    corners_compo = []
+    pad = 2
+    for corner in corners:
+        (top_left, bottom_right) = corner
+        (col_min, row_min) = top_left
+        (col_max, row_max) = bottom_right
+        col_min = max(col_min - pad, 0)
+        col_max = min(col_max + pad, org.shape[1])
+        row_min = max(row_min - pad, 0)
+        row_max = min(row_max + pad, org.shape[0])
+
+        clip_bin = bin[row_min:row_max, col_min:col_max]
+        clip_bin = reverse(clip_bin)
+        boundary_all, boundary_rec, boundary_nonrec = boundary_detection(clip_bin,
+                                                    C.THRESHOLD_OBJ_MIN_AREA, C.THRESHOLD_OBJ_MIN_PERIMETER,  # size of area
+                                                    C.THRESHOLD_LINE_THICKNESS,  # line check
+                                                    C.THRESHOLD_REC_MIN_EVENNESS_STRONG, C.THRESHOLD_IMG_MAX_DENT_RATIO)  # rectangle check
+        corners_rec = get_corner(boundary_rec)
+        corners_rec = util.corner_cvt_relative_position(corners_rec, col_min, row_min)
+        corners_compo += corners_rec
+    return corners_compo
 
 
 def img_or_block(org, binary, corners, max_thickness, max_block_cross_points):
@@ -210,6 +247,9 @@ def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height)
 
 
 def img_shrink(org, binary, corners, min_line_length_h, min_line_length_v, max_thickness):
+    """
+    For imgs that are part of a block, strip the img
+    """
 
     corners_shrunken = []
     pad = 2
