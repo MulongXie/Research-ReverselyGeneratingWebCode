@@ -4,15 +4,11 @@ import ip_draw as draw
 import ip_segment as seg
 import file_utils as file
 import ocr_classify_text as ocr
-from CONFIG import Config
-import draft
 
 import cv2
 import time
-import numpy as np
 
 # initialization
-C = Config()
 start = time.clock()
 is_detect_line = False
 is_merge_img = False
@@ -27,10 +23,7 @@ binary = pre.preprocess(gray, 1)
 
 
 # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
-boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary,
-                                                        C.THRESHOLD_OBJ_MIN_AREA, C.THRESHOLD_OBJ_MIN_PERIMETER,        # size of area
-                                                        C.THRESHOLD_LINE_THICKNESS,                                     # line check
-                                                        C.THRESHOLD_REC_MIN_EVENNESS, C.THRESHOLD_IMG_MAX_DENT_RATIO)   # rectangle check
+boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary)
 # get corner of boundaries
 corners_rec = det.get_corner(boundary_rec)
 corners_nonrec = det.get_corner(boundary_nonrec)
@@ -38,40 +31,25 @@ corners_nonrec = det.get_corner(boundary_nonrec)
 
 # *** Step 3 *** process data: identify blocks and imgs from rectangles -> identify compos -> identify irregular imgs
 # identify rectangular block and rectangular img from rectangular shapes
-corners_block, corners_img = det.img_or_block(org, binary, corners_rec,
-                                              C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS, C.THRESHOLD_BLOCK_MAX_CROSS_POINT)  # block check
+corners_block, corners_img = det.img_or_block(org, binary, corners_rec)
 # identify potential buttons and input bars
-corners_block, corners_compo = det.uicomponent_or_block(org, corners_block,
-                                                        C.THRESHOLD_UICOMPO_MAX_HEIGHT,
-                                                        C.THRESHOLD_UICOMPO_MIN_EDGE_RATION, C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH)
+corners_block, corners_compo = det.uicomponent_or_block(org, corners_block)
 # shrink images with extra borders
 if is_shrink_img:
-    corners_img = det.img_shrink(org, binary, corners_img,
-                                C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
-                                C.THRESHOLD_LINE_THICKNESS)
+    corners_img = det.img_shrink(org, binary, corners_img)
 # identify irregular-shape img from irregular shapes
-corners_img += det.img_irregular(org, corners_nonrec,
-                                 C.THRESHOLD_IMG_MUST_HEIGHT, C.THRESHOLD_IMG_MUST_WIDTH)   # img assertion
+corners_img += det.img_irregular(org, corners_nonrec)
 # ignore too large and highly likely text areas
-corners_img = det.img_refine(org, corners_img,
-                             C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,                      # ignore too large imgs
-                             C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
+corners_img = det.img_refine(org, corners_img)
 # merge overlapped corners, and remove nested corners
 if is_merge_img:
     corners_img = det.merge_corners(corners_img)
-
+# detect components on img
 corners_compo += det.uicomponent_in_img(org, binary, corners_img)
-
 # remove text misrecognition
-corners_block = det.rm_text(org, corners_block,
-                          C.THRESHOLD_IMG_MUST_HEIGHT, C.THRESHOLD_IMG_MUST_WIDTH,    # img assertion
-                          C.OCR_PADDING, C.OCR_MIN_WORD_AREA)                         # ignore text area
-corners_img = det.rm_text(org, corners_img,
-                          C.THRESHOLD_IMG_MUST_HEIGHT, C.THRESHOLD_IMG_MUST_WIDTH,    # img assertion
-                          C.OCR_PADDING, C.OCR_MIN_WORD_AREA)                         # ignore text area
-corners_compo = det.rm_text(org, corners_compo,
-                          C.THRESHOLD_IMG_MUST_HEIGHT, C.THRESHOLD_IMG_MUST_WIDTH,    # img assertion
-                          C.OCR_PADDING, C.OCR_MIN_WORD_AREA)                         # ignore text area
+corners_block = det.rm_text(org, corners_block)
+corners_img = det.rm_text(org, corners_img)
+corners_compo = det.rm_text(org, corners_compo)
 
 
 # *** Step 5 *** text detection from cleaned image
@@ -87,9 +65,9 @@ img_clean = draw.draw_bounding_box(img_clean, corners_compo, color=(255, 255, 25
 if is_segment:
     seg.segment_img(img_clean, 600, 'output/segment')
 # draw results
-draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_block, ['block' for i in range(len(corners_block))], C.COLOR)
-draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_img, ['img' for j in range(len(corners_img))], C.COLOR)
-draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_compo, ['compo' for j in range(len(corners_compo))], C.COLOR)
+draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_block, ['block' for i in range(len(corners_block))])
+draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_img, ['img' for j in range(len(corners_img))])
+draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_compo, ['compo' for j in range(len(corners_compo))])
 draw_boundary = draw.draw_boundary(boundary_rec, org.shape)
 # save results
 if is_save:

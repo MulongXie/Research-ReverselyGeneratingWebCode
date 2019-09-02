@@ -49,7 +49,7 @@ def merge_corners(corners):
         col_max = max(col_max_a, col_max_b)
         row_min = min(row_min_a, row_min_b)
         row_max = max(row_max_a, row_max_b)
-        return ((col_min, row_min), (col_max, row_max))
+        return (col_min, row_min), (col_max, row_max)
 
     new_corners = []
     for corner in corners:
@@ -74,7 +74,10 @@ def merge_corners(corners):
     return new_corners
 
 
-def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio, min_block_edge_length):
+def uicomponent_or_block(org, corners,
+                         compo_max_height=C.THRESHOLD_UICOMPO_MAX_HEIGHT,
+                         compo_min_edge_ratio=C.THRESHOLD_UICOMPO_MIN_EDGE_RATION,
+                         min_block_edge_length=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH):
     """
     Select the potential ui components (button, input) from block objects
     :param org: Original image
@@ -103,7 +106,9 @@ def uicomponent_or_block(org, corners, compo_max_height, compo_min_edge_ratio, m
     return blocks, compos
 
 
-def uicomponent_in_img(org, bin, corners):
+def uicomponent_in_img(org, bin, corners,
+                       compo_max_height=C.THRESHOLD_UICOMPO_MAX_HEIGHT,
+                       compo_min_edge_ratio=C.THRESHOLD_UICOMPO_MIN_EDGE_RATION):
     """
     Detect potential UI components inner img
     """
@@ -111,7 +116,7 @@ def uicomponent_in_img(org, bin, corners):
         """
         Reverse the input binary image
         """
-        rec, b = cv2.threshold(img, 1, 255, cv2.THRESH_BINARY_INV)
+        r, b = cv2.threshold(img, 1, 255, cv2.THRESH_BINARY_INV)
         return b
 
     corners_compo = []
@@ -124,28 +129,34 @@ def uicomponent_in_img(org, bin, corners):
         col_max = min(col_max + pad, org.shape[1])
         row_min = max(row_min - pad, 0)
         row_max = min(row_max + pad, org.shape[0])
+        height_img = row_max - row_min
+        width_img = col_max - col_min
+
+        # ignore small img
+        if height_img <= compo_max_height or width_img <= compo_max_height:
+            continue
 
         clip_bin = bin[row_min:row_max, col_min:col_max]
         clip_bin = reverse(clip_bin)
-        boundary_all, boundary_rec, boundary_nonrec = boundary_detection(clip_bin,
-                                                    C.THRESHOLD_OBJ_MIN_AREA, C.THRESHOLD_OBJ_MIN_PERIMETER,  # size of area
-                                                    C.THRESHOLD_LINE_THICKNESS,  # line check
-                                                    C.THRESHOLD_REC_MIN_EVENNESS_STRONG, C.THRESHOLD_IMG_MAX_DENT_RATIO)  # rectangle check
+        boundary_all, boundary_rec, boundary_nonrec = boundary_detection(clip_bin, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS_STRONG)  # rectangle check
         corners_rec = get_corner(boundary_rec)
         corners_rec = util.corner_cvt_relative_position(corners_rec, col_min, row_min)
 
         # check the size of rectangle
         for rec in corners_rec:
             (col_min_rec, row_min_rec), (col_max_rec, row_max_rec) = rec
-            height = row_max_rec - row_min_rec
-            width = col_max_rec - col_min_rec
-            if height <= C.THRESHOLD_UICOMPO_MAX_HEIGHT and width / height >= C.THRESHOLD_UICOMPO_MIN_EDGE_RATION:
+            height_rec = row_max_rec - row_min_rec
+            width_rec = col_max_rec - col_min_rec
+            if height_rec / height_img < 0.9 and width_rec != width_img < 0.9 and\
+                    height_rec <= compo_max_height and width_rec / height_rec >= compo_min_edge_ratio:
                 corners_compo.append(rec)
 
     return corners_compo
 
 
-def img_or_block(org, binary, corners, max_thickness, max_block_cross_points):
+def img_or_block(org, binary, corners,
+                 max_thickness=C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS,
+                 max_block_cross_points=C.THRESHOLD_BLOCK_MAX_CROSS_POINT):
     """
     Check if the objects are img components or just block
     :param org: Original image
@@ -196,7 +207,8 @@ def img_or_block(org, binary, corners, max_thickness, max_block_cross_points):
     return blocks, imgs
 
 
-def img_irregular(org, corners, must_img_height, must_img_width):
+def img_irregular(org, corners,
+                  must_img_height=C.THRESHOLD_IMG_MUST_HEIGHT, must_img_width=C.THRESHOLD_IMG_MUST_WIDTH):
     """
     Select potential irregular shaped img elements by checking the height and width
     Check the edge ratio for img components to avoid text misrecognition
@@ -221,7 +233,9 @@ def img_irregular(org, corners, must_img_height, must_img_width):
     return imgs
 
 
-def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height):
+def img_refine(org, corners,
+               max_img_height_ratio=C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,
+               text_edge_ratio=C.THRESHOLD_TEXT_EDGE_RATIO, text_height=C.THRESHOLD_TEXT_HEIGHT):
     """
     Remove too large imgs and likely text
     :param org: Original image
@@ -254,7 +268,9 @@ def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height)
     return refined_imgs
 
 
-def img_shrink(org, binary, corners, min_line_length_h, min_line_length_v, max_thickness):
+def img_shrink(org, binary, corners,
+               min_line_length_h=C.THRESHOLD_LINE_MIN_LENGTH_H, min_line_length_v=C.THRESHOLD_LINE_MIN_LENGTH_V,
+               max_thickness=C.THRESHOLD_LINE_THICKNESS):
     """
     For imgs that are part of a block, strip the img
     """
@@ -289,7 +305,9 @@ def img_shrink(org, binary, corners, min_line_length_h, min_line_length_v, max_t
 
 
 # remove imgs that contain text
-def rm_text(org, corners, must_img_height, must_img_width, ocr_padding, ocr_min_word_area, show=False):
+def rm_text(org, corners,
+            must_img_height=C.THRESHOLD_IMG_MUST_HEIGHT, must_img_width=C.THRESHOLD_IMG_MUST_WIDTH,
+            ocr_padding=C.OCR_PADDING, ocr_min_word_area=C.OCR_MIN_WORD_AREA, show=False):
     """
     Remove area that full of text
     :param org: original image
@@ -346,7 +364,9 @@ def rm_line(binary, lines):
     return new_binary
 
 
-def line_detection(binary, min_line_length_h, min_line_length_v, max_thickness):
+def line_detection(binary,
+                   min_line_length_h=C.THRESHOLD_LINE_MIN_LENGTH_H, min_line_length_v=C.THRESHOLD_LINE_MIN_LENGTH_V,
+                   max_thickness=C.THRESHOLD_LINE_THICKNESS):
     """
     Detect lines
     :param binary: Binary image from pre-processing
@@ -438,7 +458,10 @@ def line_detection(binary, min_line_length_h, min_line_length_v, max_thickness):
 # take the binary image as input
 # calculate the connected regions -> get the bounding boundaries of them -> check if those regions are rectangles
 # return all boundaries and boundaries of rectangles
-def boundary_detection(binary, min_obj_area, min_obj_perimeter, line_thickness, min_rec_evenness, max_dent_ratio):
+def boundary_detection(binary,
+                       min_obj_area=C.THRESHOLD_OBJ_MIN_AREA, min_obj_perimeter=C.THRESHOLD_OBJ_MIN_PERIMETER,
+                       line_thickness=C.THRESHOLD_LINE_THICKNESS, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
+                       max_dent_ratio=C.THRESHOLD_IMG_MAX_DENT_RATIO):
     """
     :param binary: Binary image from pre-processing
     :param min_obj_area: If not pass then ignore the small object
