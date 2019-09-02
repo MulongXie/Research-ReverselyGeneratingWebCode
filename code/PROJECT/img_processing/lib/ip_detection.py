@@ -133,7 +133,15 @@ def uicomponent_in_img(org, bin, corners):
                                                     C.THRESHOLD_REC_MIN_EVENNESS_STRONG, C.THRESHOLD_IMG_MAX_DENT_RATIO)  # rectangle check
         corners_rec = get_corner(boundary_rec)
         corners_rec = util.corner_cvt_relative_position(corners_rec, col_min, row_min)
-        corners_compo += corners_rec
+
+        # check the size of rectangle
+        for rec in corners_rec:
+            (col_min_rec, row_min_rec), (col_max_rec, row_max_rec) = rec
+            height = row_max_rec - row_min_rec
+            width = col_max_rec - col_min_rec
+            if height <= C.THRESHOLD_UICOMPO_MAX_HEIGHT and width / height >= C.THRESHOLD_UICOMPO_MIN_EDGE_RATION:
+                corners_compo.append(rec)
+
     return corners_compo
 
 
