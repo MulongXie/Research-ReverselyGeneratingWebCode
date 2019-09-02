@@ -6,7 +6,7 @@ import ip_draw as draw
 
 
 # detect object(connected region)
-def bfs_connected_area(img, x, y, mark):
+def boundary_bfs_connected_area(img, x, y, mark):
     def neighbor(img, x, y, mark, stack):
         for i in range(x - 1, x + 2):
             if i < 0 or i >= img.shape[0]: continue
@@ -31,7 +31,7 @@ def bfs_connected_area(img, x, y, mark):
 # @boundary: [top, bottom, left, right]
 # -> up, bottom: (column_index, min/max row border)
 # -> left, right: (row_index, min/max column border) detect range of each row
-def get_boundary(area):
+def boundary_get_boundary(area):
     border_up, border_bottom, border_left, border_right = {}, {}, {}, {}
     for point in area:
         # point: (row_index, column_index)
@@ -92,10 +92,30 @@ def clipping_by_line(boundary, boundary_rec, lines):
                 r1 = line[1]
 
 
-def is_line(boundary, min_line_thickness):
-    # check if it is line by checking the length of edges
-    if True in [len(boundary[i]) < min_line_thickness for i in range(len(boundary))]:
+def boundary_is_line(boundary, min_line_thickness):
+    """
+    If this object is line by checking its boundary
+    :param boundary: boundary: [border_top, border_bottom, border_left, border_right]
+                                -> top, bottom: list of (column_index, min/max row border)
+                                -> left, right: list of (row_index, min/max column border) detect range of each row
+    :param min_line_thickness:
+    :return: Boolean
+    """
+    # horizontally
+    slim = 0
+    for i in range(len(boundary[0])):
+        if abs(boundary[1][i][1] - boundary[0][i][1]) <= min_line_thickness:
+            slim += 1
+    if slim / len(boundary[0]) > 0.8:
         return True
+    # vertically
+    slim = 0
+    for i in range(len(boundary[2])):
+        if abs(boundary[2][i][1] - boundary[3][i][1]) <= min_line_thickness:
+            slim += 1
+    if slim / len(boundary[2]) > 0.8:
+        return True
+
     return False
 
 
@@ -104,7 +124,7 @@ def is_line(boundary, min_line_thickness):
 # @boundary: [border_up, border_bottom, border_left, border_right]
 # -> up, bottom: (column_index, min/max row border)
 # -> left, right: (row_index, min/max column border) detect range of each row
-def is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
+def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
     dent_direction = [-1, 1, -1, 1]
 
     flat = 0
@@ -121,24 +141,31 @@ def is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
 
         # -> up, bottom: (column_index, min/max row border)
         # -> left, right: (row_index, min/max column border) detect range of each row
+        pit = 0
         for i in range(len(border) - 1):
-
             # calculate gradient
             difference = border[i][1] - border[i + 1][1]
+            # dent detection
+            depth += difference
+            # ignore noise
+            if i / len(border) < 0.1 and abs(difference) / edge > 0.5:
+                depth = 0
+
             if abs(difference) == 0:
                 flat += 1
             # too abnormal to be a regular shape
-            elif abs(difference) / edge > 0.6:
-                return False
+            elif abs(depth) / edge > 0.5:
+                pit += 1
+                if pit / len(border) > 0.1:
+                    return False
+            else:
+                pit = 0
 
-            # dent detection
-            depth += difference
             # if dent and too deep, then counted as dent
-            if dent_direction[n] * depth > 0 and abs(depth) / edge > 0.2:
+            if dent_direction[n] * depth > 0 and abs(depth) / edge > 0.15:
                 dent += 1
         if dent / len(border) > max_dent_ratio:
             return False
-
     # ignore text and irregular shape
     if (flat / parameter) < min_rec_evenness:
         return False
@@ -148,7 +175,7 @@ def is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
 # @corners: [(top_left, bottom_right)]
 # -> top_left: (column_min, row_min)
 # -> bottom_right: (column_max, row_max)
-def relation(corner_a, corner_b):
+def corner_relation(corner_a, corner_b):
     (up_left_a, bottom_right_a) = corner_a
     (y_min_a, x_min_a) = up_left_a
     (y_max_a, x_max_a) = bottom_right_a
@@ -168,3 +195,128 @@ def relation(corner_a, corner_b):
     # intersection
     else:
         return 2
+
+
+def line_check_perpendicular(lines_h, lines_v, max_thickness):
+    """
+    lines: [line_h, line_v]
+        -> line_h: horizontal {'head':(column_min, row), 'end':(column_max, row), 'thickness':int)
+        -> line_v: vertical {'head':(column, row_min), 'end':(column, row_max), 'thickness':int}
+    """
+    is_per_h = np.full(len(lines_h), False)
+    is_per_v = np.full(len(lines_v), False)
+    for i in range(len(lines_h)):
+        # save the intersection point of h
+        lines_h[i]['inter_point'] = set()
+        h = lines_h[i]
+
+        for j in range(len(lines_v)):
+            # save the intersection point of v
+            if 'inter_point' not in lines_v[j]: lines_v[j]['inter_point'] = set()
+            v = lines_v[j]
+
+            # if h is perpendicular to v in head of v
+            if abs(h['head'][1]-v['head'][1]) <= max_thickness:
+                if abs(h['head'][0] - v['head'][0]) <= max_thickness:
+                    lines_h[i]['inter_point'].add('head')
+                    lines_v[j]['inter_point'].add('head')
+                    is_per_h[i] = True
+                    is_per_v[j] = True
+                elif abs(h['end'][0] - v['head'][0]) <= max_thickness:
+                    lines_h[i]['inter_point'].add('end')
+                    lines_v[j]['inter_point'].add('head')
+                    is_per_h[i] = True
+                    is_per_v[j] = True
+
+            # if h is perpendicular to v in end of v
+            elif abs(h['head'][1]-v['end'][1]) <= max_thickness:
+                if abs(h['head'][0] - v['head'][0]) <= max_thickness:
+                    lines_h[i]['inter_point'].add('head')
+                    lines_v[j]['inter_point'].add('end')
+                    is_per_h[i] = True
+                    is_per_v[j] = True
+                elif abs(h['end'][0] - v['head'][0]) <= max_thickness:
+                    lines_h[i]['inter_point'].add('end')
+                    lines_v[j]['inter_point'].add('end')
+                    is_per_h[i] = True
+                    is_per_v[j] = True
+    per_h = []
+    per_v = []
+    for i in range(len(is_per_h)):
+        if is_per_h[i]:
+            lines_h[i]['inter_point'] = list(lines_h[i]['inter_point'])
+            per_h.append(lines_h[i])
+    for i in range(len(is_per_v)):
+        if is_per_v[i]:
+            lines_v[i]['inter_point'] = list(lines_v[i]['inter_point'])
+            per_v.append(lines_v[i])
+    return per_h, per_v
+
+
+def line_shrink_corners(corner, lines_h, lines_v):
+    """
+    shrink the corner according to lines:
+             col_min_shrink: shrink right (increase)
+             col_max_shrink: shrink left  (decrease)
+             row_min_shrink: shrink down  (increase)
+             row_max_shrink: shrink up    (decrease)
+    :param lines_h: horizontal {'head':(column_min, row), 'end':(column_max, row), 'thickness':int)
+    :param lines_v: vertical {'head':(column, row_min), 'end':(column, row_max), 'thickness':int}
+    :return: shrunken corner: (top_left, bottom_right)
+    """
+    (col_min, row_min), (col_max, row_max) = corner
+    col_min_shrink, row_min_shrink = col_min, row_min
+    col_max_shrink, row_max_shrink = col_max, row_max
+    valid_frame = False
+
+    for h in lines_h:
+        # ignore outer border
+        if len(h['inter_point']) == 2:
+            valid_frame = True
+            continue
+        # shrink right -> col_min move to end
+        if h['inter_point'][0] == 'head':
+            col_min_shrink = max(h['end'][0], col_min_shrink)
+        # shrink left -> col_max move to head
+        elif h['inter_point'][0] == 'end':
+            col_max_shrink = min(h['head'][0], col_max_shrink)
+
+    for v in lines_v:
+        # ignore outer border
+        if len(v['inter_point']) == 2:
+            valid_frame = True
+            continue
+        # shrink down -> row_min move to end
+        if v['inter_point'][0] == 'head':
+            row_min_shrink = max(v['end'][1], row_min_shrink)
+        # shrink up -> row_max move to head
+        elif v['inter_point'][0] == 'end':
+            row_max_shrink = min(v['head'][1], row_max_shrink)
+
+    # return the shrunken corner if only there is line intersecting with two other lines
+    if valid_frame:
+        return (col_min_shrink, row_min_shrink), (col_max_shrink, row_max_shrink)
+    return corner
+
+
+def line_cvt_relative_position(col_min, row_min, lines_h, lines_v):
+    """
+    convert the relative position of lines in the entire image
+    :param col_min: based column the img lines belong to
+    :param row_min: based row the img lines belong to
+    :param lines_h: horizontal {'head':(column_min, row), 'end':(column_max, row), 'thickness':int)
+    :param lines_v: vertical {'head':(column, row_min), 'end':(column, row_max), 'thickness':int}
+    :return: lines_h_cvt, lines_v_cvt
+    """
+    for h in lines_h:
+        h['head'][0] += col_min
+        h['head'][1] += row_min
+        h['end'][0] += col_min
+        h['end'][1] += row_min
+    for v in lines_v:
+        v['head'][0] += col_min
+        v['head'][1] += row_min
+        v['end'][0] += col_min
+        v['end'][1] += row_min
+
+    return lines_h, lines_v
