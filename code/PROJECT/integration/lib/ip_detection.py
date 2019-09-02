@@ -116,7 +116,7 @@ def uicomponent_in_img(org, bin, corners,
         """
         Reverse the input binary image
         """
-        rec, b = cv2.threshold(img, 1, 255, cv2.THRESH_BINARY_INV)
+        r, b = cv2.threshold(img, 1, 255, cv2.THRESH_BINARY_INV)
         return b
 
     corners_compo = []
@@ -129,6 +129,12 @@ def uicomponent_in_img(org, bin, corners,
         col_max = min(col_max + pad, org.shape[1])
         row_min = max(row_min - pad, 0)
         row_max = min(row_max + pad, org.shape[0])
+        height_img = row_max - row_min
+        width_img = col_max - col_min
+
+        # ignore small img
+        if height_img <= compo_max_height or width_img <= compo_max_height:
+            continue
 
         clip_bin = bin[row_min:row_max, col_min:col_max]
         clip_bin = reverse(clip_bin)
@@ -139,9 +145,10 @@ def uicomponent_in_img(org, bin, corners,
         # check the size of rectangle
         for rec in corners_rec:
             (col_min_rec, row_min_rec), (col_max_rec, row_max_rec) = rec
-            height = row_max_rec - row_min_rec
-            width = col_max_rec - col_min_rec
-            if height <= compo_max_height and width / height >= compo_min_edge_ratio:
+            height_rec = row_max_rec - row_min_rec
+            width_rec = col_max_rec - col_min_rec
+            if height_rec / height_img < 0.9 and width_rec != width_img < 0.9 and\
+                    height_rec <= compo_max_height and width_rec / height_rec >= compo_min_edge_ratio:
                 corners_compo.append(rec)
 
     return corners_compo
