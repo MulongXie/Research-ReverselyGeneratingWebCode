@@ -29,8 +29,8 @@ is_ocr = True
 is_segment = False
 is_save = True
 is_clip = False
-start_index = 4
-end_index = 50
+start_index = 51
+end_index = 100
 
 for input_path in input_paths:
     index = input_path.split('\\')[-1][:-4]
@@ -83,7 +83,12 @@ for input_path in input_paths:
     # identify potential buttons and input bars
     corners_block, corners_compo = det.uicomponent_or_block(org, corners_block,
                                                             C.THRESHOLD_UICOMPO_MAX_HEIGHT,
-                                                            C.THRESHOLD_UICOMPO_MIN_EDGE_RATION, C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH)
+                                                           C.THRESHOLD_UICOMPO_MIN_EDGE_RATION, C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH)
+    # shrink images with extra borders
+    if is_shrink_img:
+        corners_img = det.img_shrink(org, binary, corners_img,
+                                     C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
+                                     C.THRESHOLD_LINE_THICKNESS)
     # identify irregular-shape img from irregular shapes
     corners_img += det.img_irregular(org, corners_nonrec,
                                      C.THRESHOLD_IMG_MUST_HEIGHT, C.THRESHOLD_IMG_MUST_WIDTH)  # img assertion
@@ -93,11 +98,6 @@ for input_path in input_paths:
     corners_img = det.img_refine(org, corners_img,
                                  C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,  # ignore too large imgs
                                  C.THRESHOLD_TEXT_EDGE_RATIO, C.THRESHOLD_TEXT_HEIGHT)  # ignore text areas
-    # shrink images with extra borders
-    if is_shrink_img:
-        corners_img = det.img_shrink(org, binary, corners_img,
-                                     C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
-                                     C.THRESHOLD_LINE_THICKNESS)
     # merge overlapped corners, and remove nested corners
     if is_merge_img:
         corners_img = det.merge_corners(corners_img)
