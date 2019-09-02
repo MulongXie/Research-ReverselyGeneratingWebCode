@@ -202,7 +202,7 @@ def img_refine(org, corners, max_img_height_ratio, text_edge_ratio, text_height)
         if org.shape[0] > 1000 and height / img_height > max_img_height_ratio:
             continue
         # likely to be text, ignore
-        elif height <= text_height and width / height > text_edge_ratio:
+        elif 0 < height <= text_height and width / height > text_edge_ratio:
             continue
         refined_imgs.append(corner)
 

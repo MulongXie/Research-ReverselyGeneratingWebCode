@@ -29,7 +29,7 @@ is_ocr = True
 is_segment = False
 is_save = True
 is_clip = False
-start_index = 51
+start_index = 91
 end_index = 100
 
 for input_path in input_paths:
