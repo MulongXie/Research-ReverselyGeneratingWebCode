@@ -5,7 +5,7 @@ class Config:
 
     def __init__(self):
         self.ROOT_INPUT = "E:\Mulong\Datasets\dataset_webpage\page10000"
-        self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v4_ocrclassification"
+        self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v5_imgshrink"
         self.ROOT_IMG_ORG = pjoin(self.ROOT_INPUT, "org")
         self.ROOT_LABEL = pjoin(self.ROOT_OUTPUT, "ip_label")
         self.ROOT_IMG_DRAWN = pjoin(self.ROOT_OUTPUT, "ip_img_drawn")
@@ -17,6 +17,7 @@ class Config:
         self.THRESHOLD_OBJ_MIN_AREA = 200
         self.THRESHOLD_OBJ_MIN_PERIMETER = 150
         self.THRESHOLD_REC_MIN_EVENNESS = 0.6
+        self.THRESHOLD_REC_MIN_EVENNESS_STRONG = 0.9
 
         self.THRESHOLD_IMG_MUST_HEIGHT = 100
         self.THRESHOLD_IMG_MUST_WIDTH = 150

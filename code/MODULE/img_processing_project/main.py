@@ -24,11 +24,13 @@ CNN.load()
 is_classify = True
 is_detect_line = False
 is_merge_img = False
+is_shrink_img = True
 is_ocr = True
 is_segment = False
 is_save = True
-start_index = 124
-end_index = 500
+is_clip = False
+start_index = 91
+end_index = 100
 
 for input_path in input_paths:
     index = input_path.split('\\')[-1][:-4]
@@ -81,7 +83,12 @@ for input_path in input_paths:
     # identify potential buttons and input bars
     corners_block, corners_compo = det.uicomponent_or_block(org, corners_block,
                                                             C.THRESHOLD_UICOMPO_MAX_HEIGHT,
-                                                            C.THRESHOLD_UICOMPO_MIN_EDGE_RATION, C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH)
+                                                           C.THRESHOLD_UICOMPO_MIN_EDGE_RATION, C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH)
+    # shrink images with extra borders
+    if is_shrink_img:
+        corners_img = det.img_shrink(org, binary, corners_img,
+                                     C.THRESHOLD_LINE_MIN_LENGTH_H, C.THRESHOLD_LINE_MIN_LENGTH_V,
+                                     C.THRESHOLD_LINE_THICKNESS)
     # identify irregular-shape img from irregular shapes
     corners_img += det.img_irregular(org, corners_nonrec,
                                      C.THRESHOLD_IMG_MUST_HEIGHT, C.THRESHOLD_IMG_MUST_WIDTH)  # img assertion
@@ -133,8 +140,8 @@ for input_path in input_paths:
         cv2.imwrite(out_img_gradient, bin)
         cv2.imwrite(out_img_clean, img_clean)
         # cv2.imwrite(out_img_gradient_no_line, bin_no_line)
-        file.save_corners(out_label, corners_block, 'div')
-        file.save_corners(out_label, corners_img, 'img', False)
+        # file.save_corners(out_label, corners_block, 'div')
+        # file.save_corners(out_label, corners_img, 'img', False)
 
     end = file.timer(start)
     print('Save ' + index + '\n')
