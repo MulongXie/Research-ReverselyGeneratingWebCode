@@ -107,7 +107,7 @@ def uicomponent_or_block(org, corners,
 
 
 def uicomponent_in_img(org, bin, corners,
-                       compo_max_height=C.THRESHOLD_UICOMPO_MAX_HEIGHT,
+                       compo_min_height=C.THRESHOLD_UICOMPO_MIN_HEIGHT, compo_max_height=C.THRESHOLD_UICOMPO_MAX_HEIGHT,
                        compo_min_edge_ratio=C.THRESHOLD_UICOMPO_MIN_EDGE_RATION):
     """
     Detect potential UI components inner img
@@ -147,8 +147,8 @@ def uicomponent_in_img(org, bin, corners,
             (col_min_rec, row_min_rec), (col_max_rec, row_max_rec) = rec
             height_rec = row_max_rec - row_min_rec
             width_rec = col_max_rec - col_min_rec
-            if height_rec / height_img < 0.9 and width_rec / width_img < 0.9 and\
-                    height_rec <= compo_max_height and width_rec / height_rec >= compo_min_edge_ratio:
+            if height_rec / height_img < 0.9 and width_rec / width_img < 0.9 and \
+                    compo_min_height <= height_rec <= compo_max_height and width_rec / height_rec >= compo_min_edge_ratio:
                 corners_compo.append(rec)
 
     return corners_compo
