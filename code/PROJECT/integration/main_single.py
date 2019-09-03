@@ -14,7 +14,7 @@ import time
 C = Config()
 CNN = CNN()
 start = time.clock()
-is_merge_img = False
+is_merge_img = True
 is_shrink_img = True
 is_detect_compo_in_img = True
 is_classify = True
@@ -26,7 +26,7 @@ is_clip = False
 if __name__ == '__main__':
 
     # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img('input/5.png', (0, 2000))  # cut out partial img
+    org, gray = pre.read_img('input/28.png', (0, 3000))  # cut out partial img
     binary = pre.preprocess(gray, 1)
 
     # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
@@ -69,10 +69,11 @@ if __name__ == '__main__':
     # *** Step 6 *** text detection from cleaned image
     img_clean = draw.draw_bounding_box(org, corners_img, color=(255, 255, 255), line=-1)
     if is_ocr:
-        draw_bounding, word = ocr.text_detection(org, img_clean)
+        corners_word = ocr.text_detection(org, img_clean)
+        corners_line = ocr.text_merge_into_line(org, corners_word)
+        draw_bounding = draw.draw_bounding_box(org, corners_line, line=1)
     else:
         draw_bounding = org
-    img_clean = draw.draw_bounding_box(img_clean, corners_compo, color=(255, 255, 255), line=-1)
 
     # *** Step 7 *** post-processing: remove img elements from original image and segment into smaller size
     if is_segment:

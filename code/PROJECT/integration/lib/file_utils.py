@@ -57,7 +57,6 @@ def save_corners_json(file_path, corners, compo_classes):
         c['height'] = c['row_max'] - c['row_min']
         components['compos'].append(c)
 
-    print(components)
     json.dump(components, f_out, indent=4)
 
 

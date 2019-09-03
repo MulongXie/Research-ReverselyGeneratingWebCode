@@ -34,6 +34,7 @@ class Config:
 
         self.THRESHOLD_TEXT_EDGE_RATIO = 2.5
         self.THRESHOLD_TEXT_HEIGHT = 20
+        self.THRESHOLD_TEXT_MAX_WORD_GAP = 10
 
         self.THRESHOLD_UICOMPO_MAX_HEIGHT = 90
         self.THRESHOLD_UICOMPO_MIN_EDGE_RATION = 1
