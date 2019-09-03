@@ -109,7 +109,5 @@ def text_merge_into_line(org, corners_word, max_words_gap=C.THRESHOLD_TEXT_MAX_W
     corners_line = []
     for l in lines:
         corners_line.append(((l['col_min'], l['row_min']), (l['col_max'], l['row_max'])))
-
-    draw.draw_bounding_box(org, corners_line, show=True)
     return corners_line
 

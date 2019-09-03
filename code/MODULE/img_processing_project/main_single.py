@@ -26,7 +26,7 @@ is_clip = False
 if __name__ == '__main__':
 
     # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img('input/1.png', (0, 2000))  # cut out partial img
+    org, gray = pre.read_img('input/18.png', (0, 3000))  # cut out partial img
     binary = pre.preprocess(gray, 1)
 
     # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     if is_ocr:
         corners_word = ocr.text_detection(org, img_clean)
         corners_line = ocr.text_merge_into_line(org, corners_word)
-        draw_bounding = draw.draw_bounding_box(org, corners_word, line=1)
+        draw_bounding = draw.draw_bounding_box(org, corners_line, line=1)
     else:
         draw_bounding = org
 
