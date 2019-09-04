@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 import ip_draw as draw
+import ip_preprocessing as pre
 import ip_detection_utils as util
 import ocr_classify_text as ocr
 from CONFIG import Config
@@ -112,13 +113,6 @@ def uicomponent_in_img(org, bin, corners,
     """
     Detect potential UI components inner img
     """
-    def reverse(img):
-        """
-        Reverse the input binary image
-        """
-        r, b = cv2.threshold(img, 1, 255, cv2.THRESH_BINARY_INV)
-        return b
-
     corners_compo = []
     pad = 2
     for corner in corners:
@@ -137,7 +131,7 @@ def uicomponent_in_img(org, bin, corners,
             continue
 
         clip_bin = bin[row_min:row_max, col_min:col_max]
-        clip_bin = reverse(clip_bin)
+        clip_bin = pre.reverse_binary(clip_bin)
         boundary_all, boundary_rec, boundary_nonrec = boundary_detection(clip_bin, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS_STRONG)  # rectangle check
         corners_rec = get_corner(boundary_rec)
         corners_rec = util.corner_cvt_relative_position(corners_rec, col_min, row_min)

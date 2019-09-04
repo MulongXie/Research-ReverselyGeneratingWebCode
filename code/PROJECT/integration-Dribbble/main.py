@@ -32,8 +32,8 @@ CNN = CNN()
 CNN.load()
 
 # start image and end image
-start_index = 4
-end_index = 20
+start_index = 0
+end_index = 25
 
 for input_path in input_paths:
     index = input_path.split('\\')[-1][:-4]
@@ -56,7 +56,7 @@ for input_path in input_paths:
     # *** Step 1 *** pre-processing: gray, gradient, binary
     org, gray = pre.read_img(input_path, (0, 3000))  # cut out partial img
     if org is None or gray is None: continue
-    binary = pre.preprocess(gray, 1)
+    binary = pre.preprocess(gray, 2)
 
     # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
     boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary)
