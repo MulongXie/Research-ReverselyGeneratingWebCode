@@ -6,21 +6,6 @@ import time
 import cv2
 
 
-def build_output_folders(C):
-    if not os.path.exists(C.ROOT_LABEL):
-        os.mkdir(C.ROOT_LABEL)
-    if not os.path.exists(C.ROOT_IMG_DRAWN):
-        os.mkdir(C.ROOT_IMG_DRAWN)
-    if not os.path.exists(C.ROOT_IMG_GRADIENT):
-        os.mkdir(C.ROOT_IMG_GRADIENT)
-    if not os.path.exists(C.ROOT_IMG_GRADIENT_NO_LINE):
-        os.mkdir(C.ROOT_IMG_GRADIENT_NO_LINE)
-    if not os.path.exists(C.ROOT_IMG_CLEAN):
-        os.mkdir(C.ROOT_IMG_CLEAN)
-    if not os.path.exists(C.ROOT_IMG_SEGMENT):
-        os.mkdir(C.ROOT_IMG_SEGMENT)
-
-
 def save_corners(file_path, corners, compo_name, clear=True):
     try:
         df = pd.read_csv(file_path, index_col=0)

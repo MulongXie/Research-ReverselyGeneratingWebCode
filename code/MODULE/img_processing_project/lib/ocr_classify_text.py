@@ -57,7 +57,7 @@ def text_detection(org, img_clean):
     return corners_word
 
 
-def text_merge_into_line(org, corners_word, max_words_gap=C.THRESHOLD_TEXT_MAX_WORD_GAP):
+def text_merge_word_into_line(org, corners_word, max_words_gap=C.THRESHOLD_TEXT_MAX_WORD_GAP):
 
     def is_in_line(word):
         for i in range(len(lines)):

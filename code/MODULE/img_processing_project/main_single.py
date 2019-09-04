@@ -14,9 +14,9 @@ import time
 C = Config()
 CNN = CNN()
 start = time.clock()
-is_merge_img = True
+is_merge_img = False
 is_shrink_img = True
-is_detect_compo_in_img = True
+is_detect_compo_in_img = False
 is_classify = True
 is_ocr = True
 is_segment = False
@@ -26,8 +26,9 @@ is_clip = False
 if __name__ == '__main__':
 
     # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img('input/28.png', (0, 3000))  # cut out partial img
-    binary = pre.preprocess(gray, 1)
+    org, gray = pre.read_img('input/dribbble/x.png', (0, 3000))  # cut out partial img
+    binary = pre.preprocess(gray, 3)
+    binary_r = pre.reverse_binary(binary)
 
     # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
     boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary)
@@ -89,6 +90,7 @@ if __name__ == '__main__':
         cv2.imwrite('output/labeled.png', draw_bounding)
         cv2.imwrite('output/boundary.png', draw_boundary)
         cv2.imwrite('output/gradient.png', binary)
+        cv2.imwrite('output/gradient_r.png', binary_r)
         cv2.imwrite('output/clean.png', img_clean)
         file.save_corners_json('output/compo.json', corners_block, ['div' for i in range(len(corners_block))])
         file.save_corners_json('output/compo.json', corners_img, ['img' for j in range(len(corners_img))])

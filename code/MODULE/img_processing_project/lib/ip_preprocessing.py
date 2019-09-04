@@ -33,6 +33,14 @@ def grad_to_binary(grad, min):
     return bin
 
 
+def reverse_binary(bin):
+    """
+    Reverse the input binary image
+    """
+    r, bin = cv2.threshold(bin, 1, 255, cv2.THRESH_BINARY_INV)
+    return bin
+
+
 def preprocess(gray, grad_min=1):
     grad = gray_to_gradient(gray)        # get RoI with high gradient
     binary = grad_to_binary(grad, grad_min)   # enhance the RoI

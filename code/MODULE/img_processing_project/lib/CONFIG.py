@@ -1,16 +1,16 @@
 from os.path import join as pjoin
+import os
 
 
 class Config:
 
     def __init__(self):
-        self.ROOT_INPUT = "E:\Mulong\Datasets\dataset_webpage\page10000"
-        self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v5_imgshrink"
+        self.ROOT_INPUT = "E:\Mulong\Datasets\Dribbble"
+        self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v6_dribbble_compoinimg"
         self.ROOT_IMG_ORG = pjoin(self.ROOT_INPUT, "org")
         self.ROOT_LABEL = pjoin(self.ROOT_OUTPUT, "ip_label")
         self.ROOT_IMG_DRAWN = pjoin(self.ROOT_OUTPUT, "ip_img_drawn")
         self.ROOT_IMG_GRADIENT = pjoin(self.ROOT_OUTPUT, "ip_img_gradient")
-        self.ROOT_IMG_GRADIENT_NO_LINE = pjoin(self.ROOT_OUTPUT, "ip_img_gradient_no_line")
         self.ROOT_IMG_CLEAN = pjoin(self.ROOT_OUTPUT, "ip_img_clean")
         self.ROOT_IMG_SEGMENT = pjoin(self.ROOT_OUTPUT, "ip_img_segment")
 
@@ -37,6 +37,7 @@ class Config:
         self.THRESHOLD_TEXT_MAX_WORD_GAP = 10
 
         self.THRESHOLD_UICOMPO_MAX_HEIGHT = 90
+        self.THRESHOLD_UICOMPO_MIN_HEIGHT = 20
         self.THRESHOLD_UICOMPO_MIN_EDGE_RATION = 1
 
         self.OCR_PADDING = 5
@@ -44,3 +45,15 @@ class Config:
 
         self.COLOR = {'block':(0, 255, 0), 'img':(0, 0, 255), 'button':(0, 166, 166), 'input':(255, 166, 0),
                       'search':(255, 0, 166), 'list':(166, 0, 255), 'select':(166, 166, 166), 'compo':(0, 166, 255)}
+
+    def build_output_folders(self, is_segment):
+        if not os.path.exists(self.ROOT_LABEL):
+            os.mkdir(self.ROOT_LABEL)
+        if not os.path.exists(self.ROOT_IMG_DRAWN):
+            os.mkdir(self.ROOT_IMG_DRAWN)
+        if not os.path.exists(self.ROOT_IMG_GRADIENT):
+            os.mkdir(self.ROOT_IMG_GRADIENT)
+        if not os.path.exists(self.ROOT_IMG_CLEAN):
+            os.mkdir(self.ROOT_IMG_CLEAN)
+        if is_segment and not os.path.exists(self.ROOT_IMG_SEGMENT):
+            os.mkdir(self.ROOT_IMG_SEGMENT)
