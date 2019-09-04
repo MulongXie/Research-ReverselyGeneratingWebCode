@@ -17,11 +17,16 @@ class Data:
         self.X_test, self.Y_test = None, None
 
         self.image_shape = cfg.image_shape
-        self.class_number = cfg.class_number
         self.class_map = cfg.class_map
+        self.class_number = len(cfg.class_map)
+        self.element_number = {}
         self.DATA_PATH = cfg.DATA_PATH
 
     def load_data(self, resize=True, shape=None):
+        # count elements in each classes
+        for c in self.class_map:
+            self.element_number[c] = 0
+
         # if customize shape
         if shape is not None:
             self.image_shape = shape
@@ -30,15 +35,23 @@ class Data:
 
         # load data
         for p in glob.glob(pjoin(self.DATA_PATH, '*')):
-            label = self.class_map.index(p.split('\\')[-1])  # map to index of classes
-            for image_path in glob.glob(pjoin(p, '*.png')):
+            class_name = p.split('\\')[-1]
+            label = self.class_map.index(class_name)  # map to index of classes
+            for image_path in glob.glob(pjoin(p, '*.png'))[:20000]:
                 image = cv2.imread(image_path)
                 if resize:
-                    image = cv2.resize(image, shape[:2])
+                    try:
+                        image = cv2.resize(image, shape[:2])
+                    except:
+                        print(image_path)
+                        continue
                 self.images.append(image)
                 self.labels.append(label)
+                self.element_number[class_name] += 1
 
-        assert len(self.images) == len(self.labels)
+            assert len(self.images) == len(self.labels)
+            print(self.element_number)
+
         self.data_num = len(self.images)
         print('%d Data Loaded' % self.data_num)
 
