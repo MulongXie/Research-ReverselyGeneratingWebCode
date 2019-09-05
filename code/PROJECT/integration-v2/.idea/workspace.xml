@@ -16,11 +16,41 @@
           <file leaf-file-name="main_single.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/main_single.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="409">
-                  <caret line="82" column="45" selection-start-line="82" selection-start-column="45" selection-end-line="82" selection-end-column="45" />
+                <state relative-caret-position="376">
+                  <caret line="71" column="42" lean-forward="true" selection-start-line="71" selection-start-column="42" selection-end-line="71" selection-end-column="42" />
                   <folding>
                     <element signature="e#0#26#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ocr_classify_text.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/lib/ocr_classify_text.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="238">
+                  <caret line="22" column="21" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
+                  <folding>
+                    <element signature="e#0#25#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ip_draw.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/lib/ip_draw.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="85">
+                  <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ip_preprocessing.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/lib/ip_preprocessing.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="234">
+                  <caret line="34" selection-start-line="34" selection-end-line="34" />
                 </state>
               </provider>
             </entry>
@@ -29,11 +59,11 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="ip_detection.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="ip_detection.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/lib/ip_detection.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="512">
-                  <caret line="361" column="35" selection-start-line="361" selection-start-column="35" selection-end-line="361" selection-end-column="35" />
+                <state relative-caret-position="240">
+                  <caret line="189" column="12" selection-start-line="189" selection-start-column="12" selection-end-line="189" selection-end-column="12" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -41,11 +71,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="CONFIG.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="CONFIG.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/lib/CONFIG.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="306">
-                  <caret line="30" column="71" selection-start-line="30" selection-start-column="71" selection-end-line="30" selection-end-column="71" />
+                <state relative-caret-position="469">
+                  <caret line="35" column="44" lean-forward="true" selection-start-line="35" selection-start-column="44" selection-end-line="35" selection-end-column="44" />
                   <folding>
                     <element signature="e#0#33#0" expanded="true" />
                   </folding>
@@ -61,8 +91,9 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/lib/CONFIG.py" />
-        <option value="$PROJECT_DIR$/main_single.py" />
+        <option value="$PROJECT_DIR$/lib/ocr_classify_text.py" />
         <option value="$PROJECT_DIR$/lib/ip_detection.py" />
+        <option value="$PROJECT_DIR$/main_single.py" />
       </list>
     </option>
   </component>
@@ -149,13 +180,33 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
+    <configuration name="ocr_classify_text" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="integration-v2" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/lib" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/lib/ocr_classify_text.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <list>
       <item itemvalue="Python.Unnamed" />
       <item itemvalue="Python.main_single" />
+      <item itemvalue="Python.ocr_classify_text" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.main_single" />
+        <item itemvalue="Python.ocr_classify_text" />
       </list>
     </recent_temporary>
   </component>
@@ -199,32 +250,56 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/main_single.py">
+    <entry file="file://$PROJECT_DIR$/lib/ip_preprocessing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="409">
-          <caret line="82" column="45" selection-start-line="82" selection-start-column="45" selection-end-line="82" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="234">
+          <caret line="34" selection-start-line="34" selection-end-line="34" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/CONFIG.py">
+    <entry file="file://$PROJECT_DIR$/lib/ip_draw.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="30" column="71" selection-start-line="30" selection-start-column="71" selection-end-line="30" selection-end-column="71" />
+        <state relative-caret-position="85">
+          <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/ocr_classify_text.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="22" column="21" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
           <folding>
-            <element signature="e#0#33#0" expanded="true" />
+            <element signature="e#0#25#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/ip_detection.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="512">
-          <caret line="361" column="35" selection-start-line="361" selection-start-column="35" selection-end-line="361" selection-end-column="35" />
+        <state relative-caret-position="240">
+          <caret line="189" column="12" selection-start-line="189" selection-start-column="12" selection-end-line="189" selection-end-column="12" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/CONFIG.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="469">
+          <caret line="35" column="44" lean-forward="true" selection-start-line="35" selection-start-column="44" selection-end-line="35" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main_single.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="376">
+          <caret line="71" column="42" lean-forward="true" selection-start-line="71" selection-start-column="42" selection-end-line="71" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -161,7 +161,8 @@ def compo_in_img(processing, org, binary, corners_img,
 def block_or_compo(org, binary, corners,
                    max_thickness=C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS, max_block_cross_points=C.THRESHOLD_BLOCK_MAX_CROSS_POINT,
                    min_block_edge=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH, max_img_edge_ratio=C.THRESHOLD_IMG_MIN_EDGE_RATION,
-                   min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
+                   min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH,
+                   min_img_height=C.THRESHOLD_IMG_MIN_HEIGHT):
     """
     Check if the objects are img components or just block
     :param org: Original image
@@ -219,14 +220,14 @@ def block_or_compo(org, binary, corners,
                 blocks.append(corner)
         # filter out small objects
         else:
-            if width / height < max_img_edge_ratio:
+            if height > min_img_height or width / height < max_img_edge_ratio:
                 imgs.append(corner)
     return blocks, imgs, compos
 
 
 def compo_irregular(org, corners,
                     corners_img, corners_compo,     # output
-                    max_img_edge_ratio=C.THRESHOLD_IMG_MIN_EDGE_RATION,
+                    max_img_edge_ratio=C.THRESHOLD_IMG_MIN_EDGE_RATION, min_img_height=C.THRESHOLD_IMG_MIN_HEIGHT,
                     min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
     """
     Select potential irregular shaped elements by checking the height and width
@@ -248,7 +249,7 @@ def compo_irregular(org, corners,
         # select UI component candidates
         if min_compo_edge < height < max_compo_edge and min_compo_edge < width < max_compo_edge:
             corners_compo.append(corner)
-        elif width / height < max_img_edge_ratio:
+        elif height > min_img_height or width / height < max_img_edge_ratio:
             corners_img.append(corner)
 
 

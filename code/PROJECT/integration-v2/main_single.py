@@ -15,7 +15,7 @@ start = time.clock()
 C = Config()
 CNN = CNN()
 CNN.load()
-is_merge_nested = True
+is_merge_nested = False
 is_shrink_img = False
 is_img_inspect = True
 is_save = True
@@ -24,8 +24,8 @@ is_clip = False
 
 def pre_processing():
     # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img('input/dribbble/0.png', (0, 3000))  # cut out partial img
-    binary = pre.preprocess(gray, 1)
+    org, gray = pre.read_img('input/dribbble/x.png', (0, 3000))  # cut out partial img
+    binary = pre.preprocess(gray, 3)
     return org, binary
 
 
@@ -39,6 +39,7 @@ def processing(org, binary, main=True):
         # *** Step 3 *** data processing: identify blocks and compos from rectangles -> identify irregular compos
         corners_block, corners_img, corners_compo = det.block_or_compo(org, binary, corners_rec)
         det.compo_irregular(org, corners_non_rec, corners_img, corners_compo)
+        corners_img, _ = det.rm_text(org, corners_img, ['img' for i in range(len(corners_img))])
 
         # *** Step 4 *** classification: clip and classify the components candidates -> ignore noises -> refine img
         compos = seg.clipping(org, corners_compo)
