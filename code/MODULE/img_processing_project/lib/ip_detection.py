@@ -129,14 +129,22 @@ def compo_in_img(processing, org, binary, corners_img,
         clip_bin = pre.reverse_binary(clip_bin)
 
         corners_block_new, corners_img_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, main=False)
-        
+        corners_block_new = util.corner_cvt_relative_position(corners_block_new, col_min, row_min)
+        corners_compo_new = util.corner_cvt_relative_position(corners_compo_new, col_min, row_min)
+
+        assert len(corners_compo_new) == len(compos_class_new)
+
         # only leave non-img elements
         corners_block += corners_block_new
         for i in range(len(corners_compo_new)):
             if compos_class_new[i] != 'img':
-                print(compos_class_new[i])
-                corners_compo += corners_compo_new
-                compos_class += compos_class_new
+                # ignore compos overlapped with its parent img
+                (col_min_new, row_min_new), (col_max_new, row_max_new) = corners_compo_new[i]
+                height_new = row_max_new - row_min_new
+                width_new = col_max_new - col_min_new
+                if height_new / height_img < 0.9 and width_new / width_img < 0.9:
+                    corners_compo.append(corners_compo_new[i])
+                    compos_class.append(compos_class_new[i])
 
 
 def block_or_compo(org, binary, corners,
@@ -434,7 +442,7 @@ def line_detection(binary,
 def boundary_detection(binary,
                        min_obj_area=C.THRESHOLD_OBJ_MIN_AREA, min_obj_perimeter=C.THRESHOLD_OBJ_MIN_PERIMETER,
                        line_thickness=C.THRESHOLD_LINE_THICKNESS, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
-                       max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO):
+                       max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO, show=False):
     """
     :param binary: Binary image from pre-processing
     :param min_obj_area: If not pass then ignore the small object
@@ -474,7 +482,8 @@ def boundary_detection(binary,
                 # rectangle check
                 if util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
                     boundary_rec.append(boundary)
+                    if show:
+                        draw.draw_boundary(boundary_rec, binary.shape, True)
                 else:
                     boundary_nonrec.append(boundary)
-
     return boundary_rec, boundary_nonrec

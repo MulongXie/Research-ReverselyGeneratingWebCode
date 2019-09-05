@@ -24,15 +24,15 @@ is_clip = False
 
 def pre_processing():
     # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img('input/28.png', (0, 600))  # cut out partial img
+    org, gray = pre.read_img('input/18.png', (0, 2000))  # cut out partial img
     binary = pre.preprocess(gray, 1)
     return org, binary
 
 
 def processing(org, binary, main=True):
-    # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
-    boundary_rec, boundary_non_rec = det.boundary_detection(binary)
     if main:
+        # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
+        boundary_rec, boundary_non_rec = det.boundary_detection(binary)
         corners_rec = det.get_corner(boundary_rec)
         corners_non_rec = det.get_corner(boundary_non_rec)
 
@@ -63,6 +63,7 @@ def processing(org, binary, main=True):
     # *** used for img inspection ***
     # only consider rectangular components
     else:
+        boundary_rec, boundary_non_rec = det.boundary_detection(binary, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS_STRONG)
         corners_rec = det.get_corner(boundary_rec)
         corners_block, corners_img, corners_compo = det.block_or_compo(org, binary, corners_rec)
         compos = seg.clipping(org, corners_compo)
