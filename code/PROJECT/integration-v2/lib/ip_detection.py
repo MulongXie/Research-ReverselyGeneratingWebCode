@@ -106,7 +106,8 @@ def compo_in_img(processing, org, binary, corners_img,
                  corners_block, corners_compo, compos_class,    # output
                  min_compo_edge_length=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH):
     """
-    Detect potential UI components inner img
+    Detect potential UI components inner img;
+    Only leave non-img
     """
     pad = 2
     for corner in corners_img:
@@ -128,7 +129,7 @@ def compo_in_img(processing, org, binary, corners_img,
         clip_bin = binary[row_min:row_max, col_min:col_max]
         clip_bin = pre.reverse_binary(clip_bin)
 
-        corners_block_new, corners_img_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, main=False)
+        corners_block_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, main=False)
         corners_block_new = util.corner_cvt_relative_position(corners_block_new, col_min, row_min)
         corners_compo_new = util.corner_cvt_relative_position(corners_compo_new, col_min, row_min)
 
