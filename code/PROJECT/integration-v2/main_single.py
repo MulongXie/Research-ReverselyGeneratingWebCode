@@ -24,7 +24,7 @@ is_clip = False
 
 def pre_processing():
     # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img('input/18.png', (0, 3000))  # cut out partial img
+    org, gray = pre.read_img('input/3.png', (0, 3000))  # cut out partial img
     binary = pre.preprocess(gray, 1)
     return org, binary
 
@@ -48,11 +48,11 @@ def processing(org, binary, main=True):
 
         # *** Step 5 *** result refinement
         if is_merge_nested:
-            corners_img = det.merge_corner(corners_img)
-            corners_compo = det.merge_corner(corners_compo)
-        corners_block = det.rm_text(org, corners_block)
-        corners_img = det.rm_text(org, corners_img)
-        corners_compo = det.rm_text(org, corners_compo)
+            corners_img, _ = det.merge_corner(corners_img, ['img' for i in range(len(corners_img))])
+            corners_compo, compos_class = det.merge_corner(corners_compo, compos_class)
+        corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
+        corners_img, _ = det.rm_text(org, corners_img, ['img' for i in range(len(corners_img))])
+        corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
         if is_shrink_img:
             corners_img = det.img_shrink(org, binary, corners_img)
 
@@ -79,8 +79,8 @@ def processing(org, binary, main=True):
 
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
         corners_compo, compos_class = det.compo_filter(org, corners_compo, compos_class)
-        corners_block = det.rm_text(org, corners_block)
-        corners_compo = det.rm_text(org, corners_compo)
+        corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
+        corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
 
         return corners_block, corners_compo, compos_class
 

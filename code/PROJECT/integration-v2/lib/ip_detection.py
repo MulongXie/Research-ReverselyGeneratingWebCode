@@ -40,7 +40,7 @@ def select_corner(corners, compos_class, class_name):
     return corners_wanted
 
 
-def merge_corner(corners):
+def merge_corner(corners, compos_class):
     """
     i. merge overlapped corners
     ii. remove nested corners
@@ -64,7 +64,9 @@ def merge_corner(corners):
         return (col_min, row_min), (col_max, row_max)
 
     new_corners = []
-    for corner in corners:
+    new_class = []
+    for i in range(len(corners)):
+        corner = corners[i]
         is_intersected = False
         for i in range(len(new_corners)):
             r = util.corner_relation(corner, new_corners[i])
@@ -83,7 +85,8 @@ def merge_corner(corners):
 
         if not is_intersected:
             new_corners.append(corner)
-    return new_corners
+            new_class.append(compos_class[i])
+    return new_corners, new_class
 
 
 def strip_img(corners_compo, compos_class, corners_img):
@@ -157,7 +160,7 @@ def compo_in_img(processing, org, binary, corners_img,
 
 def block_or_compo(org, binary, corners,
                    max_thickness=C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS, max_block_cross_points=C.THRESHOLD_BLOCK_MAX_CROSS_POINT,
-                   min_block_edge=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH,
+                   min_block_edge=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH, max_img_edge_ratio=C.THRESHOLD_IMG_MIN_EDGE_RATION,
                    min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
     """
     Check if the objects are img components or just block
@@ -216,12 +219,14 @@ def block_or_compo(org, binary, corners,
                 blocks.append(corner)
         # filter out small objects
         else:
-            imgs.append(corner)
+            if width / height < max_img_edge_ratio:
+                imgs.append(corner)
     return blocks, imgs, compos
 
 
 def compo_irregular(org, corners,
                     corners_img, corners_compo,     # output
+                    max_img_edge_ratio=C.THRESHOLD_IMG_MIN_EDGE_RATION,
                     min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
     """
     Select potential irregular shaped elements by checking the height and width
@@ -243,7 +248,7 @@ def compo_irregular(org, corners,
         # select UI component candidates
         if min_compo_edge < height < max_compo_edge and min_compo_edge < width < max_compo_edge:
             corners_compo.append(corner)
-        else:
+        elif width / height < max_img_edge_ratio:
             corners_img.append(corner)
 
 
@@ -314,7 +319,7 @@ def img_shrink(org, binary, corners,
 
 
 # remove imgs that contain text
-def rm_text(org, corners,
+def rm_text(org, corners, compo_class,
             max_text_height=C.THRESHOLD_TEXT_MAX_HEIGHT, max_text_width=C.THRESHOLD_TEXT_MAX_WIDTH,
             
             ocr_padding=C.OCR_PADDING, ocr_min_word_area=C.OCR_MIN_WORD_AREA, show=False):
@@ -324,6 +329,7 @@ def rm_text(org, corners,
     :param corners: [(top_left, bottom_right)]
                     -> top_left: (column_min, row_min)
                     -> bottom_right: (column_max, row_max)
+    :param compo_class: classes of corners
     :param max_text_height: Too large to be text
     :param max_text_width: Too large to be text
     :param ocr_padding: Padding for clipping
@@ -332,7 +338,9 @@ def rm_text(org, corners,
     :return: corners without text objects
     """
     new_corners = []
-    for corner in corners:
+    new_class = []
+    for i in range(len(corners)):
+        corner = corners[i]
         (top_left, bottom_right) = corner
         (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
@@ -350,7 +358,8 @@ def rm_text(org, corners,
             clip = org[row_min: row_max, col_min: col_max]
             if not ocr.is_text(clip, ocr_min_word_area, show=show):
                 new_corners.append(corner)
-    return new_corners
+                new_class.append(compo_class[i])
+    return new_corners, new_class
 
 
 def line_detection(binary,
