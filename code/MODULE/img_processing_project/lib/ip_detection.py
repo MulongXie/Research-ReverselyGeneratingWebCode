@@ -29,6 +29,18 @@ def get_corner(boundaries):
     return corners
 
 
+def find_corner(corners, compos_class, type):
+    """
+    Find corners in given compo type 
+    :return: corners with this type 
+    """
+    corners_wanted = []
+    for i in range(len(compos_class)):
+        if compos_class[i] == type:
+            corners_wanted.append(corners[i])
+    return corners_wanted
+
+
 def merge_corners(corners):
     """
     i. merge overlapped corners
@@ -75,47 +87,14 @@ def merge_corners(corners):
     return new_corners
 
 
-def uicomponent_or_block(org, corners,
-                         compo_max_height=C.THRESHOLD_UICOMPO_MAX_HEIGHT,
-                         compo_min_edge_ratio=C.THRESHOLD_UICOMPO_MIN_EDGE_RATION,
-                         min_block_edge_length=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH):
-    """
-    Select the potential ui components (button, input) from block objects
-    :param org: Original image
-    :param corners: corners: [(top_left, bottom_right)]
-                            -> top_left: (column_min, row_min)
-                            -> bottom_right: (column_max, row_max)
-    :param compo_max_height: Over the threshold won't be counted
-    :param compo_min_edge_ratio: Over the threshold won't be counted
-    :param min_block_edge_length: Main length for being a block
-    :return: corners of compos and blocks
-    """
-    compos = []
-    blocks = []
-    for corner in corners:
-        (top_left, bottom_right) = corner
-        (col_min, row_min) = top_left
-        (col_max, row_max) = bottom_right
-        height = row_max - row_min
-        width = col_max - col_min
-
-        if height <= compo_max_height and width/height >= compo_min_edge_ratio:
-            compos.append(corner)
-        else:
-            if width > min_block_edge_length and height > min_block_edge_length:
-                blocks.append(corner)
-    return blocks, compos
-
-
-def uicomponent_in_img(org, bin, corners,
-                       compo_min_height=C.THRESHOLD_UICOMPO_MIN_HEIGHT, compo_max_height=C.THRESHOLD_UICOMPO_MAX_HEIGHT,
-                       compo_min_edge_ratio=C.THRESHOLD_UICOMPO_MIN_EDGE_RATION):
+def compo_in_img(processing, org, binary, corners_img,
+                 corners_block, corners_compo, compos_class,
+                 min_compo_edge_length=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH):
     """
     Detect potential UI components inner img
     """
-    corners_compo = []
     pad = 2
-    for corner in corners:
+    for corner in corners_img:
         (top_left, bottom_right) = corner
         (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
@@ -126,31 +105,25 @@ def uicomponent_in_img(org, bin, corners,
         height_img = row_max - row_min
         width_img = col_max - col_min
 
-        # ignore small img
-        if height_img <= compo_max_height or width_img <= compo_max_height:
+        # ignore small ones
+        if height_img <= min_compo_edge_length or width_img <= min_compo_edge_length:
             continue
-
-        clip_bin = bin[row_min:row_max, col_min:col_max]
+            
+        clip_org = org[row_min:row_max, col_min:col_max]
+        clip_bin = binary[row_min:row_max, col_min:col_max]
         clip_bin = pre.reverse_binary(clip_bin)
-        boundary_all, boundary_rec, boundary_nonrec = boundary_detection(clip_bin, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS_STRONG)  # rectangle check
-        corners_rec = get_corner(boundary_rec)
-        corners_rec = util.corner_cvt_relative_position(corners_rec, col_min, row_min)
 
-        # check the size of rectangle
-        for rec in corners_rec:
-            (col_min_rec, row_min_rec), (col_max_rec, row_max_rec) = rec
-            height_rec = row_max_rec - row_min_rec
-            width_rec = col_max_rec - col_min_rec
-            if height_rec / height_img < 0.9 and width_rec / width_img < 0.9 and \
-                    compo_min_height <= height_rec <= compo_max_height and width_rec / height_rec >= compo_min_edge_ratio:
-                corners_compo.append(rec)
+        corners_block_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, img_inspect=False)
 
-    return corners_compo
+        corners_block += corners_block_new
+        corners_compo += corners_compo_new
+        compos_class += compos_class_new
 
 
-def img_or_block(org, binary, corners,
-                 max_thickness=C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS,
-                 max_block_cross_points=C.THRESHOLD_BLOCK_MAX_CROSS_POINT):
+def block_or_compo(org, binary, corners,
+                   max_thickness=C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS, max_block_cross_points=C.THRESHOLD_BLOCK_MAX_CROSS_POINT,
+                   min_block_edge=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH,
+                   min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
     """
     Check if the objects are img components or just block
     :param org: Original image
@@ -163,13 +136,15 @@ def img_or_block(org, binary, corners,
     :return: corners of blocks and imgs
     """
     blocks = []
-    imgs = []
+    compos = []
     for corner in corners:
         (top_left, bottom_right) = corner
         (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
+        height = row_max - row_min
+        width = col_max - col_min
 
-        is_block = False
+        block = False
         vacancy = [0, 0, 0, 0]
         for i in range(1, max_thickness):
             try:
@@ -190,19 +165,18 @@ def img_or_block(org, binary, corners,
                         np.sum(binary[row_min + i: row_max - i, col_max - i]) / 255) / (row_max - row_min - 2 * i) <= max_block_cross_points:
                     vacancy[3] = 1
                 if np.sum(vacancy) == 4:
-                    is_block = True
+                    block = True
             except:
                 pass
-        if is_block:
+        if block and height > min_block_edge and width > min_block_edge:
             blocks.append(corner)
-        else:
-            imgs.append(corner)
+        elif min_compo_edge < height < max_compo_edge and min_compo_edge < width < max_compo_edge:
+            compos.append(corner)
+    return blocks, compos
 
-    return blocks, imgs
 
-
-def img_irregular(org, corners,
-                  must_img_height=C.THRESHOLD_IMG_MUST_HEIGHT, must_img_width=C.THRESHOLD_IMG_MUST_WIDTH):
+def compo_irregular(org, corners,
+                    min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
     """
     Select potential irregular shaped img elements by checking the height and width
     Check the edge ratio for img components to avoid text misrecognition
@@ -210,11 +184,10 @@ def img_irregular(org, corners,
     :param corners: [(top_left, bottom_right)]
                     -> top_left: (column_min, row_min)
                     -> bottom_right: (column_max, row_max)
-    :param must_img_height: Larger is likely to be img
-    :param must_img_width: Larger is likely to be img
+    :param min_compo_edge_length: Larger is likely to be img
     :return: corners of img
     """
-    imgs = []
+    compos = []
     for corner in corners:
         (top_left, bottom_right) = corner
         (col_min, row_min) = top_left
@@ -222,28 +195,26 @@ def img_irregular(org, corners,
         height = row_max - row_min
         width = col_max - col_min
         # assumption: large one must be img component no matter its edge ratio
-        if height > must_img_height:
-            imgs.append(corner)
-    return imgs
+        if min_compo_edge < height < max_compo_edge and min_compo_edge < width < max_compo_edge:
+            compos.append(corner)
+    return compos
 
 
-def img_refine(org, corners,
-               max_img_height_ratio=C.THRESHOLD_IMG_MAX_HEIGHT_RATIO,
-               text_edge_ratio=C.THRESHOLD_TEXT_EDGE_RATIO, text_height=C.THRESHOLD_TEXT_HEIGHT):
+def compo_refine(org, corners,
+                 text_edge_ratio=C.THRESHOLD_TEXT_EDGE_RATIO, text_height=C.THRESHOLD_TEXT_HEIGHT):
     """
     Remove too large imgs and likely text
     :param org: Original image
     :param corners: [(top_left, bottom_right)]
                     -> top_left: (column_min, row_min)
                     -> bottom_right: (column_max, row_max)
-    :param max_img_height_ratio: height of img / total height of original image
     :param text_edge_ratio: width / height, if too large, then likely to be text
     :param text_height: common max height of text
     :return: corners of refined img
     """
     img_height, img_width = org.shape[:2]
 
-    refined_imgs = []
+    refined_compos = []
     for corner in corners:
         (top_left, bottom_right) = corner
         (col_min, row_min) = top_left
@@ -252,14 +223,14 @@ def img_refine(org, corners,
         width = col_max - col_min
 
         # ignore too large ones
-        if org.shape[0] > 1000 and height / img_height > max_img_height_ratio:
+        if org.shape[0] > 1000:
             continue
         # likely to be text, ignore
         elif 0 < height <= text_height and width / height > text_edge_ratio:
             continue
-        refined_imgs.append(corner)
+        refined_compos.append(corner)
 
-    return refined_imgs
+    return refined_compos
 
 
 def img_shrink(org, binary, corners,
@@ -300,7 +271,7 @@ def img_shrink(org, binary, corners,
 
 # remove imgs that contain text
 def rm_text(org, corners,
-            must_img_height=C.THRESHOLD_IMG_MUST_HEIGHT, must_img_width=C.THRESHOLD_IMG_MUST_WIDTH,
+            max_text_height=C.THRESHOLD_TEXT_MAX_HEIGHT, max_text_width=C.THRESHOLD_TEXT_MAX_WIDTH,
             ocr_padding=C.OCR_PADDING, ocr_min_word_area=C.OCR_MIN_WORD_AREA, show=False):
     """
     Remove area that full of text
@@ -308,8 +279,8 @@ def rm_text(org, corners,
     :param corners: [(top_left, bottom_right)]
                     -> top_left: (column_min, row_min)
                     -> bottom_right: (column_max, row_max)
-    :param must_img_height: Too large should be img
-    :param must_img_width: Too large should be img
+    :param max_text_height: Too large to be text
+    :param max_text_width: Too large to be text
     :param ocr_padding: Padding for clipping
     :param ocr_min_word_area: If too text area ratio is too large
     :param show: Show or not
@@ -323,7 +294,7 @@ def rm_text(org, corners,
         height = row_max - row_min
         width = col_max - col_min
         # highly likely to be block or img if too large
-        if height > must_img_height and width > must_img_width:
+        if height > max_text_height and width > max_text_width:
             new_corners.append(corner)
         else:
             row_min = row_min - ocr_padding if row_min - ocr_padding >= 0 else 0
@@ -335,27 +306,6 @@ def rm_text(org, corners,
             if not ocr.is_text(clip, ocr_min_word_area, show=show):
                 new_corners.append(corner)
     return new_corners
-
-
-def rm_line(binary, lines):
-    """
-    Remove lines from binary map
-    :param binary: Binary image
-    :param lines: [line_h, line_v]
-            -> line_h: horizontal {'head':(column_min, row), 'end':(column_max, row), 'thickness':int)
-            -> line_v: vertical {'head':(column, row_min), 'end':(column, row_max), 'thickness':int}
-    :return: New binary map with out lines
-    """
-    new_binary = binary.copy()
-    line_h, line_v = lines
-    for line in line_h:
-        row = line['head'][1]
-        new_binary[row: row + line['thickness'], line['head'][0]:line['end'][0] + 1] = 0
-    for line in line_v:
-        column = line['head'][0]
-        new_binary[line['head'][1]:line['end'][1] + 1, column: column + line['thickness']] = 0
-
-    return new_binary
 
 
 def line_detection(binary,
@@ -455,7 +405,7 @@ def line_detection(binary,
 def boundary_detection(binary,
                        min_obj_area=C.THRESHOLD_OBJ_MIN_AREA, min_obj_perimeter=C.THRESHOLD_OBJ_MIN_PERIMETER,
                        line_thickness=C.THRESHOLD_LINE_THICKNESS, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
-                       max_dent_ratio=C.THRESHOLD_IMG_MAX_DENT_RATIO):
+                       max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO):
     """
     :param binary: Binary image from pre-processing
     :param min_obj_area: If not pass then ignore the small object
@@ -468,7 +418,6 @@ def boundary_detection(binary,
                         -> left, right: (row_index, min/max column border) detect range of each row
     """
     mark = np.full(binary.shape, 0, dtype=np.uint8)
-    boundary_all = []
     boundary_rec = []
     boundary_nonrec = []
     row, column = binary.shape[0], binary.shape[1]
@@ -489,7 +438,6 @@ def boundary_detection(binary,
                 if perimeter < min_obj_perimeter:
                     continue
 
-                boundary_all.append(boundary)
                 # check if it is line by checking the length of edges
                 if util.boundary_is_line(boundary, line_thickness):
                     continue
@@ -500,4 +448,4 @@ def boundary_detection(binary,
                 else:
                     boundary_nonrec.append(boundary)
 
-    return boundary_all, boundary_rec, boundary_nonrec
+    return boundary_rec, boundary_nonrec
