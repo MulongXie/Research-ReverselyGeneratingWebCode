@@ -17,15 +17,15 @@ C = Config()
 CNN = CNN()
 CNN.load()
 is_merge_nested = True
+is_shrink_img = False
 is_img_inspect = True
-is_shrink_img = True
 is_save = True
 is_clip = False
 
 
 def pre_processing():
     # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img('input/69.png', (0, 3000))  # cut out partial img
+    org, gray = pre.read_img('input/2.png', (0, 3000))  # cut out partial img
     binary = pre.preprocess(gray, 1)
     return org, binary
 
@@ -56,7 +56,7 @@ def processing(org, binary, main=True):
         # *** Step 5 *** img inspection: search components in img element
         if is_img_inspect:
             det.compo_in_img(processing, org, binary, corners_img, corners_block, corners_compo, compos_class)
-    
+
     # *** used for img inspection ***
     # only consider rectangular components
     else:
