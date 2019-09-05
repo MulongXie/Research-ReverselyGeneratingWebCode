@@ -134,11 +134,18 @@ def compo_in_img(processing, org, binary, corners_img,
 
         assert len(corners_compo_new) == len(compos_class_new)
 
+        # ignore blocks superposed on its parent img
+        for b in corners_block_new:
+            (col_min_new, row_min_new), (col_max_new, row_max_new) = b
+            height_new = row_max_new - row_min_new
+            width_new = col_max_new - col_min_new
+            if height_new / height_img < 0.9 and width_new / width_img < 0.9:
+                corners_block.append(corners_block_new)
+
         # only leave non-img elements
-        corners_block += corners_block_new
         for i in range(len(corners_compo_new)):
             if compos_class_new[i] != 'img':
-                # ignore compos overlapped with its parent img
+                # ignore compos superposed on its parent img
                 (col_min_new, row_min_new), (col_max_new, row_max_new) = corners_compo_new[i]
                 height_new = row_max_new - row_min_new
                 width_new = col_max_new - col_min_new

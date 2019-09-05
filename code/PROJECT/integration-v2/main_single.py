@@ -65,7 +65,12 @@ def processing(org, binary, main=True):
     else:
         boundary_rec, boundary_non_rec = det.boundary_detection(binary, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS_STRONG)
         corners_rec = det.get_corner(boundary_rec)
+
         corners_block, corners_img, corners_compo = det.block_or_compo(org, binary, corners_rec)
+        corners_block = det.rm_text(org, corners_block)
+        corners_img = det.rm_text(org, corners_img)
+        corners_compo = det.rm_text(org, corners_compo)
+
         compos = seg.clipping(org, corners_compo)
         compos_class = CNN.predict(compos)
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
