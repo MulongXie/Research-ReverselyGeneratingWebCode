@@ -114,9 +114,12 @@ def compo_in_img(processing, org, binary, corners_img,
 
         corners_block_new, corners_img_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, main=False)
 
+        # only leave non-img elements
         corners_block += corners_block_new
-        corners_compo += corners_compo_new
-        compos_class += compos_class_new
+        for i in range(len(corners_compo_new)):
+            if compos_class_new[i] != 'img':
+                corners_compo += corners_compo_new
+                compos_class += compos_class_new
 
 
 def block_or_compo(org, binary, corners,
