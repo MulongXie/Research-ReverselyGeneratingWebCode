@@ -86,6 +86,22 @@ def merge_corner(corners):
     return new_corners
 
 
+def strip_img(corners_compo, compos_class, corners_img):
+    """
+    Separate img from other compos
+    :return: compos without img
+    """
+    corners_compo_withuot_img = []
+    compo_class_withuot_img = []
+    for i in range(len(compos_class)):
+        if compos_class[i] == 'img':
+            corners_img.append(corners_compo[i])
+        else:
+            corners_compo_withuot_img.append(corners_compo[i])
+            compo_class_withuot_img.append(compos_class[i])
+    return corners_compo_withuot_img, compo_class_withuot_img
+
+
 def compo_in_img(processing, org, binary, corners_img,
                  corners_block, corners_compo, compos_class,    # output
                  min_compo_edge_length=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH):
@@ -113,11 +129,12 @@ def compo_in_img(processing, org, binary, corners_img,
         clip_bin = pre.reverse_binary(clip_bin)
 
         corners_block_new, corners_img_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, main=False)
-
+        
         # only leave non-img elements
         corners_block += corners_block_new
         for i in range(len(corners_compo_new)):
             if compos_class_new[i] != 'img':
+                print(compos_class_new[i])
                 corners_compo += corners_compo_new
                 compos_class += compos_class_new
 
@@ -148,7 +165,7 @@ def block_or_compo(org, binary, corners,
         width = col_max - col_min
 
         # select UI component candidates
-        if min_compo_edge < height < max_compo_edge and min_compo_edge < width < max_compo_edge:
+        if min_compo_edge < height < max_compo_edge:
             compos.append(corner)
             continue
 
