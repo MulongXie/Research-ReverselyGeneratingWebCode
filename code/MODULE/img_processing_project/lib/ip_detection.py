@@ -44,7 +44,7 @@ def select_corner(corners, compos_class, class_name):
     return corners_wanted
 
 
-def merge_corners(corners):
+def merge_corner(corners):
     """
     i. merge overlapped corners
     ii. remove nested corners
@@ -91,7 +91,7 @@ def merge_corners(corners):
 
 
 def compo_in_img(processing, org, binary, corners_img,
-                 corners_block, corners_compo, compos_class,
+                 corners_block, corners_compo, compos_class,    # output
                  min_compo_edge_length=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH):
     """
     Detect potential UI components inner img
@@ -125,8 +125,7 @@ def compo_in_img(processing, org, binary, corners_img,
 
 def block_or_compo(org, binary, corners,
                    max_thickness=C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS, max_block_cross_points=C.THRESHOLD_BLOCK_MAX_CROSS_POINT,
-                   min_block_edge=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH,
-                   min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
+                   min_block_edge=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH, min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH):
     """
     Check if the objects are img components or just block
     :param org: Original image
@@ -183,13 +182,13 @@ def block_or_compo(org, binary, corners,
 
 def compo_irregular(org, corners, min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH):
     """
-    Select potential irregular shaped img elements by checking the height and width
+    Select potential irregular shaped elements by checking the height and width
     Check the edge ratio for img components to avoid text misrecognition
     :param org: Original image
     :param corners: [(top_left, bottom_right)]
                     -> top_left: (column_min, row_min)
                     -> bottom_right: (column_max, row_max)
-    :param min_compo_edge: Larger is likely to be img
+    :param min_compo_edge: ignore small objects
     :return: corners of img
     """
     compos = []
@@ -207,12 +206,12 @@ def compo_irregular(org, corners, min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LE
 
 def compo_filter(org, corners, compos_class, max_compo_egde=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
     """
-    filter compos and imgs according to knowledge
+    Filter compos and imgs according to edge length
     :param org: Original image
     :param corners: [(top_left, bottom_right)]
                     -> top_left: (column_min, row_min)
                     -> bottom_right: (column_max, row_max)
-    :return: corners of refined img
+    :return: corners of left components, classes of them
     """
     corners_compo_new = []
     compos_class_new = []
