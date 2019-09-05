@@ -16,7 +16,7 @@ start = time.clock()
 C = Config()
 CNN = CNN()
 CNN.load()
-is_merge_nested = False
+is_merge_nested = True
 is_img_inspect = True
 is_shrink_img = True
 is_save = True
@@ -30,30 +30,37 @@ def pre_processing():
     return org, binary
 
 
-def processing(org, binary, merge=is_merge_nested, img_inspect=is_img_inspect):
+def processing(org, binary, main=True):
     boundary_rec, boundary_non_rec = det.boundary_detection(binary)
 
-    corners_rec = det.get_corner(boundary_rec)
-    corners_non_rec = det.get_corner(boundary_non_rec)
-
-    corners_block, corners_compo = det.block_or_compo(org, binary, corners_rec)
-
-    corners_compo += det.compo_irregular(org, corners_non_rec)
-    # corners_compo = det.compo_refine(org, corners_compo)
-    corners_compo = det.rm_text(org, corners_compo)
-    if merge:
-        corners_compo = det.merge_corners(corners_compo)
-
-    compos = seg.clipping(org, corners_compo)
-    compos_class = CNN.predict(compos)
-    # corners_compo, compos_class = det.compo_filter(corners_compo, compos_class)
+    if main:
+        corners_rec = det.get_corner(boundary_rec)
+        corners_non_rec = det.get_corner(boundary_non_rec)
+        
+        corners_block, corners_compo = det.block_or_compo(org, binary, corners_rec)
+        corners_compo += det.compo_irregular(org, corners_non_rec)
+        if is_merge_nested:
+            corners_compo = det.merge_corners(corners_compo)
+        corners_compo = det.rm_text(org, corners_compo)
+        compos = seg.clipping(org, corners_compo)
+        compos_class = CNN.predict(compos)
+        corners_compo, compos_class = det.compo_filter(org, corners_compo, compos_class)
+        
+        if is_img_inspect:
+            corners_img = det.select_corner(corners_compo, compos_class, 'img')
+            det.compo_in_img(processing, org, binary, corners_img, corners_block, corners_compo, compos_class)
+        return corners_block, corners_compo, compos_class
     
-    if img_inspect:
-        corners_img = det.find_corner(corners_compo, compos_class, 'img')
-        det.compo_in_img(processing, org, binary, corners_img, corners_block, corners_compo, compos_class)
-
-    return corners_block, corners_compo, compos_class
-
+    # used for inspecting img
+    # only consider rectangular components
+    else:
+        corners_rec = det.get_corner(boundary_rec)
+        corners_block, corners_compo = det.block_or_compo(org, binary, corners_rec)
+        compos = seg.clipping(org, corners_compo)
+        compos_class = CNN.predict(compos)
+        corners_compo, compos_class = det.compo_filter(org, corners_compo, compos_class)
+        return corners_block, corners_compo, compos_class
+        
 
 def post_processing(org, binary, corners_block, corners_compo, compos_class):
     # *** Step 7 *** post-processing: remove img elements from original image and segment into smaller size

@@ -29,14 +29,17 @@ def get_corner(boundaries):
     return corners
 
 
-def find_corner(corners, compos_class, type):
+def select_corner(corners, compos_class, class_name):
     """
-    Find corners in given compo type 
-    :return: corners with this type 
+    Select corners in given compo type
+    :param corners:
+    :param compos_class:
+    :param class_name:
+    :return: corners with this type
     """
     corners_wanted = []
     for i in range(len(compos_class)):
-        if compos_class[i] == type:
+        if compos_class[i] == class_name:
             corners_wanted.append(corners[i])
     return corners_wanted
 
@@ -113,7 +116,7 @@ def compo_in_img(processing, org, binary, corners_img,
         clip_bin = binary[row_min:row_max, col_min:col_max]
         clip_bin = pre.reverse_binary(clip_bin)
 
-        corners_block_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, img_inspect=False)
+        corners_block_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, main=False)
 
         corners_block += corners_block_new
         corners_compo += corners_compo_new
@@ -168,15 +171,17 @@ def block_or_compo(org, binary, corners,
                     block = True
             except:
                 pass
+
+        # too big to be UI components
         if block and height > min_block_edge and width > min_block_edge:
             blocks.append(corner)
-        elif min_compo_edge < height < max_compo_edge and min_compo_edge < width < max_compo_edge:
+        # filter out small objects
+        elif height > min_compo_edge and width > min_compo_edge:
             compos.append(corner)
     return blocks, compos
 
 
-def compo_irregular(org, corners,
-                    min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
+def compo_irregular(org, corners, min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH):
     """
     Select potential irregular shaped img elements by checking the height and width
     Check the edge ratio for img components to avoid text misrecognition
@@ -184,7 +189,7 @@ def compo_irregular(org, corners,
     :param corners: [(top_left, bottom_right)]
                     -> top_left: (column_min, row_min)
                     -> bottom_right: (column_max, row_max)
-    :param min_compo_edge_length: Larger is likely to be img
+    :param min_compo_edge: Larger is likely to be img
     :return: corners of img
     """
     compos = []
@@ -194,43 +199,40 @@ def compo_irregular(org, corners,
         (col_max, row_max) = bottom_right
         height = row_max - row_min
         width = col_max - col_min
-        # assumption: large one must be img component no matter its edge ratio
-        if min_compo_edge < height < max_compo_edge and min_compo_edge < width < max_compo_edge:
+        # filter out small objects
+        if height > min_compo_edge and width > min_compo_edge:
             compos.append(corner)
     return compos
 
 
-def compo_refine(org, corners,
-                 text_edge_ratio=C.THRESHOLD_TEXT_EDGE_RATIO, text_height=C.THRESHOLD_TEXT_HEIGHT):
+def compo_filter(org, corners, compos_class, max_compo_egde=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
     """
-    Remove too large imgs and likely text
+    filter compos and imgs according to knowledge
     :param org: Original image
     :param corners: [(top_left, bottom_right)]
                     -> top_left: (column_min, row_min)
                     -> bottom_right: (column_max, row_max)
-    :param text_edge_ratio: width / height, if too large, then likely to be text
-    :param text_height: common max height of text
     :return: corners of refined img
     """
-    img_height, img_width = org.shape[:2]
-
-    refined_compos = []
-    for corner in corners:
+    corners_compo_new = []
+    compos_class_new = []
+    for i in range(len(corners)):
+        compo = compos_class[i]
+        corner = corners[i]
         (top_left, bottom_right) = corner
         (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
         height = row_max - row_min
         width = col_max - col_min
 
-        # ignore too large ones
-        if org.shape[0] > 1000:
-            continue
-        # likely to be text, ignore
-        elif 0 < height <= text_height and width / height > text_edge_ratio:
-            continue
-        refined_compos.append(corner)
+        if compo != 'img':
+            # too big to be UI components
+            if height > max_compo_egde:
+                continue
+        corners_compo_new.append(corner)
+        compos_class_new.append(compo)
 
-    return refined_compos
+    return corners_compo_new, compos_class_new
 
 
 def img_shrink(org, binary, corners,
@@ -272,6 +274,7 @@ def img_shrink(org, binary, corners,
 # remove imgs that contain text
 def rm_text(org, corners,
             max_text_height=C.THRESHOLD_TEXT_MAX_HEIGHT, max_text_width=C.THRESHOLD_TEXT_MAX_WIDTH,
+            
             ocr_padding=C.OCR_PADDING, ocr_min_word_area=C.OCR_MIN_WORD_AREA, show=False):
     """
     Remove area that full of text
