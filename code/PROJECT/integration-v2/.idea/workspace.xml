@@ -16,8 +16,8 @@
           <file leaf-file-name="main_single.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/main_single.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="153">
-                  <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
+                <state relative-caret-position="409">
+                  <caret line="82" column="45" selection-start-line="82" selection-start-column="45" selection-end-line="82" selection-end-column="45" />
                   <folding>
                     <element signature="e#0#26#0" expanded="true" />
                   </folding>
@@ -29,11 +29,11 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="ip_detection.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="ip_detection.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/lib/ip_detection.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="393">
-                  <caret line="137" selection-start-line="137" selection-end-line="137" />
+                <state relative-caret-position="512">
+                  <caret line="361" column="35" selection-start-line="361" selection-start-column="35" selection-end-line="361" selection-end-column="35" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -41,11 +41,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="CONFIG.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="CONFIG.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/lib/CONFIG.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="255">
-                  <caret line="24" column="48" selection-start-line="24" selection-start-column="48" selection-end-line="24" selection-end-column="48" />
+                <state relative-caret-position="306">
+                  <caret line="30" column="71" selection-start-line="30" selection-start-column="71" selection-end-line="30" selection-end-column="71" />
                   <folding>
                     <element signature="e#0#33#0" expanded="true" />
                   </folding>
@@ -60,9 +60,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/lib/ip_detection.py" />
         <option value="$PROJECT_DIR$/lib/CONFIG.py" />
         <option value="$PROJECT_DIR$/main_single.py" />
+        <option value="$PROJECT_DIR$/lib/ip_detection.py" />
       </list>
     </option>
   </component>
@@ -199,32 +199,32 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lib/ip_detection.py">
+    <entry file="file://$PROJECT_DIR$/main_single.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
-          <caret line="137" selection-start-line="137" selection-end-line="137" />
+        <state relative-caret-position="409">
+          <caret line="82" column="45" selection-start-line="82" selection-start-column="45" selection-end-line="82" selection-end-column="45" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/CONFIG.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="24" column="48" selection-start-line="24" selection-start-column="48" selection-end-line="24" selection-end-column="48" />
+        <state relative-caret-position="306">
+          <caret line="30" column="71" selection-start-line="30" selection-start-column="71" selection-end-line="30" selection-end-column="71" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main_single.py">
+    <entry file="file://$PROJECT_DIR$/lib/ip_detection.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
+        <state relative-caret-position="512">
+          <caret line="361" column="35" selection-start-line="361" selection-start-column="35" selection-end-line="361" selection-end-column="35" />
           <folding>
-            <element signature="e#0#26#0" expanded="true" />
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
