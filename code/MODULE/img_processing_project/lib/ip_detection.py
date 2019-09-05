@@ -32,10 +32,6 @@ def get_corner(boundaries):
 def select_corner(corners, compos_class, class_name):
     """
     Select corners in given compo type
-    :param corners:
-    :param compos_class:
-    :param class_name:
-    :return: corners with this type
     """
     corners_wanted = []
     for i in range(len(compos_class)):
@@ -116,7 +112,7 @@ def compo_in_img(processing, org, binary, corners_img,
         clip_bin = binary[row_min:row_max, col_min:col_max]
         clip_bin = pre.reverse_binary(clip_bin)
 
-        corners_block_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, main=False)
+        corners_block_new, corners_img_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, main=False)
 
         corners_block += corners_block_new
         corners_compo += corners_compo_new
@@ -125,7 +121,8 @@ def compo_in_img(processing, org, binary, corners_img,
 
 def block_or_compo(org, binary, corners,
                    max_thickness=C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS, max_block_cross_points=C.THRESHOLD_BLOCK_MAX_CROSS_POINT,
-                   min_block_edge=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH, min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH):
+                   min_block_edge=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH,
+                   min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
     """
     Check if the objects are img components or just block
     :param org: Original image
@@ -138,6 +135,7 @@ def block_or_compo(org, binary, corners,
     :return: corners of blocks and imgs
     """
     blocks = []
+    imgs = []
     compos = []
     for corner in corners:
         (top_left, bottom_right) = corner
@@ -145,6 +143,11 @@ def block_or_compo(org, binary, corners,
         (col_max, row_max) = bottom_right
         height = row_max - row_min
         width = col_max - col_min
+
+        # select UI component candidates
+        if min_compo_edge < height < max_compo_edge and min_compo_edge < width < max_compo_edge:
+            compos.append(corner)
+            continue
 
         block = False
         vacancy = [0, 0, 0, 0]
@@ -172,15 +175,18 @@ def block_or_compo(org, binary, corners,
                 pass
 
         # too big to be UI components
-        if block and height > min_block_edge and width > min_block_edge:
-            blocks.append(corner)
+        if block:
+            if height > min_block_edge and width > min_block_edge:
+                blocks.append(corner)
         # filter out small objects
-        elif height > min_compo_edge and width > min_compo_edge:
-            compos.append(corner)
-    return blocks, compos
+        else:
+            imgs.append(corner)
+    return blocks, imgs, compos
 
 
-def compo_irregular(org, corners, min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH):
+def compo_irregular(org, corners,
+                    corners_img, corners_compo,     # output
+                    min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
     """
     Select potential irregular shaped elements by checking the height and width
     Check the edge ratio for img components to avoid text misrecognition
@@ -191,17 +197,18 @@ def compo_irregular(org, corners, min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LE
     :param min_compo_edge: ignore small objects
     :return: corners of img
     """
-    compos = []
     for corner in corners:
         (top_left, bottom_right) = corner
         (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
         height = row_max - row_min
         width = col_max - col_min
-        # filter out small objects
-        if height > min_compo_edge and width > min_compo_edge:
-            compos.append(corner)
-    return compos
+
+        # select UI component candidates
+        if min_compo_edge < height < max_compo_edge and min_compo_edge < width < max_compo_edge:
+            corners_compo.append(corner)
+        else:
+            corners_img.append(corner)
 
 
 def compo_filter(org, corners, compos_class, max_compo_egde=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
