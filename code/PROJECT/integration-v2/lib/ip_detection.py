@@ -66,25 +66,26 @@ def merge_corner(corners, compos_class):
     new_corners = []
     new_class = []
     for i in range(len(corners)):
-        corner = corners[i]
         is_intersected = False
-        for i in range(len(new_corners)):
-            r = util.corner_relation(corner, new_corners[i])
-            # if corner is in new_corners[i], ignore corner
+        for j in range(len(new_corners)):
+            r = util.corner_relation(corners[i], new_corners[j])
+            # if corners[i] is in new_corners[j], ignore corners[i]
             if r == -1:
                 is_intersected = True
                 break
-            # if new_corners[i] is in corner, replace corners[i] with corner
+            # if new_corners[j] is in corners[i], replace new_corners[j] with corners[i]
             elif r == 1:
                 is_intersected = True
-                new_corners[i] = corner
+                new_corners[j] = corners[i]
+                new_class[j] = compos_class[i]
             # if [i] and [j] are overlapped
             if r == 2:
                 is_intersected = True
-                new_corners[i] = merge_overlapped(corner, new_corners[i])
+                if compos_class[i] == new_class[j]:
+                    new_corners[j] = merge_overlapped(corners[i], new_corners[i])
 
         if not is_intersected:
-            new_corners.append(corner)
+            new_corners.append(corners[i])
             new_class.append(compos_class[i])
     return new_corners, new_class
 
@@ -112,6 +113,7 @@ def compo_in_img(processing, org, binary, corners_img,
     Detect potential UI components inner img;
     Only leave non-img
     """
+    corners_img_new = []
     pad = 2
     for corner in corners_img:
         (top_left, bottom_right) = corner
@@ -123,6 +125,9 @@ def compo_in_img(processing, org, binary, corners_img,
         row_max = min(row_max + pad, org.shape[0])
         height_img = row_max - row_min
         width_img = col_max - col_min
+
+        img_area = height_img * width_img
+        compo_area = 0
 
         # ignore small ones
         if height_img <= min_compo_edge_length or width_img <= min_compo_edge_length:
@@ -145,6 +150,7 @@ def compo_in_img(processing, org, binary, corners_img,
             width_new = col_max_new - col_min_new
             if height_new / height_img < 0.9 and width_new / width_img < 0.9:
                 corners_block.append(corners_block_new)
+                compo_area += height_new * width_new
 
         # only leave non-img elements
         for i in range(len(corners_compo_new)):
@@ -153,9 +159,19 @@ def compo_in_img(processing, org, binary, corners_img,
                 (col_min_new, row_min_new), (col_max_new, row_max_new) = corners_compo_new[i]
                 height_new = row_max_new - row_min_new
                 width_new = col_max_new - col_min_new
-                if height_new / height_img < 0.9 and width_new / width_img < 0.9:
-                    corners_compo.append(corners_compo_new[i])
-                    compos_class.append(compos_class_new[i])
+
+                corners_compo.append(corners_compo_new[i])
+                compos_class.append(compos_class_new[i])
+                compo_area += height_new * width_new
+
+        # ignore imgs full of components
+        if compo_area / img_area < 0.5:
+            corners_img_new.append(corner)
+
+    corners_compo, compos_class = merge_corner(corners_compo, compos_class)
+    corners_img = rm_img_in_compo(corners_img_new, corners_compo)
+
+    return corners_block, corners_img, corners_compo, compos_class
 
 
 def block_or_compo(org, binary, corners,
@@ -193,11 +209,11 @@ def block_or_compo(org, binary, corners,
         vacancy = [0, 0, 0, 0]
         for i in range(1, max_thickness):
             try:
-                # up down
+                # top to bottom
                 if vacancy[0] == 0 and (col_max - col_min - 2 * i) is not 0 and (
                         np.sum(binary[row_min + i, col_min + i: col_max - i]) / 255) / (col_max - col_min - 2 * i) <= max_block_cross_points:
                     vacancy[0] = 1
-                # bottom-up
+                # bottom to top
                 if vacancy[1] == 0 and (col_max - col_min - 2 * i) is not 0 and (
                         np.sum(binary[row_max - i, col_min + i: col_max - i]) / 255) / (col_max - col_min - 2 * i) <= max_block_cross_points:
                     vacancy[1] = 1
@@ -222,6 +238,7 @@ def block_or_compo(org, binary, corners,
         else:
             if height > min_img_height or width / height < max_img_edge_ratio:
                 imgs.append(corner)
+                # print(height, width)
     return blocks, imgs, compos
 
 
@@ -323,6 +340,22 @@ def img_shrink(org, binary, corners,
         corners_shrunken.append(corner_shrunken)
 
     return corners_shrunken
+
+
+def rm_img_in_compo(corners_img, corners_compo):
+    """
+    Remove imgs in component
+    """
+    corners_img_new = []
+    for img in corners_img:
+        is_nested = False
+        for compo in corners_compo:
+            if util.corner_relation(img, compo) == -1:
+                is_nested = True
+                break
+        if not is_nested:
+            corners_img_new.append(img)
+    return corners_img_new
 
 
 # remove imgs that contain text
@@ -466,7 +499,7 @@ def line_detection(binary,
 def boundary_detection(binary,
                        min_obj_area=C.THRESHOLD_OBJ_MIN_AREA, min_obj_perimeter=C.THRESHOLD_OBJ_MIN_PERIMETER,
                        line_thickness=C.THRESHOLD_LINE_THICKNESS, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
-                       max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO):
+                       max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO, show=False):
     """
     :param binary: Binary image from pre-processing
     :param min_obj_area: If not pass then ignore the small object
@@ -506,6 +539,9 @@ def boundary_detection(binary,
                 # rectangle check
                 if util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
                     boundary_rec.append(boundary)
+                    if show:
+                        draw.draw_boundary(boundary_rec, binary.shape, show)
                 else:
                     boundary_nonrec.append(boundary)
+
     return boundary_rec, boundary_nonrec

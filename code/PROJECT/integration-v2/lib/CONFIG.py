@@ -17,13 +17,13 @@ class Config:
         self.THRESHOLD_OBJ_MIN_AREA = 200
         self.THRESHOLD_OBJ_MIN_PERIMETER = 120
 
-        self.THRESHOLD_REC_MIN_EVENNESS = 0.6
-        self.THRESHOLD_REC_MIN_EVENNESS_STRONG = 0.9
+        self.THRESHOLD_REC_MIN_EVENNESS = 0.7
+        self.THRESHOLD_REC_MIN_EVENNESS_STRONG = 0.75
         self.THRESHOLD_REC_MAX_DENT_RATIO = 0.1
 
         self.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS = 8
         self.THRESHOLD_BLOCK_MAX_CROSS_POINT = 0.3
-        self.THRESHOLD_BLOCK_MIN_EDGE_LENGTH = 90
+        self.THRESHOLD_BLOCK_MIN_EDGE_LENGTH = 100
 
         self.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH = self.THRESHOLD_BLOCK_MIN_EDGE_LENGTH
         self.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH = 30
@@ -45,8 +45,8 @@ class Config:
         self.OCR_PADDING = 5
         self.OCR_MIN_WORD_AREA = 0.3
 
-        self.COLOR = {'block': (0, 255, 0), 'img': (0, 0, 255), 'button': (0, 166, 166), 'input': (255, 166, 0),
-                      'search': (255, 0, 166), 'list': (166, 0, 255), 'select': (166, 166, 166), 'icon': (0, 166, 255)}
+        self.COLOR = {'block': (0, 255, 0), 'img': (0, 0, 255), 'icon': (255, 166, 166), 'input': (255, 166, 0),
+                      'search': (255, 0, 166), 'list': (166, 0, 255), 'select': (166, 166, 166), 'button': (0, 166, 255)}
 
     def build_output_folders(self, is_segment):
         if not os.path.exists(self.ROOT_LABEL):
