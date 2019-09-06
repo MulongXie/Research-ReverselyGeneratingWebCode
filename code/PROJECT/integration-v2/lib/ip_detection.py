@@ -82,7 +82,7 @@ def merge_corner(corners, compos_class):
             if r == 2:
                 is_intersected = True
                 if compos_class[i] == new_class[j]:
-                    new_corners[j] = merge_overlapped(corners[i], new_corners[i])
+                    new_corners[j] = merge_overlapped(corners[i], new_corners[j])
 
         if not is_intersected:
             new_corners.append(corners[i])

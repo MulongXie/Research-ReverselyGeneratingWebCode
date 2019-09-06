@@ -27,9 +27,9 @@ CNN = CNN()
 CNN.load()
 
 
-def pre_processing():
+def pre_processing(img):
     # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img('input/dribbble/x.png', (0, 3000))  # cut out partial img
+    org, gray = pre.read_img(img, (0, 3000))  # cut out partial img
     binary = pre.preprocess(gray, 3)
     return org, binary
 
@@ -115,8 +115,8 @@ def post_processing(index, org, binary, corners_block, corners_img, corners_comp
 
 def _main():
     # start image and end image
-    start_index = 0
-    end_index = 25
+    start_index = 6
+    end_index = 200
 
     for input_path in input_paths:
         index = input_path.split('\\')[-1][:-4]
@@ -129,7 +129,7 @@ def _main():
         print(input_path)
         print(time.ctime())
 
-        org, binary = pre_processing()
+        org, binary = pre_processing(input_path)
         corners_block, corners_img, corners_compo, compos_class, corners_text = processing(org, binary)
         post_processing(index, org, binary, corners_block, corners_img, corners_compo, compos_class, corners_text)
 
