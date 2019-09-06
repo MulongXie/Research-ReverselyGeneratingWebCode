@@ -25,15 +25,15 @@ is_clip = False
 # initialization
 C = Config()
 C.build_output_folders(is_segment)
-input_root = C.ROOT_IMG_ORG
+input_root = C.ROOT_INPUT
 input_paths = glob.glob(pyjoin(input_root, '*.png'))
 input_paths = sorted(input_paths, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 CNN = CNN()
 CNN.load()
 
 # start image and end image
-start_index = 1
-end_index = 1
+start_index = 20
+end_index = 100
 
 for input_path in input_paths:
     index = input_path.split('\\')[-1][:-4]

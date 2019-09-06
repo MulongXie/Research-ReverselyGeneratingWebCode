@@ -5,8 +5,8 @@ import os
 class Config:
 
     def __init__(self):
-        self.ROOT_INPUT = "E:\Mulong\Datasets\Dribbble"
-        self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v7_dribbble_v2"
+        self.ROOT_INPUT = "E:\Mulong\Datasets\\apps_json\data\play_store_screenshots"
+        self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v8_googleplay_v2"
         self.ROOT_IMG_ORG = pjoin(self.ROOT_INPUT, "org")
         self.ROOT_LABEL = pjoin(self.ROOT_OUTPUT, "ip_label")
         self.ROOT_IMG_DRAWN = pjoin(self.ROOT_OUTPUT, "ip_img_drawn")
