@@ -37,7 +37,7 @@ class Data:
         for p in glob.glob(pjoin(self.DATA_PATH, '*')):
             class_name = p.split('\\')[-1]
             label = self.class_map.index(class_name)  # map to index of classes
-            for image_path in glob.glob(pjoin(p, '*.png'))[:20000]:
+            for image_path in glob.glob(pjoin(p, '*.png'))[:25000]:
                 image = cv2.imread(image_path)
                 if resize:
                     try:
