@@ -25,11 +25,13 @@ class Config:
         self.THRESHOLD_BLOCK_MAX_CROSS_POINT = 0.3
         self.THRESHOLD_BLOCK_MIN_EDGE_LENGTH = 90
 
-        self.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH = 30
         self.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH = self.THRESHOLD_BLOCK_MIN_EDGE_LENGTH
+        self.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH = 30
+
+        self.THRESHOLD_ICON_MAX_EDGE = 60
 
         self.THRESHOLD_IMG_MIN_EDGE_RATION = 2.5
-        self.THRESHOLD_IMG_MIN_HEIGHT = self.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH
+        self.THRESHOLD_IMG_MIN_HEIGHT = 30
 
         self.THRESHOLD_TEXT_EDGE_RATIO = 2.5
         self.THRESHOLD_TEXT_MAX_WORD_GAP = 10
@@ -44,7 +46,7 @@ class Config:
         self.OCR_MIN_WORD_AREA = 0.3
 
         self.COLOR = {'block': (0, 255, 0), 'img': (0, 0, 255), 'button': (0, 166, 166), 'input': (255, 166, 0),
-                      'search': (255, 0, 166), 'list': (166, 0, 255), 'select': (166, 166, 166), 'compo': (0, 166, 255)}
+                      'search': (255, 0, 166), 'list': (166, 0, 255), 'select': (166, 166, 166), 'icon': (0, 166, 255)}
 
     def build_output_folders(self, is_segment):
         if not os.path.exists(self.ROOT_LABEL):

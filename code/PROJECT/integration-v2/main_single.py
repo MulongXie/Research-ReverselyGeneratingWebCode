@@ -41,11 +41,15 @@ def processing(org, binary, main=True):
         det.compo_irregular(org, corners_non_rec, corners_img, corners_compo)
         corners_img, _ = det.rm_text(org, corners_img, ['img' for i in range(len(corners_img))])
 
+        draw.draw_bounding_box(org, corners_compo, show=True)
+
         # *** Step 4 *** classification: clip and classify the components candidates -> ignore noises -> refine img
         compos = seg.clipping(org, corners_compo)
         compos_class = CNN.predict(compos)
-        corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
         corners_compo, compos_class = det.compo_filter(org, corners_compo, compos_class)
+        corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
+
+        draw.draw_bounding_box(org, corners_compo, show=True)
 
         # *** Step 5 *** result refinement
         if is_merge_nested:
@@ -78,8 +82,8 @@ def processing(org, binary, main=True):
         compos = seg.clipping(org, corners_compo)
         compos_class = CNN.predict(compos)
 
-        corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
         corners_compo, compos_class = det.compo_filter(org, corners_compo, compos_class)
+        corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
         corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
         corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
 

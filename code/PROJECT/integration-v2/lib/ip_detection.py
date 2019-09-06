@@ -247,13 +247,14 @@ def compo_irregular(org, corners,
         width = col_max - col_min
 
         # select UI component candidates
-        if min_compo_edge < height < max_compo_edge and min_compo_edge < width < max_compo_edge:
+        if min_compo_edge < height < max_compo_edge:
             corners_compo.append(corner)
         elif height > min_img_height or width / height < max_img_edge_ratio:
             corners_img.append(corner)
 
 
-def compo_filter(org, corners, compos_class, max_compo_egde=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
+def compo_filter(org, corners, compos_class,
+                 max_compo_egde=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH, max_icon_edge=C.THRESHOLD_ICON_MAX_EDGE):
     """
     Filter compos and imgs according to edge length
     :param org: Original image
@@ -273,12 +274,17 @@ def compo_filter(org, corners, compos_class, max_compo_egde=C.THRESHOLD_UICOMPO_
         height = row_max - row_min
         width = col_max - col_min
 
-        if compo != 'img':
+        if height < max_icon_edge and width < max_icon_edge:
+            compo = 'icon'
+        elif compo != 'img':
             # too big to be UI components
             if height > max_compo_egde:
                 continue
         corners_compo_new.append(corner)
         compos_class_new.append(compo)
+
+        # print("Height:%d, Width:%d, Area:%d, Perimeter:%d" % (height, width, height*width, height*2+width*2))
+        # draw.draw_bounding_box(org, corners_compo_new, show=True)
 
     return corners_compo_new, compos_class_new
 
@@ -460,7 +466,7 @@ def line_detection(binary,
 def boundary_detection(binary,
                        min_obj_area=C.THRESHOLD_OBJ_MIN_AREA, min_obj_perimeter=C.THRESHOLD_OBJ_MIN_PERIMETER,
                        line_thickness=C.THRESHOLD_LINE_THICKNESS, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
-                       max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO, show=False):
+                       max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO):
     """
     :param binary: Binary image from pre-processing
     :param min_obj_area: If not pass then ignore the small object
@@ -500,8 +506,6 @@ def boundary_detection(binary,
                 # rectangle check
                 if util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
                     boundary_rec.append(boundary)
-                    if show:
-                        draw.draw_boundary(boundary_rec, binary.shape, True)
                 else:
                     boundary_nonrec.append(boundary)
     return boundary_rec, boundary_nonrec
