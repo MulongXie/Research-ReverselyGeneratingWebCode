@@ -2,10 +2,21 @@ import cv2
 import numpy as np
 
 
-def read_img(path, height=(0, 600)):
+def read_img(path, clip_h=(0, 3000), resize_h=None):
+
+    def resize_by_height(org):
+        w_h_ratio = org.shape[1] / org.shape[0]
+        resize_w = resize_h * w_h_ratio
+        re = cv2.resize(org, (int(resize_w), int(resize_h)))
+        return re
+
     try:
         img = cv2.imread(path)
-        img = img[height[0]:height[1]]
+        img = img[clip_h[0]:clip_h[1]]
+
+        if resize_h is not None:
+            img = resize_by_height(img)
+
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         return img, gray
     except:
