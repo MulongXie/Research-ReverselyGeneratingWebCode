@@ -271,7 +271,8 @@ def compo_irregular(org, corners,
 
 
 def compo_filter(org, corners, compos_class, is_icon,
-                 max_compo_egde=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH, max_icon_edge=C.THRESHOLD_ICON_MAX_EDGE):
+                 max_compo_egde=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH, max_compo_w_h_ratio=C.THRESHOLD_UICOMPO_MIN_W_H_RATIO,
+                 max_icon_edge=C.THRESHOLD_ICON_MAX_EDGE):
     """
     Filter compos and imgs according to edge length
     :param org: Original image
@@ -290,6 +291,9 @@ def compo_filter(org, corners, compos_class, is_icon,
         (col_max, row_max) = bottom_right
         height = row_max - row_min
         width = col_max - col_min
+
+        if width / height > max_compo_w_h_ratio:
+            continue
 
         if height < max_icon_edge and width < max_icon_edge:
             if is_icon:

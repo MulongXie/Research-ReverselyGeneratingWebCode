@@ -117,8 +117,8 @@ def post_processing(index, org, binary, corners_block, corners_img, corners_comp
 
 def _main():
     # start image and end image
-    start_index = 13
-    end_index = 100
+    start_index = 400
+    end_index = 700
 
     for input_path in input_paths:
         index = input_path.split('\\')[-1][:-4]
