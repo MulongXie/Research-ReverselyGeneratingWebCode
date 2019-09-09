@@ -24,7 +24,7 @@ is_clip = False
 
 def pre_processing():
     # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img('input/dribbble/x.png', (0, 3000), resize_h=900)  # cut out partial img
+    org, gray = pre.read_img('input/dribbble/12.png', (0, 3000), resize_h=900)  # cut out partial img
     binary = pre.preprocess(gray)
     return org, binary
 
@@ -32,7 +32,7 @@ def pre_processing():
 def processing(org, binary, main=True):
     if main:
         # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
-        boundary_rec, boundary_non_rec = det.boundary_detection(binary)
+        boundary_rec, boundary_non_rec = det.boundary_detection(binary, show=True)
         corners_rec = det.get_corner(boundary_rec)
         corners_non_rec = det.get_corner(boundary_non_rec)
 
