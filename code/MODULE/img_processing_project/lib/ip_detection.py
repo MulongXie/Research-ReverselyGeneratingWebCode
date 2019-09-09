@@ -40,7 +40,7 @@ def select_corner(corners, compos_class, class_name):
     return corners_wanted
 
 
-def merge_corner(corners):
+def merge_corner(corners, compos_class):
     """
     i. merge overlapped corners
     ii. remove nested corners
@@ -64,26 +64,30 @@ def merge_corner(corners):
         return (col_min, row_min), (col_max, row_max)
 
     new_corners = []
-    for corner in corners:
+    new_class = []
+    for i in range(len(corners)):
         is_intersected = False
-        for i in range(len(new_corners)):
-            r = util.corner_relation(corner, new_corners[i])
-            # if corner is in new_corners[i], ignore corner
+        for j in range(len(new_corners)):
+            r = util.corner_relation(corners[i], new_corners[j])
+            # if corners[i] is in new_corners[j], ignore corners[i]
             if r == -1:
                 is_intersected = True
                 break
-            # if new_corners[i] is in corner, replace corners[i] with corner
+            # if new_corners[j] is in corners[i], replace new_corners[j] with corners[i]
             elif r == 1:
                 is_intersected = True
-                new_corners[i] = corner
+                new_corners[j] = corners[i]
+                new_class[j] = compos_class[i]
             # if [i] and [j] are overlapped
             if r == 2:
                 is_intersected = True
-                new_corners[i] = merge_overlapped(corner, new_corners[i])
+                if compos_class[i] == new_class[j]:
+                    new_corners[j] = merge_overlapped(corners[i], new_corners[j])
 
         if not is_intersected:
-            new_corners.append(corner)
-    return new_corners
+            new_corners.append(corners[i])
+            new_class.append(compos_class[i])
+    return new_corners, new_class
 
 
 def strip_img(corners_compo, compos_class, corners_img):
@@ -106,8 +110,10 @@ def compo_in_img(processing, org, binary, corners_img,
                  corners_block, corners_compo, compos_class,    # output
                  min_compo_edge_length=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH):
     """
-    Detect potential UI components inner img
+    Detect potential UI components inner img;
+    Only leave non-img
     """
+    corners_img_new = []
     pad = 2
     for corner in corners_img:
         (top_left, bottom_right) = corner
@@ -120,6 +126,9 @@ def compo_in_img(processing, org, binary, corners_img,
         height_img = row_max - row_min
         width_img = col_max - col_min
 
+        img_area = height_img * width_img
+        compo_area = 0
+
         # ignore small ones
         if height_img <= min_compo_edge_length or width_img <= min_compo_edge_length:
             continue
@@ -128,29 +137,48 @@ def compo_in_img(processing, org, binary, corners_img,
         clip_bin = binary[row_min:row_max, col_min:col_max]
         clip_bin = pre.reverse_binary(clip_bin)
 
-        corners_block_new, corners_img_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, main=False)
+        corners_block_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, main=False)
         corners_block_new = util.corner_cvt_relative_position(corners_block_new, col_min, row_min)
         corners_compo_new = util.corner_cvt_relative_position(corners_compo_new, col_min, row_min)
 
         assert len(corners_compo_new) == len(compos_class_new)
 
+        # ignore blocks superposed on its parent img
+        for b in corners_block_new:
+            (col_min_new, row_min_new), (col_max_new, row_max_new) = b
+            height_new = row_max_new - row_min_new
+            width_new = col_max_new - col_min_new
+            if height_new / height_img < 0.9 and width_new / width_img < 0.9:
+                corners_block.append(corners_block_new)
+                compo_area += height_new * width_new
+
         # only leave non-img elements
-        corners_block += corners_block_new
         for i in range(len(corners_compo_new)):
             if compos_class_new[i] != 'img':
-                # ignore compos overlapped with its parent img
+                # ignore compos superposed on its parent img
                 (col_min_new, row_min_new), (col_max_new, row_max_new) = corners_compo_new[i]
                 height_new = row_max_new - row_min_new
                 width_new = col_max_new - col_min_new
-                if height_new / height_img < 0.9 and width_new / width_img < 0.9:
-                    corners_compo.append(corners_compo_new[i])
-                    compos_class.append(compos_class_new[i])
+
+                corners_compo.append(corners_compo_new[i])
+                compos_class.append(compos_class_new[i])
+                compo_area += height_new * width_new
+
+        # ignore imgs full of components
+        if compo_area / img_area < 0.5:
+            corners_img_new.append(corner)
+
+    corners_compo, compos_class = merge_corner(corners_compo, compos_class)
+    corners_img = rm_img_in_compo(corners_img_new, corners_compo)
+
+    return corners_block, corners_img, corners_compo, compos_class
 
 
 def block_or_compo(org, binary, corners,
                    max_thickness=C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS, max_block_cross_points=C.THRESHOLD_BLOCK_MAX_CROSS_POINT,
-                   min_block_edge=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH,
-                   min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
+                   min_block_edge=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH, max_img_edge_ratio=C.THRESHOLD_IMG_MIN_EDGE_RATION,
+                   min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH,
+                   min_img_height=C.THRESHOLD_IMG_MIN_HEIGHT):
     """
     Check if the objects are img components or just block
     :param org: Original image
@@ -181,11 +209,11 @@ def block_or_compo(org, binary, corners,
         vacancy = [0, 0, 0, 0]
         for i in range(1, max_thickness):
             try:
-                # up down
+                # top to bottom
                 if vacancy[0] == 0 and (col_max - col_min - 2 * i) is not 0 and (
                         np.sum(binary[row_min + i, col_min + i: col_max - i]) / 255) / (col_max - col_min - 2 * i) <= max_block_cross_points:
                     vacancy[0] = 1
-                # bottom-up
+                # bottom to top
                 if vacancy[1] == 0 and (col_max - col_min - 2 * i) is not 0 and (
                         np.sum(binary[row_max - i, col_min + i: col_max - i]) / 255) / (col_max - col_min - 2 * i) <= max_block_cross_points:
                     vacancy[1] = 1
@@ -208,12 +236,15 @@ def block_or_compo(org, binary, corners,
                 blocks.append(corner)
         # filter out small objects
         else:
-            imgs.append(corner)
+            if height > min_img_height or width / height < max_img_edge_ratio:
+                imgs.append(corner)
+                # print(height, width)
     return blocks, imgs, compos
 
 
 def compo_irregular(org, corners,
                     corners_img, corners_compo,     # output
+                    max_img_edge_ratio=C.THRESHOLD_IMG_MIN_EDGE_RATION, min_img_height=C.THRESHOLD_IMG_MIN_HEIGHT,
                     min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
     """
     Select potential irregular shaped elements by checking the height and width
@@ -233,13 +264,15 @@ def compo_irregular(org, corners,
         width = col_max - col_min
 
         # select UI component candidates
-        if min_compo_edge < height < max_compo_edge and min_compo_edge < width < max_compo_edge:
+        if min_compo_edge < height < max_compo_edge:
             corners_compo.append(corner)
-        else:
+        elif height > min_img_height or width / height < max_img_edge_ratio:
             corners_img.append(corner)
 
 
-def compo_filter(org, corners, compos_class, max_compo_egde=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
+def compo_filter(org, corners, compos_class, is_icon,
+                 max_compo_egde=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH, max_compo_w_h_ratio=C.THRESHOLD_UICOMPO_MIN_W_H_RATIO,
+                 max_icon_edge=C.THRESHOLD_ICON_MAX_EDGE):
     """
     Filter compos and imgs according to edge length
     :param org: Original image
@@ -259,12 +292,23 @@ def compo_filter(org, corners, compos_class, max_compo_egde=C.THRESHOLD_UICOMPO_
         height = row_max - row_min
         width = col_max - col_min
 
-        if compo != 'img':
+        if width / height > max_compo_w_h_ratio:
+            continue
+
+        if height < max_icon_edge and width < max_icon_edge:
+            if is_icon:
+                compo = 'icon'
+            else:
+                continue
+        elif compo != 'img':
             # too big to be UI components
             if height > max_compo_egde:
                 continue
         corners_compo_new.append(corner)
         compos_class_new.append(compo)
+
+        # print("Height:%d, Width:%d, Area:%d, Perimeter:%d" % (height, width, height*width, height*2+width*2))
+        # draw.draw_bounding_box(org, corners_compo_new, show=True)
 
     return corners_compo_new, compos_class_new
 
@@ -305,8 +349,24 @@ def img_shrink(org, binary, corners,
     return corners_shrunken
 
 
+def rm_img_in_compo(corners_img, corners_compo):
+    """
+    Remove imgs in component
+    """
+    corners_img_new = []
+    for img in corners_img:
+        is_nested = False
+        for compo in corners_compo:
+            if util.corner_relation(img, compo) == -1:
+                is_nested = True
+                break
+        if not is_nested:
+            corners_img_new.append(img)
+    return corners_img_new
+
+
 # remove imgs that contain text
-def rm_text(org, corners,
+def rm_text(org, corners, compo_class,
             max_text_height=C.THRESHOLD_TEXT_MAX_HEIGHT, max_text_width=C.THRESHOLD_TEXT_MAX_WIDTH,
             
             ocr_padding=C.OCR_PADDING, ocr_min_word_area=C.OCR_MIN_WORD_AREA, show=False):
@@ -316,6 +376,7 @@ def rm_text(org, corners,
     :param corners: [(top_left, bottom_right)]
                     -> top_left: (column_min, row_min)
                     -> bottom_right: (column_max, row_max)
+    :param compo_class: classes of corners
     :param max_text_height: Too large to be text
     :param max_text_width: Too large to be text
     :param ocr_padding: Padding for clipping
@@ -324,7 +385,9 @@ def rm_text(org, corners,
     :return: corners without text objects
     """
     new_corners = []
-    for corner in corners:
+    new_class = []
+    for i in range(len(corners)):
+        corner = corners[i]
         (top_left, bottom_right) = corner
         (col_min, row_min) = top_left
         (col_max, row_max) = bottom_right
@@ -342,7 +405,8 @@ def rm_text(org, corners,
             clip = org[row_min: row_max, col_min: col_max]
             if not ocr.is_text(clip, ocr_min_word_area, show=show):
                 new_corners.append(corner)
-    return new_corners
+                new_class.append(compo_class[i])
+    return new_corners, new_class
 
 
 def line_detection(binary,
@@ -483,7 +547,8 @@ def boundary_detection(binary,
                 if util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
                     boundary_rec.append(boundary)
                     if show:
-                        draw.draw_boundary(boundary_rec, binary.shape, True)
+                        draw.draw_boundary(boundary_rec, binary.shape, show)
                 else:
                     boundary_nonrec.append(boundary)
+
     return boundary_rec, boundary_nonrec

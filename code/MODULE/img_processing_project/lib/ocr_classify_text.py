@@ -22,7 +22,7 @@ def is_text(img, min_word_area, show=False):
     for d in data[1:]:
         d = d.split()
         if d[-1] != '-1':
-            if d[-1] != '-' and d[-1] != '—' and int(d[-3]) < 40 and int(d[-4]) < 100:
+            if d[-1] != '-' and d[-1] != '—' and int(d[-3]) < 50 and int(d[-4]) < 100:
                 word.append(d)
                 t_l = (int(d[-6]), int(d[-5]))
                 b_r = (int(d[-6]) + int(d[-4]), int(d[-5]) + int(d[-3]))

@@ -176,6 +176,12 @@ def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
 # -> top_left: (column_min, row_min)
 # -> bottom_right: (column_max, row_max)
 def corner_relation(corner_a, corner_b):
+    """
+    :return: -1 : a in b
+             0  : a, b are not overlapped
+             1  : b in a
+             2  : a, b are overlapped
+    """
     (up_left_a, bottom_right_a) = corner_a
     (y_min_a, x_min_a) = up_left_a
     (y_max_a, x_max_a) = bottom_right_a

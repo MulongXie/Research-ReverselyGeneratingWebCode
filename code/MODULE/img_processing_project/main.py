@@ -13,112 +13,135 @@ import glob
 from os.path import join as pyjoin
 
 # choose functionality
-is_merge_img = True
-is_shrink_img = True
-is_detect_compo_in_img = True
-is_classify = True
-is_ocr = True
-is_segment = False
+is_icon = False
+is_shrink_img = False
+is_img_inspect = True
 is_save = True
-is_clip = False
 
 # initialization
 C = Config()
-C.build_output_folders(is_segment)
+C.build_output_folders(False)
 input_root = C.ROOT_INPUT
 input_paths = glob.glob(pyjoin(input_root, '*.png'))
 input_paths = sorted(input_paths, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 CNN = CNN()
 CNN.load()
 
-# start image and end image
-start_index = 0
-end_index = 25
 
-for input_path in input_paths:
-    index = input_path.split('\\')[-1][:-4]
-    if int(index) < start_index:
-        continue
-    if int(index) > end_index:
-        break
+def pre_processing(img):
+    # *** Step 1 *** pre-processing: gray, gradient, binary
+    org, gray = pre.read_img(img, (0, 3000))  # cut out partial img
+    binary = pre.preprocess(gray)
+    return org, binary
 
-    start = time.clock()
 
-    # set paths
-    print(input_path)
-    print(time.ctime())
+# set timeout
+def processing(org, binary, main=True):
+    if main:
+        # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
+        boundary_rec, boundary_non_rec = det.boundary_detection(binary)
+        corners_rec = det.get_corner(boundary_rec)
+        corners_non_rec = det.get_corner(boundary_non_rec)
+
+        # *** Step 3 *** data processing: identify blocks and compos from rectangles -> identify irregular compos
+        corners_block, corners_img, corners_compo = det.block_or_compo(org, binary, corners_rec)
+        det.compo_irregular(org, corners_non_rec, corners_img, corners_compo)
+        corners_img, _ = det.rm_text(org, corners_img, ['img' for i in range(len(corners_img))])
+
+        # *** Step 4 *** classification: clip and classify the components candidates -> ignore noises -> refine img
+        compos = seg.clipping(org, corners_compo)
+        compos_class = CNN.predict(compos)
+        corners_compo, compos_class = det.compo_filter(org, corners_compo, compos_class, is_icon)
+        corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
+
+        # *** Step 5 *** result refinement
+        corners_img, _ = det.merge_corner(corners_img, ['img' for i in range(len(corners_img))])
+        corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
+        corners_img, _ = det.rm_text(org, corners_img, ['img' for i in range(len(corners_img))])
+        corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
+        if is_shrink_img:
+            corners_img = det.img_shrink(org, binary, corners_img)
+
+        # *** Step 6 *** text detection from cleaned image
+        img_clean = draw.draw_bounding_box(org, corners_img, color=(255, 255, 255), line=-1)
+        corners_word = ocr.text_detection(org, img_clean)
+        corners_text = ocr.text_merge_word_into_line(org, corners_word)
+
+        # *** Step 7 *** img inspection: search components in img element
+        if is_img_inspect:
+            corners_block, corners_img, corners_compo, compos_class = det.compo_in_img(processing, org, binary, corners_img, corners_block, corners_compo, compos_class)
+
+        return corners_block, corners_img, corners_compo, compos_class, corners_text
+
+    # *** used for img inspection ***
+    # only consider rectangular components
+    else:
+        boundary_rec, boundary_non_rec = det.boundary_detection(binary, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS_STRONG, show=False)
+        corners_rec = det.get_corner(boundary_rec)
+        corners_block, corners_img, corners_compo = det.block_or_compo(org, binary, corners_rec)
+
+        compos = seg.clipping(org, corners_compo)
+        compos_class = CNN.predict(compos)
+        corners_compo, compos_class = det.compo_filter(org, corners_compo, compos_class, is_icon)
+        corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
+
+        corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
+        corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
+
+        return corners_block, corners_compo, compos_class
+
+
+def post_processing(index, org, binary, corners_block, corners_img, corners_compo, compos_class, corners_text):
+
+    out_img_gradient = pyjoin(C.ROOT_IMG_GRADIENT, index + '.png')
     out_img_draw = pyjoin(C.ROOT_IMG_DRAWN, index + '.png')
     out_img_clean = pyjoin(C.ROOT_IMG_CLEAN, index + '.png')
-    out_img_gradient = pyjoin(C.ROOT_IMG_GRADIENT, index + '.png')
-    out_img_segment = pyjoin(C.ROOT_IMG_SEGMENT, index)
-    out_label = pyjoin(C.ROOT_LABEL, index + '.csv')
-
-    # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img(input_path, (0, 3000))  # cut out partial img
-    if org is None or gray is None: continue
-    binary = pre.preprocess(gray, 2)
-
-    # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
-    boundary_all, boundary_rec, boundary_nonrec = det.boundary_detection(binary)
-    # get corner of boundaries
-    corners_rec = det.get_corner(boundary_rec)
-    corners_nonrec = det.get_corner(boundary_nonrec)
-
-    # *** Step 3 *** data processing: identify blocks and imgs from rectangles -> identify compos -> identify irregular imgs
-    corners_block, corners_img = det.img_or_block(org, binary, corners_rec)
-    # identify potential buttons and input bars
-    corners_block, corners_compo = det.uicomponent_or_block(org, corners_block)
-    # shrink images with extra borders
-    if is_shrink_img:
-        corners_img = det.img_shrink(org, binary, corners_img)
-    # identify irregular-shape img from irregular shapes
-    corners_img += det.img_irregular(org, corners_nonrec)
-
-    # *** Step 4 *** refine results: refine img according to size -> OCR text area filter
-    corners_img = det.img_refine(org, corners_img)
-    # merge overlapped corners, and remove nested corners
-    if is_merge_img:
-        corners_img = det.merge_corners(corners_img)
-    # detect components in img
-    if is_detect_compo_in_img:
-        corners_compo += det.uicomponent_in_img(org, binary, corners_img)
-    # remove pure text element
-    corners_block = det.rm_text(org, corners_block)
-    corners_img = det.rm_text(org, corners_img)
-    corners_compo = det.rm_text(org, corners_compo)
-
-    # *** Step 5 *** classification: clip and classify the potential components
-    if is_classify:
-        CNN.load()
-        compos = seg.clipping(org, corners_compo)
-        compos_classes = CNN.predict(compos)
-    else:
-        compos_classes = None
-
-    # *** Step 6 *** text detection from cleaned image
-    img_clean = draw.draw_bounding_box(org, corners_img, color=(255, 255, 255), line=-1)
-    if is_ocr:
-        corners_word = ocr.text_detection(org, img_clean)
-        corners_line = ocr.text_merge_into_line(org, corners_word)
-        draw_bounding = draw.draw_bounding_box(org, corners_line, line=1)
-    else:
-        draw_bounding = org
+    out_label = pyjoin(C.ROOT_LABEL, index + '.json')
 
     # *** Step 7 *** post-processing: remove img elements from original image and segment into smaller size
-    if is_segment:
-        seg.segment_img(img_clean, 600, 'output/segment')
+    img_clean = draw.draw_bounding_box(org, corners_img, color=(255, 255, 255), line=-1)
     # draw results
-    draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_block, ['block' for i in range(len(corners_block))], C.COLOR)
-    draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_img, ['img' for j in range(len(corners_img))], C.COLOR)
-    draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_compo, compos_classes, C.COLOR)
-    draw_boundary = draw.draw_boundary(boundary_rec, org.shape)
+    draw_bounding = draw.draw_bounding_box_class(org, corners_compo, compos_class)
+    draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_block, ['block' for i in range(len(corners_block))])
+    draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_img, ['img' for i in range(len(corners_img))])
+    draw_bounding = draw.draw_bounding_box(draw_bounding, corners_text, line=1)
     # save results
     if is_save:
-        cv2.imwrite(out_img_draw, draw_bounding)
         cv2.imwrite(out_img_gradient, binary)
+        cv2.imwrite(out_img_draw, draw_bounding)
         cv2.imwrite(out_img_clean, img_clean)
-        # file.save_corners(out_label, corners_block, 'div')
-        # file.save_corners(out_label, corners_img, 'img', False)
+        file.save_corners_json(out_label, corners_block, ['div' for i in range(len(corners_block))])
+        file.save_corners_json(out_label, corners_img, ['div' for i in range(len(corners_img))])
+        file.save_corners_json(out_label, corners_compo, compos_class)
 
-    end = file.timer(start)
-    print('Save ' + index + '\n')
+
+def _main():
+    # start image and end image
+    start_index = 400
+    end_index = 700
+
+    for input_path in input_paths:
+        index = input_path.split('\\')[-1][:-4]
+        if int(index) < start_index:
+            continue
+        if int(index) > end_index:
+            break
+
+        start = time.clock()
+        print(input_path)
+        print(time.ctime())
+
+        try:
+            org, binary = pre_processing(input_path)
+            corners_block, corners_img, corners_compo, compos_class, corners_text = processing(org, binary)
+            post_processing(index, org, binary, corners_block, corners_img, corners_compo, compos_class, corners_text)
+        except:
+            print('Bad Input', index + '\n')
+            continue
+
+        file.timer(start)
+        print('Save ' + index + '\n')
+
+
+if __name__ == '__main__':
+    _main()
