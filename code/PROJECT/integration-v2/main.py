@@ -34,6 +34,7 @@ def pre_processing(img):
     return org, binary
 
 
+# set timeout
 def processing(org, binary, main=True):
     if main:
         # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
@@ -115,8 +116,8 @@ def post_processing(index, org, binary, corners_block, corners_img, corners_comp
 
 def _main():
     # start image and end image
-    start_index = 0
-    end_index = 200
+    start_index = 207
+    end_index = 700
 
     for input_path in input_paths:
         index = input_path.split('\\')[-1][:-4]
@@ -129,9 +130,13 @@ def _main():
         print(input_path)
         print(time.ctime())
 
-        org, binary = pre_processing(input_path)
-        corners_block, corners_img, corners_compo, compos_class, corners_text = processing(org, binary)
-        post_processing(index, org, binary, corners_block, corners_img, corners_compo, compos_class, corners_text)
+        try:
+            org, binary = pre_processing(input_path)
+            corners_block, corners_img, corners_compo, compos_class, corners_text = processing(org, binary)
+            post_processing(index, org, binary, corners_block, corners_img, corners_compo, compos_class, corners_text)
+        except:
+            print('Bad Input', index + '\n')
+            continue
 
         file.timer(start)
         print('Save ' + index + '\n')

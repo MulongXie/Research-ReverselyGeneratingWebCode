@@ -10,7 +10,7 @@ def magnify(img, re_height):
     img = cv2.resize(img, (int(re_width), int(re_height)))
 
 
-img, gray = pre.read_img('input/dribbble/x.png', resize_h=600)
+img, gray = pre.read_img('input/dribbble/x.png', resize_h=None)
 print(img.shape)
 cv2.imshow('img', img)
 cv2.waitKey()
