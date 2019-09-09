@@ -25,7 +25,7 @@ is_clip = False
 def pre_processing():
     # *** Step 1 *** pre-processing: gray, gradient, binary
     org, gray = pre.read_img('input/dribbble/x.png', (0, 3000), resize_h=900)  # cut out partial img
-    binary = pre.preprocess(gray, 3)
+    binary = pre.preprocess(gray)
     return org, binary
 
 

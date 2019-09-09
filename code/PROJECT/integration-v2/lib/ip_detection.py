@@ -291,8 +291,11 @@ def compo_filter(org, corners, compos_class, is_icon,
         height = row_max - row_min
         width = col_max - col_min
 
-        if is_icon and height < max_icon_edge and width < max_icon_edge:
-            compo = 'icon'
+        if height < max_icon_edge and width < max_icon_edge:
+            if is_icon:
+                compo = 'icon'
+            else:
+                continue
         elif compo != 'img':
             # too big to be UI components
             if height > max_compo_egde:

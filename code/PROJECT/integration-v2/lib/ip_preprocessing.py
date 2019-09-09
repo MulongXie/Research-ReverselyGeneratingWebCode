@@ -1,6 +1,9 @@
 import cv2
 import numpy as np
 
+from CONFIG import Config
+C = Config()
+
 
 def read_img(path, clip_h=(0, 3000), resize_h=None):
 
@@ -52,7 +55,7 @@ def reverse_binary(bin):
     return bin
 
 
-def preprocess(gray, grad_min=1):
+def preprocess(gray, grad_min=C.THRESHOLD_MIN_GRADIENT):
     grad = gray_to_gradient(gray)        # get RoI with high gradient
     binary = grad_to_binary(grad, grad_min)   # enhance the RoI
     close = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, (5, 5))   # remove noises

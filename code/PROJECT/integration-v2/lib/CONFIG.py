@@ -14,6 +14,8 @@ class Config:
         self.ROOT_IMG_CLEAN = pjoin(self.ROOT_OUTPUT, "ip_img_clean")
         self.ROOT_IMG_SEGMENT = pjoin(self.ROOT_OUTPUT, "ip_img_segment")
 
+        self.THRESHOLD_MIN_GRADIENT = 3
+
         self.THRESHOLD_OBJ_MIN_AREA = 200
         self.THRESHOLD_OBJ_MIN_PERIMETER = 120
 
