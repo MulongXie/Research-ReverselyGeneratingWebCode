@@ -201,9 +201,9 @@ def block_or_compo(org, binary, corners,
         width = col_max - col_min
 
         # select UI component candidates
-        if min_compo_edge < height < max_compo_edge:
-            compos.append(corner)
-            continue
+        # if min_compo_edge < height < max_compo_edge:
+        #     compos.append(corner)
+        #     continue
 
         block = False
         vacancy = [0, 0, 0, 0]
@@ -234,11 +234,15 @@ def block_or_compo(org, binary, corners,
         if block:
             if height > min_block_edge and width > min_block_edge:
                 blocks.append(corner)
+            else:
+                compos.append(corner)
         # filter out small objects
         else:
-            if height > min_img_height or width / height < max_img_edge_ratio:
+            if width / height < max_img_edge_ratio and height > max_compo_edge:
                 imgs.append(corner)
                 # print(height, width)
+            else:
+                compos.append(corner)
     return blocks, imgs, compos
 
 
@@ -292,18 +296,13 @@ def compo_filter(org, corners, compos_class, is_icon,
         height = row_max - row_min
         width = col_max - col_min
 
-        if width / height > max_compo_w_h_ratio:
+        if width / height < max_compo_w_h_ratio:
             continue
 
-        if height < max_icon_edge and width < max_icon_edge:
-            if is_icon:
-                compo = 'icon'
-            else:
-                continue
         elif compo != 'img':
             # too big to be UI components
             if height > max_compo_egde:
-                continue
+                compo = 'img'
         corners_compo_new.append(corner)
         compos_class_new.append(compo)
 
@@ -368,7 +367,6 @@ def rm_img_in_compo(corners_img, corners_compo):
 # remove imgs that contain text
 def rm_text(org, corners, compo_class,
             max_text_height=C.THRESHOLD_TEXT_MAX_HEIGHT, max_text_width=C.THRESHOLD_TEXT_MAX_WIDTH,
-            
             ocr_padding=C.OCR_PADDING, ocr_min_word_area=C.OCR_MIN_WORD_AREA, show=False):
     """
     Remove area that full of text
@@ -396,6 +394,7 @@ def rm_text(org, corners, compo_class,
         # highly likely to be block or img if too large
         if height > max_text_height and width > max_text_width:
             new_corners.append(corner)
+            new_class.append(compo_class[i])
         else:
             row_min = row_min - ocr_padding if row_min - ocr_padding >= 0 else 0
             row_max = row_max + ocr_padding if row_max + ocr_padding < org.shape[0] else org.shape[0]

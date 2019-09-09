@@ -6,7 +6,7 @@ class Config:
 
     def __init__(self):
         self.ROOT_INPUT = "E:\Mulong\Datasets\\Dribbble"
-        self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v7_dribbble_v2"
+        self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v7_dribbble_v3"
         self.ROOT_IMG_ORG = pjoin(self.ROOT_INPUT, "org")
         self.ROOT_LABEL = pjoin(self.ROOT_OUTPUT, "ip_label")
         self.ROOT_IMG_DRAWN = pjoin(self.ROOT_OUTPUT, "ip_img_drawn")
@@ -20,7 +20,7 @@ class Config:
         self.THRESHOLD_OBJ_MIN_PERIMETER = 120
 
         self.THRESHOLD_REC_MIN_EVENNESS = 0.7
-        self.THRESHOLD_REC_MIN_EVENNESS_STRONG = 0.75
+        self.THRESHOLD_REC_MIN_EVENNESS_STRONG = 0.7
         self.THRESHOLD_REC_MAX_DENT_RATIO = 0.1
 
         self.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS = 8
@@ -46,7 +46,7 @@ class Config:
         self.THRESHOLD_LINE_MIN_LENGTH_V = 50
 
         self.OCR_PADDING = 5
-        self.OCR_MIN_WORD_AREA = 0.3
+        self.OCR_MIN_WORD_AREA = 0.45
 
         self.COLOR = {'block': (0, 255, 0), 'img': (0, 0, 255), 'icon': (255, 166, 166), 'input': (255, 166, 0),
                       'search': (255, 0, 166), 'list': (166, 0, 255), 'select': (166, 166, 166), 'button': (0, 166, 255)}
