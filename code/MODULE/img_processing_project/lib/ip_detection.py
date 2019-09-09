@@ -107,8 +107,7 @@ def strip_img(corners_compo, compos_class, corners_img):
 
 
 def compo_in_img(processing, org, binary, corners_img,
-                 corners_block, corners_compo, compos_class,    # output
-                 min_compo_edge_length=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH):
+                 corners_block, corners_compo, compos_class):
     """
     Detect potential UI components inner img;
     Only leave non-img
@@ -130,8 +129,8 @@ def compo_in_img(processing, org, binary, corners_img,
         compo_area = 0
 
         # ignore small ones
-        if height_img <= min_compo_edge_length or width_img <= min_compo_edge_length:
-            continue
+        # if height_img <= min_compo_edge_length or width_img <= min_compo_edge_length:
+        #     continue
             
         clip_org = org[row_min:row_max, col_min:col_max]
         clip_bin = binary[row_min:row_max, col_min:col_max]

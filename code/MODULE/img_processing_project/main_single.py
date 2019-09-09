@@ -32,7 +32,7 @@ def save(org, binary, corners_block, corners_img, corners_compo, compos_class, c
 
 
 def _main():
-    org, binary = body.pre_processing('input/dribbble/1.png')
+    org, binary = body.pre_processing('input/dribbble/5.png')
     corners_block, corners_img, corners_compo, compos_class, corners_text = body.processing(org, binary, CNN)
     save(org, binary, corners_block, corners_img, corners_compo, compos_class, corners_text)
 

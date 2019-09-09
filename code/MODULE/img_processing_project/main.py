@@ -44,7 +44,7 @@ def save(index, org, binary, corners_block, corners_img, corners_compo, compos_c
 def _main():
     # start image and end image
     start_index = 1
-    end_index = 1
+    end_index = 20
 
     for input_path in input_paths:
         index = input_path.split('\\')[-1][:-4]

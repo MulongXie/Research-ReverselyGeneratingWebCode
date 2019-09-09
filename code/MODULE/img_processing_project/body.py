@@ -13,6 +13,7 @@ import time
 start = time.clock()
 # initialization
 is_icon = False
+is_merge = False
 is_shrink_img = False
 is_img_inspect = True
 is_save = True
@@ -40,17 +41,15 @@ def processing(org, binary, main=True):
         corners_block, corners_img, corners_compo = det.block_or_compo(org, binary, corners_rec)
         det.compo_irregular(org, corners_non_rec, corners_img, corners_compo)
         corners_img, _ = det.rm_text(org, corners_img, ['img' for i in range(len(corners_img))])
-        draw.draw_bounding_box(org, corners_img, show=True)
-        draw.draw_bounding_box(org, corners_compo, show=True)
 
         # *** Step 4 *** classification: clip and classify the components candidates -> ignore noises -> refine img
         compos = seg.clipping(org, corners_compo)
         compos_class = CNN.predict(compos)
-        corners_compo, compos_class = det.compo_filter(org, corners_compo, compos_class, is_icon)
+        # corners_compo, compos_class = det.compo_filter(org, corners_compo, compos_class, is_icon)
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
-
         # *** Step 5 *** result refinement
-        corners_img, _ = det.merge_corner(corners_img, ['img' for i in range(len(corners_img))])
+        if is_merge:
+            corners_img, _ = det.merge_corner(corners_img, ['img' for i in range(len(corners_img))])
         corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
         corners_img, _ = det.rm_text(org, corners_img, ['img' for i in range(len(corners_img))])
         corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
