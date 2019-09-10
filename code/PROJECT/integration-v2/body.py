@@ -77,6 +77,7 @@ def processing(org, binary, main=True):
 
         compos = seg.clipping(org, corners_compo)
         compos_class = CNN.predict(compos)
+        corners_compo, compos_class = det.strip_text(corners_compo, compos_class)
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
 
         corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
