@@ -48,11 +48,16 @@ def save_corners_json(file_path, corners, compo_classes):
 def save_clipping(org, output_root, corners, compo_classes, compo_index):
     if not os.path.exists(output_root):
         os.mkdir(output_root)
+    pad = 2
     for i in range(len(corners)):
         compo = compo_classes[i]
         (up_left, bottom_right) = corners[i]
         (col_min, row_min) = up_left
         (col_max, row_max) = bottom_right
+        col_min = max(col_min - pad, 0)
+        col_max = min(col_max + pad, org.shape[1])
+        row_min = max(row_min - pad, 0)
+        row_max = min(row_max + pad, org.shape[0])
 
         # if component type already exists, index increase by 1, otherwise add this type
         compo_path = pjoin(output_root, compo)
