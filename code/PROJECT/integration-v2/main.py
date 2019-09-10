@@ -12,7 +12,7 @@ from os.path import join as pyjoin
 
 # initialization
 is_clip = True
-compo_index = {}
+compo_index = {'button':613, 'input':315, 'list':12, 'search':22, 'select':8}
 
 C = Config()
 C.build_output_folders(is_clip)
@@ -48,8 +48,8 @@ def save(index, org, binary, corners_block, corners_img, corners_compo, compos_c
 
 def _main():
     # start image and end image
-    start_index = 157
-    end_index = 300
+    start_index = 300
+    end_index = 1000
 
     for input_path in input_paths:
         index = input_path.split('\\')[-1][:-4]
