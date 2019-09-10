@@ -45,6 +45,7 @@ def processing(org, binary, main=True):
         # *** Step 4 *** classification: clip and classify the components candidates -> ignore noises -> refine img
         compos = seg.clipping(org, corners_compo)
         compos_class = CNN.predict(compos)
+        corners_compo, compos_class = det.strip_text(corners_compo, compos_class)
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
 
         # *** Step 5 *** result refinement

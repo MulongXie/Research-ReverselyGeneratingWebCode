@@ -90,6 +90,19 @@ def merge_corner(corners, compos_class):
     return new_corners, new_class
 
 
+def strip_text(corners_compo, compos_class):
+    """
+    Remove all text elements from components
+    """
+    corners_compo_withuot_text = []
+    compo_class_withuot_text = []
+    for i in range(len(compos_class)):
+        if compos_class[i] != 'text':
+            corners_compo_withuot_text.append(corners_compo[i])
+            compo_class_withuot_text.append(compos_class[i])
+    return corners_compo_withuot_text, compo_class_withuot_text
+
+
 def strip_img(corners_compo, compos_class, corners_img):
     """
     Separate img from other compos
