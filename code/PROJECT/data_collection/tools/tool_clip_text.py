@@ -61,12 +61,22 @@ def read_img():
     img_paths = glob.glob(pjoin(ROOT_CLEAN_IMG, '*.png'))
     img_paths.sort(key=lambda x: int(x.split('\\')[-1][:-4]))
 
+    start_index = 5647
+    end_index = 20000
+
     for img_path in img_paths:
+        index = img_path.split('\\')[-1][:-4]
+        if int(index) < start_index:
+            continue
+        if int(index) > end_index:
+            break
+
         print(img_path)
 
         img = cv2.imread(img_path)
         corners_word = text_detection(img)
-        clipping(img, corners_word)
+        if corners_word is not None:
+            clipping(img, corners_word)
 
 
 read_img()
