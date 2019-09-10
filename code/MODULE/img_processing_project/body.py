@@ -45,8 +45,8 @@ def processing(org, binary, main=True):
         # *** Step 4 *** classification: clip and classify the components candidates -> ignore noises -> refine img
         compos = seg.clipping(org, corners_compo)
         compos_class = CNN.predict(compos)
-        # corners_compo, compos_class = det.compo_filter(org, corners_compo, compos_class, is_icon)
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
+
         # *** Step 5 *** result refinement
         if is_merge:
             corners_img, _ = det.merge_corner(corners_img, ['img' for i in range(len(corners_img))])
@@ -76,7 +76,6 @@ def processing(org, binary, main=True):
 
         compos = seg.clipping(org, corners_compo)
         compos_class = CNN.predict(compos)
-        corners_compo, compos_class = det.compo_filter(org, corners_compo, compos_class, is_icon)
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
 
         corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])

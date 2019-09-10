@@ -175,9 +175,8 @@ def compo_in_img(processing, org, binary, corners_img,
 
 def block_or_compo(org, binary, corners,
                    max_thickness=C.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS, max_block_cross_points=C.THRESHOLD_BLOCK_MAX_CROSS_POINT,
-                   min_block_edge=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH, max_img_edge_ratio=C.THRESHOLD_IMG_MIN_EDGE_RATION,
-                   min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH,
-                   min_img_height=C.THRESHOLD_IMG_MIN_HEIGHT):
+                   min_compo_w_h_ratio=C.THRESHOLD_UICOMPO_MIN_W_H_RATIO, max_compo_w_h_ratio=C.THRESHOLD_UICOMPO_MAX_W_H_RATIO,
+                   min_block_edge=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH):
     """
     Check if the objects are img components or just block
     :param org: Original image
@@ -234,21 +233,23 @@ def block_or_compo(org, binary, corners,
             if height > min_block_edge and width > min_block_edge:
                 blocks.append(corner)
             else:
-                compos.append(corner)
+                if min_compo_w_h_ratio < width / height < max_compo_w_h_ratio:
+                    compos.append(corner)
         # filter out small objects
         else:
-            if width / height < max_img_edge_ratio and height > max_compo_edge:
+            if height > min_block_edge:
                 imgs.append(corner)
                 # print(height, width)
             else:
-                compos.append(corner)
+                if min_compo_w_h_ratio < width / height < max_compo_w_h_ratio:
+                    compos.append(corner)
     return blocks, imgs, compos
 
 
 def compo_irregular(org, corners,
                     corners_img, corners_compo,     # output
-                    max_img_edge_ratio=C.THRESHOLD_IMG_MIN_EDGE_RATION, min_img_height=C.THRESHOLD_IMG_MIN_HEIGHT,
-                    min_compo_edge=C.THRESHOLD_UICOMPO_MIN_EDGE_LENGTH, max_compo_edge=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH):
+                    min_block_edge=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH,
+                    min_compo_w_h_ratio=C.THRESHOLD_UICOMPO_MIN_W_H_RATIO, max_compo_w_h_ratio=C.THRESHOLD_UICOMPO_MAX_W_H_RATIO):
     """
     Select potential irregular shaped elements by checking the height and width
     Check the edge ratio for img components to avoid text misrecognition
@@ -267,48 +268,11 @@ def compo_irregular(org, corners,
         width = col_max - col_min
 
         # select UI component candidates
-        if min_compo_edge < height < max_compo_edge:
-            corners_compo.append(corner)
-        elif height > min_img_height or width / height < max_img_edge_ratio:
+        if height > min_block_edge:
             corners_img.append(corner)
-
-
-def compo_filter(org, corners, compos_class, is_icon,
-                 max_compo_egde=C.THRESHOLD_UICOMPO_MAX_EDGE_LENGTH, max_compo_w_h_ratio=C.THRESHOLD_UICOMPO_MIN_W_H_EDGE,
-                 max_icon_edge=C.THRESHOLD_ICON_MAX_EDGE):
-    """
-    Filter compos and imgs according to edge length
-    :param org: Original image
-    :param corners: [(top_left, bottom_right)]
-                    -> top_left: (column_min, row_min)
-                    -> bottom_right: (column_max, row_max)
-    :return: corners of left components, classes of them
-    """
-    corners_compo_new = []
-    compos_class_new = []
-    for i in range(len(corners)):
-        compo = compos_class[i]
-        corner = corners[i]
-        (top_left, bottom_right) = corner
-        (col_min, row_min) = top_left
-        (col_max, row_max) = bottom_right
-        height = row_max - row_min
-        width = col_max - col_min
-
-        if width / height < max_compo_w_h_ratio:
-            continue
-
-        elif compo != 'img':
-            # too big to be UI components
-            if height > max_compo_egde:
-                compo = 'img'
-        corners_compo_new.append(corner)
-        compos_class_new.append(compo)
-
-        # print("Height:%d, Width:%d, Area:%d, Perimeter:%d" % (height, width, height*width, height*2+width*2))
-        # draw.draw_bounding_box(org, corners_compo_new, show=True)
-
-    return corners_compo_new, compos_class_new
+        else:
+            if min_compo_w_h_ratio < width / height < max_compo_w_h_ratio:
+                corners_compo.append(corner)
 
 
 def img_shrink(org, binary, corners,
