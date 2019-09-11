@@ -35,6 +35,9 @@ def nms(corners_compo_old, compos_class_old, corner_text):
     corner_text = np.array(corner_text)
     for i in range(len(corners_compo_old)):
         if compos_class_old[i] != 'img':
+            if compos_class_old[i] != 'text':
+                corners_compo_refine.append(corners_compo_old[i])
+                compos_class_refine.append(compos_class_old[i])
             continue
 
         a = corners_compo_old[i]
