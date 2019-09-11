@@ -52,23 +52,6 @@ def draw_boxes(img, output_path_label, boxes, scale):
     cv2.imwrite('data/output/ocr.png', img)
 
 
-cfg_from_file('ctpn/ctpn/text.yml')
-
-# init session
-config = tf.ConfigProto(allow_soft_placement=True)
-sess = tf.Session(config=config)
-with gfile.FastGFile('ctpn/data/ctpn.pb', 'rb') as f:
-    graph_def = tf.GraphDef()
-    graph_def.ParseFromString(f.read())
-    sess.graph.as_default()
-    tf.import_graph_def(graph_def, name='')
-sess.run(tf.global_variables_initializer())
-
-input_img = sess.graph.get_tensor_by_name('Placeholder:0')
-output_cls_prob = sess.graph.get_tensor_by_name('Reshape_2:0')
-output_box_pred = sess.graph.get_tensor_by_name('rpn_bbox_pred/Reshape_1:0')
-
-
 def ctpn(input_path_img, output_path_label):
     print(('CTPN for {:s}'.format(input_path_img)))
     img = cv2.imread(input_path_img)
@@ -89,3 +72,20 @@ def ctpn(input_path_img, output_path_label):
     draw_boxes(img, output_path_label, boxes, scale)
     print('*** OCR Complete ***')
     sess.close()
+
+
+cfg_from_file('ctpn/ctpn/text.yml')
+
+# init session
+config = tf.ConfigProto(allow_soft_placement=True)
+sess = tf.Session(config=config)
+with gfile.FastGFile('ctpn/data/ctpn.pb', 'rb') as f:
+    graph_def = tf.GraphDef()
+    graph_def.ParseFromString(f.read())
+    sess.graph.as_default()
+    tf.import_graph_def(graph_def, name='')
+sess.run(tf.global_variables_initializer())
+
+input_img = sess.graph.get_tensor_by_name('Placeholder:0')
+output_cls_prob = sess.graph.get_tensor_by_name('Reshape_2:0')
+output_box_pred = sess.graph.get_tensor_by_name('rpn_bbox_pred/Reshape_1:0')
