@@ -63,9 +63,9 @@ def processing(org, binary, main=True):
         # *** Step 8 *** merge overlapped components
         if is_merge_nested_compo:
             corners_img = det.rm_img_in_compo(corners_img, corners_compo)
-        corners_img, _ = det.merge_corner(corners_img, ['img' for i in range(len(corners_img))], is_merge_nested=False)
-        corners_compo, compos_class = det.merge_corner(corners_compo, compos_class, is_merge_nested=False)
-        
+        corners_img, _ = det.merge_corner(org, corners_img, ['img' for i in range(len(corners_img))], is_merge_nested=False)
+        corners_compo, compos_class = det.merge_corner(org, corners_compo, compos_class, is_merge_nested=False)
+
         return corners_block, corners_img, corners_compo, compos_class, corners_text
 
     # *** used for img inspection ***

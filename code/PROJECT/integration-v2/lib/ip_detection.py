@@ -40,7 +40,7 @@ def select_corner(corners, compos_class, class_name):
     return corners_wanted
 
 
-def merge_corner(corners, compos_class, is_merge_nested):
+def merge_corner(org, corners, compos_class, is_merge_nested):
     """
     i. merge overlapped corners
     ii. remove nested corners
@@ -68,7 +68,8 @@ def merge_corner(corners, compos_class, is_merge_nested):
     for i in range(len(corners)):
         is_intersected = False
         for j in range(len(new_corners)):
-            r = util.corner_relation(corners[i], new_corners[j])
+            r = util.corner_relation_nms(org, corners[i], new_corners[j])
+            # r = util.corner_relation(corners[i], new_corners[j])
             if is_merge_nested:
                 # if corners[i] is in new_corners[j], ignore corners[i]
                 if r == -1:
@@ -79,8 +80,18 @@ def merge_corner(corners, compos_class, is_merge_nested):
                     is_intersected = True
                     new_corners[j] = corners[i]
                     new_class[j] = compos_class[i]
-            # if [i] and [j] are overlapped
-            if r == 2:
+
+            # if above IoU threshold, and corners[i] is in new_corners[j], ignore corners[i]
+            if r == -2:
+                is_intersected = True
+                break
+            # if above IoU threshold, and new_corners[j] is in corners[i], replace new_corners[j] with corners[i]
+            elif r == 2:
+                is_intersected = True
+                new_corners[j] = corners[i]
+                new_class[j] = compos_class[i]
+            # if [i] and [j] are overlapped but no containing relation, merge corners with same class
+            elif r == 3:
                 is_intersected = True
                 if compos_class[i] == new_class[j]:
                     new_corners[j] = merge_overlapped(corners[i], new_corners[j])

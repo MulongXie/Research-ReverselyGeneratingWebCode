@@ -178,9 +178,9 @@ def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
 def corner_relation(corner_a, corner_b):
     """
     :return: -1 : a in b
-             0  : a, b are not overlapped
+             0  : a, b are not intersected
              1  : b in a
-             2  : a, b are overlapped
+             2  : a, b are identical or intersected
     """
     (up_left_a, bottom_right_a) = corner_a
     (y_min_a, x_min_a) = up_left_a
@@ -201,6 +201,59 @@ def corner_relation(corner_a, corner_b):
     # intersection
     else:
         return 2
+
+
+def corner_relation_nms(org, corner_a, corner_b):
+    '''
+    Calculate the relation between two rectangles by nms
+    IoU = Intersection / Union
+          0  : Not intersected
+          0~1: Overlapped
+          1  : Identical
+    :return:-2 : b in a and IoU above the threshold
+            -1 : a in b
+             0 : a, b are not intersected
+             1 : b in a
+             2 : a in b and IoU above the threshold
+             3 : intersected but no containing relation
+    '''
+    ((col_min_a, row_min_a), (col_max_a, row_max_a)) = corner_a
+    ((col_min_b, row_min_b), (col_max_b, row_max_b)) = corner_b
+
+    # get the intersected area
+    col_min_s = max(col_min_a, col_min_b)
+    row_min_s = max(row_min_a, row_min_b)
+    col_max_s = min(col_max_a, col_max_b)
+    row_max_s = min(row_max_a, row_max_b)
+    w = np.maximum(0, col_max_s - col_min_s)
+    h = np.maximum(0, row_max_s - row_min_s)
+    inter = w * h
+    area_a = (col_max_a - col_min_a) * (row_max_a - row_min_a)
+    area_b = (col_max_b - col_min_b) * (row_max_b - row_min_b)
+    iou = inter / (area_a + area_b - inter)
+
+    # not intersected with each other
+    if iou == 0:
+        return 0
+    # overlapped too much with each other
+    if iou > 0.6:
+        # a in b
+        if inter == area_a:
+            return -2
+        # b in a
+        if inter == area_b:
+            return 2
+    # intersected and containing relation
+    if iou <= 0.6:
+        # a in b
+        if inter == area_a:
+            return -1
+        # b in a
+        if inter == area_b:
+            return 1
+
+    # intersected but no containing relation
+    return 3
 
 
 def corner_cvt_relative_position(corners, col_min_base, row_min_base):
