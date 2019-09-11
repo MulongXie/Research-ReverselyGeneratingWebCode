@@ -32,18 +32,15 @@ def save(org, binary, corners_block, corners_img, corners_compo, compos_class, c
     file.save_corners_json('output/compo.json', corners_compo, compos_class)
 
     if is_clip:
-        file.save_clipping(org, 'output/components', corners_compo, compos_class, {})
+        file.save_clipping(org, 'output/components', corners_compo, compos_class)
 
 
-def _main():
-    org, binary = body.pre_processing('input/dribbble/2.png')
+def element_detect(input_img):
+    org, binary = body.pre_processing(input_img)
     corners_block, corners_img, corners_compo, compos_class, corners_text = body.processing(org, binary, CNN)
     save(org, binary, corners_block, corners_img, corners_compo, compos_class, corners_text)
 
     file.timer(start)
 
-
-if __name__ == '__main__':
-    _main()
 
 

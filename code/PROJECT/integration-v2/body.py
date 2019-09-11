@@ -16,7 +16,6 @@ is_icon = False
 is_shrink_img = False
 is_img_inspect = True
 is_save = True
-is_clip = False
 
 CNN = CNN()
 CNN.load()
