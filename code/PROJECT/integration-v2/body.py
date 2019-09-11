@@ -12,9 +12,9 @@ import time
 
 start = time.clock()
 # initialization
-is_icon = False
 is_shrink_img = False
 is_img_inspect = True
+is_merge_nested_compo = False
 is_save = True
 
 CNN = CNN()
@@ -38,12 +38,10 @@ def processing(org, binary, main=True):
         # *** Step 3 *** data processing: identify blocks and compos from rectangles -> identify irregular compos
         corners_block, corners_img, corners_compo = det.block_or_compo(org, binary, corners_rec)
         det.compo_irregular(org, corners_non_rec, corners_img, corners_compo)
-        corners_img, _ = det.rm_text(org, corners_img, ['img' for i in range(len(corners_img))])
 
         # *** Step 4 *** classification: clip and classify the components candidates -> ignore noises -> refine img
         compos = seg.clipping(org, corners_compo)
         compos_class = CNN.predict(compos)
-        corners_compo, compos_class = det.strip_text(corners_compo, compos_class)
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
 
         # *** Step 5 *** result refinement
@@ -61,10 +59,13 @@ def processing(org, binary, main=True):
         # *** Step 7 *** img inspection: search components in img element
         if is_img_inspect:
             corners_block, corners_img, corners_compo, compos_class = det.compo_in_img(processing, org, binary, corners_img, corners_block, corners_compo, compos_class)
-        # merge overlapped components
-        corners_img, _ = det.merge_corner(corners_img, ['img' for i in range(len(corners_img))], False)
-        corners_compo, compos_class = det.merge_corner(corners_compo, compos_class, True)
 
+        # *** Step 8 *** merge overlapped components
+        if is_merge_nested_compo:
+            corners_img = det.rm_img_in_compo(corners_img, corners_compo)
+        corners_img, _ = det.merge_corner(corners_img, ['img' for i in range(len(corners_img))], is_merge_nested=False)
+        corners_compo, compos_class = det.merge_corner(corners_compo, compos_class, is_merge_nested=False)
+        
         return corners_block, corners_img, corners_compo, compos_class, corners_text
 
     # *** used for img inspection ***
@@ -76,9 +77,7 @@ def processing(org, binary, main=True):
 
         compos = seg.clipping(org, corners_compo)
         compos_class = CNN.predict(compos)
-        corners_compo, compos_class = det.strip_text(corners_compo, compos_class)
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
-
         corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
         corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
 

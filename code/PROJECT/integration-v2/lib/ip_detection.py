@@ -91,19 +91,6 @@ def merge_corner(corners, compos_class, is_merge_nested):
     return new_corners, new_class
 
 
-def strip_text(corners_compo, compos_class):
-    """
-    Remove all text elements from components
-    """
-    corners_compo_withuot_text = []
-    compo_class_withuot_text = []
-    for i in range(len(compos_class)):
-        if compos_class[i] != 'text':
-            corners_compo_withuot_text.append(corners_compo[i])
-            compo_class_withuot_text.append(compos_class[i])
-    return corners_compo_withuot_text, compo_class_withuot_text
-
-
 def strip_img(corners_compo, compos_class, corners_img):
     """
     Separate img from other compos
@@ -181,9 +168,7 @@ def compo_in_img(processing, org, binary, corners_img,
         if compo_area / img_area < 0.5:
             corners_img_new.append(corner)
 
-    corners_img = rm_img_in_compo(corners_img_new, corners_compo)
-
-    return corners_block, corners_img, corners_compo, compos_class
+    return corners_block, corners_img_new, corners_compo, compos_class
 
 
 def block_or_compo(org, binary, corners,
@@ -210,11 +195,6 @@ def block_or_compo(org, binary, corners,
         (col_max, row_max) = bottom_right
         height = row_max - row_min
         width = col_max - col_min
-
-        # select UI component candidates
-        # if min_compo_edge < height < max_compo_edge:
-        #     compos.append(corner)
-        #     continue
 
         block = False
         vacancy = [0, 0, 0, 0]
@@ -320,7 +300,6 @@ def img_shrink(org, binary, corners,
         # shrink corner according to the lines
         corner_shrunken = util.line_shrink_corners(corner, lines_h, lines_v)
         corners_shrunken.append(corner_shrunken)
-
     return corners_shrunken
 
 
@@ -471,7 +450,6 @@ def line_detection(binary,
             x += 1
         if y < column - 1:
             y += 1
-
     return lines_h, lines_v
 
 
@@ -494,6 +472,7 @@ def boundary_detection(binary,
                         -> left, right: (row_index, min/max column border) detect range of each row
     """
     mark = np.full(binary.shape, 0, dtype=np.uint8)
+    boundary_all = []
     boundary_rec = []
     boundary_nonrec = []
     row, column = binary.shape[0], binary.shape[1]
@@ -521,9 +500,12 @@ def boundary_detection(binary,
                 # rectangle check
                 if util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
                     boundary_rec.append(boundary)
-                    if show:
-                        draw.draw_boundary(boundary_rec, binary.shape, show)
                 else:
                     boundary_nonrec.append(boundary)
+
+                if show:
+                    print('Area:%d, Perimeter:%d' % (len(area), perimeter))
+                    boundary_all.append(boundary)
+                    draw.draw_boundary(boundary_all, binary.shape, show=True)
 
     return boundary_rec, boundary_nonrec
