@@ -33,10 +33,11 @@ def save(org, binary, corners_block, corners_img, corners_compo, compos_class, c
 
 
 def uied(input_path_img, output_path_label, output_path_img_drawn, output_path_img_bin):
+    print('UIED for', input_path_img)
     org, binary = body.pre_processing(input_path_img)
     corners_block, corners_img, corners_compo, compos_class, corners_text = body.processing(org, binary, CNN)
     save(org, binary, corners_block, corners_img, corners_compo, compos_class, corners_text, output_path_label, output_path_img_drawn, output_path_img_bin)
-    print('*** UI Elements Complete ***')
+    print('*** UI Elements Complete ***\n')
 
 
 
