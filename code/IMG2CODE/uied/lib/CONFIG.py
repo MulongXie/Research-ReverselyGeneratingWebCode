@@ -14,7 +14,7 @@ class Config:
         self.ROOT_IMG_GRADIENT_UIED = pjoin(self.ROOT_OUTPUT, "ui_img_gradient")
         self.ROOT_LABEL_CTPN = pjoin(self.ROOT_OUTPUT, "ctpn_label")
         self.ROOT_IMG_DRAWN_CTPN = pjoin(self.ROOT_OUTPUT, "ctpn_drawn")
-        self.ROOT_IMG_MERGE = pjoin(self.ROOT_OUTPUT, "merge_label")
+        self.ROOT_IMG_MERGE = pjoin(self.ROOT_OUTPUT, "merge_drawn")
         self.ROOT_IMG_COMPONENT = pjoin(self.ROOT_OUTPUT, "ui_img_component")
 
         self.THRESHOLD_MIN_GRADIENT = 3

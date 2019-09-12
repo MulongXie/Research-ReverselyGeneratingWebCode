@@ -25,11 +25,11 @@ def save_corners(file_path, corners, compo_name, clear=True):
     df.to_csv(file_path)
 
 
-def save_corners_json(file_path, corners, compo_classes):
-    try:
+def save_corners_json(file_path, corners, compo_classes, new=True):
+    if not new:
         f_in = open(file_path, 'r')
         components = json.load(f_in)
-    except:
+    else:
         components = {'compos': []}
     f_out = open(file_path, 'w')
 

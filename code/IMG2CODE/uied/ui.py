@@ -27,9 +27,9 @@ def save(org, binary, corners_block, corners_img, corners_compo, compos_class, c
     cv2.imwrite('data/output/gradient_r.png', binary_r)
     cv2.imwrite(output_path_img_bin, binary)
     cv2.imwrite(output_path_img_drawn, draw_bounding)
-    file.save_corners_json(output_path_label, corners_block, ['div' for i in range(len(corners_block))])
-    file.save_corners_json(output_path_label, corners_img, ['img' for i in range(len(corners_img))])
-    file.save_corners_json(output_path_label, corners_compo, compos_class)
+    file.save_corners_json(output_path_label, corners_block, ['div' for i in range(len(corners_block))], new=True)
+    file.save_corners_json(output_path_label, corners_img, ['img' for i in range(len(corners_img))], new=False)
+    file.save_corners_json(output_path_label, corners_compo, compos_class, new=False)
 
 
 def uied(input_path_img, output_path_label, output_path_img_drawn, output_path_img_bin):

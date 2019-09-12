@@ -10,12 +10,12 @@ from CONFIG import Config
 C = Config()
 C.build_output_folders(is_clip=False)
 
-is_ctpn = False
+is_ctpn = True
 is_uied = True
-is_merge = False
+is_merge = True
 
-start_index = 3
-end_index = 20
+start_index = 0
+end_index = 0
 
 input_paths_img = glob.glob(pjoin(C.ROOT_INPUT, '*.png'))
 input_paths_img = sorted(input_paths_img, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
@@ -32,8 +32,8 @@ for input_path_img in input_paths_img:
     img_uied_drawn =pjoin(C.ROOT_IMG_DRAWN_UIED, index + '.png')
     img_uied_grad = pjoin(C.ROOT_IMG_GRADIENT_UIED, index + '.png')
     label_text = pjoin(C.ROOT_LABEL_CTPN, index + '.txt')
-    img_ctpn_drawn = pjoin(C.ROOT_IMG_DRAWN_CTPN, 'ctpn_drawn', index + '.png')
-    img_merge = pjoin(C.ROOT_IMG_MERGE, 'merge_label', index + '.png')
+    img_ctpn_drawn = pjoin(C.ROOT_IMG_DRAWN_CTPN, index + '.png')
+    img_merge = pjoin(C.ROOT_IMG_MERGE, index + '.png')
 
     if is_ctpn:
         ocr.ctpn(input_path_img, label_text, img_ctpn_drawn)

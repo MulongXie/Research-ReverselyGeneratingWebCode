@@ -12,6 +12,7 @@ import time
 
 start = time.clock()
 # initialization
+is_ocr = False
 is_shrink_img = False
 is_img_inspect = True
 is_merge_nested_compo = False
@@ -45,9 +46,10 @@ def processing(org, binary, main=True):
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
 
         # *** Step 5 *** result refinement
-        corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
-        corners_img, _ = det.rm_text(org, corners_img, ['img' for i in range(len(corners_img))])
-        corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
+        if is_ocr:
+            corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
+            corners_img, _ = det.rm_text(org, corners_img, ['img' for i in range(len(corners_img))])
+            corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
         if is_shrink_img:
             corners_img = det.img_shrink(org, binary, corners_img)
 
@@ -78,7 +80,8 @@ def processing(org, binary, main=True):
         compos = seg.clipping(org, corners_compo)
         compos_class = CNN.predict(compos)
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
-        corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
-        corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
+        if is_ocr:
+            corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
+            corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
 
         return corners_block, corners_compo, compos_class
