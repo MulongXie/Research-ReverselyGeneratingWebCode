@@ -70,7 +70,7 @@ def ctpn(input_path_img, output_path_label, output_path_img):
     textdetector = TextDetector()
     boxes = textdetector.detect(boxes, scores[:, np.newaxis], img.shape[:2])
     draw_boxes(img, boxes, scale, output_path_label, output_path_img)
-    print('*** OCR Complete ***\n')
+    print('*** OCR Complete ***')
     # sess.close()
 
 

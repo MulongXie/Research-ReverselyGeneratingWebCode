@@ -77,5 +77,5 @@ def time_start():
 
 def timer_end(start):
     now = time.clock()
-    print('Time Taken:%.3f s' % (now - start))
+    print('Time Taken:%.3f s\n' % (now - start))
     return now

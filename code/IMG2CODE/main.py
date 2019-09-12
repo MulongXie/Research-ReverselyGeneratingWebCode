@@ -14,7 +14,7 @@ is_ctpn = False
 is_uied = True
 is_merge = False
 
-start_index = 0
+start_index = 3
 end_index = 20
 
 input_paths_img = glob.glob(pjoin(C.ROOT_INPUT, '*.png'))
