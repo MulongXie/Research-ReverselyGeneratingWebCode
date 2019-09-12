@@ -7,7 +7,7 @@ from collections import Counter
 import os
 from os.path import join as pjoin
 
-paths = glob.glob('E:\Mulong\Datasets\dataset_webpage\elements\input\*')
+paths = glob.glob('E:\Mulong\Datasets\dataset_webpage\elements\\button\*')
 
 heights, widths, ratios = [], [], []
 

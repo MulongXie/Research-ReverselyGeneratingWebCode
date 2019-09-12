@@ -12,7 +12,7 @@ from os.path import join as pyjoin
 
 # initialization
 is_clip = True
-compo_index = {'button':613, 'input':315, 'list':12, 'search':22, 'select':8}
+compo_index = {'button':906, 'input':336, 'list':25, 'search':46, 'select':17}
 
 C = Config()
 C.build_output_folders(is_clip)
@@ -40,7 +40,7 @@ def save(index, org, binary, corners_block, corners_img, corners_compo, compos_c
     cv2.imwrite(out_img_draw, draw_bounding)
     cv2.imwrite(out_img_clean, img_clean)
     file.save_corners_json(out_label, corners_block, ['div' for i in range(len(corners_block))])
-    file.save_corners_json(out_label, corners_img, ['div' for i in range(len(corners_img))])
+    file.save_corners_json(out_label, corners_img, ['img' for i in range(len(corners_img))])
     file.save_corners_json(out_label, corners_compo, compos_class)
     if is_clip:
         file.save_clipping(org, C.ROOT_IMG_COMPONENT, corners_compo, compos_class, compo_index)
@@ -48,7 +48,7 @@ def save(index, org, binary, corners_block, corners_img, corners_compo, compos_c
 
 def _main():
     # start image and end image
-    start_index = 1
+    start_index = 22
     end_index = 100
 
     for input_path in input_paths:
