@@ -71,7 +71,11 @@ def save_clipping(org, output_root, corners, compo_classes, compo_index):
         cv2.imwrite(pjoin(compo_path, str(compo_index[compo_classes[i]]) + '.png'), clip)
 
 
-def timer(start):
+def time_start():
+    return time.clock()
+
+
+def timer_end(start):
     now = time.clock()
     print('Time Taken:%.3f s' % (now - start))
     return now

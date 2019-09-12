@@ -26,7 +26,7 @@ def resize_im(im, scale, max_scale=None):
     return cv2.resize(im, None, None, fx=f, fy=f, interpolation=cv2.INTER_LINEAR), f
 
 
-def draw_boxes(img, output_path_label, boxes, scale):
+def draw_boxes(img, boxes, scale, output_path_label, output_path_img):
     with open(output_path_label, 'w') as f:
         for box in boxes:
             if np.linalg.norm(box[0] - box[1]) < 5 or np.linalg.norm(box[3] - box[0]) < 5:
@@ -49,10 +49,10 @@ def draw_boxes(img, output_path_label, boxes, scale):
             f.write(line)
 
     img = cv2.resize(img, None, None, fx=1.0 / scale, fy=1.0 / scale, interpolation=cv2.INTER_LINEAR)
-    cv2.imwrite('data/output/ocr.png', img)
+    cv2.imwrite(output_path_img, img)
 
 
-def ctpn(input_path_img, output_path_label):
+def ctpn(input_path_img, output_path_label, output_path_img):
     print(('CTPN for {:s}'.format(input_path_img)))
     img = cv2.imread(input_path_img)
     img, scale = resize_im(img, scale=TextLineCfg.SCALE, max_scale=TextLineCfg.MAX_SCALE)
@@ -69,9 +69,9 @@ def ctpn(input_path_img, output_path_label):
     boxes = rois[:, 1:5] / im_scales[0]
     textdetector = TextDetector()
     boxes = textdetector.detect(boxes, scores[:, np.newaxis], img.shape[:2])
-    draw_boxes(img, output_path_label, boxes, scale)
-    print('*** OCR Complete ***')
-    sess.close()
+    draw_boxes(img, boxes, scale, output_path_label, output_path_img)
+    print('*** OCR Complete ***\n')
+    # sess.close()
 
 
 cfg_from_file('ctpn/ctpn/text.yml')
