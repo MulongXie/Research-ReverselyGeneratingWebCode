@@ -15,8 +15,8 @@ is_clip = True
 C = Config()
 C.build_output_folders(is_clip)
 
-start_index = 101
-end_index = 300
+start_index = 1000
+end_index = 2000
 
 input_paths_img = glob.glob(pjoin(C.ROOT_INPUT, '*.png'))
 input_paths_img = sorted(input_paths_img, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index

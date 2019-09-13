@@ -4,11 +4,11 @@ import ui
 
 from file_utils import time_start, timer_end
 
-is_ctpn = False
+is_ctpn = True
 is_uied = True
-is_merge = False
+is_merge = True
 
-PATH_IMG_INPUT = 'data\\input\\13.png'
+PATH_IMG_INPUT = 'data\\input\\googleplay\\6.png'
 PATH_LABEL_COMPO = 'data\\output\\compo.json'
 PATH_LABEL_TEXT = 'data\\output\\ocr.txt'
 PATH_CTPN_DRAWN = 'data\\output\\ctpn.png'
