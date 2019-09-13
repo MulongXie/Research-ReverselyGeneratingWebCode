@@ -1,9 +1,12 @@
 import json
 import cv2
 import numpy as np
+from os.path import join as pjoin
+import os
 
 from CONFIG import Config
 C = Config()
+compo_index = {'img':0, 'text':0, 'button':0, 'input':0, 'icon':0}
 
 
 def draw_bounding_box_class(org, corners, compo_class, color_map=C.COLOR, line=3, show=False, name='img'):
@@ -14,9 +17,34 @@ def draw_bounding_box_class(org, corners, compo_class, color_map=C.COLOR, line=3
                             cv2.FONT_HERSHEY_SIMPLEX, 0.8, color_map[compo_class[i]], 2)
     if show:
         cv2.imshow(name, board)
-        cv2.imwrite('data/output/' + name + '.png', board)
         cv2.waitKey(0)
     return board
+
+
+def save_clipping(org, corners, compo_classes, compo_index, output_root=C.ROOT_IMG_COMPONENT):
+    if output_root is None:
+        output_root = C.ROOT_IMG_COMPONENT
+    if not os.path.exists(output_root):
+        os.mkdir(output_root)
+    pad = 2
+    for i in range(len(corners)):
+        compo = compo_classes[i]
+        (col_min, row_min, col_max, row_max) = corners[i]
+        col_min = max(col_min - pad, 0)
+        col_max = min(col_max + pad, org.shape[1])
+        row_min = max(row_min - pad, 0)
+        row_max = min(row_max + pad, org.shape[0])
+
+        # if component type already exists, index increase by 1, otherwise add this type
+        compo_path = pjoin(output_root, compo)
+        if not os.path.exists(compo_path):
+            os.mkdir(compo_path)
+        if compo_classes[i] not in compo_index:
+            compo_index[compo_classes[i]] = 0
+        else:
+            compo_index[compo_classes[i]] += 1
+        clip = org[row_min:row_max, col_min:col_max]
+        cv2.imwrite(pjoin(compo_path, str(compo_index[compo_classes[i]]) + '.png'), clip)
 
 
 def nms(corners_compo_old, compos_class_old, corner_text):
@@ -57,7 +85,7 @@ def nms(corners_compo_old, compos_class_old, corner_text):
     return corners_compo_refine, compos_class_refine
 
 
-def incorporate(img_path, compo_path, text_path, output_path):
+def incorporate(img_path, compo_path, text_path, output_path, is_clip=False, clip_path=None):
     img = cv2.imread(img_path)
     compo_f = open(compo_path, 'r')
     text_f = open(text_path, 'r')
@@ -76,3 +104,6 @@ def incorporate(img_path, compo_path, text_path, output_path):
     corners_compo_new, compos_class_new = nms(corners_compo, compos_class, corners_text)
     board = draw_bounding_box_class(img, corners_compo_new, compos_class_new)
     cv2.imwrite(output_path, board)
+
+    if is_clip:
+        save_clipping(img, corners_compo_new, compos_class_new, compo_index, clip_path)

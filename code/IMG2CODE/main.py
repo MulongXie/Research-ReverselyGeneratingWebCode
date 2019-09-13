@@ -1,5 +1,5 @@
 import glob
-from os.path import join as pjoin
+from os.path import join as pjoin, exists
 
 import ocr
 import ui
@@ -7,15 +7,16 @@ import merge
 from file_utils import time_start, timer_end
 from CONFIG import Config
 
-C = Config()
-C.build_output_folders(is_clip=False)
-
 is_ctpn = True
 is_uied = True
 is_merge = True
+is_clip = True
 
-start_index = 0
-end_index = 0
+C = Config()
+C.build_output_folders(is_clip)
+
+start_index = 1
+end_index = 100
 
 input_paths_img = glob.glob(pjoin(C.ROOT_INPUT, '*.png'))
 input_paths_img = sorted(input_paths_img, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
@@ -40,6 +41,6 @@ for input_path_img in input_paths_img:
     if is_uied:
         ui.uied(input_path_img, label_compo, img_uied_drawn, img_uied_grad)
     if is_merge:
-        merge.incorporate(input_path_img, label_compo, label_text, img_merge)
+        merge.incorporate(input_path_img, label_compo, label_text, img_merge, is_clip)
 
     end = timer_end(start)

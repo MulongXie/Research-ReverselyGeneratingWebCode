@@ -15,7 +15,7 @@ class Config:
         self.ROOT_LABEL_CTPN = pjoin(self.ROOT_OUTPUT, "ctpn_label")
         self.ROOT_IMG_DRAWN_CTPN = pjoin(self.ROOT_OUTPUT, "ctpn_drawn")
         self.ROOT_IMG_MERGE = pjoin(self.ROOT_OUTPUT, "merge_drawn")
-        self.ROOT_IMG_COMPONENT = pjoin(self.ROOT_OUTPUT, "ui_img_component")
+        self.ROOT_IMG_COMPONENT = pjoin(self.ROOT_OUTPUT, "components")
 
         self.THRESHOLD_MIN_GRADIENT = 3
         self.THRESHOLD_OBJ_MIN_AREA = 240
