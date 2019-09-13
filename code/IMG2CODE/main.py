@@ -15,7 +15,7 @@ is_clip = True
 C = Config()
 C.build_output_folders(is_clip)
 
-start_index = 1000
+start_index = 0
 end_index = 2000
 
 input_paths_img = glob.glob(pjoin(C.ROOT_INPUT, '*.png'))

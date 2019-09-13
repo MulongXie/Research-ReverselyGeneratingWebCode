@@ -23,6 +23,16 @@ def draw_bounding_box_class(org, corners, compo_class, color_map=C.COLOR, line=3
     return board
 
 
+def draw_bounding_box(org, corners, color=(0, 255, 0), line=3, show=False):
+    board = org.copy()
+    for i in range(len(corners)):
+        board = cv2.rectangle(board, (corners[i][0], corners[i][1]), (corners[i][2], corners[i][3]), color, line)
+    if show:
+        cv2.imshow('a', board)
+        cv2.waitKey(0)
+    return board
+
+
 def save_clipping(org, corners, compo_classes, compo_index, output_root=C.ROOT_IMG_COMPONENT):
     if output_root is None:
         output_root = C.ROOT_IMG_COMPONENT
@@ -103,7 +113,11 @@ def incorporate(img_path, compo_path, text_path, output_path, is_clip=False, cli
             corners_text.append([int(c) for c in line[:-1].split(',')])
 
     corners_compo_new, compos_class_new = nms(corners_compo, compos_class, corners_text)
+
+    print(corners_text)
     board = draw_bounding_box_class(img, corners_compo_new, compos_class_new)
+    board = draw_bounding_box(board, corners_text, line=1)
+
     cv2.imwrite(output_path, board)
 
     if is_clip:

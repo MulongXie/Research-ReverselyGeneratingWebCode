@@ -1,0 +1,24 @@
+{
+    "compos": [
+        {
+            "id": 0,
+            "height": 479,
+            "column_max": 798,
+            "class": "img",
+            "row_max": 479,
+            "row_min": 0,
+            "width": 798,
+            "column_min": 0
+        },
+        {
+            "id": 0,
+            "height": 9,
+            "column_max": 780,
+            "class": "button",
+            "row_max": 319,
+            "row_min": 310,
+            "width": 72,
+            "column_min": 708
+        }
+    ]
+}
