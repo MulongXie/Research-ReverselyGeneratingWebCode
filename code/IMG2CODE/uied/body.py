@@ -12,10 +12,8 @@ import time
 
 start = time.clock()
 # initialization
-is_ocr = False
+is_ocr_check = False
 is_shrink_img = False
-is_img_inspect = True
-is_save = True
 
 CNN = CNN()
 CNN.load()
@@ -45,21 +43,20 @@ def processing(org, binary, main=True):
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
 
         # *** Step 5 *** result refinement
-        if is_ocr:
-            corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
-            corners_img, _ = det.rm_text(org, corners_img, ['img' for i in range(len(corners_img))])
-            corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
         if is_shrink_img:
             corners_img = det.img_shrink(org, binary, corners_img)
 
-        # *** Step 6 *** text detection from cleaned image
+        # *** Step 6 *** img inspection: search components in img element
+        corners_block, corners_img, corners_compo, compos_class = det.compo_in_img(processing, org, binary, corners_img, corners_block, corners_compo, compos_class)
+
+        # *** Step 7 *** ocr check and text detection from cleaned image
+        if is_ocr_check:
+            corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
+            corners_img, _ = det.rm_text(org, corners_img, ['img' for i in range(len(corners_img))])
+            corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
         img_clean = draw.draw_bounding_box(org, corners_img, color=(255, 255, 255), line=-1)
         corners_word = ocr.text_detection(org, img_clean)
         corners_text = ocr.text_merge_word_into_line(org, corners_word)
-
-        # *** Step 7 *** img inspection: search components in img element
-        if is_img_inspect:
-            corners_block, corners_img, corners_compo, compos_class = det.compo_in_img(processing, org, binary, corners_img, corners_block, corners_compo, compos_class)
 
         # *** Step 8 *** merge overlapped components
         corners_img = det.rm_img_in_compo(corners_img, corners_compo)
@@ -74,12 +71,8 @@ def processing(org, binary, main=True):
         boundary_rec, boundary_non_rec = det.boundary_detection(binary, show=False)
         corners_rec = det.get_corner(boundary_rec)
         corners_block, corners_img, corners_compo = det.block_or_compo(org, binary, corners_rec)
-
         compos = seg.clipping(org, corners_compo)
         compos_class = CNN.predict(compos)
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
-        if is_ocr:
-            corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
-            corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
 
         return corners_block, corners_compo, compos_class
