@@ -244,7 +244,7 @@ def corner_relation_nms(org, corner_a, corner_b):
         if inter == area_b:
             return 2
     # intersected and containing relation
-    if 0.005 < iou <= 0.6:
+    if 0.0025 < iou <= 0.6:
         # a in b
         if inter == area_a:
             return -1
@@ -252,7 +252,7 @@ def corner_relation_nms(org, corner_a, corner_b):
         if inter == area_b:
             return 1
     # containing but too small
-    if iou <= 0.005:
+    if iou <= 0.0025:
         # a in b
         if inter == area_a:
             return -3

@@ -46,7 +46,7 @@ def processing(org, binary, main=True):
         if is_shrink_img:
             corners_img = det.img_shrink(org, binary, corners_img)
 
-        # *** Step 6 *** img inspection: search components in img element
+        # *** Step 6 *** recursive inspection: search components nested in components
         corners_block, corners_img, corners_compo, compos_class = det.compo_in_img(processing, org, binary, corners_img, corners_block, corners_compo, compos_class)
 
         # *** Step 7 *** ocr check and text detection from cleaned image
@@ -59,7 +59,7 @@ def processing(org, binary, main=True):
         corners_text = ocr.text_merge_word_into_line(org, corners_word)
 
         # *** Step 8 *** merge overlapped components
-        corners_img = det.rm_img_in_compo(corners_img, corners_compo)
+        # corners_img = det.rm_img_in_compo(corners_img, corners_compo)
         corners_img, _ = det.merge_corner(org, corners_img, ['img' for i in range(len(corners_img))], is_merge_nested_same=False)
         corners_compo, compos_class = det.merge_corner(org, corners_compo, compos_class, is_merge_nested_same=True)
 
