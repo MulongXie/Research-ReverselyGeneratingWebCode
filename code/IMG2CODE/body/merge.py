@@ -12,6 +12,8 @@ compo_index = {'img':0, 'text':0, 'button':0, 'input':0, 'icon':0}
 def draw_bounding_box_class(org, corners, compo_class, color_map=C.COLOR, line=3, show=False, name='img'):
     board = org.copy()
     for i in range(len(corners)):
+        if compo_class[i] == 'text':
+            continue
         board = cv2.rectangle(board, (corners[i][0], corners[i][1]), (corners[i][2], corners[i][3]), color_map[compo_class[i]], line)
         board = cv2.putText(board, compo_class[i], (corners[i][0]+5, corners[i][1]+20),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.8, color_map[compo_class[i]], 2)
@@ -26,7 +28,7 @@ def save_clipping(org, corners, compo_classes, compo_index, output_root=C.ROOT_I
         output_root = C.ROOT_IMG_COMPONENT
     if not os.path.exists(output_root):
         os.mkdir(output_root)
-    pad = 2
+    pad = 1
     for i in range(len(corners)):
         compo = compo_classes[i]
         (col_min, row_min, col_max, row_max) = corners[i]
@@ -54,9 +56,8 @@ def nms(corners_compo_old, compos_class_old, corner_text):
     corner_text = np.array(corner_text)
     for i in range(len(corners_compo_old)):
         if compos_class_old[i] != 'img':
-            if compos_class_old[i] != 'text':
-                corners_compo_refine.append(corners_compo_old[i])
-                compos_class_refine.append(compos_class_old[i])
+            corners_compo_refine.append(corners_compo_old[i])
+            compos_class_refine.append(compos_class_old[i])
             continue
 
         a = corners_compo_old[i]

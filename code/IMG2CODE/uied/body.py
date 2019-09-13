@@ -15,7 +15,6 @@ start = time.clock()
 is_ocr = False
 is_shrink_img = False
 is_img_inspect = True
-is_merge_nested_compo = False
 is_save = True
 
 CNN = CNN()
@@ -63,10 +62,9 @@ def processing(org, binary, main=True):
             corners_block, corners_img, corners_compo, compos_class = det.compo_in_img(processing, org, binary, corners_img, corners_block, corners_compo, compos_class)
 
         # *** Step 8 *** merge overlapped components
-        if is_merge_nested_compo:
-            corners_img = det.rm_img_in_compo(corners_img, corners_compo)
-        corners_img, _ = det.merge_corner(org, corners_img, ['img' for i in range(len(corners_img))], is_merge_nested=False)
-        corners_compo, compos_class = det.merge_corner(org, corners_compo, compos_class, is_merge_nested=False)
+        corners_img = det.rm_img_in_compo(corners_img, corners_compo)
+        corners_img, _ = det.merge_corner(org, corners_img, ['img' for i in range(len(corners_img))], is_merge_nested_same=False)
+        corners_compo, compos_class = det.merge_corner(org, corners_compo, compos_class, is_merge_nested_same=True)
 
         return corners_block, corners_img, corners_compo, compos_class, corners_text
 

@@ -10,47 +10,17 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
+    <splitter split-orientation="horizontal" split-proportion="0.42186606">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/main.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="153">
-                  <caret line="15" column="31" lean-forward="true" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
-                  <folding>
-                    <element signature="e#0#11#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/test.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="119">
-                  <caret line="7" column="18" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="main_single.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="main_single.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/main_single.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="414">
-                  <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+                <state relative-caret-position="221">
+                  <caret line="13" column="37" lean-forward="true" selection-start-line="13" selection-start-column="37" selection-end-line="13" selection-end-column="37" />
                   <folding>
                     <element signature="e#0#12#0" expanded="true" />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="ip_detection.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/uied/lib/ip_detection.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2848">
-                  <caret line="519" column="47" selection-start-line="519" selection-start-column="47" selection-end-line="519" selection-end-column="47" />
                 </state>
               </provider>
             </entry>
@@ -59,23 +29,23 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="CONFIG.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/uied/lib/CONFIG.py">
+          <file leaf-file-name="ui.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/uied/ui.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="289">
-                  <caret line="17" column="24" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
+                <state relative-caret-position="332">
+                  <caret line="37" selection-start-line="37" selection-end-line="37" />
                   <folding>
-                    <element signature="e#0#33#0" expanded="true" />
+                    <element signature="e#0#11#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="body.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="body.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/uied/body.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="136">
-                  <caret line="23" selection-start-line="23" selection-end-line="23" />
+                <state relative-caret-position="434">
+                  <caret line="71" column="42" lean-forward="true" selection-start-line="71" selection-start-column="42" selection-end-line="71" selection-end-column="42" />
                   <folding>
                     <element signature="e#0#26#0" expanded="true" />
                   </folding>
@@ -83,38 +53,20 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="file_utils.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/uied/lib/file_utils.py">
+          <file leaf-file-name="ip_detection.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/uied/lib/ip_detection.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="132">
-                  <caret line="47" column="41" selection-start-line="47" selection-start-column="41" selection-end-line="47" selection-end-column="41" />
-                  <folding>
-                    <element signature="e#0#9#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="166">
+                  <caret line="42" column="4" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="4" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="ui.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/uied/ui.py">
+          <file leaf-file-name="ip_detection_utils.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/uied/lib/ip_detection_utils.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="527">
-                  <caret line="31" column="84" selection-start-line="31" selection-start-column="84" selection-end-line="31" selection-end-column="84" />
-                  <folding>
-                    <element signature="e#0#11#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="merge.py" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/body/merge.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="281">
-                  <caret line="28" column="11" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
-                  <folding>
-                    <element signature="e#0#11#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="395">
+                  <caret line="247" column="16" lean-forward="true" selection-start-line="247" selection-start-column="16" selection-end-line="247" selection-end-column="16" />
                 </state>
               </provider>
             </entry>
@@ -152,13 +104,14 @@
         <option value="$PROJECT_DIR$/ctpn/ocr.py" />
         <option value="$PROJECT_DIR$/uied/lib/file_utils.py" />
         <option value="$PROJECT_DIR$/uied/ui.py" />
-        <option value="$PROJECT_DIR$/uied/lib/ip_detection.py" />
-        <option value="$PROJECT_DIR$/uied/body.py" />
         <option value="$PROJECT_DIR$/uied/lib/CONFIG.py" />
         <option value="$PROJECT_DIR$/test.py" />
-        <option value="$PROJECT_DIR$/main_single.py" />
-        <option value="$PROJECT_DIR$/body/merge.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/body/merge.py" />
+        <option value="$PROJECT_DIR$/uied/lib/ip_detection.py" />
+        <option value="$PROJECT_DIR$/uied/lib/ip_detection_utils.py" />
+        <option value="$PROJECT_DIR$/uied/body.py" />
+        <option value="$PROJECT_DIR$/main_single.py" />
       </list>
     </option>
   </component>
@@ -184,23 +137,13 @@
             <path>
               <item name="IMG2CODE" type="b2602c69:ProjectViewProjectNode" />
               <item name="IMG2CODE" type="462c0819:PsiDirectoryNode" />
-              <item name="body" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="IMG2CODE" type="b2602c69:ProjectViewProjectNode" />
-              <item name="IMG2CODE" type="462c0819:PsiDirectoryNode" />
-              <item name="ctpn" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="IMG2CODE" type="b2602c69:ProjectViewProjectNode" />
-              <item name="IMG2CODE" type="462c0819:PsiDirectoryNode" />
               <item name="uied" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="IMG2CODE" type="b2602c69:ProjectViewProjectNode" />
               <item name="IMG2CODE" type="462c0819:PsiDirectoryNode" />
               <item name="uied" type="462c0819:PsiDirectoryNode" />
-              <item name="cnn" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -224,7 +167,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.main_single">
     <configuration name="body" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="IMG2CODE" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -324,8 +267,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main" />
         <item itemvalue="Python.main_single" />
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.body" />
         <item itemvalue="Python.nms" />
@@ -396,13 +339,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/uied/body.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="7" selection-start-column="7" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ctpn/ocr.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -500,16 +436,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/uied/ui.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="31" column="84" selection-start-line="31" selection-start-column="84" selection-end-line="31" selection-end-column="84" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/uied/cnn/CONFIG_CNN.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -527,66 +453,83 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/uied/body.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/uied/lib/ip_detection.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2848">
-          <caret line="519" column="47" selection-start-line="519" selection-start-column="47" selection-end-line="519" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
-          <caret line="7" column="18" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
+          <caret line="7" column="18" lean-forward="true" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/uied/lib/CONFIG.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="24" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
+        <state relative-caret-position="85">
+          <caret line="17" column="25" selection-start-line="17" selection-start-column="25" selection-end-line="17" selection-end-column="25" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main_single.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+        <state relative-caret-position="238">
+          <caret line="14" column="12" lean-forward="true" selection-start-line="14" selection-start-column="12" selection-end-line="14" selection-end-column="12" />
           <folding>
-            <element signature="e#0#12#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/body/merge.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="28" column="11" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
+        <state relative-caret-position="272">
+          <caret line="21" column="22" lean-forward="true" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/uied/lib/ip_detection.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="15" column="31" lean-forward="true" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
+        <state relative-caret-position="166">
+          <caret line="42" column="4" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/uied/lib/ip_detection_utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="395">
+          <caret line="247" column="16" lean-forward="true" selection-start-line="247" selection-start-column="16" selection-end-line="247" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/uied/ui.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="332">
+          <caret line="37" selection-start-line="37" selection-end-line="37" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/uied/body.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="434">
+          <caret line="71" column="42" lean-forward="true" selection-start-line="71" selection-start-column="42" selection-end-line="71" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main_single.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="37" lean-forward="true" selection-start-line="13" selection-start-column="37" selection-end-line="13" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
           </folding>
         </state>
       </provider>
