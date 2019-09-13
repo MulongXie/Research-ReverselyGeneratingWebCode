@@ -244,16 +244,24 @@ def corner_relation_nms(org, corner_a, corner_b):
         if inter == area_b:
             return 2
     # intersected and containing relation
-    if iou <= 0.6:
+    if 0.005 < iou <= 0.6:
         # a in b
         if inter == area_a:
             return -1
         # b in a
         if inter == area_b:
             return 1
+    # containing but too small
+    if iou <= 0.005:
+        # a in b
+        if inter == area_a:
+            return -3
+        # b in a
+        if inter == area_b:
+            return 3
 
     # intersected but no containing relation
-    return 3
+    return 4
 
 
 def corner_cvt_relative_position(corners, col_min_base, row_min_base):

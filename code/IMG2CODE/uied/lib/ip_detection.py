@@ -90,8 +90,17 @@ def merge_corner(org, corners, compos_class, is_merge_nested_same=False):
                 is_intersected = True
                 new_corners[j] = corners[i]
                 new_class[j] = compos_class[i]
-            # if [i] and [j] are overlapped but no containing relation, merge corners with same class
+
+            # containing and too small
+            elif r == -3:
+                is_intersected = True
+                break
             elif r == 3:
+                is_intersected = True
+                new_corners[j] = corners[i]
+
+            # if [i] and [j] are overlapped but no containing relation, merge corners when same class
+            elif r == 4:
                 is_intersected = True
                 if compos_class[i] == new_class[j]:
                     new_corners[j] = merge_overlapped(corners[i], new_corners[j])

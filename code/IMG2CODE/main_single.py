@@ -8,7 +8,7 @@ is_ctpn = True
 is_uied = True
 is_merge = True
 
-PATH_IMG_INPUT = 'data\\input\\dribbble\\55.png'
+PATH_IMG_INPUT = 'data\\input\\dribbble\\204.png'
 PATH_LABEL_COMPO = 'data\\output\\compo.json'
 PATH_LABEL_TEXT = 'data\\output\\ocr.txt'
 PATH_CTPN_DRAWN = 'data\\output\\ctpn.png'
