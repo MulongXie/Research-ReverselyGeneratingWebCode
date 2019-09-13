@@ -29,7 +29,7 @@ def pre_processing(input_path):
 def processing(org, binary, main=True):
     if main:
         # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
-        boundary_rec, boundary_non_rec = det.boundary_detection(binary, show=False)
+        boundary_rec, boundary_non_rec = det.boundary_detection(binary)
         corners_rec = det.get_corner(boundary_rec)
         corners_non_rec = det.get_corner(boundary_non_rec)
 
@@ -68,7 +68,7 @@ def processing(org, binary, main=True):
     # *** used for img inspection ***
     # only consider rectangular components
     else:
-        boundary_rec, boundary_non_rec = det.boundary_detection(binary, show=False)
+        boundary_rec, boundary_non_rec = det.boundary_detection(binary)
         corners_rec = det.get_corner(boundary_rec)
         corners_block, corners_img, corners_compo = det.block_or_compo(org, binary, corners_rec)
         compos = seg.clipping(org, corners_compo)
