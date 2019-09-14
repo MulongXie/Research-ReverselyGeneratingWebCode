@@ -97,7 +97,7 @@ def nms(corners_compo_old, compos_class_old, corner_text):
     return corners_compo_refine, compos_class_refine
 
 
-def refine_text(org, corners_text, max_line_gap):
+def refine_text(org, corners_text, max_line_gap, min_word_length):
     def refine(bin):
         head = 0
         rear = 0
@@ -119,11 +119,12 @@ def refine_text(org, corners_text, max_line_gap):
                 gap += 1
 
             if gap > max_line_gap:
-                corners_text_refine.append((head + col_min, row_min, rear + col_min, row_max))
+                if (rear - head) > min_word_length:
+                    corners_text_refine.append((head + col_min, row_min, rear + col_min, row_max))
                 gap = 0
                 get_word = False
 
-        if get_word:
+        if get_word and (rear - head) > min_word_length:
             corners_text_refine.append((head + col_min, row_min, rear + col_min, row_max))
 
     corners_text_refine = []
@@ -157,7 +158,7 @@ def incorporate(img_path, compo_path, text_path, output_path, is_clip=False, cli
         if len(line) > 1:
             corners_text.append([int(c) for c in line[:-1].split(',')])
 
-    corners_text = refine_text(img, corners_text, 10)
+    corners_text = refine_text(img, corners_text, 20, 10)
     corners_compo_new, compos_class_new = nms(corners_compo, compos_class, corners_text)
 
     board = draw_bounding_box_class(img, corners_compo_new, compos_class_new)
