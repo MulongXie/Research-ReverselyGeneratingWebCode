@@ -6,5 +6,5 @@ class Config:
         self.class_number = len(self.class_map)
 
         self.DATA_PATH = "E:/Mulong/Datasets/dataset_webpage/elements"
-        # self.MODEL_PATH = 'E:/Mulong/Model/ui_compos/cnn6_icon.h5'
-        self.MODEL_PATH = 'E:/Mulong/Model/ui_compos/cnn8.h5'
+        self.MODEL_PATH = 'E:/Mulong/Model/ui_compos/cnn6_icon.h5'
+        # self.MODEL_PATH = 'E:/Mulong/Model/ui_compos/cnn8.h5'

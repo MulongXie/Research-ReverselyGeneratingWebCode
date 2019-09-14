@@ -127,7 +127,7 @@ def strip_img(corners_compo, compos_class, corners_img):
     return corners_compo_withuot_img, compo_class_withuot_img
 
 
-def compo_in_img(processing, org, binary, corners_img,
+def compo_in_img(processing, org, binary, clf, corners_img,
                  corners_block, corners_compo, compos_class):
     """
     Detect potential UI components inner img;
@@ -157,7 +157,7 @@ def compo_in_img(processing, org, binary, corners_img,
         clip_bin = binary[row_min:row_max, col_min:col_max]
         clip_bin = pre.reverse_binary(clip_bin)
 
-        corners_block_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, main=False)
+        corners_block_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, clf, main=False)
         corners_block_new = util.corner_cvt_relative_position(corners_block_new, col_min, row_min)
         corners_compo_new = util.corner_cvt_relative_position(corners_compo_new, col_min, row_min)
 

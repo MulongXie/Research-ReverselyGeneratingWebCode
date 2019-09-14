@@ -3,7 +3,6 @@ import ip_preprocessing as pre
 import ip_draw as draw
 import file_utils as file
 from CONFIG import Config
-from MODEL import CNN
 
 import cv2
 import time
@@ -11,7 +10,16 @@ import time
 start = time.clock()
 # initialization
 C = Config()
-is_clip = True
+model = 'svm'
+
+if model == 'cnn':
+    from MODEL_CNN import CNN
+    clf = CNN()
+    clf.load()
+elif model == 'svm':
+    from MODEL_SVM import SVM
+    clf = SVM()
+    clf.load()
 
 
 def save(org, binary, corners_block, corners_img, corners_compo, compos_class, corners_text, output_path_label, output_path_img_drawn, output_path_img_bin):
@@ -35,7 +43,7 @@ def save(org, binary, corners_block, corners_img, corners_compo, compos_class, c
 def uied(input_path_img, output_path_label, output_path_img_drawn, output_path_img_bin):
     print('UIED for', input_path_img)
     org, binary = body.pre_processing(input_path_img)
-    corners_block, corners_img, corners_compo, compos_class, corners_text = body.processing(org, binary, CNN)
+    corners_block, corners_img, corners_compo, compos_class, corners_text = body.processing(org, binary, clf)
     save(org, binary, corners_block, corners_img, corners_compo, compos_class, corners_text, output_path_label, output_path_img_drawn, output_path_img_bin)
     print('*** UI Elements Complete ***')
 

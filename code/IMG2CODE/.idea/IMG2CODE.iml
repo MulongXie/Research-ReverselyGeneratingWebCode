@@ -11,8 +11,9 @@
       <sourceFolder url="file://$MODULE_DIR$/ocr/ctpn" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ctpn" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/uied/lib" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/uied/cnn" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/body" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/uied/svm" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/uied/cnn" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

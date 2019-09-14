@@ -5,7 +5,6 @@ import ip_segment as seg
 import file_utils as file
 import ocr_classify_text as ocr
 from CONFIG import Config
-from MODEL import CNN
 
 import cv2
 import time
@@ -15,9 +14,6 @@ start = time.clock()
 is_ocr_check = False
 is_shrink_img = False
 
-CNN = CNN()
-CNN.load()
-
 
 def pre_processing(input_path):
     # *** Step 1 *** pre-processing: gray, gradient, binary
@@ -26,7 +22,7 @@ def pre_processing(input_path):
     return org, binary
 
 
-def processing(org, binary, main=True):
+def processing(org, binary, clf, main=True):
     if main:
         # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
         boundary_rec, boundary_non_rec = det.boundary_detection(binary)
@@ -39,7 +35,7 @@ def processing(org, binary, main=True):
 
         # *** Step 4 *** classification: clip and classify the components candidates -> ignore noises -> refine img
         compos = seg.clipping(org, corners_compo)
-        compos_class = CNN.predict(compos)
+        compos_class = clf.predict(compos)
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
 
         # *** Step 5 *** result refinement
@@ -47,7 +43,7 @@ def processing(org, binary, main=True):
             corners_img = det.img_shrink(org, binary, corners_img)
 
         # *** Step 6 *** recursive inspection: search components nested in components
-        corners_block, corners_img, corners_compo, compos_class = det.compo_in_img(processing, org, binary, corners_img, corners_block, corners_compo, compos_class)
+        corners_block, corners_img, corners_compo, compos_class = det.compo_in_img(processing, org, binary, clf, corners_img, corners_block, corners_compo, compos_class)
 
         # *** Step 7 *** ocr check and text detection from cleaned image
         if is_ocr_check:
@@ -72,7 +68,7 @@ def processing(org, binary, main=True):
         corners_rec = det.get_corner(boundary_rec)
         corners_block, corners_img, corners_compo = det.block_or_compo(org, binary, corners_rec)
         compos = seg.clipping(org, corners_compo)
-        compos_class = CNN.predict(compos)
+        compos_class = clf.predict(compos)
         corners_compo, compos_class = det.strip_img(corners_compo, compos_class, corners_img)
 
         return corners_block, corners_compo, compos_class
