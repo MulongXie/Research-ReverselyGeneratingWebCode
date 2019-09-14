@@ -161,7 +161,7 @@ def incorporate(img_path, compo_path, text_path, output_path, is_clip=False, cli
     corners_compo_new, compos_class_new = nms(corners_compo, compos_class, corners_text)
 
     board = draw_bounding_box_class(img, corners_compo_new, compos_class_new)
-    board = draw_bounding_box(board, corners_text, line=2)
+    board = draw_bounding_box(board, corners_text, line=1)
 
     cv2.imwrite(output_path, board)
 
