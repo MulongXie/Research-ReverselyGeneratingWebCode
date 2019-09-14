@@ -4,6 +4,7 @@ import numpy as np
 from os.path import join as pjoin
 import os
 
+from ip_preprocessing import preprocess
 from CONFIG import Config
 C = Config()
 compo_index = {'img':0, 'text':0, 'button':0, 'input':0, 'icon':0}
@@ -96,6 +97,50 @@ def nms(corners_compo_old, compos_class_old, corner_text):
     return corners_compo_refine, compos_class_refine
 
 
+def refine_text(org, corners_text, max_line_gap):
+    def refine(bin):
+        head = 0
+        rear = 0
+        gap = 0
+        get_word = False
+        for i in range(bin.shape[1]):
+            # find head
+            if not get_word and np.sum(bin[:, i]) != 0:
+                head = i
+                rear = i
+                get_word = True
+                continue
+
+            if get_word and np.sum(bin[:, i]) != 0:
+                rear = i
+                continue
+
+            if get_word and np.sum(bin[:, i]) == 0:
+                gap += 1
+
+            if gap > max_line_gap:
+                corners_text_refine.append((head + col_min, row_min, rear + col_min, row_max))
+                gap = 0
+                get_word = False
+
+        if get_word:
+            corners_text_refine.append((head + col_min, row_min, rear + col_min, row_max))
+
+    corners_text_refine = []
+    pad = 1
+    for corner in corners_text:
+        (col_min, row_min, col_max, row_max) = corner
+        col_min = max(col_min - pad, 0)
+        col_max = min(col_max + pad, org.shape[1])
+        row_min = max(row_min - pad, 0)
+        row_max = min(row_max + pad, org.shape[0])
+
+        clip = org[row_min:row_max, col_min:col_max]
+        clip_bin = preprocess(clip)
+        refine(clip_bin)
+    return corners_text_refine
+
+
 def incorporate(img_path, compo_path, text_path, output_path, is_clip=False, clip_path=None):
     img = cv2.imread(img_path)
     compo_f = open(compo_path, 'r')
@@ -112,10 +157,11 @@ def incorporate(img_path, compo_path, text_path, output_path, is_clip=False, cli
         if len(line) > 1:
             corners_text.append([int(c) for c in line[:-1].split(',')])
 
+    corners_text = refine_text(img, corners_text, 10)
     corners_compo_new, compos_class_new = nms(corners_compo, compos_class, corners_text)
 
     board = draw_bounding_box_class(img, corners_compo_new, compos_class_new)
-    board = draw_bounding_box(board, corners_text, line=1)
+    board = draw_bounding_box(board, corners_text, line=2)
 
     cv2.imwrite(output_path, board)
 

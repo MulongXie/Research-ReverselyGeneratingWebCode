@@ -22,7 +22,7 @@ class Config:
         self.ROOT_IMG_COMPONENT = pjoin(self.ROOT_OUTPUT, "components")
 
         self.THRESHOLD_MIN_GRADIENT = 4
-        self.THRESHOLD_OBJ_MIN_AREA = 240
+        self.THRESHOLD_OBJ_MIN_AREA = 175
         self.THRESHOLD_OBJ_MIN_PERIMETER = 70
 
         self.THRESHOLD_REC_MIN_EVENNESS = 0.7
