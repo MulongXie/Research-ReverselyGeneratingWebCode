@@ -1,24 +1,24 @@
 {
     "compos": [
         {
+            "column_max": 504,
+            "row_min": 0,
             "id": 0,
             "height": 899,
-            "column_max": 504,
-            "class": "div",
             "row_max": 899,
-            "row_min": 0,
             "width": 504,
-            "column_min": 0
+            "column_min": 0,
+            "class": "div"
         },
         {
-            "id": 0,
-            "height": 133,
-            "column_max": 317,
-            "class": "img",
-            "row_max": 357,
+            "column_max": 316,
             "row_min": 224,
-            "width": 192,
-            "column_min": 125
+            "id": 0,
+            "height": 125,
+            "row_max": 349,
+            "width": 185,
+            "column_min": 131,
+            "class": "img"
         }
     ]
 }
