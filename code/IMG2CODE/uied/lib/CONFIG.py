@@ -6,7 +6,9 @@ class Config:
 
     def __init__(self):
         self.ROOT_INPUT = "E:\Mulong\Datasets\\Dribbble"
-        self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v9_dribbble_ctpn"
+        # self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v9_dribbble_ctpn"    # cnn6 - components1
+        self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v9_dribbble_ctpn_v2"   # cnn8 - components3
+
         # self.ROOT_INPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\input\googleplay"
         # self.ROOT_OUTPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\output\googleplay"
         # self.ROOT_INPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\input\dribbble"
