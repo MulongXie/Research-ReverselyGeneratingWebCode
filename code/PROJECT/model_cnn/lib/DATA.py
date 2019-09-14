@@ -53,7 +53,7 @@ class Data:
             print(self.element_number)
 
         self.data_num = len(self.images)
-        print('%d Data Loaded' % self.data_num)
+        print('%d Data Loaded with Shape:(%d, %d)' % (self.data_num, shape[0], shape[1]))
 
     def generate_training_data(self, train_data_ratio=0.8):
         # transfer int into c dimensions one-hot array
@@ -65,7 +65,7 @@ class Data:
 
         # reshuffle
         np.random.seed(0)
-        self.images = np.random.permutation(self.images)
+        self.images = np.array(np.random.permutation(self.images))
         np.random.seed(0)
         self.labels = np.random.permutation(self.labels)
         Y = expand(self.labels, self.class_number)

@@ -1,7 +1,7 @@
 
 class Config:
     def __init__(self):
-        self.image_shape = (64, 64, 3)
+        self.image_shape = (80, 80, 3)
         self.class_map = ['button', 'input', 'icon', 'img', 'text']
         self.class_number = len(self.class_map)
 
