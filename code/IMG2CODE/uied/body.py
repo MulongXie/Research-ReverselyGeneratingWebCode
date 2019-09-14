@@ -4,7 +4,7 @@ import ip_draw as draw
 import ip_segment as seg
 import file_utils as file
 import ocr_classify_text as ocr
-from CONFIG import Config
+from CONFIG_UIED import Config
 
 import cv2
 import time

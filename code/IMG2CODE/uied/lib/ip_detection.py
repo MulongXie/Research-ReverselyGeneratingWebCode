@@ -5,7 +5,7 @@ import ip_draw as draw
 import ip_preprocessing as pre
 import ip_detection_utils as util
 import ocr_classify_text as ocr
-from CONFIG import Config
+from CONFIG_UIED import Config
 
 C = Config()
 

@@ -2,7 +2,7 @@ import pytesseract as pyt
 import cv2
 
 import ip_draw as draw
-from CONFIG import Config
+from CONFIG_UIED import Config
 
 C = Config()
 

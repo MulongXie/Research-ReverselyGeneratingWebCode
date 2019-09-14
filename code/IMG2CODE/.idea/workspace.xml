@@ -309,7 +309,7 @@
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.079557426" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5057956" side_tool="true" visible="true" weight="0.44989106" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49420443" visible="true" weight="0.44989106" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49420443" weight="0.44989106" />
       <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />

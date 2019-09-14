@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from CONFIG import Config
+from CONFIG_UIED import Config
 C = Config()
 
 

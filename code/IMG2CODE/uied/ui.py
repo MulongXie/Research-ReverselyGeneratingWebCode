@@ -2,7 +2,7 @@ import body
 import ip_preprocessing as pre
 import ip_draw as draw
 import file_utils as file
-from CONFIG import Config
+from CONFIG_UIED import Config
 
 import cv2
 import time
