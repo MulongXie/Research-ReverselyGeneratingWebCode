@@ -11,7 +11,7 @@ import time
 
 start = time.clock()
 # initialization
-is_ocr_check = False
+is_ocr = False
 is_shrink_img = False
 
 
@@ -46,13 +46,10 @@ def processing(org, binary, clf, main=True):
         corners_block, corners_img, corners_compo, compos_class = det.compo_in_img(processing, org, binary, clf, corners_img, corners_block, corners_compo, compos_class)
 
         # *** Step 7 *** ocr check and text detection from cleaned image
-        if is_ocr_check:
+        if is_ocr:
             corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
             corners_img, _ = det.rm_text(org, corners_img, ['img' for i in range(len(corners_img))])
             corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
-            img_clean = draw.draw_bounding_box(org, corners_img, color=(255, 255, 255), line=-1)
-            corners_word = ocr.text_detection(org, img_clean)
-            corners_text = ocr.text_merge_word_into_line(org, corners_word)
 
         # *** Step 8 *** merge overlapped components
         # corners_img = det.rm_img_in_compo(corners_img, corners_compo)
