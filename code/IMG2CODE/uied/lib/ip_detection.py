@@ -252,7 +252,6 @@ def block_or_compo(org, binary, corners,
         else:
             if height > min_block_edge:
                 imgs.append(corner)
-                # print(height, width)
             else:
                 if min_compo_w_h_ratio < width / height < max_compo_w_h_ratio:
                     compos.append(corner)

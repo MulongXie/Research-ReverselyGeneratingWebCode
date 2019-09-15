@@ -13,8 +13,8 @@ class Config:
         # self.ROOT_OUTPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\output\googleplay"
         # self.ROOT_INPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\input\dribbble"
         # self.ROOT_OUTPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\output\dribbble"
-        self.ROOT_IMG_ORG = pjoin(self.ROOT_INPUT, "org")
 
+        self.ROOT_IMG_ORG = pjoin(self.ROOT_INPUT, "org")
         self.ROOT_LABEL_UIED = pjoin(self.ROOT_OUTPUT, "ui_label")
         self.ROOT_IMG_DRAWN_UIED = pjoin(self.ROOT_OUTPUT, "ui_img_drawn")
         self.ROOT_IMG_GRADIENT_UIED = pjoin(self.ROOT_OUTPUT, "ui_img_gradient")
@@ -23,29 +23,26 @@ class Config:
         self.ROOT_IMG_MERGE = pjoin(self.ROOT_OUTPUT, "merge_drawn")
         self.ROOT_IMG_COMPONENT = pjoin(self.ROOT_OUTPUT, "components")
 
+        # Adjustable
         self.THRESHOLD_MIN_GRADIENT = 4
         self.THRESHOLD_OBJ_MIN_AREA = 175
         self.THRESHOLD_OBJ_MIN_PERIMETER = 70
+        self.THRESHOLD_REC_MIN_EVENNESS = 0.66
+        self.THRESHOLD_BLOCK_MIN_EDGE_LENGTH = 68
 
-        self.THRESHOLD_REC_MIN_EVENNESS = 0.7
+        # Frozen
         self.THRESHOLD_REC_MIN_EVENNESS_STRONG = 0.7
         self.THRESHOLD_REC_MAX_DENT_RATIO = 0.1
-
         self.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS = 8
         self.THRESHOLD_BLOCK_MAX_CROSS_POINT = 0.3
-        self.THRESHOLD_BLOCK_MIN_EDGE_LENGTH = 100
-
         self.THRESHOLD_UICOMPO_MIN_W_H_RATIO = 0.4
         self.THRESHOLD_UICOMPO_MAX_W_H_RATIO = 10
-
         self.THRESHOLD_TEXT_MAX_WORD_GAP = 10
         self.THRESHOLD_TEXT_MAX_HEIGHT = 100
         self.THRESHOLD_TEXT_MAX_WIDTH = 150
-
         self.THRESHOLD_LINE_THICKNESS = 5
         self.THRESHOLD_LINE_MIN_LENGTH_H = 50
         self.THRESHOLD_LINE_MIN_LENGTH_V = 50
-
         self.OCR_PADDING = 5
         self.OCR_MIN_WORD_AREA = 0.45
 

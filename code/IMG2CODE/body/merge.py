@@ -104,7 +104,7 @@ def nms(org, corners_compo_old, compos_class_old, corner_text):
                     noise = True
                     break
         # check if img is text paragraph
-        if compos_class_old[i] == 'img' and area_text / area_a > 0.5:
+        if compos_class_old[i] == 'img' and area_text / area_a > 0.45:
             noise = True
 
         if not noise:
