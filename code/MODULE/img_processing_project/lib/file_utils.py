@@ -45,19 +45,30 @@ def save_corners_json(file_path, corners, compo_classes):
     json.dump(components, f_out, indent=4)
 
 
-def save_clipping(org, output_root, corners, compo_classes):
+def save_clipping(org, output_root, corners, compo_classes, compo_index):
     if not os.path.exists(output_root):
         os.mkdir(output_root)
+    pad = 2
     for i in range(len(corners)):
         compo = compo_classes[i]
-        path = pjoin(output_root, compo)
         (up_left, bottom_right) = corners[i]
         (col_min, row_min) = up_left
         (col_max, row_max) = bottom_right
-        if not os.path.exists(path):
-            os.mkdir(path)
+        col_min = max(col_min - pad, 0)
+        col_max = min(col_max + pad, org.shape[1])
+        row_min = max(row_min - pad, 0)
+        row_max = min(row_max + pad, org.shape[0])
+
+        # if component type already exists, index increase by 1, otherwise add this type
+        compo_path = pjoin(output_root, compo)
+        if compo_classes[i] not in compo_index:
+            compo_index[compo_classes[i]] = 0
+            if not os.path.exists(compo_path):
+                os.mkdir(compo_path)
+        else:
+            compo_index[compo_classes[i]] += 1
         clip = org[row_min:row_max, col_min:col_max]
-        cv2.imwrite(pjoin(path, str(i) + '.png'), clip)
+        cv2.imwrite(pjoin(compo_path, str(compo_index[compo_classes[i]]) + '.png'), clip)
 
 
 def timer(start):

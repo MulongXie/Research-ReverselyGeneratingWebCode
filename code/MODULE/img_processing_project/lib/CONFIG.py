@@ -12,15 +12,15 @@ class Config:
         self.ROOT_IMG_DRAWN = pjoin(self.ROOT_OUTPUT, "ip_img_drawn")
         self.ROOT_IMG_GRADIENT = pjoin(self.ROOT_OUTPUT, "ip_img_gradient")
         self.ROOT_IMG_CLEAN = pjoin(self.ROOT_OUTPUT, "ip_img_clean")
-        self.ROOT_IMG_SEGMENT = pjoin(self.ROOT_OUTPUT, "ip_img_segment")
+        self.ROOT_IMG_COMPONENT = pjoin(self.ROOT_OUTPUT, "ip_img_component")
 
         self.THRESHOLD_MIN_GRADIENT = 3
 
         self.THRESHOLD_OBJ_MIN_AREA = 200
         self.THRESHOLD_OBJ_MIN_PERIMETER = 80
 
-        self.THRESHOLD_REC_MIN_EVENNESS = 0.7
-        self.THRESHOLD_REC_MIN_EVENNESS_STRONG = 0.7
+        self.THRESHOLD_REC_MIN_EVENNESS = 0.6
+        self.THRESHOLD_REC_MIN_EVENNESS_STRONG = 0.6
         self.THRESHOLD_REC_MAX_DENT_RATIO = 0.1
 
         self.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS = 8
@@ -54,7 +54,7 @@ class Config:
                       'text': (77, 77, 255), 'search': (255, 0, 166), 'list': (166, 0, 255), 'select': (166, 166, 166),
                       'button': (0, 166, 255)}
 
-    def build_output_folders(self, is_segment):
+    def build_output_folders(self, is_clip):
         if not os.path.exists(self.ROOT_LABEL):
             os.mkdir(self.ROOT_LABEL)
         if not os.path.exists(self.ROOT_IMG_DRAWN):
@@ -63,5 +63,5 @@ class Config:
             os.mkdir(self.ROOT_IMG_GRADIENT)
         if not os.path.exists(self.ROOT_IMG_CLEAN):
             os.mkdir(self.ROOT_IMG_CLEAN)
-        if is_segment and not os.path.exists(self.ROOT_IMG_SEGMENT):
-            os.mkdir(self.ROOT_IMG_SEGMENT)
+        if is_clip and not os.path.exists(self.ROOT_IMG_COMPONENT):
+            os.mkdir(self.ROOT_IMG_COMPONENT)

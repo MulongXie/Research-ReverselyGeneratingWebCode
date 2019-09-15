@@ -1,18 +1,18 @@
+import cv2
+import glob
 import os
-import pandas as pd
+from os.path import join as pjoin
 import numpy as np
-import shutil
 
-data_position = 'D:\datasets\dataset_webpage\data'
-root = os.path.join(data_position, 'img_relabelled')
-img_root = os.path.join(root, 'img')
-label_root = os.path.join(root, 'label')
+g = glob.glob('C:\\Users\Shae\Desktop\\text\*')
 
-i = 0
-for l in os.listdir(img_root):
-    shutil.copy(os.path.join(img_root, (l + '/org.png')), 'input/' + l + '.png')
+root = '\\'.join(g[0].split('\\')[:-1])
+for i in range(len(g)):
 
-    print(os.path.join(img_root, (l + '/org.png')))
-    i += 1
-    if i > 5:
-        break
+    # img = cv2.imread(g[i])
+    # if img.shape[0] > 35 and img.shape[1] > 35:
+    #     os.remove(g[i])
+
+    os.renames(g[i], pjoin(root, str(i) + 'a.png'))
+
+print(len(g))

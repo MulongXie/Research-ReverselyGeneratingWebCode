@@ -11,8 +11,11 @@ import glob
 from os.path import join as pyjoin
 
 # initialization
+is_clip = True
+compo_index = {'button':613, 'input':315, 'list':12, 'search':22, 'select':8}
+
 C = Config()
-C.build_output_folders(False)
+C.build_output_folders(is_clip)
 input_root = C.ROOT_INPUT
 input_paths = glob.glob(pyjoin(input_root, '*.png'))
 input_paths = sorted(input_paths, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
@@ -39,12 +42,14 @@ def save(index, org, binary, corners_block, corners_img, corners_compo, compos_c
     file.save_corners_json(out_label, corners_block, ['div' for i in range(len(corners_block))])
     file.save_corners_json(out_label, corners_img, ['div' for i in range(len(corners_img))])
     file.save_corners_json(out_label, corners_compo, compos_class)
+    if is_clip:
+        file.save_clipping(org, C.ROOT_IMG_COMPONENT, corners_compo, compos_class, compo_index)
 
 
 def _main():
     # start image and end image
-    start_index = 20
-    end_index = 50
+    start_index = 1
+    end_index = 100
 
     for input_path in input_paths:
         index = input_path.split('\\')[-1][:-4]

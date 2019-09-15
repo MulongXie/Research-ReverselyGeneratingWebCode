@@ -1,6 +1,5 @@
 import pytesseract as pyt
 import cv2
-import ip_preprocessing as pre
 
 img = cv2.imread('8.png')
 org = img.copy()

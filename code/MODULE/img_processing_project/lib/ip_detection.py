@@ -40,7 +40,7 @@ def select_corner(corners, compos_class, class_name):
     return corners_wanted
 
 
-def merge_corner(corners, compos_class):
+def merge_corner(corners, compos_class, is_merge_nested):
     """
     i. merge overlapped corners
     ii. remove nested corners
@@ -69,15 +69,16 @@ def merge_corner(corners, compos_class):
         is_intersected = False
         for j in range(len(new_corners)):
             r = util.corner_relation(corners[i], new_corners[j])
-            # if corners[i] is in new_corners[j], ignore corners[i]
-            if r == -1:
-                is_intersected = True
-                break
-            # if new_corners[j] is in corners[i], replace new_corners[j] with corners[i]
-            elif r == 1:
-                is_intersected = True
-                new_corners[j] = corners[i]
-                new_class[j] = compos_class[i]
+            if is_merge_nested:
+                # if corners[i] is in new_corners[j], ignore corners[i]
+                if r == -1:
+                    is_intersected = True
+                    break
+                # if new_corners[j] is in corners[i], replace new_corners[j] with corners[i]
+                elif r == 1:
+                    is_intersected = True
+                    new_corners[j] = corners[i]
+                    new_class[j] = compos_class[i]
             # if [i] and [j] are overlapped
             if r == 2:
                 is_intersected = True
@@ -180,7 +181,6 @@ def compo_in_img(processing, org, binary, corners_img,
         if compo_area / img_area < 0.5:
             corners_img_new.append(corner)
 
-    corners_compo, compos_class = merge_corner(corners_compo, compos_class)
     corners_img = rm_img_in_compo(corners_img_new, corners_compo)
 
     return corners_block, corners_img, corners_compo, compos_class

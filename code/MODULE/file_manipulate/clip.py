@@ -57,6 +57,7 @@ def fetch_and_clip_csv(img, label, show=False):
 
 def read_labels_csv():
     label_paths = glob.glob(pjoin(ROOT_LABEL, '*csv'))
+    label_paths.sort(key=lambda x: int(x.split('\\')[-1][:-4]))
 
     for label_path in label_paths:
         index = label_path.split('\\')[-1][:-4]
@@ -69,5 +70,6 @@ def read_labels_csv():
         fetch_and_clip_csv(img, label)
 
     print(element_number)
+
 
 read_labels_csv()

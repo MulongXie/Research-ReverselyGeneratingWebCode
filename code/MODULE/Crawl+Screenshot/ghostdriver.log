@@ -1,5 +1,79 @@
-[INFO  - 2019-07-31T06:43:03.214Z] GhostDriver - Main - running on port 61585
-[INFO  - 2019-07-31T06:43:07.665Z] Session [74a21db0-b35e-11e9-afac-e1e429d994a3] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
-[INFO  - 2019-07-31T06:43:07.665Z] Session [74a21db0-b35e-11e9-afac-e1e429d994a3] - page.customHeaders:  - {}
-[INFO  - 2019-07-31T06:43:07.665Z] Session [74a21db0-b35e-11e9-afac-e1e429d994a3] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
-[INFO  - 2019-07-31T06:43:07.665Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 74a21db0-b35e-11e9-afac-e1e429d994a3
+[INFO  - 2019-08-06T07:46:23.131Z] GhostDriver - Main - running on port 60790
+[INFO  - 2019-08-06T07:46:27.618Z] Session [4c0f94d0-b81e-11e9-ad6d-8bd3f3b6c20a] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
+[INFO  - 2019-08-06T07:46:27.618Z] Session [4c0f94d0-b81e-11e9-ad6d-8bd3f3b6c20a] - page.customHeaders:  - {}
+[INFO  - 2019-08-06T07:46:27.618Z] Session [4c0f94d0-b81e-11e9-ad6d-8bd3f3b6c20a] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2019-08-06T07:46:27.618Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 4c0f94d0-b81e-11e9-ad6d-8bd3f3b6c20a
+[ERROR - 2019-08-06T07:46:28.597Z] Session [4c0f94d0-b81e-11e9-ad6d-8bd3f3b6c20a] - page.onError - msg: ReferenceError: Can't find variable: Symbol
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-08-06T07:46:28.598Z] Session [4c0f94d0-b81e-11e9-ad6d-8bd3f3b6c20a] - page.onError - stack:
+  _iterableToArray (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  _toConsumableArray (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  o (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  o (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  o (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  o (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  o (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  o (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  (anonymous function) (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  o (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+  r (https://www.apple.com/metrics/ac-analytics/2.7.0/scripts/ac-analytics.js:1)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-08-06T07:46:29.171Z] Session [4c0f94d0-b81e-11e9-ad6d-8bd3f3b6c20a] - page.onError - msg: ReferenceError: Can't find variable: WeakMap
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-08-06T07:46:29.171Z] Session [4c0f94d0-b81e-11e9-ad6d-8bd3f3b6c20a] - page.onError - stack:
+  e (https://www.apple.com/v/home/el/built/scripts/main.built.js:5)
+  t (https://www.apple.com/v/home/el/built/scripts/main.built.js:5)
+  value (https://www.apple.com/v/home/el/built/scripts/main.built.js:3)
+  (anonymous function) (https://www.apple.com/v/home/el/built/scripts/main.built.js:3)
+  forEach (https://www.apple.com/v/home/el/built/scripts/head.built.js:2)
+  value (https://www.apple.com/v/home/el/built/scripts/main.built.js:3)
+  value (https://www.apple.com/v/home/el/built/scripts/main.built.js:3)
+  exports (https://www.apple.com/v/home/el/built/scripts/main.built.js:1)
+  (anonymous function) (https://www.apple.com/v/home/el/built/scripts/main.built.js:6)
+  r (https://www.apple.com/v/home/el/built/scripts/main.built.js:1)
+  e (https://www.apple.com/v/home/el/built/scripts/main.built.js:1)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-08-06T07:46:29.341Z] Session [4c0f94d0-b81e-11e9-ad6d-8bd3f3b6c20a] - page.onError - msg: TypeError: undefined is not a constructor (evaluating 'ArrayBuffer.isView(t)')
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2019-08-06T07:46:29.341Z] Session [4c0f94d0-b81e-11e9-ad6d-8bd3f3b6c20a] - page.onError - stack:
+  p (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  (anonymous function) (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  c (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  a (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  (anonymous function) (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  (anonymous function) (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  r (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  (anonymous function) (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  (anonymous function) (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  r (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  (anonymous function) (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  (anonymous function) (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  r (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  (anonymous function) (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  exports (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  exports (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  exports (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  t (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  (anonymous function) (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  (anonymous function) (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  r (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+  t (https://www.apple.com/ac/ac-films/6.0.0/scripts/autofilms.built.js:1)
+
+  phantomjs://platform/console++.js:263 in error
