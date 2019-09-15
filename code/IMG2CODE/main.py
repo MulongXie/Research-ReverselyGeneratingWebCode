@@ -15,8 +15,9 @@ is_clip = True
 C = Config()
 C.build_output_folders(is_clip)
 
-start_index = 0
-end_index = 2000
+start_index = 863
+end_index = 10000
+img_section = (1500, 1500)  # selected img section, height and width
 
 input_paths_img = glob.glob(pjoin(C.ROOT_INPUT, '*.png'))
 input_paths_img = sorted(input_paths_img, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
@@ -38,11 +39,11 @@ for input_path_img in input_paths_img:
 
     try:
         if is_ctpn:
-            ocr.ctpn(input_path_img, label_text, img_ctpn_drawn)
+            ocr.ctpn(input_path_img, label_text, img_ctpn_drawn, img_section)
         if is_uied:
-            ui.uied(input_path_img, label_compo, img_uied_drawn, img_uied_grad)
+            ui.uied(input_path_img, label_compo, img_uied_drawn, img_uied_grad, img_section)
         if is_merge:
-            merge.incorporate(input_path_img, label_compo, label_text, img_merge, is_clip)
+            merge.incorporate(input_path_img, label_compo, label_text, img_merge, img_section, is_clip)
     except:
         print("Bad Img")
 

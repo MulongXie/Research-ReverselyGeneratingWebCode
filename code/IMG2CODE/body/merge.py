@@ -159,8 +159,9 @@ def refine_text(org, corners_text, max_line_gap, min_word_length):
     return corners_text_refine
 
 
-def incorporate(img_path, compo_path, text_path, output_path, is_clip=False, clip_path=None):
+def incorporate(img_path, compo_path, text_path, output_path, img_section, is_clip=False, clip_path=None):
     img = cv2.imread(img_path)
+    img = img[:img_section[0], :img_section[1]]
     compo_f = open(compo_path, 'r')
     text_f = open(text_path, 'r')
 
@@ -182,6 +183,8 @@ def incorporate(img_path, compo_path, text_path, output_path, is_clip=False, cli
     board = draw_bounding_box(board, corners_text, line=1)
 
     cv2.imwrite(output_path, board)
+
+    print('*** Save to', output_path, ' ***')
 
     if is_clip:
         save_clipping(img, corners_compo_new, compos_class_new, compo_index, clip_path)

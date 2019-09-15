@@ -15,9 +15,9 @@ is_ocr_check = False
 is_shrink_img = False
 
 
-def pre_processing(input_path):
+def pre_processing(input_path, img_section):
     # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img(input_path, (0, 3000))  # cut out partial img
+    org, gray = pre.read_img(input_path, img_section)  # cut out partial img
     binary = pre.preprocess(gray)
     return org, binary
 
@@ -50,16 +50,16 @@ def processing(org, binary, clf, main=True):
             corners_block, _ = det.rm_text(org, corners_block, ['block' for i in range(len(corners_block))])
             corners_img, _ = det.rm_text(org, corners_img, ['img' for i in range(len(corners_img))])
             corners_compo, compos_class = det.rm_text(org, corners_compo, compos_class)
-        img_clean = draw.draw_bounding_box(org, corners_img, color=(255, 255, 255), line=-1)
-        corners_word = ocr.text_detection(org, img_clean)
-        corners_text = ocr.text_merge_word_into_line(org, corners_word)
+            img_clean = draw.draw_bounding_box(org, corners_img, color=(255, 255, 255), line=-1)
+            corners_word = ocr.text_detection(org, img_clean)
+            corners_text = ocr.text_merge_word_into_line(org, corners_word)
 
         # *** Step 8 *** merge overlapped components
         # corners_img = det.rm_img_in_compo(corners_img, corners_compo)
         corners_img, _ = det.merge_corner(org, corners_img, ['img' for i in range(len(corners_img))], is_merge_nested_same=False)
         corners_compo, compos_class = det.merge_corner(org, corners_compo, compos_class, is_merge_nested_same=True)
 
-        return corners_block, corners_img, corners_compo, compos_class, corners_text
+        return corners_block, corners_img, corners_compo, compos_class
 
     # *** used for img inspection ***
     # only consider rectangular components
