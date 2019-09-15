@@ -1,64 +1,64 @@
 {
     "compos": [
         {
+            "column_max": 798,
+            "id": 0,
+            "column_min": 0,
+            "row_min": 0,
+            "width": 798,
             "class": "img",
             "height": 413,
-            "row_min": 0,
-            "row_max": 413,
-            "column_min": 0,
-            "id": 0,
-            "width": 798,
-            "column_max": 798
+            "row_max": 413
         },
         {
-            "class": "img",
-            "height": 105,
-            "row_min": 457,
-            "row_max": 562,
+            "column_max": 268,
+            "id": 1,
             "column_min": 84,
-            "id": 1,
+            "row_min": 457,
             "width": 184,
-            "column_max": 268
-        },
-        {
             "class": "img",
             "height": 105,
-            "row_min": 457,
-            "row_max": 562,
-            "column_min": 307,
+            "row_max": 562
+        },
+        {
+            "column_max": 491,
             "id": 2,
+            "column_min": 307,
+            "row_min": 457,
             "width": 184,
-            "column_max": 491
-        },
-        {
             "class": "img",
             "height": 105,
-            "row_min": 457,
-            "row_max": 562,
-            "column_min": 530,
+            "row_max": 562
+        },
+        {
+            "column_max": 714,
             "id": 3,
+            "column_min": 530,
+            "row_min": 457,
             "width": 184,
-            "column_max": 714
+            "class": "img",
+            "height": 105,
+            "row_max": 562
         },
         {
-            "class": "text",
-            "height": 10,
-            "width": 45,
-            "row_min": 273,
-            "row_max": 283,
-            "column_min": 111,
+            "column_max": 156,
             "id": 0,
-            "column_max": 156
+            "height": 10,
+            "column_min": 111,
+            "row_min": 273,
+            "width": 45,
+            "row_max": 283,
+            "class": "text"
         },
         {
-            "class": "button",
-            "height": 24,
-            "width": 112,
-            "row_min": 266,
-            "row_max": 290,
-            "column_min": 86,
+            "column_max": 198,
             "id": 1,
-            "column_max": 198
+            "height": 24,
+            "column_min": 86,
+            "row_min": 266,
+            "width": 112,
+            "row_max": 290,
+            "class": "button"
         }
     ]
 }

@@ -5,7 +5,7 @@ from os.path import join as pjoin
 import os
 
 from ip_preprocessing import preprocess
-from CONFIG_UIED import Config
+from CONFIG import Config
 C = Config()
 compo_index = {'img':0, 'text':0, 'button':0, 'input':0, 'icon':0}
 

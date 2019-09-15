@@ -5,7 +5,7 @@ import ocr
 import ui
 import merge
 from file_utils import time_start, timer_end
-from CONFIG_UIED import Config
+from CONFIG import Config
 
 is_ctpn = True
 is_uied = True
