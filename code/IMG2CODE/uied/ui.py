@@ -10,7 +10,7 @@ import time
 start = time.clock()
 # initialization
 C = Config()
-model = 'svm'
+model = 'cnn'
 
 if model == 'cnn':
     from MODEL_CNN import CNN
