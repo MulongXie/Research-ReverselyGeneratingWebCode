@@ -1,10 +1,10 @@
 from file_utils import time_start, timer_end
 
 is_ctpn = False
-is_uied = False
-is_merge = True
+is_uied = True
+is_merge = False
 
-PATH_IMG_INPUT = 'data\\input\\dribbble\\985.png'
+PATH_IMG_INPUT = 'data\\input\\web\\3.png'
 PATH_LABEL_COMPO = 'data\\output\\compo.json'
 PATH_LABEL_TEXT = 'data\\output\\ocr.txt'
 PATH_CTPN_DRAWN = 'data\\output\\ctpn.png'
@@ -15,14 +15,15 @@ PATH_COMPONENT = 'data\\output\\components'
 
 start = time_start()
 
+img_section = (1500, 1500)  # selected img section, height and width
 if is_ctpn:
     import ocr
-    ocr.ctpn(PATH_IMG_INPUT, PATH_LABEL_TEXT, PATH_CTPN_DRAWN)
+    ocr.ctpn(PATH_IMG_INPUT, PATH_LABEL_TEXT, PATH_CTPN_DRAWN, img_section)
 if is_uied:
     import ui
-    ui.uied(PATH_IMG_INPUT, PATH_LABEL_COMPO, PATH_UIED_DRAWN, PATH_UIED_BIN)
+    ui.uied(PATH_IMG_INPUT, PATH_LABEL_COMPO, PATH_UIED_DRAWN, PATH_UIED_BIN, img_section)
 if is_merge:
     import merge
-    merge.incorporate(PATH_IMG_INPUT, PATH_LABEL_COMPO, PATH_LABEL_TEXT, PATH_MERGE, is_clip=True, clip_path=PATH_COMPONENT)
+    merge.incorporate(PATH_IMG_INPUT, PATH_LABEL_COMPO, PATH_LABEL_TEXT, PATH_MERGE, img_section, is_clip=True, clip_path=PATH_COMPONENT)
 
 timer_end(start)

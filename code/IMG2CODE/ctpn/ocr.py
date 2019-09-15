@@ -52,9 +52,10 @@ def draw_boxes(img, boxes, scale, output_path_label, output_path_img):
     cv2.imwrite(output_path_img, img)
 
 
-def ctpn(input_path_img, output_path_label, output_path_img):
+def ctpn(input_path_img, output_path_label, output_path_img, img_section):
     print(('CTPN for {:s}'.format(input_path_img)))
     img = cv2.imread(input_path_img)
+    img = img[:img_section[0], :img_section[1]]
     img, scale = resize_im(img, scale=TextLineCfg.SCALE, max_scale=TextLineCfg.MAX_SCALE)
     blobs, im_scales = _get_blobs(img, None)
     if cfg.TEST.HAS_RPN:

@@ -5,7 +5,7 @@ from CONFIG_UIED import Config
 C = Config()
 
 
-def read_img(path, clip_h=(0, 3000), resize_h=None):
+def read_img(path, img_section, resize_h=None):
 
     def resize_by_height(org):
         w_h_ratio = org.shape[1] / org.shape[0]
@@ -15,7 +15,7 @@ def read_img(path, clip_h=(0, 3000), resize_h=None):
 
     try:
         img = cv2.imread(path)
-        img = img[clip_h[0]:clip_h[1]]
+        img = img[:img_section[0], :img_section[1]]
 
         if resize_h is not None:
             img = resize_by_height(img)

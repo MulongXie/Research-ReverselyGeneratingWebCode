@@ -22,13 +22,12 @@ elif model == 'svm':
     clf.load()
 
 
-def save(org, binary, corners_block, corners_img, corners_compo, compos_class, corners_text, output_path_label, output_path_img_drawn, output_path_img_bin):
+def save(org, binary, corners_block, corners_img, corners_compo, compos_class, output_path_label, output_path_img_drawn, output_path_img_bin):
     # *** Step 7 *** post-processing: remove img elements from original image and segment into smaller size
     # draw results
     draw_bounding = draw.draw_bounding_box_class(org, corners_compo, compos_class)
     draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_block, ['div' for i in range(len(corners_block))])
     draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_img, ['img' for i in range(len(corners_img))])
-    draw_bounding = draw.draw_bounding_box(draw_bounding, corners_text, line=1)
     # save results
     binary_r = pre.reverse_binary(binary)
     cv2.imwrite('data/output/org.png', org)
@@ -40,12 +39,12 @@ def save(org, binary, corners_block, corners_img, corners_compo, compos_class, c
     file.save_corners_json(output_path_label, corners_compo, compos_class, new=False)
 
 
-def uied(input_path_img, output_path_label, output_path_img_drawn, output_path_img_bin):
+def uied(input_path_img, output_path_label, output_path_img_drawn, output_path_img_bin, img_section):
     print('UIED for', input_path_img)
-    org, binary = body.pre_processing(input_path_img)
-    corners_block, corners_img, corners_compo, compos_class, corners_text = body.processing(org, binary, clf)
-    save(org, binary, corners_block, corners_img, corners_compo, compos_class, corners_text, output_path_label, output_path_img_drawn, output_path_img_bin)
-    print('*** UI Elements Complete ***')
+    org, binary = body.pre_processing(input_path_img, img_section)
+    corners_block, corners_img, corners_compo, compos_class = body.processing(org, binary, clf)
+    save(org, binary, corners_block, corners_img, corners_compo, compos_class, output_path_label, output_path_img_drawn, output_path_img_bin)
+    print('*** UI Detection Complete ***')
 
 
 
