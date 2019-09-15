@@ -8,15 +8,11 @@ class Config:
         # self.ROOT_INPUT = "E:\Mulong\Datasets\\Dribbble"
         # self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v9_dribbble_ctpn_cnn6"    # cnn6 - components1
         self.ROOT_INPUT = "E:\Mulong\Datasets\google_play\select"
-        self.ROOT_OUTPUT = "E:\Mulong\Result\\rico"    # cnn6 - components1
-
-        # self.ROOT_INPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\input\googleplay"
-        # self.ROOT_OUTPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\output\googleplay"
-        # self.ROOT_INPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\input\dribbble"
-        # self.ROOT_OUTPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\output\dribbble"
+        self.ROOT_OUTPUT = "E:\Mulong\Result\\rico"
         # self.ROOT_INPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\input\\app"
         # self.ROOT_OUTPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\output\\app"
 
+        # Frozen
         self.ROOT_IMG_ORG = pjoin(self.ROOT_INPUT, "org")
         self.ROOT_LABEL_UIED = pjoin(self.ROOT_OUTPUT, "ui_label")
         self.ROOT_IMG_DRAWN_UIED = pjoin(self.ROOT_OUTPUT, "ui_img_drawn")
