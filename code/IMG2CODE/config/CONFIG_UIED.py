@@ -9,11 +9,11 @@ class Config:
         self.THRESHOLD_MIN_GRADIENT = 4
         self.THRESHOLD_OBJ_MIN_AREA = 175
         self.THRESHOLD_OBJ_MIN_PERIMETER = 70
-        self.THRESHOLD_REC_MIN_EVENNESS = 0.66
-        self.THRESHOLD_BLOCK_MIN_EDGE_LENGTH = 70   # dribbble:68 app:210 web:70
-        self.THRESHOLD_UICOMPO_MAX_W_H_RATIO = 22   # dribbble:10 app:10 web:22
+        self.THRESHOLD_BLOCK_MIN_EDGE_LENGTH = 180   # dribbble:68 rico:210 web:70
+        self.THRESHOLD_UICOMPO_MAX_W_H_RATIO = 22   # dribbble:10 rico:10 web:22
 
         # Frozen
+        self.THRESHOLD_REC_MIN_EVENNESS = 0.66
         self.THRESHOLD_REC_MIN_EVENNESS_STRONG = 0.7
         self.THRESHOLD_REC_MAX_DENT_RATIO = 0.1
         self.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS = 8

@@ -6,17 +6,16 @@ class Config:
 
     def __init__(self):
         # self.ROOT_INPUT = "E:\Mulong\Datasets\\Dribbble"
-        # self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v9_dribbble_ctpn"    # cnn6 - components1
-        # self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v9_dribbble_ctpn_v2"   # cnn8 - components3
-        self.ROOT_INPUT = "E:\\Datasets\\page10000\\org"
-        self.ROOT_OUTPUT = "E:\\UI2CODE\\web"
+        # self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v9_dribbble_ctpn_cnn6"    # cnn6 - components1
+        self.ROOT_INPUT = "E:\Mulong\Datasets\google_play\select"
+        self.ROOT_OUTPUT = "E:\Mulong\Result\\rico"    # cnn6 - components1
 
         # self.ROOT_INPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\input\googleplay"
         # self.ROOT_OUTPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\output\googleplay"
-        # self.ROOT_INPUT = "D:\git_file\github\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\input\dribbble"
-        # self.ROOT_OUTPUT = "D:\git_file\github\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\output\dribbble"
-        # self.ROOT_INPUT = "D:\git_file\github\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\input\web"
-        # self.ROOT_OUTPUT = "D:\git_file\github\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\output\web"
+        # self.ROOT_INPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\input\dribbble"
+        # self.ROOT_OUTPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\output\dribbble"
+        # self.ROOT_INPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\input\\app"
+        # self.ROOT_OUTPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\output\\app"
 
         self.ROOT_IMG_ORG = pjoin(self.ROOT_INPUT, "org")
         self.ROOT_LABEL_UIED = pjoin(self.ROOT_OUTPUT, "ui_label")

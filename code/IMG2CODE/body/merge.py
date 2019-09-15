@@ -184,7 +184,7 @@ def incorporate(img_path, compo_path, text_path, output_path, img_section, is_cl
 
     cv2.imwrite(output_path, board)
 
-    print('*** Save to', output_path, ' ***')
+    print('*** Merge Complete and Save to', output_path, '***')
 
     if is_clip:
         save_clipping(img, corners_compo_new, compos_class_new, compo_index, clip_path)
