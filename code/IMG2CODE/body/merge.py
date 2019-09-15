@@ -60,21 +60,23 @@ def save_clipping(org, corners, compo_classes, compo_index, output_root=C.ROOT_I
         cv2.imwrite(pjoin(compo_path, str(compo_index[compo_classes[i]]) + '.png'), clip)
 
 
-def nms(corners_compo_old, compos_class_old, corner_text):
+def nms(org, corners_compo_old, compos_class_old, corner_text):
     corners_compo_refine = []
     compos_class_refine = []
 
     corner_text = np.array(corner_text)
     for i in range(len(corners_compo_old)):
-        if compos_class_old[i] != 'img':
-            corners_compo_refine.append(corners_compo_old[i])
-            compos_class_refine.append(compos_class_old[i])
-            continue
+        # if compos_class_old[i] != 'img':
+        #     corners_compo_refine.append(corners_compo_old[i])
+        #     compos_class_refine.append(compos_class_old[i])
+        #     continue
 
         a = corners_compo_old[i]
         noise = False
         area_a = (a[2] - a[0]) * (a[3] - a[1])
+        area_text = 0
         for b in corner_text:
+            area_b = (b[2] - b[0]) * (b[3] - b[1])
             # get the intersected area
             col_min_s = max(a[0], b[0])
             row_min_s = max(a[1], b[1])
@@ -85,11 +87,26 @@ def nms(corners_compo_old, compos_class_old, corner_text):
             inter = w * h
 
             # calculate IoU
-            iou = inter / area_a
+            ioa = inter / area_a
+            iob = inter / area_b
 
-            if iou > 0.2:
-                noise = True
-                break
+            if compos_class_old[i] == 'img':
+                # sum up all text area in a img
+                if iob > 0.8:
+                    area_text += area_b
+                # loose threshold for img
+                if ioa > 0.3:
+                    noise = True
+                    break
+            else:
+                # tight threshold for other components
+                if ioa > 0.8:
+                    noise = True
+                    break
+        # check if img is text paragraph
+        if compos_class_old[i] == 'img' and area_text / area_a > 0.5:
+            noise = True
+
         if not noise:
             corners_compo_refine.append(corners_compo_old[i])
             compos_class_refine.append(compos_class_old[i])
@@ -159,7 +176,7 @@ def incorporate(img_path, compo_path, text_path, output_path, is_clip=False, cli
             corners_text.append([int(c) for c in line[:-1].split(',')])
 
     corners_text = refine_text(img, corners_text, 20, 10)
-    corners_compo_new, compos_class_new = nms(corners_compo, compos_class, corners_text)
+    corners_compo_new, compos_class_new = nms(img, corners_compo, compos_class, corners_text)
 
     board = draw_bounding_box_class(img, corners_compo_new, compos_class_new)
     board = draw_bounding_box(board, corners_text, line=1)
