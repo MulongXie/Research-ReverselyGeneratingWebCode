@@ -6,27 +6,16 @@ import pandas as pd
 import segment_drawLabel as sd
 
 
-def segment_img(segment_size, img_name=0, img_root_path="D:\datasets\dataset_webpage\data\segment\img", show=True):
-    img_path = os.path.join(img_root_path, str(img_name))
-    img_input_path = os.path.join(img_path, 'org.png')
-    img_output_path = os.path.join(img_path, 'segment')
+def segment_img(segment_size, img, segment_path, show=False):
 
-    print(img_path)
-
-    img = cv2.imread(img_input_path)
     height_bottom = np.shape(img)[0]
-
-    print(np.shape(img))
 
     h = 0
     segment_no = 0
     while h < height_bottom:
-        segment_range = {}
-
-        segment_range['top'] = h
-        segment_range['bottom'] = h + segment_size if h + segment_size <= height_bottom else height_bottom
+        segment_range = {'top': h, 'bottom': h + segment_size if h + segment_size <= height_bottom else height_bottom}
         segment_img = img[segment_range['top']:segment_range['bottom'], :, :]
-        cv2.imwrite(os.path.join(img_output_path, str(segment_no) + '.png'), segment_img)
+        cv2.imwrite(os.path.join(segment_path, str(segment_no) + '.png'), segment_img)
 
         h += segment_size
         segment_no += 1

@@ -5,8 +5,8 @@ import pandas as pd
 
 import segment_utils as seg
 
-root_path = "D:\datasets\dataset_webpage\data\img_segment"
-img_root_path = os.path.join(root_path, 'img')
+root_path = "E:\Mulong\Datasets\dataset_webpage\page10000"
+img_root_path = os.path.join(root_path, 'org')
 label_root_path = os.path.join(root_path, 'label')
 
 name = 1
