@@ -31,7 +31,7 @@ for merge_path in merge_paths:
 
     for i in range(len(m_label)):
         compo = m_label.iloc[i]
-        if compo['class'] == 'img':
+        if compo['class'] == 'img' or compo['class'] == 'div':
             ele = {'bx': compo['column_min'], 'by':compo['row_min'], 'bw':compo['width'], 'bh':compo['height'],
                    'element':compo['class'], 'segment_no': compo['segment_no']}
             syn_label = syn_label.append(ele, ignore_index=True)
