@@ -7,10 +7,10 @@ class Config:
     def __init__(self):
         # self.ROOT_INPUT = "E:\Mulong\Datasets\\Dribbble"
         # self.ROOT_OUTPUT = "E:\Mulong\Datasets\dataset_webpage\ip\ip_v9_dribbble_ctpn_cnn6"    # cnn6 - components1
-        self.ROOT_INPUT = "E:\Mulong\Datasets\google_play\select"
-        self.ROOT_OUTPUT = "E:\Mulong\Result\\rico"
-        # self.ROOT_INPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\input\\app"
-        # self.ROOT_OUTPUT = "D:\git_file\github\doing\Research-ReverselyGeneratingWebCode\code\IMG2CODE\data\output\\app"
+        # self.ROOT_INPUT = "E:\Mulong\Datasets\google_play\select"  # 37657
+        # self.ROOT_OUTPUT = "E:\Mulong\Result\\googleplay"
+        self.ROOT_INPUT = "E:\Mulong\Datasets\google_play\data\play_store_screenshots"
+        self.ROOT_OUTPUT = "E:\Mulong\Result\\googleplay_all"
 
         # Frozen
         self.ROOT_IMG_ORG = pjoin(self.ROOT_INPUT, "org")

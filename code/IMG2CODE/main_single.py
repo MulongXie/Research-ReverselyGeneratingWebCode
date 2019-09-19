@@ -1,10 +1,10 @@
 from file_utils import time_start, timer_end
 
-is_ctpn = True
+is_ctpn = False
 is_uied = True
-is_merge = True
+is_merge = False
 
-PATH_IMG_INPUT = 'data\\input\\dribbble\\902.png'
+PATH_IMG_INPUT = 'data\\input\\web\\4198.png'
 PATH_LABEL_COMPO = 'data\\output\\compo.json'
 PATH_LABEL_TEXT = 'data\\output\\ocr.txt'
 PATH_CTPN_DRAWN = 'data\\output\\ctpn.png'

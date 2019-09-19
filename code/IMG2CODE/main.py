@@ -11,12 +11,12 @@ is_ctpn = True
 is_uied = True
 is_merge = True
 
-is_clip = True
+is_clip = False
 C = Config()
 C.build_output_folders(is_clip)
 
-start_index = 863
-end_index = 10000
+start_index = 38132  # 37657
+end_index = 70000
 img_section = (1500, 1500)  # selected img section, height and width
 
 input_paths_img = glob.glob(pjoin(C.ROOT_INPUT, '*.png'))

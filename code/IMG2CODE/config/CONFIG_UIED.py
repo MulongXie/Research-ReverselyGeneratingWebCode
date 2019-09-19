@@ -6,7 +6,7 @@ class Config:
 
     def __init__(self):
         # Adjustable
-        self.THRESHOLD_MIN_GRADIENT = 4
+        self.THRESHOLD_MIN_GRADIENT = 4     # dribbble:4 rico:4 web:1
         self.THRESHOLD_OBJ_MIN_AREA = 175
         self.THRESHOLD_OBJ_MIN_PERIMETER = 70
         self.THRESHOLD_BLOCK_MIN_EDGE_LENGTH = 180   # dribbble:68 rico:210 web:70
