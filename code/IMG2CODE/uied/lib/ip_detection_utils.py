@@ -203,7 +203,7 @@ def corner_relation(corner_a, corner_b):
         return 2
 
 
-def corner_relation_nms(org, corner_a, corner_b):
+def corner_relation_nms(org, corner_a, corner_b, min_selected_IoU):
     '''
     Calculate the relation between two rectangles by nms
     IoU = Intersection / Union
@@ -244,7 +244,7 @@ def corner_relation_nms(org, corner_a, corner_b):
         if inter == area_b:
             return 2
     # intersected and containing relation
-    if 0.0025 < iou <= 0.6:
+    if min_selected_IoU < iou <= 0.6:
         # a in b
         if inter == area_a:
             return -1
@@ -252,7 +252,7 @@ def corner_relation_nms(org, corner_a, corner_b):
         if inter == area_b:
             return 1
     # containing but too small
-    if iou <= 0.0025:
+    if iou <= min_selected_IoU:
         # a in b
         if inter == area_a:
             return -3

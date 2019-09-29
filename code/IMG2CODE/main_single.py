@@ -1,8 +1,8 @@
 from file_utils import time_start, timer_end
 
-is_ctpn = False
+is_ctpn = True
 is_uied = True
-is_merge = False
+is_merge = True
 
 PATH_IMG_INPUT = 'data\\input\\web\\4198.png'
 PATH_LABEL_COMPO = 'data\\output\\compo.json'
