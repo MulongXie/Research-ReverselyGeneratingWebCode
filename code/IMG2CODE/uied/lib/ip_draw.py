@@ -5,7 +5,7 @@ from CONFIG_UIED import Config
 C = Config()
 
 
-def draw_bounding_box_class(org, corners, compo_class, color_map=C.COLOR, line=3, show=False):
+def draw_bounding_box_class(org, corners, compo_class, color_map=C.COLOR, line=3, draw_text=False, show=False):
     """
     Draw bounding box of components with their classes on the original image
     :param org: original image
@@ -22,6 +22,8 @@ def draw_bounding_box_class(org, corners, compo_class, color_map=C.COLOR, line=3
         compo_class = ['compo' for i in range(len(corners))]
     board = org.copy()
     for i in range(len(corners)):
+        if not draw_text and compo_class[i] == 'text':
+            continue
         board = cv2.rectangle(board, corners[i][0], corners[i][1], color_map[compo_class[i]], line)
         board = cv2.putText(board, compo_class[i], (corners[i][0][0]+5, corners[i][0][1]+20),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.8, color_map[compo_class[i]], 2)
