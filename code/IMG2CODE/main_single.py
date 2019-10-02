@@ -2,9 +2,9 @@ from file_utils import time_start, timer_end
 
 is_ctpn = False
 is_uied = True
-is_merge = False
+is_merge = True
 
-PATH_IMG_INPUT = 'data\\input\\web\\4.png'
+PATH_IMG_INPUT = 'data\\input\\web\\10.png'
 PATH_LABEL_COMPO = 'data\\output\\compo.json'
 PATH_LABEL_TEXT = 'data\\output\\ocr.txt'
 PATH_CTPN_DRAWN = 'data\\output\\ctpn.png'
@@ -12,7 +12,7 @@ PATH_UIED_DRAWN = 'data\\output\\uied.png'
 PATH_UIED_BIN = 'data\\output\\gradient.png'
 PATH_MERGE = 'data\\output\\merged.png'
 PATH_COMPONENT = 'data\\output\\components'
-img_section = (600, 1500)  # selected img section, height and width
+img_section = (1000, 1500)  # selected img section, height and width
 
 start = time_start()
 

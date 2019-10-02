@@ -22,7 +22,7 @@ class Config:
         self.ROOT_IMG_MERGE = pjoin(self.ROOT_OUTPUT, "merge_drawn")
         self.ROOT_IMG_COMPONENT = pjoin(self.ROOT_OUTPUT, "components")
 
-        self.COLOR = {'div': (0, 255, 0), 'img': (0, 0, 255), 'icon': (255, 166, 166), 'input': (255, 166, 0),
+        self.COLOR = {'block': (0, 255, 0), 'img': (0, 0, 255), 'icon': (255, 166, 166), 'input': (255, 166, 0),
                       'text': (77, 77, 255), 'search': (255, 0, 166), 'list': (166, 0, 255), 'select': (166, 166, 166),
                       'button': (0, 166, 255)}
 

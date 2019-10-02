@@ -26,7 +26,7 @@ def save(org, binary, corners_block, corners_img, corners_compo, compos_class, o
     # *** Step 7 *** post-processing: remove img elements from original image and segment into smaller size
     # draw results
     draw_bounding = draw.draw_bounding_box_class(org, corners_compo, compos_class)
-    draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_block, ['div' for i in range(len(corners_block))])
+    draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_block, ['block' for i in range(len(corners_block))])
     draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_img, ['img' for i in range(len(corners_img))])
     # save results
     binary_r = pre.reverse_binary(binary)
@@ -35,7 +35,7 @@ def save(org, binary, corners_block, corners_img, corners_compo, compos_class, o
     cv2.imwrite(output_path_img_bin, binary)
     cv2.imwrite(output_path_img_drawn, draw_bounding)
     file.save_corners_json(output_path_label, corners_compo, compos_class, new=True)
-    file.save_corners_json(output_path_label, corners_block, ['div' for i in range(len(corners_block))], new=False)
+    file.save_corners_json(output_path_label, corners_block, ['block' for i in range(len(corners_block))], new=False)
     file.save_corners_json(output_path_label, corners_img, ['img' for i in range(len(corners_img))], new=False)
 
 
