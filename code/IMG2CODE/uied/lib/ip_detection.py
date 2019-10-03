@@ -478,7 +478,7 @@ def line_detection(binary,
 def boundary_detection(binary,
                        min_obj_area=C.THRESHOLD_OBJ_MIN_AREA, min_obj_perimeter=C.THRESHOLD_OBJ_MIN_PERIMETER,
                        line_thickness=C.THRESHOLD_LINE_THICKNESS, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
-                       max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO, show=False):
+                       max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO, show=False, write_boundary=False):
     """
     :param binary: Binary image from pre-processing
     :param min_obj_area: If not pass then ignore the small object
@@ -521,10 +521,13 @@ def boundary_detection(binary,
                     boundary_rec.append(boundary)
                 else:
                     boundary_nonrec.append(boundary)
+                boundary_all.append(boundary)
 
                 if show:
                     print('Area:%d, Perimeter:%d' % (len(area), perimeter))
-                    boundary_all.append(boundary)
                     draw.draw_boundary(boundary_all, binary.shape, show=True)
+
+    if write_boundary:
+        cv2.imwrite('data/output/boundary.png', draw.draw_boundary(boundary_all, binary.shape))
 
     return boundary_rec, boundary_nonrec

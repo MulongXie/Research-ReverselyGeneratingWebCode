@@ -25,7 +25,7 @@ def pre_processing(input_path, img_section):
 def processing(org, binary, clf, main=True):
     if main:
         # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
-        boundary_rec, boundary_non_rec = det.boundary_detection(binary)
+        boundary_rec, boundary_non_rec = det.boundary_detection(binary, write_boundary=True)
         corners_rec = det.get_corner(boundary_rec)
         corners_non_rec = det.get_corner(boundary_non_rec)
 
