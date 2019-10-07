@@ -85,6 +85,8 @@ def nms(org, corners_compo_old, compos_class_old, corner_text):
             w = np.maximum(0, col_max_s - col_min_s + 1)
             h = np.maximum(0, row_max_s - row_min_s + 1)
             inter = w * h
+            if inter == 0:
+                continue
 
             # calculate IoU
             ioa = inter / area_a
@@ -92,10 +94,10 @@ def nms(org, corners_compo_old, compos_class_old, corner_text):
 
             if compos_class_old[i] == 'img':
                 # sum up all text area in a img
-                if iob > 0.8:
-                    area_text += area_b
+                # if iob > 0.8:
+                area_text += inter
                 # loose threshold for img
-                if ioa > 0.56:
+                if ioa > 0.38:
                     noise = True
                     break
             else:
