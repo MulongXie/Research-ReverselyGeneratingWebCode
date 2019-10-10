@@ -1,6 +1,11 @@
+import cv2
 
-label = open('label_colab.txt', 'r')
+imgs = [cv2.imread('9.png')]
 
-for l in label.readlines():
-    print(l)
-    l.replace('./', '')
+c_width = 1
+c_height = 0
+
+for i, img in enumerate(imgs):
+    print(img.shape)
+    clip = img[c_height:-500, c_width:-c_width]
+    cv2.imwrite(str(i) + '.png', clip)
