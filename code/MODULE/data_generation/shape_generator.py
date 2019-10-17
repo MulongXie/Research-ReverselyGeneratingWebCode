@@ -45,7 +45,7 @@ def draw_blocks(blocks, is_show=False, is_write=False, output='E:\\Mulong\Datase
     board = np.zeros((img_height, img_width, 3), dtype=np.uint8)
     for block in blocks:
         cv2.rectangle(board, (block[1], block[0]), (block[3], block[2]), (255,255,255), -1)
-        f.write(str(block[1]) + ',' + str(block[0]) + ',' + str(block[2]) + str(block[3]) + ',0 ')
+        f.write(str(block[1]) + ',' + str(block[0]) + ',' + str(block[3]) + ',' + str(block[2]) + ',0 ')
 
         if is_show:
             cv2.imshow('img', board)
@@ -58,7 +58,7 @@ def draw_blocks(blocks, is_show=False, is_write=False, output='E:\\Mulong\Datase
 img_height = 600
 img_width = 800
 min_block_edge = 15
-img_number = 40
+img_number = 10000
 
 for index in range(img_number):
     bs = generate_blocks(rint(2, 6))
