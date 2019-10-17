@@ -1,12 +1,7 @@
 import numpy as np
 import cv2
 from random import randint as rint
-
-
-img_height = 600
-img_width = 800
-
-min_block_edge = 15
+from os.path import join as pjoin
 
 
 def generate_parameters():
@@ -16,7 +11,7 @@ def generate_parameters():
     height = rint(min_block_edge, img_height - corner_top)
     width = rint(min_block_edge, img_width - corner_left)
     corner_bottom = corner_top + height
-    corner_right =  corner_left + width
+    corner_right = corner_left + width
     return corner_top, corner_left, corner_bottom, corner_right
 
 
@@ -43,16 +38,24 @@ def generate_blocks(blocks_number):
     return blocks
 
 
-def draw_blocks(blocks):
+def draw_blocks(blocks, is_show=False, is_write=False, output='E:\\Mulong\Datasets\\fake_shapes'):
     board = np.zeros((img_height, img_width, 3), dtype=np.uint8)
-
     for block in blocks:
         cv2.rectangle(board, (block[1], block[0]), (block[3], block[2]), (255,255,255), -1)
 
-    cv2.imshow('img', board)
-    cv2.waitKey()
+        if is_show:
+            cv2.imshow('img', board)
+            cv2.waitKey()
+
+    if is_write:
+        cv2.imwrite(pjoin(output, str(index) + '.png'), board)
 
 
-while True:
-    bs = generate_blocks(2)
-    draw_blocks(bs)
+img_height = 600
+img_width = 800
+min_block_edge = 15
+img_number = 40
+
+for index in range(img_number):
+    bs = generate_blocks(rint(2, 6))
+    draw_blocks(bs, is_write=True)
