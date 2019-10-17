@@ -39,16 +39,20 @@ def generate_blocks(blocks_number):
 
 
 def draw_blocks(blocks, is_show=False, is_write=False, output='E:\\Mulong\Datasets\\fake_shapes'):
+    f = open('label.txt', 'a')
+    f.write(output + ' ')
+
     board = np.zeros((img_height, img_width, 3), dtype=np.uint8)
     for block in blocks:
         cv2.rectangle(board, (block[1], block[0]), (block[3], block[2]), (255,255,255), -1)
+        f.write(str(block[1]) + ',' + str(block[0]) + ',' + str(block[2]) + str(block[3]) + ',0 ')
 
         if is_show:
             cv2.imshow('img', board)
             cv2.waitKey()
-
     if is_write:
         cv2.imwrite(pjoin(output, str(index) + '.png'), board)
+    f.write('\n')
 
 
 img_height = 600
