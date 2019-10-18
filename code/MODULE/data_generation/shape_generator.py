@@ -40,7 +40,7 @@ def generate_blocks(blocks_number):
 
 def draw_blocks(blocks, is_show=False, is_write=False, output='E:\\Mulong\Datasets\\fake_shapes'):
     f = open('label.txt', 'a')
-    f.write(output + ' ')
+    f.write(pjoin(output, str(index) + '.png') + ' ')
 
     board = np.zeros((img_height, img_width, 3), dtype=np.uint8)
     for block in blocks:
