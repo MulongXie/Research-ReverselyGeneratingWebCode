@@ -5,7 +5,7 @@ class DIV:
     def __init__(self, id):
         self.head = '<div id="' + str(id) + '">\n'
         self.body = ''
-        self.tail = '</div>' + str(id) + '\n'
+        self.tail = '</div>\n'
         self.code = self.head + self.body + self.tail
 
     def insert_body(self, code):
@@ -17,13 +17,10 @@ class DIV:
 
     def indent(self):
         head = '\t' + self.head
-        if self.body is not '':
-            lines = self.body.split('\n')
-            lines = ['\t' + l + '\n' for l in lines]
-            body = ''.join(lines)[:-1]
-        else:
-            body = ''
-        tail = '\t' + self.tail
+        lines = self.body.split('\n')
+        lines = ['\t' + l + '\n' for l in lines]
+        body = ''.join(lines)[:-1]
+        tail = self.tail
         code = head + body + tail
         return code
 

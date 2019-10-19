@@ -5,12 +5,13 @@ import numpy as np
 from BLOCK import BLOCK as B
 
 
-def draw_blocks(img, blocks, hierarchy, output):
+def draw_blocks(org, blocks, hierarchy, output):
+    board = np.zeros(org.shape, dtype=np.uint8)
     c = 0
     bin = 256 * 3 / len(blocks)
     color = [255, 255, 255]
     for i, hier in enumerate(hierarchy):
-        blocks[hier[0]].draw_block(img, color, -1, True, output + str(i) + '.png')
+        blocks[hier[0]].draw_block(board, color, -1, True, output + str(i) + '.png')
         color[c] -= bin
         if color[c] < 0:
             c = (c+1)%3
@@ -80,11 +81,11 @@ def divide_blocks_by_lines(lines, height, min_block_height):
             if lower[i] - line[0][1] > min_block_height:
                 t_l = line[0]
                 b_r = (line[1][0], lower[i])
-                blocks.append(B(index, t_l, b_r))
-                mark.append((t_l, b_r))
-                index += 1
+                if (t_l, b_r) not in mark:
+                    blocks.append(B(index, t_l, b_r))
+                    mark.append((t_l, b_r))
+                    index += 1
 
-        for i, line in enumerate(lines):
             if line[0][1] - upper[i] > min_block_height:
                 t_l = (line[0][0], upper[i])
                 b_r = line[1]
@@ -104,7 +105,7 @@ def divide_blocks_by_lines(lines, height, min_block_height):
                 continue
             head_i, end_i = lines[i][0], lines[i][1]
             head_j, end_j = lines[j][0], lines[j][1]
-            if not ((head_i[0] <= head_j[0] and end_i[0] > end_j[0]) or (head_i[0] < head_j[0] and end_i[0] >= end_j[0])):
+            if not (head_i[0] < head_j[0] and end_i[0] > end_j[0]):
                 if head_i[1] > head_j[1] > upper[i]:
                     upper[i] = head_j[1]
                 if head_i[1] < head_j[1] < lower[i]:
@@ -118,7 +119,7 @@ def divide_blocks_by_lines(lines, height, min_block_height):
 
 # @blocks: [(top_left, bottom_right)] -> [((col, row), (col, row))]
 # @is_sored: if true, sorted by hierarchy and return list of tuples -> [(id, hierarchy)]
-def hierarchical_blocks(blocks, is_sorted=True):
+def hierarchy_blocks(blocks, is_sorted=True):
 
     for i in range(len(blocks)):
         for j in range(len(blocks)):

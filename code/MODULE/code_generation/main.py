@@ -32,10 +32,9 @@ if is_block:
 
 if is_code:
     # calculate the hierarchy among blocks
-    hierarchies_h = l2b.hierarchical_blocks(blocks_h)
+    hierarchies_h = l2b.hierarchy_blocks(blocks_h)
     # generate code according to hierarchy
     html = code.gen_html(blocks_h, hierarchies_h)
-
 
 # save results
 broad_line = np.zeros(org.shape, dtype=np.uint8)
