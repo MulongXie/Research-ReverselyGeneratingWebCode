@@ -71,7 +71,7 @@ options.headless = True
 driver = webdriver.Chrome(executable_path='D:\\webdriver\\chromedriver.exe', options=options)
 
 root = "E:\Mulong\Datasets\dataset_webpage\page20000"
-start_pos = 20541
+start_pos = 20632
 end_pos = 30000
 for index in range(start_pos, end_pos):
     start_time = time.clock()
@@ -90,7 +90,7 @@ for index in range(start_pos, end_pos):
     try:
         crawl(url)
     except FunctionTimedOut:
-        print("*** Time out ***")
+        print("*** Time out ***\n")
         continue
     print("1/3. Successfully Crawling Url")
 
@@ -101,7 +101,7 @@ for index in range(start_pos, end_pos):
         driver.set_window_size(S('Width'), S('Height'))  # May need manual adjustment
         driver.find_element_by_tag_name('body').screenshot(path_org)
     except:
-        print("*** Saving Screenshot Failed ***")
+        print("*** Saving Screenshot Failed ***\n")
         continue
     print("2/3. Successfully Saving Screenshot")
 
@@ -116,7 +116,7 @@ for index in range(start_pos, end_pos):
         tree = driver.execute_script("return document.documentElement.outerHTML")
         open(path_dom, 'w', encoding="utf-8").write(tree)
     except:
-        print("*** Catching Element Failed ***")
+        print("*** Catching Element Failed ***\n")
         continue
     print("3/3. Successfully Fetching Elements")
 
