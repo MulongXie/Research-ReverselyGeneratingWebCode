@@ -60,7 +60,6 @@ def crawl(url):
     try:
         driver.get(url)
     except FunctionTimedOut:
-        print('Time out')
         return None, None
 
 
@@ -72,7 +71,7 @@ options.headless = True
 driver = webdriver.Chrome(executable_path='D:\\webdriver\\chromedriver.exe', options=options)
 
 root = "E:\Mulong\Datasets\dataset_webpage\page20000"
-start_pos = 20000
+start_pos = 20541
 end_pos = 30000
 for index in range(start_pos, end_pos):
     start_time = time.clock()
@@ -81,6 +80,7 @@ for index in range(start_pos, end_pos):
     path_org = pjoin(root, 'org', str(index) + '.png')
     path_drawn = pjoin(root, 'drawn', str(index) + '.png')
     path_label = pjoin(root, 'label', str(index) + '.csv')
+    path_dom = pjoin(root, 'dom', str(index) + '.html')
 
     # fetch label format
     element_all = pd.read_csv('format.csv', index_col=0)
@@ -111,6 +111,10 @@ for index in range(start_pos, end_pos):
         element_all = fetch_element('button', element_all)
         element_all = fetch_element('input', element_all)
         element_all.to_csv(path_label)
+
+        # save dom tree
+        tree = driver.execute_script("return document.documentElement.outerHTML")
+        open(path_dom, 'w', encoding="utf-8").write(tree)
     except:
         print("*** Catching Element Failed ***")
         continue
