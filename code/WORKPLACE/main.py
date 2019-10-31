@@ -2,6 +2,8 @@ import pandas as pd
 from selenium import webdriver
 import cv2
 from os.path import join as pjoin
+from func_timeout import func_set_timeout, FunctionTimedOut
+import time
 
 
 def draw(label, pic):
@@ -53,6 +55,15 @@ def fetch_element(ele_name, ele_all):
     return ele_all
 
 
+@func_set_timeout(60)
+def crawl(url):
+    try:
+        driver.get(url)
+    except FunctionTimedOut:
+        print('Time out')
+        return None, None
+
+
 csv = pd.read_csv('link.csv')
 links = csv.link
 
@@ -60,38 +71,56 @@ options = webdriver.ChromeOptions()
 options.headless = True
 driver = webdriver.Chrome(executable_path='D:\\webdriver\\chromedriver.exe', options=options)
 
-
-start_pos = 15000
-end_pos = 20000
+root = "E:\Mulong\Datasets\dataset_webpage\page20000"
+start_pos = 20000
+end_pos = 30000
 for index in range(start_pos, end_pos):
-    # set output
-    path_org = pjoin('data', 'org', str(index) + '.png')
-    path_drawn = pjoin('data', 'drawn', str(index) + '.png')
-    path_label = pjoin('data', 'label', str(index) + '.csv')
+    start_time = time.clock()
 
-    # store label
+    # set output
+    path_org = pjoin(root, 'org', str(index) + '.png')
+    path_drawn = pjoin(root, 'drawn', str(index) + '.png')
+    path_label = pjoin(root, 'label', str(index) + '.csv')
+
+    # fetch label format
     element_all = pd.read_csv('format.csv', index_col=0)
     # fetch url
     url = 'http://' + links.iloc[index]
-    driver.get(url)
-    print("*** Fetch " + url + " ***")
+    print("Crawling " + str(index) + ' ' + url)
+    try:
+        crawl(url)
+    except FunctionTimedOut:
+        print("*** Time out ***")
+        continue
+    print("1/3. Successfully Crawling Url")
 
     # get screenshots
-    body = driver.find_elements_by_tag_name('body')
-    S = lambda X: driver.execute_script('return document.body.parentNode.scroll' + X)
-    driver.set_window_size(S('Width'), S('Height'))  # May need manual adjustment
-    driver.find_element_by_tag_name('body').screenshot(path_org)
-    print("*** Save Screenshot ***")
+    try:
+        body = driver.find_elements_by_tag_name('body')
+        S = lambda X: driver.execute_script('return document.body.parentNode.scroll' + X)
+        driver.set_window_size(S('Width'), S('Height'))  # May need manual adjustment
+        driver.find_element_by_tag_name('body').screenshot(path_org)
+    except:
+        print("*** Saving Screenshot Failed ***")
+        continue
+    print("2/3. Successfully Saving Screenshot")
+
     # get elements
-    element_all = fetch_element('img', element_all)
-    element_all = fetch_element('button', element_all)
-    element_all = fetch_element('input', element_all)
-    element_all.to_csv(path_label)
-    print("*** Get Elements ***\n")
+    try:
+        element_all = fetch_element('img', element_all)
+        element_all = fetch_element('button', element_all)
+        element_all = fetch_element('input', element_all)
+        element_all.to_csv(path_label)
+    except:
+        print("*** Catching Element Failed ***")
+        continue
+    print("3/3. Successfully Fetching Elements")
 
     # draw results
     pic = cv2.imread(path_org)
     draw(element_all, pic)
     cv2.imwrite(path_drawn, pic)
 
-    break
+    print("Time taken:%ds" % int(time.clock() - start_time))
+    print(time.ctime() + '\n')
+
