@@ -22,4 +22,3 @@ Attempt to generate layout code (HTML/CSS) from given web page screenshot [-ING]
     - Calculate the color theme of components <br>
     - Classify the tag of components <br>
 <br>
-
