@@ -3,12 +3,12 @@ import cv2
 
 class BLOCK:
     # (column, row)
-    def __init__(self, id, top_left, bottom_right, parent=None, child=None, layer=None):
+    def __init__(self, id, top_left, bottom_right, parent=None, children=None, layer=None):
         self.id = id
         self.top_left = top_left
         self.bottom_right = bottom_right
         self.parent = parent
-        self.child = child
+        self.children = children
         self.layer = layer
 
         self.center = (int((bottom_right[0] + top_left[0])/2), int((bottom_right[1] + top_left[1])/2))

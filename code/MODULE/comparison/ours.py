@@ -62,7 +62,8 @@ def preprocess(gray, grad_min=1):
     return dilate
 
 
-img, gray = read_img('902.png', (10000, 10000))
-grad = preprocess(gray)
+img, gray = read_img('4.png', (900, 10000))
+grad = preprocess(gray, 0)
 
 cv2.imwrite('grad.png', grad)
+cv2.imwrite('org.png', img)

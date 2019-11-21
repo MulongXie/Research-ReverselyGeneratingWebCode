@@ -1,15 +1,22 @@
 from code_generation import DIV
+import line
+import line_to_block as l2b
+import code_generation as code
+from config import CONFIG as cfg
+import ip_preprocessing as pre
 
-d1 = DIV(1)
-d2 = DIV(2)
-d3 = DIV(3)
-d4 = DIV(4)
+C = cfg()
 
-d3.insert_body(d4.indent())
-print(d3.code)
+org, gray = pre.read_img('input/4.png', (0, 3000))  # cut out partial img
 
-d2.insert_body(d3.indent())
-# print(d2.code)
+lines_v = line.read_lines('output/lines_v.csv')
+lines_h = line.read_lines('output/lines_h.csv')
+blocks_h = l2b.divide_blocks_by_lines(lines_h, org.shape[0], C.BLOCK_MIN_HEIGHT)
+hierarchies_h = l2b.hierarchy_blocks(blocks_h)
 
-d1.insert_body(d2.indent())
-print(d1.code)
+print(hierarchies_h)
+
+# html = code.gen_html2(blocks_h)
+# open('output/y.html', 'w').write(html)
+
+# code.gen_css(blocks_h)

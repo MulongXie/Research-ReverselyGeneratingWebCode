@@ -10,10 +10,10 @@ import time
 from func_timeout import func_set_timeout, FunctionTimedOut
 
 start_time = time.clock()
-is_segment = True
+is_segment = False
 is_draw_label = True
 # set the web crawler
-url = "https://play.google.com/store/apps/details?id=com.facebook.orca"
+url = "https://en.wikipedia.org/wiki/Computational_complexity"
 # set path
 img_org_path = 'data/org.png'
 img_drawn_path = 'data/drawn.png'

@@ -113,9 +113,9 @@ def catch(url, out_label, out_img, libel_format, driver_path, browser='PhantomJS
 
         # fetch the attributes
         # label = find_element('div', label, driver)
-        # label = find_element('img', label, driver)
-        # label = find_element('a', label, driver)
-        # label = find_element('h1', label, driver)
+        label = find_element('img', label, driver)
+        label = find_element('a', label, driver)
+        label = find_element('h1', label, driver)
         # label = find_element('h2', label, driver)
         # label = find_element('button', label, driver)
         # label = find_element('input', label, driver)

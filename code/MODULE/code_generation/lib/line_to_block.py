@@ -127,17 +127,17 @@ def hierarchy_blocks(blocks, is_sorted=True):
                 continue
             h = blocks[i].hierarchy(blocks[j])
             if h == 1:
-                if blocks[i].child is None:
-                    blocks[i].child = [blocks[j]]
+                if blocks[i].children is None:
+                    blocks[i].children = [blocks[j]]
                 else:
-                    blocks[i].child.append([blocks[j]])
+                    blocks[i].children.append(blocks[j])
             elif h == -1:
                 if blocks[i].parent is None or blocks[i].parent > blocks[j]:
                     blocks[i].parent = blocks[j]
 
     leaves = []
     for block in blocks:
-        if block.child is None:
+        if block.children is None:
             leaves.append(block.id)
 
     hierarchies = np.zeros(len(blocks), dtype=int)  # layer

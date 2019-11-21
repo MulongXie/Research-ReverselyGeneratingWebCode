@@ -71,7 +71,7 @@ options.headless = True
 driver = webdriver.Chrome(executable_path='D:\\webdriver\\chromedriver.exe', options=options)
 
 root = "E:\Mulong\Datasets\dataset_webpage\page20000"
-start_pos = 20632
+start_pos = 20923
 end_pos = 30000
 for index in range(start_pos, end_pos):
     start_time = time.clock()

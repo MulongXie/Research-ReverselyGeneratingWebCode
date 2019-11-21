@@ -6,7 +6,7 @@ def nothing(x):
     pass
 
 
-name = '902'
+name = '10'
 img = cv2.imread(name + '.png')
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 

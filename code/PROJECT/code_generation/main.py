@@ -3,11 +3,11 @@ import numpy as np
 
 import ip_preprocessing as pre
 import line
-import CONFIG as cfg
+from config import CONFIG as cfg
 import line_to_block as l2b
 import code_generation as code
 
-C = cfg.CONFIG()
+C = cfg()
 
 
 org, gray = pre.read_img('input/4.png', (0, 3000))  # cut out partial img
