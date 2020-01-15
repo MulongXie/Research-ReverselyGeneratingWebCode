@@ -17,9 +17,10 @@ def iter_kids(obj, layer):
 jfile = json.load(open('1.json'))
 act = jfile['activity']
 root = act['root']
-
 objects = []
 
 iter_kids(root, 0)
-print(objects)
-print(len(objects))
+
+objs_json = json.dumps(objects)
+output = open('objects.json', 'w')
+output.write(objs_json)
