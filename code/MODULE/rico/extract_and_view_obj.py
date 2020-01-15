@@ -6,7 +6,7 @@ from random import randint as rint
 
 def extract_objects_from_root(root):
     def extract(obj, layer):
-        return {'layer':layer, 'class':obj['class'], 'bound':obj['bounds'], 'rel-bounds':obj['rel-bounds']}
+        return {'layer':layer, 'class':obj['class'], 'bounds':obj['bounds'], 'rel-bounds':obj['rel-bounds']}
 
     def iter_kids(obj, layer):
         if 'visibility' in obj and obj['visibility'] == 'visible' and\
@@ -26,17 +26,21 @@ def extract_objects_from_root(root):
     return objects
 
 
-def view_objects(objects):
+def view_objects(objects, org, shrink_ratio=3):
     def shrink(img, ratio):
         return cv2.resize(img, (int(img.shape[1] / ratio), int(img.shape[0] / ratio)))
+
+    org = cv2.resize(org, (1440, 2560))
+    org = shrink(org, shrink_ratio)
+    cv2.imshow('original', org)
 
     board = np.zeros((2560, 1440, 3), dtype=np.uint8)
     for obj in objects:
         print(obj)
         color = (rint(0, 255), rint(0, 255), rint(0, 255))
-        cv2.rectangle(board, (obj['rel-bounds'][0], obj['rel-bounds'][1]), (obj['rel-bounds'][2], obj['rel-bounds'][3]),
+        cv2.rectangle(board, (obj['bounds'][0], obj['bounds'][1]), (obj['bounds'][2], obj['bounds'][3]),
                       color, -1)
-        board_show = shrink(board, 3)
+        board_show = shrink(board, shrink_ratio)
         cv2.imshow('board_show', board_show)
         cv2.waitKey()
 
@@ -44,8 +48,11 @@ def view_objects(objects):
     cv2.waitKey()
 
 
-jfile = json.load(open('2.json'))
+index = '0'
+imgfile = cv2.imread('E:\\Download\\combined\\' + index + '.jpg')
+jfile = json.load(open('E:\\Download\\combined\\' + index + '.json'))
+
 act = jfile['activity']
 compos = extract_objects_from_root(act['root'])
-view_objects(compos)
+view_objects(compos, imgfile)
 
