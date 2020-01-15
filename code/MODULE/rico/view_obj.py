@@ -21,3 +21,6 @@ for obj in objects:
     board_show = shrink(board, 3)
     cv2.imshow('board_show', board_show)
     cv2.waitKey()
+
+print('end')
+cv2.waitKey()
