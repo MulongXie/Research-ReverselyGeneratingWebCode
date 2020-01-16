@@ -39,13 +39,15 @@ def extract_objects_from_root(root):
     return objects
 
 
-def view_objects(objects, org, shrink_ratio=5):
+def view_objects(objects, org, annot, shrink_ratio=5):
     def shrink(img, ratio):
         return cv2.resize(img, (int(img.shape[1] / ratio), int(img.shape[0] / ratio)))
 
     org = cv2.resize(org, (1440, 2560))
     org = shrink(org, shrink_ratio)
     cv2.imshow('original', org)
+    annot = cv2.resize(annot, (org.shape[1], org.shape[0]))
+    cv2.imshow('annotation', annot)
 
     board = np.zeros((2560, 1440, 3), dtype=np.uint8)
     for obj in objects:
@@ -60,13 +62,14 @@ def view_objects(objects, org, shrink_ratio=5):
 
 index = 0
 while True:
-
     if os.path.exists('E:\\Download\\combined\\' + str(index) + '.jpg'):
+        print(index)
         imgfile = cv2.imread('E:\\Download\\combined\\' + str(index) + '.jpg')
         jfile = json.load(open('E:\\Download\\combined\\' + str(index) + '.json'))
+        annofile = cv2.imread('E:\\Download\\semantic_annotations\\' + str(index) + '.png')
 
         act = jfile['activity']
         compos = extract_objects_from_root(act['root'])
-        view_objects(compos, imgfile)
+        view_objects(compos, imgfile, annofile)
 
     index += 1
