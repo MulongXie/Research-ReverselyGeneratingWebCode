@@ -34,7 +34,6 @@ def extract_objects_from_root(root):
     # save objects
     objs_json = json.dumps(objects)
     open('objects.json', 'w').write(objs_json)
-
     return objects
 
 
@@ -50,12 +49,10 @@ def view_objects(objects, org, shrink_ratio=5):
     for obj in objects:
         print(obj)
         color = (rint(0, 255), rint(0, 255), rint(0, 255))
-        cv2.rectangle(board, (obj['bounds'][0], obj['bounds'][1]), (obj['bounds'][2], obj['bounds'][3]),
-                      color, -1)
+        cv2.rectangle(board, (obj['bounds'][0], obj['bounds'][1]), (obj['bounds'][2], obj['bounds'][3]), color, -1)
         board_show = shrink(board, shrink_ratio)
         cv2.imshow('board_show', board_show)
         cv2.waitKey()
-
     print('end')
     cv2.waitKey()
 
