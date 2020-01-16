@@ -2,6 +2,7 @@ import cv2
 import json
 import numpy as np
 from random import randint as rint
+import os
 
 
 def extract_objects_from_root(root):
@@ -25,22 +26,31 @@ def extract_objects_from_root(root):
     return objects
 
 
-def label_on_org(objects, org, shrink_ratio=3):
+def label_on_org(objects, annotimg, org, shrink_ratio=4):
     def shrink(img, ratio):
         return cv2.resize(img, (int(img.shape[1] / ratio), int(img.shape[0] / ratio)))
 
     org = cv2.resize(org, (1440, 2560))
+    org = shrink(org, shrink_ratio)
+    annotimg = cv2.resize(annotimg, (1440, 2560))
     for obj in objects:
-        cv2.putText(org, obj['compoLabel'], (int((obj['bounds'][0] + obj['bounds'][2])/2) - 50, int((obj['bounds'][1] + obj['bounds'][3])/2)),
+        cv2.putText(annotimg, obj['compoLabel'], (int((obj['bounds'][0] + obj['bounds'][2])/2) - 50, int((obj['bounds'][1] + obj['bounds'][3])/2)),
                     cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,255), 4)
-        org_show = shrink(org, shrink_ratio)
-        cv2.imshow('img', org_show)
-        cv2.waitKey()
+    annot_show = shrink(annotimg, shrink_ratio)
+    cv2.imshow('org', org)
+    cv2.imshow('annotation', annot_show)
+    cv2.waitKey()
 
 
-index = '3'
-imgfile = cv2.imread(index + '.png')
-jsonfile = json.load(open(index + '.json'))
+index = 0
+while True:
+    if os.path.exists('E:\\Download\\combined\\' + str(index) + '.jpg'):
+        print(index)
+        imgfile = cv2.imread('E:\\Download\\combined\\' + str(index) + '.jpg')
+        jfile = json.load(open('E:\\Download\\semantic_annotations\\' + str(index) + '.json'))
+        annofile = cv2.imread('E:\\Download\\semantic_annotations\\' + str(index) + '.png')
 
-compos = extract_objects_from_root(jsonfile)
-label_on_org(compos, imgfile)
+        compos = extract_objects_from_root(jfile)
+        label_on_org(compos, annofile, imgfile)
+
+    index += 1
