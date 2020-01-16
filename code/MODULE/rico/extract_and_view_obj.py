@@ -8,9 +8,16 @@ def extract_objects_from_root(root):
     def extract(obj, layer):
         return {'layer':layer, 'class':obj['class'], 'bounds':obj['bounds'], 'rel-bounds':obj['rel-bounds']}
 
+    def valid_obj(obj):
+        if 'visibility' in obj and obj['visibility'] == 'visible' and \
+                'visible-to-user' in obj and obj['visible-to-user'] is True and \
+                'Layout' not in obj['class'].split('.')[-1]:
+            return True
+        else:
+            return False
+
     def iter_kids(obj, layer):
-        if 'visibility' in obj and obj['visibility'] == 'visible' and\
-                'visible-to-user' in obj and obj['visible-to-user'] is True:
+        if valid_obj(obj):
             objects.append(extract(obj, layer))
         if 'children' in obj and len(obj['children']) > 0:
             children = obj['children']
