@@ -8,10 +8,15 @@ def extract_objects_from_root(root):
     def extract(obj, layer):
         return {'layer':layer, 'class':obj['class'], 'bounds':obj['bounds'], 'rel-bounds':obj['rel-bounds']}
 
-    def valid_obj(obj):
+    def valid_obj(obj, rm_text=True):
         if 'visibility' in obj and obj['visibility'] == 'visible' and \
                 'visible-to-user' in obj and obj['visible-to-user'] is True and \
                 'Layout' not in obj['class'].split('.')[-1]:
+            if rm_text:
+                if 'Text' not in obj['class'].split('.')[-1]:
+                    return True
+                else:
+                    return False
             return True
         else:
             return False
@@ -33,7 +38,7 @@ def extract_objects_from_root(root):
     return objects
 
 
-def view_objects(objects, org, shrink_ratio=3):
+def view_objects(objects, org, shrink_ratio=5):
     def shrink(img, ratio):
         return cv2.resize(img, (int(img.shape[1] / ratio), int(img.shape[0] / ratio)))
 
@@ -55,7 +60,7 @@ def view_objects(objects, org, shrink_ratio=3):
     cv2.waitKey()
 
 
-index = '0'
+index = '4'
 imgfile = cv2.imread('E:\\Download\\combined\\' + index + '.jpg')
 jfile = json.load(open('E:\\Download\\combined\\' + index + '.json'))
 
