@@ -83,5 +83,4 @@ while True:
         new_compos = recategorize(compos)
         labelling(compos, new_compos, annofile, imgfile)
 
-
     index += 1
