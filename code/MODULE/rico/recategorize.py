@@ -53,7 +53,7 @@ def recategorize(objects):
                 'NumberPicker' not in obj['class'] and\
                 'AppCompatEditText' not in obj['class']:
             obj['relabel'] = 'Input'
-            
+
         elif obj['compoLabel'] in ['Text Button'] and\
                 'class' in obj and\
                 'TextView' not in obj['class'] and\
@@ -124,19 +124,21 @@ def view_label(objects, relabeled_objects, annotimg, org, shrink_ratio=4):
 
 
 if '__main__':
+    show = True
     index = 1  # start point
     while True:
         if os.path.exists('E:\\Download\\combined\\' + str(index) + '.jpg'):
             print(index)
-            # read screenshot, annotations and drawn annotation image
-            imgfile = cv2.imread('E:\\Download\\combined\\' + str(index) + '.jpg')
+            # extract Ui components, relabel them
             jfile = json.load(open('E:\\Download\\semantic_annotations\\' + str(index) + '.json', encoding="utf8"))
-            annofile = cv2.imread('E:\\Download\\semantic_annotations\\' + str(index) + '.png')
-
-            # extract Ui components, relabel them and show them
             compos = extract_objects(jfile)
             new_compos = recategorize(compos)
-            view_label(compos, new_compos, annofile, imgfile)
+
+            # read screenshot and drawn annotation image and show them
+            if show:
+                imgfile = cv2.imread('E:\\Download\\combined\\' + str(index) + '.jpg')
+                annofile = cv2.imread('E:\\Download\\semantic_annotations\\' + str(index) + '.png')
+                view_label(compos, new_compos, annofile, imgfile)
 
             # save new labels
             labelfile = open('label.txt', 'a')
