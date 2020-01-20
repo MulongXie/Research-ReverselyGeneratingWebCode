@@ -8,18 +8,41 @@ import os
 def recategorize(objects):
     new_objects = []
     for obj in objects:
-        if obj['compoLabel'] in ['Button Bar', 'Text Button', 'Radio Button']:
+        if obj['compoLabel'] in ['Radio Button']:
             obj['relabel'] = 'Button'
-        elif obj['compoLabel'] in ['Image', 'Image Button']:
+        elif obj['compoLabel'] in ['Image', 'Image Button', 'Video']:
             obj['relabel'] = 'Image'
-        elif obj['compoLabel'] in ['Input']:
-            obj['relabel'] = 'Input'
         elif obj['compoLabel'] in ['Icon']:
             obj['relabel'] = 'Icon'
+        elif obj['compoLabel'] == 'Web View' and (obj['bounds'][2] - obj['bounds'][0]) > 500:
+            return []
+
+        elif obj['compoLabel'] in ['Input'] and\
+                'class' in obj and\
+                'NumberPicker' not in obj['class']:
+            obj['relabel'] = 'Input'
+
+        elif obj['compoLabel'] in ['Text Button'] and\
+                'class' in obj and\
+                'TextView' not in obj['class'] and\
+                'AppCompatButton' not in obj['class'] and\
+                'CheckBox' not in obj['class'] and\
+                'SwitchCompat' not in obj['class']:
+            obj['relabel'] = 'Button'
+
         else:
             continue
         new_objects.append(obj)
     return new_objects
+
+
+def save_label(objects, img_path, outputfile):
+    compo_index = {'Image': 0, 'Icon': 1, 'Button': 2, 'Input': 3}
+    label_txt = img_path + ' '
+    for obj in objects:
+        label_txt += ','.join([str(b) for b in obj['bounds']]) + ',' + str(compo_index[obj['relabel']]) + ' '
+    label_txt += '\n'
+    outputfile.write(label_txt)
 
 
 def extract_objects_from_root(root):
@@ -71,7 +94,7 @@ def labelling(objects, relabeled_objects, annotimg, org, shrink_ratio=4):
     cv2.waitKey()
 
 
-index = 0
+index = 58
 while True:
     if os.path.exists('E:\\Download\\combined\\' + str(index) + '.jpg'):
         print(index)
@@ -82,5 +105,8 @@ while True:
         compos = extract_objects_from_root(jfile)
         new_compos = recategorize(compos)
         labelling(compos, new_compos, annofile, imgfile)
+
+        labelfile = open('label.txt', 'a')
+        save_label(new_compos, 'E:\\Download\\combined\\' + str(index) + '.jpg', labelfile)
 
     index += 1
