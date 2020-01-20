@@ -14,12 +14,13 @@ def recategorize(objects):
             obj['relabel'] = 'Image'
         elif obj['compoLabel'] in ['Icon']:
             obj['relabel'] = 'Icon'
-        elif obj['compoLabel'] == 'Web View' and (obj['bounds'][2] - obj['bounds'][0]) > 500:
+        elif obj['compoLabel'] == 'Web View' and (obj['bounds'][3] - obj['bounds'][1]) > 500:
             return []
 
         elif obj['compoLabel'] in ['Input'] and\
                 'class' in obj and\
-                'NumberPicker' not in obj['class']:
+                'NumberPicker' not in obj['class'] and\
+                'AppCompatEditText' not in obj['class']:
             obj['relabel'] = 'Input'
 
         elif obj['compoLabel'] in ['Text Button'] and\
@@ -37,6 +38,8 @@ def recategorize(objects):
 
 
 def save_label(objects, img_path, outputfile):
+    if len(objects) == 0:
+        return
     compo_index = {'Image': 0, 'Icon': 1, 'Button': 2, 'Input': 3}
     label_txt = img_path + ' '
     for obj in objects:
@@ -94,12 +97,12 @@ def labelling(objects, relabeled_objects, annotimg, org, shrink_ratio=4):
     cv2.waitKey()
 
 
-index = 58
+index = 147
 while True:
     if os.path.exists('E:\\Download\\combined\\' + str(index) + '.jpg'):
         print(index)
         imgfile = cv2.imread('E:\\Download\\combined\\' + str(index) + '.jpg')
-        jfile = json.load(open('E:\\Download\\semantic_annotations\\' + str(index) + '.json'))
+        jfile = json.load(open('E:\\Download\\semantic_annotations\\' + str(index) + '.json', encoding="utf8"))
         annofile = cv2.imread('E:\\Download\\semantic_annotations\\' + str(index) + '.png')
 
         compos = extract_objects_from_root(jfile)
