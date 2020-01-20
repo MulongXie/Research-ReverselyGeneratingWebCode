@@ -5,7 +5,38 @@ from random import randint as rint
 import os
 
 
+def extract_objects(root):
+    '''
+    read json files of annotation and extract components
+    :param root: loaded jason object
+    :return: UI components only containing class(original Android class), compoLabel(label defined in Rico paper 2) and bounds(topleft and bottomright)
+    '''
+    def extract(obj):
+        return {'class':obj['class'], 'bounds':obj['bounds'],
+                'compoLabel':obj['componentLabel'] if 'componentLabel' in obj else None}
+
+    def iter_kids(obj):
+        objects.append(extract(obj))
+        if 'children' in obj and len(obj['children']) > 0:
+            children = obj['children']
+            for child in children:
+                iter_kids(child)
+
+    objects = []
+    iter_kids(root)
+    # save objects
+    objs_json = json.dumps(objects)
+    open('objects.json', 'w').write(objs_json)
+    return objects
+
+
 def recategorize(objects):
+    '''
+    relabel compoLabel into 4 classes: Button, Image, Icon and Input;
+    filter out some improper annotations from Rico-semantic-annotation
+    :param objects: UI components
+    :return: selected components with new label
+    '''
     new_objects = []
     for obj in objects:
         if obj['compoLabel'] in ['Radio Button']:
@@ -22,7 +53,7 @@ def recategorize(objects):
                 'NumberPicker' not in obj['class'] and\
                 'AppCompatEditText' not in obj['class']:
             obj['relabel'] = 'Input'
-
+            
         elif obj['compoLabel'] in ['Text Button'] and\
                 'class' in obj and\
                 'TextView' not in obj['class'] and\
@@ -38,6 +69,12 @@ def recategorize(objects):
 
 
 def save_label(objects, img_path, outputfile):
+    '''
+    save the new label as training format
+    :param objects: UI components
+    :param img_path: path of the related original image(UI screenshot)
+    :param outputfile: file to output
+    '''
     if len(objects) == 0:
         return
     compo_index = {'Image': 0, 'Icon': 1, 'Button': 2, 'Input': 3}
@@ -48,34 +85,22 @@ def save_label(objects, img_path, outputfile):
     outputfile.write(label_txt)
 
 
-def extract_objects_from_root(root):
-    def extract(obj, layer):
-        return {'class':obj['class'], 'bounds':obj['bounds'],
-                'compoLabel':obj['componentLabel'] if 'componentLabel' in obj else None,
-                'layer':layer}
-
-    def iter_kids(obj, layer):
-        objects.append(extract(obj, layer))
-        if 'children' in obj and len(obj['children']) > 0:
-            children = obj['children']
-            for child in children:
-                iter_kids(child, layer + 1)
-
-    objects = []
-    iter_kids(root, 0)
-    # save objects
-    objs_json = json.dumps(objects)
-    open('objects.json', 'w').write(objs_json)
-    return objects
-
-
-def labelling(objects, relabeled_objects, annotimg, org, shrink_ratio=4):
+def view_label(objects, relabeled_objects, annotimg, org, shrink_ratio=4):
+    '''
+    (Optional)
+    visualize the annotations, new labels and original images
+    :param objects: extracted UI components from original annotation
+    :param relabeled_objects: relabeled UI components with new classes
+    :param annotimg: original annotation image
+    :param org: original screenshot image
+    :param shrink_ratio: shrink all images in order to viewing conveniently
+    '''
     def shrink(img, ratio):
         return cv2.resize(img, (int(img.shape[1] / ratio), int(img.shape[0] / ratio)))
 
     org = cv2.resize(org, (1440, 2560))
     annotimg = cv2.resize(annotimg, (1440, 2560))
-    board = np.full((2560, 1440, 3), 255, dtype=np.uint8)
+    board = np.full((2560, 1440, 3), 255, dtype=np.uint8)  # used for draw new labels
 
     for obj in objects:
         cv2.putText(annotimg, obj['compoLabel'], (int((obj['bounds'][0] + obj['bounds'][2])/2) - 50, int((obj['bounds'][1] + obj['bounds'][3])/2)),
@@ -87,6 +112,7 @@ def labelling(objects, relabeled_objects, annotimg, org, shrink_ratio=4):
         cv2.putText(board, obj['relabel'], (int((obj['bounds'][0] + obj['bounds'][2]) / 2) - 50, int((obj['bounds'][1] + obj['bounds'][3]) / 2)),
                     cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 4)
 
+    # easy to show
     org = shrink(org, shrink_ratio)
     annot_show = shrink(annotimg, shrink_ratio)
     relabel_show = shrink(board, shrink_ratio)
@@ -97,19 +123,23 @@ def labelling(objects, relabeled_objects, annotimg, org, shrink_ratio=4):
     cv2.waitKey()
 
 
-index = 147
-while True:
-    if os.path.exists('E:\\Download\\combined\\' + str(index) + '.jpg'):
-        print(index)
-        imgfile = cv2.imread('E:\\Download\\combined\\' + str(index) + '.jpg')
-        jfile = json.load(open('E:\\Download\\semantic_annotations\\' + str(index) + '.json', encoding="utf8"))
-        annofile = cv2.imread('E:\\Download\\semantic_annotations\\' + str(index) + '.png')
+if '__main__':
+    index = 1  # start point
+    while True:
+        if os.path.exists('E:\\Download\\combined\\' + str(index) + '.jpg'):
+            print(index)
+            # read screenshot, annotations and drawn annotation image
+            imgfile = cv2.imread('E:\\Download\\combined\\' + str(index) + '.jpg')
+            jfile = json.load(open('E:\\Download\\semantic_annotations\\' + str(index) + '.json', encoding="utf8"))
+            annofile = cv2.imread('E:\\Download\\semantic_annotations\\' + str(index) + '.png')
 
-        compos = extract_objects_from_root(jfile)
-        new_compos = recategorize(compos)
-        labelling(compos, new_compos, annofile, imgfile)
+            # extract Ui components, relabel them and show them
+            compos = extract_objects(jfile)
+            new_compos = recategorize(compos)
+            view_label(compos, new_compos, annofile, imgfile)
 
-        labelfile = open('label.txt', 'a')
-        save_label(new_compos, 'E:\\Download\\combined\\' + str(index) + '.jpg', labelfile)
+            # save new labels
+            labelfile = open('label.txt', 'a')
+            save_label(new_compos, 'E:\\Download\\combined\\' + str(index) + '.jpg', labelfile)
 
-    index += 1
+        index += 1
