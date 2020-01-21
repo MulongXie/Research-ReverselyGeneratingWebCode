@@ -39,6 +39,9 @@ def recategorize(objects):
     '''
     new_objects = []
     for obj in objects:
+        if (obj['bounds'][2] - obj['bounds'][0]) == 0 or (obj['bounds'][3] - obj['bounds'][1]) == 0:
+            continue
+
         if obj['compoLabel'] in ['Radio Button']:
             obj['relabel'] = 'Button'
         elif obj['compoLabel'] in ['Icon']:
@@ -130,9 +133,9 @@ def view_label(objects, relabeled_objects, annotimg, org, shrink_ratio=4):
 
 
 if '__main__':
-    show = True
-    start = 10001  # start point
-    end = 10004
+    show = False
+    start = 70000  # start point
+    end = 70001
     index = start
     labelfile = open('label.txt', 'a')
     while True:
