@@ -41,12 +41,18 @@ def recategorize(objects):
     for obj in objects:
         if obj['compoLabel'] in ['Radio Button']:
             obj['relabel'] = 'Button'
-        elif obj['compoLabel'] in ['Image', 'Image Button', 'Video']:
-            obj['relabel'] = 'Image'
         elif obj['compoLabel'] in ['Icon']:
             obj['relabel'] = 'Icon'
         elif obj['compoLabel'] == 'Web View' and (obj['bounds'][3] - obj['bounds'][1]) > 500:
             return []
+
+        elif obj['compoLabel'] in ['Image', 'Image Button', 'Video']:
+            asp_ratio = (obj['bounds'][2] - obj['bounds'][0]) / (obj['bounds'][3] - obj['bounds'][1])
+            asp_ratio = 1/asp_ratio if asp_ratio < 1 else asp_ratio
+            if asp_ratio < 40:
+                obj['relabel'] = 'Image'
+            else:
+                continue
 
         elif obj['compoLabel'] in ['Input'] and\
                 'class' in obj and\
@@ -124,7 +130,7 @@ def view_label(objects, relabeled_objects, annotimg, org, shrink_ratio=4):
 
 
 if '__main__':
-    show = False
+    show = True
     start = 10001  # start point
     end = 10004
     index = start
