@@ -124,24 +124,29 @@ def view_label(objects, relabeled_objects, annotimg, org, shrink_ratio=4):
 
 
 if '__main__':
-    show = True
-    index = 1  # start point
+    show = False
+    start = 10001  # start point
+    end = 10004
+    index = start
+    labelfile = open('label.txt', 'a')
     while True:
-        if os.path.exists('E:\\Download\\combined\\' + str(index) + '.jpg'):
+        if os.path.exists('E:\\Mulong\\Datasets\\rico\\combined\\' + str(index) + '.jpg'):
             print(index)
             # extract Ui components, relabel them
-            jfile = json.load(open('E:\\Download\\semantic_annotations\\' + str(index) + '.json', encoding="utf8"))
+            jfile = json.load(open('E:\\Mulong\\Datasets\\rico\\semantic_annotations\\' + str(index) + '.json', encoding="utf8"))
             compos = extract_objects(jfile)
             new_compos = recategorize(compos)
 
             # read screenshot and drawn annotation image and show them
             if show:
-                imgfile = cv2.imread('E:\\Download\\combined\\' + str(index) + '.jpg')
-                annofile = cv2.imread('E:\\Download\\semantic_annotations\\' + str(index) + '.png')
+                imgfile = cv2.imread('E:\\Mulong\\Datasets\\rico\\combined\\' + str(index) + '.jpg')
+                annofile = cv2.imread('E:\\Mulong\\Datasets\\rico\\semantic_annotations\\' + str(index) + '.png')
                 view_label(compos, new_compos, annofile, imgfile)
 
             # save new labels
-            labelfile = open('label.txt', 'a')
-            save_label(new_compos, 'E:\\Download\\combined\\' + str(index) + '.jpg', labelfile)
+            save_label(new_compos, 'E:\\Mulong\\Datasets\\rico\\combined\\' + str(index) + '.jpg', labelfile)
 
         index += 1
+        if index > end:
+            break
+    labelfile.close()
