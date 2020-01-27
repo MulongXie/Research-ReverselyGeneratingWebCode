@@ -148,15 +148,15 @@ def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
             # the degree of surface changing
             depth += difference
             # ignore noise at the start of each direction
-            # if i / len(border) < 0.1 and abs(difference) / adj_side > 0.5:
-            #     depth = 0  # reset
+            if i / len(border) < 0.05 and abs(difference) / adj_side > 0.5:
+                depth = 0  # reset
 
-            # print(depth, abs(depth) / adj_side)
+            # print(border[i][1], i / len(border), depth)
             # if the change of the surface is too large, count it as part of abnormal change
             if abs(depth) / adj_side > 0.5:
                 abnm += 1    # count the size of the abnm
                 # if the abnm is too big, the shape should not be a rectangle
-                if abnm / len(border) > 0.1:
+                if abnm / len(border) > 0.1:\
                     return False
                 continue
             else:
