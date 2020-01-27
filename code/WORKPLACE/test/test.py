@@ -5,6 +5,8 @@ import time
 
 import ip_preprocessing as pre
 import ip_detection_utils as util
+import ip_detection as det
+import ip_draw as draw
 
 
 def draw_region(region, broad):
@@ -39,12 +41,12 @@ def flood_fill_bfs(img, x_start, y_start, mark):
     return region
 
 
-def block_division(grey):
+def block_division(org, grey):
+    blocks = []
     mask = np.zeros((org.shape[0], org.shape[1]), dtype=np.uint8)
     broad = np.zeros((org.shape[0], org.shape[1], 3), dtype=np.uint8)
 
     row, column = org.shape[0], org.shape[1]
-
     for x in range(row):
         for y in range(column):
             if mask[x, y] == 0:
@@ -58,19 +60,23 @@ def block_division(grey):
                 if not util.boundary_is_rectangle(boundary, 0.66, 0.1):
                     continue
 
+                blocks.append(boundary)
                 draw_region(region, broad)
 
+    blocks_corner = det.get_corner(blocks)
     cv2.imshow('broad', broad)
+
+    return blocks_corner
 
 
 start = time.clock()
 
-org = cv2.imread('1.jpg')
+org = cv2.imread('2.jpg')
 org = shrink(org)
 grey = cv2.cvtColor(org, cv2.COLOR_BGR2GRAY)
 binary = pre.preprocess(grey)
 
-block_division(grey)
+block_division(org, grey)
 
 print(time.clock() - start)
 

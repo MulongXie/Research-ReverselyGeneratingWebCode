@@ -487,8 +487,8 @@ def boundary_detection(binary,
     :param min_rec_evenness: If not pass then this object cannot be rectangular
     :param max_dent_ratio: If not pass then this object cannot be rectangular
     :return: boundary: [top, bottom, left, right]
-                        -> up, bottom: (column_index, min/max row border)
-                        -> left, right: (row_index, min/max column border) detect range of each row
+                        -> up, bottom: list of (column_index, min/max row border)
+                        -> left, right: list of (row_index, min/max column border) detect range of each row
     """
     mark = np.full(binary.shape, 0, dtype=np.uint8)
     boundary_all = []
