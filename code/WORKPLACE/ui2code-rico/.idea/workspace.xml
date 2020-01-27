@@ -10,50 +10,58 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="ui.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/uied/ui.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-289">
-              <caret line="42" selection-start-line="42" selection-end-line="42" />
-              <folding>
-                <element signature="e#0#39#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ip_draw.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/uied/lib_uied/ip_draw.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
-              <caret line="43" column="31" selection-start-line="43" selection-start-column="31" selection-end-line="43" selection-end-column="31" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ip_detection.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/uied/lib_uied/ip_detection.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="99">
-              <caret line="491" column="7" selection-start-line="491" selection-start-column="7" selection-end-line="491" selection-end-column="7" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ip_detection_utils.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/uied/lib_uied/ip_detection_utils.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="269">
-              <caret line="158" column="43" selection-start-line="158" selection-start-column="43" selection-end-line="158" selection-end-column="43" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf>
+          <file leaf-file-name="ui.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/uied/ui.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="340">
+                  <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
+                  <folding>
+                    <element signature="e#0#39#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ip_draw.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/uied/lib_uied/ip_draw.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="595">
+                  <caret line="43" column="31" selection-start-line="43" selection-start-column="31" selection-end-line="43" selection-end-column="31" />
+                  <folding>
+                    <element signature="e#0#10#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ip_detection_utils.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/uied/lib_uied/ip_detection_utils.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="269">
+                  <caret line="158" column="43" selection-start-line="158" selection-start-column="43" selection-end-line="158" selection-end-column="43" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="ip_detection.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/uied/lib_uied/ip_detection.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-22">
+                  <caret line="491" column="7" selection-start-line="491" selection-start-column="7" selection-end-line="491" selection-end-column="7" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -63,11 +71,11 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
-    <option name="x" value="-12" />
-    <option name="y" value="-12" />
-    <option name="width" value="1944" />
-    <option name="height" value="1044" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-1928" />
+    <option name="y" value="-81" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -159,13 +167,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1296" height="696" extended-state="1" />
+    <frame x="-1928" y="-81" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.26461038" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11854584" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3232143" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.19716775" />
       <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -211,15 +219,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/uied/lib_uied/ip_detection.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
+        <state relative-caret-position="-22">
           <caret line="491" column="7" selection-start-line="491" selection-start-column="7" selection-end-line="491" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/uied/ui.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-289">
-          <caret line="42" selection-start-line="42" selection-end-line="42" />
+        <state relative-caret-position="340">
+          <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>

@@ -26,7 +26,7 @@ def flood_fill_bfs(img, x_start, y_start, mark):
             if i < 0 or i >= img.shape[0]: continue
             for j in range(y - 1, y + 2):
                 if j < 0 or j >= img.shape[1]: continue
-                if mark[i, j] == 0 and abs(img[i, j] - img[x, y]) < 5:
+                if mark[i, j] == 0 and abs(img[i, j] - img[x, y]) < 8:
                     stack.append([i, j])
                     mark[i, j] = 255
 
