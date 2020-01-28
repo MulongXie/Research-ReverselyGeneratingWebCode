@@ -7,6 +7,7 @@ import ip_preprocessing as pre
 import ip_detection_utils as util
 import ip_detection as det
 import ip_draw as draw
+import ip_segment as seg
 
 
 def draw_region(region, broad):
@@ -73,7 +74,6 @@ def block_division(grey, show=False):
                     continue
                 # ignore non-rectangle as blocks must be rectangular
                 if not util.boundary_is_rectangle(boundary, 0.66, 0.25):
-                    draw.draw_boundary([boundary], grey.shape, show=True)
                     continue
                 blocks.append(boundary)
 
@@ -86,18 +86,21 @@ def block_division(grey, show=False):
     return blocks_corner
 
 
-def block_clip(blocks):
-    for b in blocks:
-        pass
+def block_clip(org, blocks_corner):
+    blocks_clip = seg.clipping(org, blocks_corner, True)
+    return blocks_clip
 
 
-if '__main__':
-    start = time.clock()
-
+def main():
     org = cv2.imread('data/5.jpg')
     org = shrink(org)
     grey = cv2.cvtColor(org, cv2.COLOR_BGR2GRAY)
 
-    blocks = block_division(grey, show=True)
+    blocks_corner = block_division(grey, show=True)
+    blocks_clip = block_clip(org, blocks_corner)
 
+
+if __name__ == '__main__':
+    start = time.clock()
+    main()
     print(time.clock() - start)
