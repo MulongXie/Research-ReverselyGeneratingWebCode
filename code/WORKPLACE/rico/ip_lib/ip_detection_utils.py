@@ -125,7 +125,7 @@ def boundary_is_line(boundary, min_line_thickness):
 # -> up, bottom: (column_index, min/max row border)
 # -> left, right: (row_index, min/max column border) detect range of each row
 def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
-    dent_direction = [-1, 1, -1, 1]
+    dent_direction = [1, -1, 1, -1]
 
     flat = 0
     parameter = 0
@@ -142,21 +142,23 @@ def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
         # -> up, bottom: (column_index, min/max row border)
         # -> left, right: (row_index, min/max column border) detect range of each row
         abnm = 0
+        print('\n', n)
         for i in range(len(border) - 1):
             # calculate gradient
             difference = border[i][1] - border[i + 1][1]
             # the degree of surface changing
             depth += difference
             # ignore noise at the start of each direction
-            if i / len(border) < 0.05 and abs(difference) / adj_side > 0.5:
+            if i / len(border) < 0.05 and dent_direction[n] * difference / adj_side > 0.6:
                 depth = 0  # reset
 
-            # print(border[i][1], i / len(border), depth)
+            print(border[i][1], i / len(border), depth)
             # if the change of the surface is too large, count it as part of abnormal change
             if abs(depth) / adj_side > 0.5:
                 abnm += 1    # count the size of the abnm
                 # if the abnm is too big, the shape should not be a rectangle
-                if abnm / len(border) > 0.1:\
+                if abnm / len(border) > 0.1:
+                    print('abnormal')
                     return False
                 continue
             else:
@@ -174,9 +176,11 @@ def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
 
         # if the pit is too big, the shape should not be a rectangle
         if pit / len(border) > max_dent_ratio:
+            print('pit')
             return False
     # ignore text and irregular shape
     if (flat / parameter) < min_rec_evenness:
+        print('rough')
         return False
     return True
 

@@ -71,9 +71,9 @@ def block_division(grey, show=False):
                 # ignore lines
                 if util.boundary_is_line(boundary, 5):
                     continue
+                print('*********************\n')
                 # ignore non-rectangle as blocks must be rectangular
                 if not util.boundary_is_rectangle(boundary, 0.66, 0.1):
-                    print('not rec')
                     draw.draw_boundary([boundary], grey.shape, show=True)
                     continue
                 blocks.append(boundary)
@@ -87,11 +87,15 @@ def block_division(grey, show=False):
     return blocks_corner
 
 
+def block_clip(blocks):
+    for b in blocks:
+        pass
+
 if '__main__':
 
     start = time.clock()
 
-    org = cv2.imread('data/4.jpg')
+    org = cv2.imread('data/2.jpg')
     org = shrink(org)
     grey = cv2.cvtColor(org, cv2.COLOR_BGR2GRAY)
 
