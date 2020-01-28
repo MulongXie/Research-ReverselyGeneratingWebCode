@@ -2,6 +2,7 @@ import cv2
 import json
 import numpy as np
 from random import randint as rint
+import pandas as pd
 import os
 
 
@@ -77,6 +78,7 @@ def recategorize(objects):
     return new_objects
 
 
+# ******* change here to fit new data format *******
 def save_label(objects, img_path, outputfile):
     '''
     save the new label as training format
@@ -95,26 +97,24 @@ def save_label(objects, img_path, outputfile):
 
 
 if '__main__':
+    # ****** change here ******
+    # rico path
     path_img = 'E:\\Mulong\\Datasets\\rico\\combined\\'
     path_annot = 'E:\\Mulong\\Datasets\\rico\\semantic_annotations\\'
-
-    start = 1  # start point
-    end = 80000
-    index = start
-    labelfile = open('label.txt', 'a')
-    while True:
+    # label path
+    # data_train.csv / data_test.csv / data_val.csv
+    ui_ids = pd.read_csv('data_train.csv', index_col=0)['UI Number'].values
+    label_file = open('label_train.txt', 'a')
+    # *************************
+    
+    for index in ui_ids:
+        print(index)
         if os.path.exists(path_img + str(index) + '.jpg'):
-            print(index)
             # extract Ui components, relabel them
             jfile = json.load(open(path_annot + str(index) + '.json', encoding="utf8"))
             old_compos = extract_objects(jfile)
             new_compos = recategorize(old_compos)
+            # write out new label
+            save_label(new_compos, path_img + str(index) + '.jpg', label_file)
 
-            # save new labels
-            # modify here!!!
-            save_label(new_compos, path_img + str(index) + '.jpg', labelfile)
-
-        index += 1
-        if index > end:
-            break
-    labelfile.close()
+    label_file.close()
