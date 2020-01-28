@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from CONFIG_UIED import Config
+from lib_uied.CONFIG_UIED import Config
 
 C = Config()
 

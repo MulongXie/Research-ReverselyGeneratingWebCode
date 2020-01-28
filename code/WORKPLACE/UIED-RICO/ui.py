@@ -4,7 +4,7 @@ import lib_uied.ip_detection as det
 import lib_uied.ip_segment as seg
 import lib_uied.file_utils as file
 import lib_uied.ocr_classify_text as ocr
-from CONFIG_UIED import Config
+from lib_uied.CONFIG_UIED import Config
 
 import cv2
 
@@ -18,9 +18,9 @@ is_ocr = False
 is_shrink_img = False
 
 
-def pre_processing(input_path, img_section):
+def pre_processing(input_path, resize_h=None):
     # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img(input_path, img_section)  # cut out partial img
+    org, gray = pre.read_img(input_path, resize_h)  # cut out partial img
     binary = pre.preprocess(gray)
     return org, binary
 
@@ -90,7 +90,7 @@ def save(org, binary, corners_block, corners_img, corners_compo, compos_class, o
 
 def uied(input_path_img, output_path_label, output_path_img_drawn, output_path_img_bin, img_section):
     print('UIED for', input_path_img)
-    org, binary = pre_processing(input_path_img, img_section)
+    org, binary = pre_processing(input_path_img)
     corners_block, corners_img, corners_compo, compos_class = processing(org, binary, clf)
     save(org, binary, corners_block, corners_img, corners_compo, compos_class, output_path_label, output_path_img_drawn, output_path_img_bin)
     print('*** UI Detection Complete ***')

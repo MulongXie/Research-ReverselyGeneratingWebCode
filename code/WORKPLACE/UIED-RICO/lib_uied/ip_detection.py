@@ -5,7 +5,7 @@ import lib_uied.ip_draw as draw
 import lib_uied.ip_preprocessing as pre
 import lib_uied.ip_detection_utils as util
 import lib_uied.ocr_classify_text as ocr
-from CONFIG_UIED import Config
+from lib_uied.CONFIG_UIED import Config
 
 C = Config()
 
