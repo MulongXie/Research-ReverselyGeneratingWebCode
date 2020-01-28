@@ -125,46 +125,55 @@ def boundary_is_line(boundary, min_line_thickness):
 # -> up, bottom: (column_index, min/max row border)
 # -> left, right: (row_index, min/max column border) detect range of each row
 def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
-    dent_direction = [-1, 1, -1, 1]
+    dent_direction = [1, -1, 1, -1]  # direction for convex
 
     flat = 0
     parameter = 0
     for n, border in enumerate(boundary):
         parameter += len(border)
         # dent detection
-        dent = 0  # length of dent
-        depth = 0  # depth of dent, vector
+        pit = 0  # length of pit
+        depth = 0  # the degree of surface changing
         if n <= 1:
-            edge = max(len(boundary[2]), len(boundary[3]))  # get maximum length of adjacent edge
+            adj_side = max(len(boundary[2]), len(boundary[3]))  # get maximum length of adjacent side
         else:
-            edge = max(len(boundary[0]), len(boundary[1]))
+            adj_side = max(len(boundary[0]), len(boundary[1]))
 
         # -> up, bottom: (column_index, min/max row border)
         # -> left, right: (row_index, min/max column border) detect range of each row
-        pit = 0
+        abnm = 0
         for i in range(len(border) - 1):
             # calculate gradient
             difference = border[i][1] - border[i + 1][1]
-            # dent detection
+            # the degree of surface changing
             depth += difference
-            # ignore noise
-            if i / len(border) < 0.1 and abs(difference) / edge > 0.5:
-                depth = 0
+            # ignore noise at the start of each direction
+            if i / len(border) < 0.08 and (dent_direction[n] * difference) / adj_side > 0.5:
+                depth = 0  # reset
 
+            # print(border[i][1], i / len(border), depth, (dent_direction[n] * difference) / adj_side )
+            # if the change of the surface is too large, count it as part of abnormal change
+            if abs(depth) / adj_side > 0.5:
+                abnm += 1    # count the size of the abnm
+                # if the abnm is too big, the shape should not be a rectangle
+                if abnm / len(border) > 0.1:
+                    return False
+                continue
+            else:
+                # reset the abnm if the depth back to normal
+                abnm = 0
+
+            # if sunken and the surface changing is large, then counted as pit
+            if dent_direction[n] * depth < 0 and abs(depth) / adj_side > 0.15:
+                pit += 1
+                continue
+
+            # if the surface is not changing to a pit and the gradient is zero, then count it as flat
             if abs(difference) == 0:
                 flat += 1
-            # too abnormal to be a regular shape
-            elif abs(depth) / edge > 0.5:
-                pit += 1
-                if pit / len(border) > 0.1:
-                    return False
-            else:
-                pit = 0
 
-            # if dent and too deep, then counted as dent
-            if dent_direction[n] * depth > 0 and abs(depth) / edge > 0.15:
-                dent += 1
-        if dent / len(border) > max_dent_ratio:
+        # if the pit is too big, the shape should not be a rectangle
+        if pit / len(border) > max_dent_ratio:
             return False
     # ignore text and irregular shape
     if (flat / parameter) < min_rec_evenness:
