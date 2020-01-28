@@ -14,7 +14,6 @@ def read_img(path, resize_h=None):
 
     try:
         img = cv2.imread(path)
-
         if resize_h is not None:
             img = resize_by_height(img)
 
