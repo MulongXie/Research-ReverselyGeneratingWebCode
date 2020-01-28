@@ -76,27 +76,26 @@ def block_division(grey, show=False):
                 if not util.boundary_is_rectangle(boundary, 0.66, 0.25):
                     continue
                 blocks.append(boundary)
-
-                if show:
-                    draw_region(region, broad)
-                    cv2.imshow('broad', broad)
-                    cv2.waitKey()
+                draw_region(region, broad)
+    if show:
+        cv2.imshow('broad', broad)
+        cv2.waitKey()
 
     blocks_corner = det.get_corner(blocks)
     return blocks_corner
 
 
 def block_clip(org, blocks_corner):
-    blocks_clip = seg.clipping(org, blocks_corner, True)
+    blocks_clip = seg.clipping(org, blocks_corner, False)
     return blocks_clip
 
 
 def main():
-    org = cv2.imread('data/5.jpg')
+    org = cv2.imread('data/2.jpg')
     org = shrink(org)
     grey = cv2.cvtColor(org, cv2.COLOR_BGR2GRAY)
 
-    blocks_corner = block_division(grey, show=True)
+    blocks_corner = block_division(grey, show=False)
     blocks_clip = block_clip(org, blocks_corner)
 
 
