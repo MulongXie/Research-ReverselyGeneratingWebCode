@@ -10,19 +10,8 @@ import cv2
 
 # initialization
 C = Config()
-from lib_uied.MODEL_CNN import CNN
-clf = CNN()
-clf.load()
-
 is_ocr = False
 is_shrink_img = False
-
-
-def pre_processing(input_path, resize_h=None):
-    # *** Step 1 *** pre-processing: gray, gradient, binary
-    org, gray = pre.read_img(input_path, resize_h)  # cut out partial img
-    binary = pre.preprocess(gray)
-    return org, binary
 
 
 def processing(org, binary, clf, main=True):
@@ -86,14 +75,5 @@ def save(org, binary, corners_block, corners_img, corners_compo, compos_class, o
     file.save_corners_json(output_path_label, corners_compo, compos_class, new=True)
     file.save_corners_json(output_path_label, corners_block, ['block' for i in range(len(corners_block))], new=False)
     file.save_corners_json(output_path_label, corners_img, ['img' for i in range(len(corners_img))], new=False)
-
-
-def uied(input_path_img, output_path_label, output_path_img_drawn, output_path_img_bin, img_section):
-    print('UIED for', input_path_img)
-    org, binary = pre_processing(input_path_img)
-    corners_block, corners_img, corners_compo, compos_class = processing(org, binary, clf)
-    save(org, binary, corners_block, corners_img, corners_compo, compos_class, output_path_label, output_path_img_drawn, output_path_img_bin)
-    print('*** UI Detection Complete ***')
-
 
 

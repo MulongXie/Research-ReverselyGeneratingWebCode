@@ -20,8 +20,9 @@ def segment_img(org, segment_size, output_path, overlap=100):
         bottom = bottom + segment_size - overlap if bottom + segment_size - overlap <= height else height
 
 
-def clipping(img, corners, show=False):
+def clipping(img, corners, shrink=0):
     """
+    :param shrink: trim the brim
     :param img: original image
     :param corners: ((column_min, row_min),(column_max, row_max))
     :return: list of clipping images
@@ -30,9 +31,6 @@ def clipping(img, corners, show=False):
     clips = []
     for corner in corners:
         ((column_min, row_min), (column_max, row_max)) = corner
-        clip = img[row_min:row_max, column_min:column_max]
+        clip = img[row_min + shrink:row_max - shrink, column_min + shrink:column_max - shrink]
         clips.append(clip)
-        if show:
-            cv2.imshow('clip', clip)
-            cv2.waitKey(0)
     return clips

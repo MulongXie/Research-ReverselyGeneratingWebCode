@@ -4,7 +4,7 @@ from sklearn.metrics import confusion_matrix
 import cv2
 import numpy as np
 
-from CONFIG import Config
+from lib_uied.CONFIG import Config
 cfg = Config()
 
 

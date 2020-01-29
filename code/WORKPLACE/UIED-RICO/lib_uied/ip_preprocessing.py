@@ -54,8 +54,9 @@ def reverse_binary(bin):
     return bin
 
 
-def preprocess(gray, grad_min=C.THRESHOLD_MIN_GRADIENT):
-    grad = gray_to_gradient(gray)        # get RoI with high gradient
+def preprocess(org, grad_min=C.THRESHOLD_MIN_GRADIENT):
+    grey = cv2.cvtColor(org, cv2.COLOR_BGR2GRAY)
+    grad = gray_to_gradient(grey)        # get RoI with high gradient
     binary = grad_to_binary(grad, grad_min)   # enhance the RoI
     close = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, (5, 5))   # remove noises
     dilate = cv2.morphologyEx(close, cv2.MORPH_DILATE, (3, 3))

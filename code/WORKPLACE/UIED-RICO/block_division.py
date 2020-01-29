@@ -84,22 +84,3 @@ def block_division(grey, show=False):
     blocks_corner = det.get_corner(blocks)
     return blocks_corner
 
-
-def block_clip(org, blocks_corner):
-    blocks_clip = seg.clipping(org, blocks_corner, True)
-    return blocks_clip
-
-
-def main():
-    org = cv2.imread('data/4.jpg')
-    org = shrink(org)
-    grey = cv2.cvtColor(org, cv2.COLOR_BGR2GRAY)
-
-    blocks_corner = block_division(grey, show=True)
-    blocks_clip = block_clip(org, blocks_corner)
-
-
-if __name__ == '__main__':
-    start = time.clock()
-    main()
-    print(time.clock() - start)
