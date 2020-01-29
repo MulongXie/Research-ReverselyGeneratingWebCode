@@ -54,44 +54,6 @@ def boundary_get_boundary(area):
     return boundary
 
 
-# check if an object is so slim
-# @boundary: [border_up, border_bottom, border_left, border_right]
-# -> up, bottom: (column_index, min/max row border)
-# -> left, right: (row_index, min/max column border) detect range of each row
-def clipping_by_line(boundary, boundary_rec, lines):
-    boundary = boundary.copy()
-    for orient in lines:
-        # horizontal
-        if orient == 'h':
-            # column range of sub area
-            r1, r2 = 0, 0
-            for line in lines[orient]:
-                if line[0] == 0:
-                    r1 = line[1]
-                    continue
-                r2 = line[0]
-                b_top = []
-                b_bottom = []
-                for i in range(len(boundary[0])):
-                    if r2 > boundary[0][i][0] >= r1:
-                        b_top.append(boundary[0][i])
-                for i in range(len(boundary[1])):
-                    if r2 > boundary[1][i][0] >= r1:
-                        b_bottom.append(boundary[1][i])
-
-                b_left = [x for x in boundary[2]]  # (row_index, min column border)
-                for i in range(len(b_left)):
-                    if b_left[i][1] < r1:
-                        b_left[i][1] = r1
-                b_right = [x for x in boundary[3]]  # (row_index, max column border)
-                for i in range(len(b_right)):
-                    if b_right[i][1] > r2:
-                        b_right[i][1] = r2
-
-                boundary_rec.append([b_top, b_bottom, b_left, b_right])
-                r1 = line[1]
-
-
 def boundary_is_line(boundary, min_line_thickness):
     """
     If this object is line by checking its boundary
@@ -414,3 +376,41 @@ def line_cvt_relative_position(col_min, row_min, lines_h, lines_v):
         v['end'][1] += row_min
 
     return lines_h, lines_v
+
+
+# check if an object is so slim
+# @boundary: [border_up, border_bottom, border_left, border_right]
+# -> up, bottom: (column_index, min/max row border)
+# -> left, right: (row_index, min/max column border) detect range of each row
+def clipping_by_line(boundary, boundary_rec, lines):
+    boundary = boundary.copy()
+    for orient in lines:
+        # horizontal
+        if orient == 'h':
+            # column range of sub area
+            r1, r2 = 0, 0
+            for line in lines[orient]:
+                if line[0] == 0:
+                    r1 = line[1]
+                    continue
+                r2 = line[0]
+                b_top = []
+                b_bottom = []
+                for i in range(len(boundary[0])):
+                    if r2 > boundary[0][i][0] >= r1:
+                        b_top.append(boundary[0][i])
+                for i in range(len(boundary[1])):
+                    if r2 > boundary[1][i][0] >= r1:
+                        b_bottom.append(boundary[1][i])
+
+                b_left = [x for x in boundary[2]]  # (row_index, min column border)
+                for i in range(len(b_left)):
+                    if b_left[i][1] < r1:
+                        b_left[i][1] = r1
+                b_right = [x for x in boundary[3]]  # (row_index, max column border)
+                for i in range(len(b_right)):
+                    if b_right[i][1] > r2:
+                        b_right[i][1] = r2
+
+                boundary_rec.append([b_top, b_bottom, b_left, b_right])
+                r1 = line[1]
