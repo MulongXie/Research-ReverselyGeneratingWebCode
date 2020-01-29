@@ -8,7 +8,7 @@ element_map = {'0':'Image', '1':'Icon', '2':'Button', '3':'Input'}
 element_number = {'Image':0, 'Icon':0, 'Button':0, 'Input':0}
 ROOT_OUTPUT = "E:/Mulong/Datasets/rico/elements"
 ROOT_IMG = 'E:/Mulong/Datasets/rico/combined'
-ROOT_LABEL = 'E:/Mulong/Datasets/rico//data_train.txt'
+ROOT_LABEL = 'label_test.txt'
 
 
 def fetch_and_clip(img, label, output_root, pad=False, show_label=False, show_clip=False, write_clip=True):
@@ -58,6 +58,7 @@ def read_files():
         img_path = l[0]
         label = l[1:]
         img = cv2.imread(img_path)
+        img = cv2.resize(img, (1440, 2560))
 
         print(img_path)
         fetch_and_clip(img, label, ROOT_OUTPUT)

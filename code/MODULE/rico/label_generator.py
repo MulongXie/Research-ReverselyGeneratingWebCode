@@ -103,8 +103,8 @@ if '__main__':
     path_annot = 'E:\\Mulong\\Datasets\\rico\\semantic_annotations\\'
     # label path
     # data_train.csv / data_test.csv / data_val.csv
-    ui_ids = pd.read_csv('data_val.csv', index_col=0)['UI Number'].values
-    label_file = open('label_val.txt', 'a')
+    ui_ids = pd.read_csv('data_train.csv', index_col=0)['UI Number'].values
+    label_file = open('label_train.txt', 'a')
     # *************************
 
     i = 0
