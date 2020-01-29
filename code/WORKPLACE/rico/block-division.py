@@ -85,18 +85,18 @@ def block_division(grey, show=False):
     return blocks_corner
 
 
-def block_clip(org, blocks_corner):
-    blocks_clip = seg.clipping(org, blocks_corner, False)
+def block_clip(org, blocks_corner, show=False):
+    blocks_clip = seg.clipping(org, blocks_corner, show)
     return blocks_clip
 
 
 def main():
-    org = cv2.imread('data/2.jpg')
+    org = cv2.imread('data/4.jpg')
     org = shrink(org)
     grey = cv2.cvtColor(org, cv2.COLOR_BGR2GRAY)
 
     blocks_corner = block_division(grey, show=False)
-    blocks_clip = block_clip(org, blocks_corner)
+    blocks_clip = block_clip(org, blocks_corner, show=True)
 
 
 if __name__ == '__main__':
