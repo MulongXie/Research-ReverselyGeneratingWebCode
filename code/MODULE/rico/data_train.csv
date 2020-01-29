@@ -4228,12 +4228,12 @@
 11397,com.yidio.androidapp,Entertainment,8412
 11398,com.yidio.androidapp,Entertainment,8413
 11399,com.yidio.androidapp,Entertainment,8414
+11400,com.yidio.androidapp,Entertainment,8415
 11401,com.yidio.androidapp,Entertainment,8416
 11404,com.yidio.androidapp,Entertainment,8419
 11402,com.yidio.androidapp,Entertainment,8417
 11395,com.yidio.androidapp,Entertainment,8410
 11396,com.yidio.androidapp,Entertainment,8411
-48971,com.yotapps.dragonball,Entertainment,44076
 54500,air.Chat.org,Social,20513
 66187,air.com.FreeVideoChat,Social,53614
 26190,air.com.interactech.moovz,Social,15294
@@ -7571,6 +7571,7 @@
 4975,com.waplog.social,Social,9158
 4976,com.waplog.social,Social,9159
 4977,com.waplog.social,Social,9160
+4970,com.waplog.social,Social,9153
 4969,com.waplog.social,Social,9152
 4968,com.waplog.social,Social,9151
 4978,com.waplog.social,Social,9161
@@ -7584,7 +7585,6 @@
 4986,com.waplog.social,Social,64132
 4974,com.waplog.social,Social,9157
 4985,com.waplog.social,Social,9168
-24688,com.waplogmatch.social,Social,36699
 41954,air.com.avon.mobile.AvonMobile,Shopping,27841
 29199,air.com.maranathatechnologies.ammoseek,Shopping,58117
 33512,air.com.yudu.ReaderAIR3104835,Shopping,55259
@@ -10914,8 +10914,8 @@
 49052,com.trixiesoft.clapp,Shopping,68040
 49050,com.trixiesoft.clapp,Shopping,68038
 49059,com.trixiesoft.clapp,Shopping,68047
+49054,com.trixiesoft.clapp,Shopping,68042
 49051,com.trixiesoft.clapp,Shopping,68039
-40829,com.twicular.grocerypal.android,Shopping,66675
 53064,B4A.BigFivePersonalityTest,Education,49783
 59235,Gecko.Droid.PhysicsHelper,Education,21238
 59238,Gecko.Droid.PhysicsHelper,Education,29869
@@ -14056,6 +14056,7 @@
 47737,com.virblue.mystudylife,Education,70457
 47748,com.virblue.mystudylife,Education,70468
 47749,com.virblue.mystudylife,Education,70469
+47726,com.virblue.mystudylife,Education,27576
 47766,com.virblue.mystudylife,Education,70486
 47765,com.virblue.mystudylife,Education,70485
 47764,com.virblue.mystudylife,Education,70484
@@ -14076,7 +14077,6 @@
 47729,com.virblue.mystudylife,Education,27579
 47728,com.virblue.mystudylife,Education,27578
 47742,com.virblue.mystudylife,Education,70462
-40482,com.virtualni_atelier.hubble,Education,71452
 41023,air.com.indiegoes.spiritanimal,Lifestyle,65114
 8694,air.com.marykay.enterprise.VMO,Lifestyle,67955
 62553,app.diaryfree,Lifestyle,19742
@@ -17205,6 +17205,7 @@
 28605,com.urbancustard.lifeguidanceinspiration,Lifestyle,23006
 46157,com.urbandroid.sleep,Lifestyle,66953
 46165,com.urbandroid.sleep,Lifestyle,66961
+46166,com.urbandroid.sleep,Lifestyle,66962
 46154,com.urbandroid.sleep,Lifestyle,66950
 46150,com.urbandroid.sleep,Lifestyle,66946
 46152,com.urbandroid.sleep,Lifestyle,66948
@@ -17226,7 +17227,6 @@
 46161,com.urbandroid.sleep,Lifestyle,66957
 46162,com.urbandroid.sleep,Lifestyle,66958
 46163,com.urbandroid.sleep,Lifestyle,66959
-25602,com.usamp.mobile,Lifestyle,56004
 55712,alexcrusher.just6weeks.pushups,Health & Fitness,51889
 55713,alexcrusher.just6weeks.pushups,Health & Fitness,51890
 55709,alexcrusher.just6weeks.pushups,Health & Fitness,51886
@@ -20258,6 +20258,7 @@
 44325,com.wsl.noom,Health & Fitness,27987
 44327,com.wsl.noom,Health & Fitness,27989
 44339,com.wsl.noom,Health & Fitness,28001
+44331,com.wsl.noom,Health & Fitness,27993
 44332,com.wsl.noom,Health & Fitness,27994
 44333,com.wsl.noom,Health & Fitness,27995
 44334,com.wsl.noom,Health & Fitness,27996
@@ -20268,7 +20269,6 @@
 44330,com.wsl.noom,Health & Fitness,27992
 44329,com.wsl.noom,Health & Fitness,27991
 44328,com.wsl.noom,Health & Fitness,27990
-12435,com.wte.view,Health & Fitness,60716
 18353,CN.MyPrivateMessages,Communication,26083
 14828,SavySoda.PrivateBrowsing,Communication,38947
 14825,SavySoda.PrivateBrowsing,Communication,38944
@@ -23265,6 +23265,7 @@
 29417,com.yeecall.app,Communication,42490
 29416,com.yeecall.app,Communication,42489
 29414,com.yeecall.app,Communication,42487
+29418,com.yeecall.app,Communication,42491
 29420,com.yeecall.app,Communication,42493
 29419,com.yeecall.app,Communication,42492
 29422,com.yeecall.app,Communication,42495
@@ -23274,7 +23275,6 @@
 29423,com.yeecall.app,Communication,42496
 29424,com.yeecall.app,Communication,42497
 29421,com.yeecall.app,Communication,42494
-64187,com.yollacalls,Communication,16396
 32632,air.com.launchday.mobile.farmingsim,News & Magazines,65552
 6492,air.com.launchday.mobile.finalfantasy,News & Magazines,20656
 26302,air.com.launchday.mobile.halo,News & Magazines,55345
@@ -26143,6 +26143,7 @@
 42285,com.tribtv.kcpq,News & Magazines,20254
 18162,com.tribtv.kswb2,News & Magazines,36308
 18174,com.tribtv.kswb2,News & Magazines,36320
+18180,com.tribtv.kswb2,News & Magazines,36326
 18177,com.tribtv.kswb2,News & Magazines,36323
 18176,com.tribtv.kswb2,News & Magazines,36322
 18175,com.tribtv.kswb2,News & Magazines,36321
@@ -26162,7 +26163,6 @@
 18163,com.tribtv.kswb2,News & Magazines,36309
 18169,com.tribtv.kswb2,News & Magazines,36315
 18178,com.tribtv.kswb2,News & Magazines,36324
-10700,com.tribtv.ktla2,News & Magazines,68009
 26048,air.BasketballDoodFree,Sports,3748
 26047,air.BasketballDoodFree,Sports,3747
 10252,air.FootballDoodFree,Sports,46754
@@ -28940,6 +28940,7 @@
 45786,com.yinzcam.nbamoji,Sports,10693
 45785,com.yinzcam.nbamoji,Sports,10692
 980,com.yinzcam.nfl.bears,Sports,54258
+985,com.yinzcam.nfl.bears,Sports,54263
 984,com.yinzcam.nfl.bears,Sports,54262
 983,com.yinzcam.nfl.bears,Sports,54261
 982,com.yinzcam.nfl.bears,Sports,54260
@@ -28956,7 +28957,6 @@
 987,com.yinzcam.nfl.bears,Sports,54265
 971,com.yinzcam.nfl.bears,Sports,54249
 988,com.yinzcam.nfl.bears,Sports,54266
-21566,com.yinzcam.nfl.bengals,Sports,53086
 50316,HinKhoj.Dictionary,Books & Reference,42074
 50317,HinKhoj.Dictionary,Books & Reference,42083
 50318,HinKhoj.Dictionary,Books & Reference,42085
@@ -36779,6 +36779,7 @@
 35514,com.wtol.android.weather,Weather,43920
 35515,com.wtol.android.weather,Weather,43921
 35517,com.wtol.android.weather,Weather,43923
+35518,com.wtol.android.weather,Weather,43924
 35519,com.wtol.android.weather,Weather,43925
 35520,com.wtol.android.weather,Weather,43926
 35521,com.wtol.android.weather,Weather,43927
@@ -36786,7 +36787,6 @@
 35523,com.wtol.android.weather,Weather,43929
 35524,com.wtol.android.weather,Weather,43930
 35512,com.wtol.android.weather,Weather,43918
-17602,com.wttg.android.weather,Weather,20127
 49071,appinventor.ai_hamada_yousef_o.MP3Quruan_2,Music & Audio,33776
 49070,appinventor.ai_hamada_yousef_o.MP3Quruan_2,Music & Audio,33775
 49069,appinventor.ai_hamada_yousef_o.MP3Quruan_2,Music & Audio,33774
@@ -39079,6 +39079,7 @@
 13612,de.smartchord.droid,Music & Audio,5705
 13599,de.smartchord.droid,Music & Audio,5692
 13600,de.smartchord.droid,Music & Audio,5693
+13579,de.smartchord.droid,Music & Audio,5672
 13614,de.smartchord.droid,Music & Audio,5707
 13576,de.smartchord.droid,Music & Audio,5669
 13607,de.smartchord.droid,Music & Audio,5700
@@ -39114,7 +39115,6 @@
 13575,de.smartchord.droid,Music & Audio,5668
 13574,de.smartchord.droid,Music & Audio,5667
 13573,de.smartchord.droid,Music & Audio,5666
-55055,de.stohelit.audiobookplayer,Music & Audio,48731
 56115,Kenneth.Currency,Finance,51880
 56116,Kenneth.Currency,Finance,51881
 56117,Kenneth.Currency,Finance,51882
@@ -41138,6 +41138,7 @@
 1866,com.yahoo.mobile.client.android.finance,Finance,30940
 1867,com.yahoo.mobile.client.android.finance,Finance,30941
 1868,com.yahoo.mobile.client.android.finance,Finance,30942
+1869,com.yahoo.mobile.client.android.finance,Finance,30943
 1870,com.yahoo.mobile.client.android.finance,Finance,30944
 1871,com.yahoo.mobile.client.android.finance,Finance,30945
 1877,com.yahoo.mobile.client.android.finance,Finance,30951
@@ -41171,7 +41172,6 @@
 1850,com.yahoo.mobile.client.android.finance,Finance,17065
 1841,com.yahoo.mobile.client.android.finance,Finance,17056
 1872,com.yahoo.mobile.client.android.finance,Finance,30946
-44099,com.yapstone.rentpayment,Finance,3020
 28768,adidas.app3,Business,32637
 15754,air.com.adobe.connectpro,Business,60847
 1385,air.com.gmail.vojjin.jobmanagertool,Business,10475
@@ -42884,12 +42884,12 @@
 3214,com.thehomedepot.proapp,Business,63635
 3213,com.thehomedepot.proapp,Business,63634
 19599,com.thisclicks.wiw,Business,69837
+19597,com.thisclicks.wiw,Business,69835
 19596,com.thisclicks.wiw,Business,69834
 19601,com.thisclicks.wiw,Business,69839
 19600,com.thisclicks.wiw,Business,69838
 19598,com.thisclicks.wiw,Business,69836
 19595,com.thisclicks.wiw,Business,69833
-40223,com.thumbtack.pro,Business,47839
 29209,DOCECG2.doctor,Medical,51036
 47613,Pedcall.Calculator,Medical,28104
 47626,Pedcall.Calculator,Medical,28117
@@ -44469,8 +44469,8 @@
 37245,com.szyk.myheart,Medical,31019
 37263,com.szyk.myheart,Medical,42671
 37264,com.szyk.myheart,Medical,42672
+37265,com.szyk.myheart,Medical,42673
 37259,com.szyk.myheart,Medical,31033
-26370,com.talixa.pocketherbalist,Medical,38847
 8825,air.com.readysquare.scsm,Maps & Navigation,9993
 8826,air.com.readysquare.scsm,Maps & Navigation,9994
 8828,air.com.readysquare.scsm,Maps & Navigation,9996
@@ -46003,6 +46003,7 @@
 29936,de.hafas.android.db,Maps & Navigation,33881
 29932,de.hafas.android.db,Maps & Navigation,33877
 29934,de.hafas.android.db,Maps & Navigation,33879
+29931,de.hafas.android.db,Maps & Navigation,33876
 29945,de.hafas.android.db,Maps & Navigation,33890
 29935,de.hafas.android.db,Maps & Navigation,33880
 29944,de.hafas.android.db,Maps & Navigation,33889
@@ -46014,7 +46015,6 @@
 29933,de.hafas.android.db,Maps & Navigation,33878
 29941,de.hafas.android.db,Maps & Navigation,33886
 29940,de.hafas.android.db,Maps & Navigation,33885
-61075,de.hafas.android.oebb,Maps & Navigation,11056
 43791,air.QCHMOBILE,Food & Drink,7716
 11844,br.com.brainweb.ifood,Food & Drink,25428
 11846,br.com.brainweb.ifood,Food & Drink,25431
@@ -47476,6 +47476,7 @@
 30918,com.ubercab.eats,Food & Drink,63092
 30917,com.ubercab.eats,Food & Drink,63091
 30916,com.ubercab.eats,Food & Drink,63090
+30921,com.ubercab.eats,Food & Drink,63095
 30922,com.ubercab.eats,Food & Drink,63096
 30923,com.ubercab.eats,Food & Drink,63097
 30924,com.ubercab.eats,Food & Drink,63098
@@ -47497,7 +47498,6 @@
 30937,com.ubercab.eats,Food & Drink,63111
 30940,com.ubercab.eats,Food & Drink,63114
 30919,com.ubercab.eats,Food & Drink,63093
-28828,com.uconnection.uconnection,Food & Drink,56866
 6715,air.bahraniapps.comicspanelcreator,Comics,23190
 6716,air.bahraniapps.comicspanelcreator,Comics,23191
 6717,air.bahraniapps.comicspanelcreator,Comics,23192
@@ -48506,7 +48506,7 @@
 29383,cute.cartoon.yellow.chat,Comics,28771
 29384,cute.cartoon.yellow.chat,Comics,28772
 31225,cute.face.smile.pink,Comics,29605
-20241,cute.girl.lovely.baby,Comics,44655
+31224,cute.face.smile.pink,Comics,29604
 61084,air.com.flaxbin.chat,Dating,69434
 61085,air.com.flaxbin.chat,Dating,69435
 61086,air.com.flaxbin.chat,Dating,69436
@@ -49463,6 +49463,7 @@
 40974,fr.android.v4p,Dating,64750
 64581,hot.video.chat.marriage.dating,Dating,69997
 64576,hot.video.chat.marriage.dating,Dating,69992
+64573,hot.video.chat.marriage.dating,Dating,69989
 64574,hot.video.chat.marriage.dating,Dating,69990
 64575,hot.video.chat.marriage.dating,Dating,69991
 64577,hot.video.chat.marriage.dating,Dating,69993
@@ -49479,7 +49480,6 @@
 64590,hot.video.chat.marriage.dating,Dating,70006
 64591,hot.video.chat.marriage.dating,Dating,70007
 64584,hot.video.chat.marriage.dating,Dating,70000
-34229,ify.next.com,Dating,41663
 55197,afzkl.development.mVideoPlayer,Video Players & Editors,13392
 55196,afzkl.development.mVideoPlayer,Video Players & Editors,13391
 55187,afzkl.development.mVideoPlayer,Video Players & Editors,13382
@@ -50394,8 +50394,8 @@
 62558,media.music.musicplayer.mp3player,Video Players & Editors,28727
 62560,media.music.musicplayer.mp3player,Video Players & Editors,28729
 62554,media.music.musicplayer.mp3player,Video Players & Editors,28723
+62561,media.music.musicplayer.mp3player,Video Players & Editors,28730
 62562,media.music.musicplayer.mp3player,Video Players & Editors,28731
-51683,media.video.mediaplayer,Video Players & Editors,70746
 9589,app.babychakra.babychakra,Parenting,48528
 9590,app.babychakra.babychakra,Parenting,48529
 9588,app.babychakra.babychakra,Parenting,48527
@@ -52381,6 +52381,7 @@
 42579,com.zameen.zameenapp,House & Home,10495
 33433,com.zillow.android.rentals,House & Home,34442
 33450,com.zillow.android.rentals,House & Home,67552
+33444,com.zillow.android.rentals,House & Home,67546
 33424,com.zillow.android.rentals,House & Home,34433
 33416,com.zillow.android.rentals,House & Home,34425
 33445,com.zillow.android.rentals,House & Home,67547
@@ -52416,7 +52417,6 @@
 33440,com.zillow.android.rentals,House & Home,67542
 33442,com.zillow.android.rentals,House & Home,67544
 33441,com.zillow.android.rentals,House & Home,67543
-15382,com.zillow.android.zillowmap,House & Home,47082
 41775,air.com.kigorosa.hausmittel.kosmetik.ad,Beauty,64001
 35376,apps.yamayka.beautifulhair,Beauty,7276
 35375,apps.yamayka.beautifulhair,Beauty,7275
@@ -53146,8 +53146,8 @@
 13237,com.udn.howtodraw.undertale,Art & Design,32585
 34033,com.vblast.flipaclip,Art & Design,7574
 33807,com.vvaani.logo.maker,Art & Design,69746
+33806,com.vvaani.logo.maker,Art & Design,69745
 33805,com.vvaani.logo.maker,Art & Design,69744
-26530,com.woodencloset.paintsplash,Art & Design,57757
 25595,com.amitech.allevents,Events,24818
 25594,com.amitech.allevents,Events,24816
 25593,com.amitech.allevents,Events,24814
@@ -53296,4 +53296,5 @@
 60091,net.ayudaporfavor.Love,000 - 1,2659
 60092,net.ayudaporfavor.Love,000 - 1,2660
 60090,net.ayudaporfavor.Love,000 - 1,2658
+60093,net.ayudaporfavor.Love,000 - 1,2661
 60089,net.ayudaporfavor.Love,000 - 1,2657

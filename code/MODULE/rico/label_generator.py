@@ -26,8 +26,8 @@ def extract_objects(root):
     objects = []
     iter_kids(root)
     # save objects
-    objs_json = json.dumps(objects)
-    open('objects.json', 'w').write(objs_json)
+    # objs_json = json.dumps(objects)
+    # open('objects.json', 'w').write(objs_json)
     return objects
 
 
@@ -103,12 +103,13 @@ if '__main__':
     path_annot = 'E:\\Mulong\\Datasets\\rico\\semantic_annotations\\'
     # label path
     # data_train.csv / data_test.csv / data_val.csv
-    ui_ids = pd.read_csv('data_train.csv', index_col=0)['UI Number'].values
-    label_file = open('label_train.txt', 'a')
+    ui_ids = pd.read_csv('data_val.csv', index_col=0)['UI Number'].values
+    label_file = open('label_val.txt', 'a')
     # *************************
-    
+
+    i = 0
     for index in ui_ids:
-        print(index)
+        print(i, index)
         if os.path.exists(path_img + str(index) + '.jpg'):
             # extract Ui components, relabel them
             jfile = json.load(open(path_annot + str(index) + '.json', encoding="utf8"))
@@ -116,5 +117,5 @@ if '__main__':
             new_compos = recategorize(old_compos)
             # write out new label
             save_label(new_compos, path_img + str(index) + '.jpg', label_file)
-
+            i += 1
     label_file.close()
