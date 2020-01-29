@@ -19,15 +19,18 @@ print(org.shape)
 blocks_corner = div.block_division(grey)
 blocks_clip = seg.clipping(org, blocks_corner, shrink=3)
 
-for block in blocks_clip:
-    bin = pre.preprocess(block)
-    corners_block, corners_img, corners_compo, compos_class = ui.processing(block, bin, clf)
-    draw_bounding = draw.draw_bounding_box_class(block, corners_compo, compos_class)
-    draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_block, ['block' for i in range(len(corners_block))])
-    draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_img, ['img' for i in range(len(corners_img))])
+for i in range(len(blocks_corner)):
+    bin = pre.preprocess(blocks_clip[i])
+    corners_block, corners_img, corners_compo, compos_class = ui.processing(blocks_clip[i], bin, clf)
 
-    cv2.imshow('bin', bin)
-    cv2.imshow('b', draw_bounding)
+    corners_img = div.block_rectify(blocks_corner[i], corners_img)
+
+    # draw_bounding = draw.draw_bounding_box_class(org, corners_compo, compos_class)
+    # draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_block, ['block' for i in range(len(corners_block))])
+    draw_bounding = draw.draw_bounding_box_class(org, corners_img, ['img' for i in range(len(corners_img))])
+
+    cv2.imshow('img', draw_bounding)
     cv2.waitKey()
+
 
 print(time.clock() - start)

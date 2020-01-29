@@ -84,3 +84,29 @@ def block_division(grey, show=False):
     blocks_corner = det.get_corner(blocks)
     return blocks_corner
 
+
+def block_rectify(block_corner, components_corner):
+    '''
+    Assemble the split
+    :param block_corner: corners of blocks
+                        (top_left, bottom_right)
+                        -> top_left: (column_min, row_min)
+                        -> bottom_right: (column_max, row_max)
+    :param components_corner: list of corners of components needed to be corrected
+                        [(top_left, bottom_right)]
+                        -> top_left: (column_min, row_min)
+                        -> bottom_right: (column_max, row_max)
+    :return:
+    '''
+    bias = block_corner[0]
+    compos_corner_new = []
+    for compo in components_corner:
+        # column
+        col_min = compo[0][0] + bias[0]
+        col_max = compo[1][0] + bias[0]
+        # row
+        row_min = compo[0][1] + bias[1]
+        row_max = compo[1][1] + bias[1]
+        compos_corner_new.append(((col_min, row_min), (col_max, row_max)))
+
+    return compos_corner_new
