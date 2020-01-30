@@ -42,7 +42,7 @@ def processing_block(org, blocks_corner, classifier):
         binary = pre.preprocess(block_clip)
 
         # *** Step 2 *** object extraction: extract components boundary -> get bounding box corner
-        compos_boundary = det.boundary_detection(binary, rec_detect=False)
+        compos_boundary = det.boundary_detection(binary)
         compos_corner = det.get_corner(compos_boundary)
 
         # *** Step 3 *** classification: clip components -> classify components
@@ -60,13 +60,17 @@ def processing_block(org, blocks_corner, classifier):
     return all_compos_boundary, all_compos_corner, all_compos_class
 
 
-def processing(org, binary, clf):
+def processing(org, binary, classifier):
     # *** Step 1 *** object detection: get connected areas -> get boundary -> get corners
-    boundary_rec, boundary_non_rec = det.boundary_detection(binary)
-    corners_rec = det.get_corner(boundary_rec)
-    corners_non_rec = det.get_corner(boundary_non_rec)
+    compos_boundary = det.boundary_detection(binary)
+    compos_corner = det.get_corner(compos_boundary)
 
-    # *** Step 2 *** data processing: identify blocks and compos from rectangles -> identify irregular compos
-    corners_block, corners_img, corners_compo = det.block_or_compo(org, binary, corners_rec)
-    det.compo_irregular(org, corners_non_rec, corners_img, corners_compo)
+    # *** Step 2 *** classification: clip components -> classify components
+    compos_clip = seg.clipping(org, compos_corner)
+    compos_class = classifier.predict(compos_clip)
 
+    # *** Step 3 *** refining: merge overlapping components -> search components on background image
+    compos_corner, compos_class = det.merge_corner(compos_corner, compos_class)
+    compos_corner, compos_class = det.compo_on_img(processing, org, binary, classifier, compos_corner, compos_class)
+
+    return compos_boundary, compos_corner, compos_class

@@ -127,68 +127,37 @@ def strip_img(corners_compo, compos_class, corners_img):
     return corners_compo_withuot_img, compo_class_withuot_img
 
 
-def compo_in_img(processing, org, binary, clf, corners_img,
-                 corners_block, corners_compo, compos_class):
+def compo_on_img(processing, org, binary, clf,
+                 compos_corner, compos_class):
     """
     Detect potential UI components inner img;
     Only leave non-img
     """
-    corners_img_new = []
     pad = 2
-    for corner in corners_img:
-        (top_left, bottom_right) = corner
-        (col_min, row_min) = top_left
-        (col_max, row_max) = bottom_right
+    for i in range(len(compos_corner)):
+        if compos_class[i] != 'img':
+            continue
+        ((col_min, row_min), (col_max, row_max)) = compos_corner[i]
         col_min = max(col_min - pad, 0)
         col_max = min(col_max + pad, org.shape[1])
         row_min = max(row_min - pad, 0)
         row_max = min(row_max + pad, org.shape[0])
-        height_img = row_max - row_min
-        width_img = col_max - col_min
 
-        img_area = height_img * width_img
-        compo_area = 0
-
-        # ignore small ones
-        # if height_img <= min_compo_edge_length or width_img <= min_compo_edge_length:
-        #     continue
-            
         clip_org = org[row_min:row_max, col_min:col_max]
-        clip_bin = binary[row_min:row_max, col_min:col_max]
-        clip_bin = pre.reverse_binary(clip_bin)
+        clip_bin_inv = pre.reverse_binary(binary[row_min:row_max, col_min:col_max])
 
-        corners_block_new, corners_compo_new, compos_class_new = processing(clip_org, clip_bin, clf, main=False)
-        corners_block_new = util.corner_cvt_relative_position(corners_block_new, col_min, row_min)
-        corners_compo_new = util.corner_cvt_relative_position(corners_compo_new, col_min, row_min)
+        compos_boundary_new, compos_corner_new, compos_class_new = processing(clip_org, clip_bin_inv, clf)
+        compos_corner_new = util.corner_cvt_relative_position(compos_corner_new, col_min, row_min)
 
-        assert len(corners_compo_new) == len(compos_class_new)
-
-        # ignore blocks superposed on its parent img
-        for b in corners_block_new:
-            (col_min_new, row_min_new), (col_max_new, row_max_new) = b
-            height_new = row_max_new - row_min_new
-            width_new = col_max_new - col_min_new
-            if height_new / height_img < 0.9 and width_new / width_img < 0.9:
-                corners_block.append(corners_block_new)
-                compo_area += height_new * width_new
+        assert len(compos_corner_new) == len(compos_class_new)
 
         # only leave non-img elements
-        for i in range(len(corners_compo_new)):
+        for i in range(len(compos_corner_new)):
             if compos_class_new[i] != 'img':
-                # ignore compos superposed on its parent img
-                (col_min_new, row_min_new), (col_max_new, row_max_new) = corners_compo_new[i]
-                height_new = row_max_new - row_min_new
-                width_new = col_max_new - col_min_new
-
-                corners_compo.append(corners_compo_new[i])
+                compos_corner.append(compos_corner_new[i])
                 compos_class.append(compos_class_new[i])
-                compo_area += height_new * width_new
 
-        # ignore imgs full of components
-        if compo_area / img_area < 0.5:
-            corners_img_new.append(corner)
-
-    return corners_block, corners_img_new, corners_compo, compos_class
+    return compos_corner, compos_class
 
 
 def block_or_compo(org, binary, corners,
@@ -479,7 +448,7 @@ def boundary_detection(binary,
                        min_obj_area=C.THRESHOLD_OBJ_MIN_AREA, min_obj_perimeter=C.THRESHOLD_OBJ_MIN_PERIMETER,
                        line_thickness=C.THRESHOLD_LINE_THICKNESS, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
                        max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO,
-                       rec_detect=True, show=False, write=False):
+                       rec_detect=False, show=False, write=False):
     """
     :param binary: Binary image from pre-processing
     :param min_obj_area: If not pass then ignore the small object
