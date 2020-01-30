@@ -107,7 +107,7 @@ def block_rectify(block_corner, components_corner):
     return compos_corner_new
 
 
-def block_erase(binary, blocks_corner, show=False, pad=3):
+def block_erase(binary, blocks_corner, show=False, pad=2):
     '''
     erase the block parts from the binary map
     :param binary: binary map of original image

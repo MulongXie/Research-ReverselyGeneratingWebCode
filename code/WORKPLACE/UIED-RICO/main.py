@@ -2,7 +2,6 @@ import cv2
 import time
 
 import ip
-import ui
 import lib_uied.block_division as blk
 import lib_uied.ip_preprocessing as pre
 import lib_uied.ip_segment as seg
