@@ -105,3 +105,29 @@ def block_rectify(block_corner, components_corner):
         compos_corner_new.append(((col_min, row_min), (col_max, row_max)))
 
     return compos_corner_new
+
+
+def block_erase(binary, blocks_corner, show=False, pad=3):
+    '''
+    erase the block parts from the binary map
+    :param binary: binary map of original image
+    :param blocks_corner: corners of detected layout block
+    :param show: show or not
+    :param pad: expand the bounding boxes of blocks
+    :return: binary map without block parts
+    '''
+
+    bin_org = binary.copy()
+    for block in blocks_corner:
+        ((column_min, row_min), (column_max, row_max)) = block
+        column_min = max(column_min - pad, 0)
+        column_max = min(column_max + pad, binary.shape[1])
+        row_min = max(row_min - pad, 0)
+        row_max = min(row_max + pad, binary.shape[0])
+        cv2.rectangle(binary, (column_min, row_min), (column_max, row_max), (0), -1)
+
+    if show:
+        cv2.imshow('before', bin_org)
+        cv2.imshow('after', binary)
+        cv2.waitKey()
+    return binary

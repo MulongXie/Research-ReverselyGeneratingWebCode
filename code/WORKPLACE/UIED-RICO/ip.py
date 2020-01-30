@@ -9,15 +9,10 @@ from config.CONFIG_UIED import Config
 
 import cv2
 
-# initialization
-C = Config()
-is_ocr = False
-is_shrink_img = False
-
-
-def processing_block(org, blocks_corner, classifier):
+def processing_block(org, binary, blocks_corner, classifier):
     '''
     :param org: original image
+    :param binary: binary map of original image
     :param blocks_corner: list of corners of blocks
                         [(top_left, bottom_right)]
                         -> top_left: (column_min, row_min)
@@ -30,7 +25,8 @@ def processing_block(org, blocks_corner, classifier):
              corners of detected components in blocks;
              corresponding classes of components;
     '''
-    blocks_clip = seg.clipping(org, blocks_corner, shrink=3)
+    blocks_clip_org = seg.clipping(org, blocks_corner, shrink=3)
+    blocks_clip_bin = seg.clipping(binary, blocks_corner, shrink=3)
 
     all_compos_boundary = []
     all_compos_corner = []
@@ -38,15 +34,15 @@ def processing_block(org, blocks_corner, classifier):
     for i in range(len(blocks_corner)):
         # *** Step 1 *** pre-processing: get block information -> binarization
         block_corner = blocks_corner[i]
-        block_clip = blocks_clip[i]
-        binary = pre.preprocess(block_clip)
+        block_clip_org = blocks_clip_org[i]
+        block_clip_bin = blocks_clip_bin[i]
 
         # *** Step 2 *** object extraction: extract components boundary -> get bounding box corner
-        compos_boundary = det.boundary_detection(binary)
+        compos_boundary = det.boundary_detection(block_clip_bin)
         compos_corner = det.get_corner(compos_boundary)
 
         # *** Step 3 *** classification: clip components -> classify components
-        compos_clip = seg.clipping(block_clip, compos_corner)
+        compos_clip = seg.clipping(block_clip_org, compos_corner)
         compos_class = classifier.predict(compos_clip)
 
         # *** Step 4 *** refining: merge overlapping components -> convert the corners to holistic value in entire image
@@ -60,7 +56,7 @@ def processing_block(org, blocks_corner, classifier):
     return all_compos_boundary, all_compos_corner, all_compos_class
 
 
-def processing(org, binary, classifier):
+def processing(org, binary, classifier, inspect_img=False):
     # *** Step 1 *** object detection: get connected areas -> get boundary -> get corners
     compos_boundary = det.boundary_detection(binary)
     compos_corner = det.get_corner(compos_boundary)
@@ -71,6 +67,7 @@ def processing(org, binary, classifier):
 
     # *** Step 3 *** refining: merge overlapping components -> search components on background image
     compos_corner, compos_class = det.merge_corner(compos_corner, compos_class)
-    compos_corner, compos_class = det.compo_on_img(processing, org, binary, classifier, compos_corner, compos_class)
+    if inspect_img:
+        compos_corner, compos_class = det.compo_on_img(processing, org, binary, classifier, compos_corner, compos_class)
 
     return compos_boundary, compos_corner, compos_class
