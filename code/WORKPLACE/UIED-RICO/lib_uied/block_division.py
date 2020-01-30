@@ -16,11 +16,6 @@ def draw_region(region, broad):
         broad[point[0], point[1]] = color
 
 
-def shrink(img, ratio=3.5):
-    img_shrink = cv2.resize(img, (int(img.shape[1] / ratio), int(img.shape[0] / ratio)))
-    return img_shrink
-
-
 def block_division(grey, show=False):
     '''
     :param grey: grey-scale of original image
