@@ -24,7 +24,7 @@ compo_in_blk_boundary, compo_in_blk_corner, compo_in_blk_class = ip.processing_b
 # erase block parts
 binary_non_block = blk.block_erase(binary_org, blocks_corner)
 # detect elements from non-block parts
-compo_non_blk_boundary, compo_non_blk_corner, compo_non_blk_class = ip.processing(org, binary_non_block, cnn)
+compo_non_blk_boundary, compo_non_blk_corner, compo_non_blk_class = ip.processing(org, binary_non_block, cnn, True)
 
 # merge
 compos_boundary = compo_in_blk_boundary + compo_non_blk_boundary

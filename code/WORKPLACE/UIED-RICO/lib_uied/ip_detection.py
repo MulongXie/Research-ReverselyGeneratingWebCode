@@ -142,6 +142,7 @@ def compo_on_img(processing, org, binary, clf,
         col_max = min(col_max + pad, org.shape[1])
         row_min = max(row_min - pad, 0)
         row_max = min(row_max + pad, org.shape[0])
+        area = (col_max - col_min) * (row_max - row_min)
 
         clip_org = org[row_min:row_max, col_min:col_max]
         clip_bin_inv = pre.reverse_binary(binary[row_min:row_max, col_min:col_max])
@@ -153,7 +154,9 @@ def compo_on_img(processing, org, binary, clf,
 
         # only leave non-img elements
         for i in range(len(compos_corner_new)):
-            if compos_class_new[i] != 'img':
+            ((col_min_new, row_min_new), (col_max_new, row_max_new)) = compos_corner[i]
+            area_new = (col_max_new - col_min_new) * (row_max_new - row_min_new)
+            if compos_class_new[i] != 'img' and area_new / area < 0.8:
                 compos_corner.append(compos_corner_new[i])
                 compos_class.append(compos_class_new[i])
 
