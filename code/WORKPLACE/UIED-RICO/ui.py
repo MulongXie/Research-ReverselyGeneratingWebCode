@@ -4,7 +4,7 @@ import lib_uied.ip_detection as det
 import lib_uied.ip_segment as seg
 import lib_uied.file_utils as file
 import lib_uied.ocr_classify_text as ocr
-from lib_uied.CONFIG_UIED import Config
+from config.CONFIG_UIED import Config
 
 import cv2
 
@@ -17,7 +17,7 @@ is_shrink_img = False
 def processing(org, binary, clf, main=True):
     if main:
         # *** Step 2 *** object detection: get connected areas -> get boundary -> get corners
-        boundary_rec, boundary_non_rec = det.boundary_detection(binary, write_boundary=True)
+        boundary_rec, boundary_non_rec = det.boundary_detection(binary, write=True)
         corners_rec = det.get_corner(boundary_rec)
         corners_non_rec = det.get_corner(boundary_non_rec)
 
@@ -45,8 +45,8 @@ def processing(org, binary, clf, main=True):
 
         # *** Step 8 *** merge overlapped components
         # corners_img = det.rm_img_in_compo(corners_img, corners_compo)
-        corners_img, _ = det.merge_corner(org, corners_img, ['img' for i in range(len(corners_img))], is_merge_nested_same=False)
-        corners_compo, compos_class = det.merge_corner(org, corners_compo, compos_class, is_merge_nested_same=True)
+        corners_img, _ = det.merge_corner(corners_img, ['img' for i in range(len(corners_img))], is_merge_nested_same=False)
+        corners_compo, compos_class = det.merge_corner(corners_compo, compos_class, is_merge_nested_same=True)
 
         return corners_block, corners_img, corners_compo, compos_class
 

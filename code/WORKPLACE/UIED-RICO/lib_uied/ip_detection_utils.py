@@ -174,7 +174,7 @@ def corner_relation(corner_a, corner_b):
         return 2
 
 
-def corner_relation_nms(org, corner_a, corner_b, min_selected_IoU):
+def corner_relation_nms(corner_a, corner_b, min_selected_IoU):
     '''
     Calculate the relation between two rectangles by nms
     IoU = Intersection / Union

@@ -5,7 +5,7 @@ import lib_uied.ip_draw as draw
 import lib_uied.ip_preprocessing as pre
 import lib_uied.ip_detection_utils as util
 import lib_uied.ocr_classify_text as ocr
-from lib_uied.CONFIG_UIED import Config
+from config.CONFIG_UIED import Config
 
 C = Config()
 
@@ -40,7 +40,7 @@ def select_corner(corners, compos_class, class_name):
     return corners_wanted
 
 
-def merge_corner(org, corners, compos_class, min_selected_IoU=C.THRESHOLD_MIN_IOU, is_merge_nested_same=False):
+def merge_corner(corners, compos_class, min_selected_IoU=C.THRESHOLD_MIN_IOU, is_merge_nested_same=True):
     """
     Calculate the Intersection over Overlap (IoU) and merge corners according to the value of IoU
     :param is_merge_nested_same: if true, merge the nested corners with same class whatever the IoU is
@@ -68,7 +68,7 @@ def merge_corner(org, corners, compos_class, min_selected_IoU=C.THRESHOLD_MIN_IO
     for i in range(len(corners)):
         is_intersected = False
         for j in range(len(new_corners)):
-            r = util.corner_relation_nms(org, corners[i], new_corners[j], min_selected_IoU)
+            r = util.corner_relation_nms(corners[i], new_corners[j], min_selected_IoU)
             # r = util.corner_relation(corners[i], new_corners[j])
             if is_merge_nested_same:
                 if compos_class[i] == new_class[j]:
@@ -478,7 +478,8 @@ def line_detection(binary,
 def boundary_detection(binary,
                        min_obj_area=C.THRESHOLD_OBJ_MIN_AREA, min_obj_perimeter=C.THRESHOLD_OBJ_MIN_PERIMETER,
                        line_thickness=C.THRESHOLD_LINE_THICKNESS, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
-                       max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO, show=False, write_boundary=False):
+                       max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO,
+                       rec_detect=True, show=False, write=False):
     """
     :param binary: Binary image from pre-processing
     :param min_obj_area: If not pass then ignore the small object
@@ -511,23 +512,23 @@ def boundary_detection(binary,
                 perimeter = np.sum([len(b) for b in boundary])
                 if perimeter < min_obj_perimeter:
                     continue
-
                 # check if it is line by checking the length of edges
                 if util.boundary_is_line(boundary, line_thickness):
                     continue
-
-                # rectangle check
-                if util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
-                    boundary_rec.append(boundary)
-                else:
-                    boundary_nonrec.append(boundary)
                 boundary_all.append(boundary)
+
+                if rec_detect:
+                    # rectangle check
+                    if util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
+                        boundary_rec.append(boundary)
+                    else:
+                        boundary_nonrec.append(boundary)
 
                 if show:
                     print('Area:%d, Perimeter:%d' % (len(area), perimeter))
                     draw.draw_boundary(boundary_all, binary.shape, show=True)
 
-    if write_boundary:
-        cv2.imwrite('data/output/boundary.png', draw.draw_boundary(boundary_all, binary.shape))
-
-    return boundary_rec, boundary_nonrec
+    if rec_detect:
+        return boundary_rec, boundary_nonrec
+    else:
+        return boundary_all

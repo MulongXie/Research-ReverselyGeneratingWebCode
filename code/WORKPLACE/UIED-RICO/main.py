@@ -6,7 +6,7 @@ import lib_uied.ip_preprocessing as pre
 import lib_uied.ip_segment as seg
 import lib_uied.ip_draw as draw
 import lib_uied.ip_detection_utils as util
-from lib_uied.MODEL_CNN import CNN
+from config.MODEL_CNN import CNN
 import ui
 clf = CNN()
 clf.load()
@@ -29,9 +29,5 @@ for i in range(len(blocks_corner)):
     # draw_bounding = draw.draw_bounding_box_class(org, corners_compo, compos_class)
     # draw_bounding = draw.draw_bounding_box_class(draw_bounding, corners_block, ['block' for i in range(len(corners_block))])
     draw_bounding = draw.draw_bounding_box_class(org, corners_img, ['img' for i in range(len(corners_img))])
-
-    cv2.imshow('img', draw_bounding)
-    cv2.waitKey()
-
 
 print(time.clock() - start)
