@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from os.path import join as pjoin
 import glob
+from tqdm import tqdm
 from CONFIG import Config
 
 cfg = Config()
@@ -30,8 +31,9 @@ class Data:
 
         # load data
         for p in glob.glob(pjoin(self.DATA_PATH, '*')):
+            print("*** Loading components of %s: %d ***" %(p.split('\\')[-1], int(len(glob.glob(pjoin(p, '*.png'))))))
             label = self.class_map.index(p.split('\\')[-1])  # map to index of classes
-            for image_path in glob.glob(pjoin(p, '*.png')):
+            for image_path in tqdm(glob.glob(pjoin(p, '*.png'))):
                 image = cv2.imread(image_path)
                 if resize:
                     image = cv2.resize(image, shape[:2])

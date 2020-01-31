@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from MODEL import CNN
+from CNN import CNN
 from DATA import Data
 
 # load data and generate training and testing data
