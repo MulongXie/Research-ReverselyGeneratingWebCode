@@ -6,10 +6,10 @@ import cv2
 import numpy as np
 
 element_map = {'0':'Image', '1':'Icon', '2':'Button', '3':'Input'}
-element_number = {'Image':0, 'Icon':0, 'Button':0, 'Input':0}
+element_number = {'Image':176976, 'Icon':148376, 'Button':72371, 'Input':14664}
 ROOT_OUTPUT = "E:/Mulong/Datasets/rico/elements"
 ROOT_IMG = 'E:/Mulong/Datasets/rico/combined'
-ROOT_LABEL = 'label_test.txt'
+ROOT_LABEL = 'label_val.txt'
 
 
 def setup_folder():
@@ -68,9 +68,9 @@ def fetch_and_clip(img, label, output_root, shrink_ratio=3, pad=False, show_labe
 
 
 def read_files():
-    start_point = '64366'
-    locate = True
-    bad_img = 0
+    start_point = '38074'
+    locate = False
+    bad_img = 1
     labels = open(ROOT_LABEL, 'r')
     for i, l in enumerate(labels.readlines()):
         l = l.replace('./', ROOT_IMG).split()
@@ -92,8 +92,9 @@ def read_files():
         try:
             fetch_and_clip(img, label, ROOT_OUTPUT, show_label=False)
         except:
-            print('*** Bad img:', bad_img, img_path)
+            print('*** Bad img:', bad_img, img_path, '***')
 
 
 setup_folder()
 read_files()
+print(element_number)
