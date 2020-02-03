@@ -90,13 +90,32 @@ def block_clip(org, blocks_corner, show=False):
     return blocks_clip
 
 
+def block_erase(binary, blocks_corner, show=False, pad=3):
+    bin_org = binary.copy
+    for block in blocks_corner:
+        ((column_min, row_min), (column_max, row_max)) = block
+        column_min = max(column_min - pad, 0)
+        column_max = min(column_max + pad, binary.shape[1])
+        row_min = max(row_min - pad, 0)
+        row_max = min(row_max + pad, binary.shape[0])
+        cv2.rectangle(binary, (column_min, row_min), (column_max, row_max), (0), -1)
+
+    if show:
+        cv2.imshow('before', bin_org)
+        cv2.imshow('after', binary)
+        cv2.waitKey()
+    return binary
+
+
 def main():
     org = cv2.imread('data/4.jpg')
     org = shrink(org)
     grey = cv2.cvtColor(org, cv2.COLOR_BGR2GRAY)
+    binary = pre.preprocess(grey)
 
     blocks_corner = block_division(grey, show=False)
-    blocks_clip = block_clip(org, blocks_corner, show=True)
+
+    block_erase(binary, blocks_corner)
 
 
 if __name__ == '__main__':
