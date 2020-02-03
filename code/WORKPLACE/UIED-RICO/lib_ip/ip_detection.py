@@ -1,10 +1,10 @@
 import cv2
 import numpy as np
 
-import lib_uied.ip_draw as draw
-import lib_uied.ip_preprocessing as pre
-import lib_uied.ip_detection_utils as util
-import lib_uied.ocr_classify_text as ocr
+import lib_ip.ip_draw as draw
+import lib_ip.ip_preprocessing as pre
+import lib_ip.ip_detection_utils as util
+import lib_ip.ocr_classify_text as ocr
 from config.CONFIG_UIED import Config
 
 C = Config()

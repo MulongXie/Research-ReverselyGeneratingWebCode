@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 from collections import Counter
 
-import lib_uied.ip_draw as draw
+import lib_ip.ip_draw as draw
 
 
 # detect object(connected region)

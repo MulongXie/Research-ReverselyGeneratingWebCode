@@ -1,13 +1,14 @@
-import lib_uied.ip_preprocessing as pre
-import lib_uied.ip_draw as draw
-import lib_uied.ip_detection as det
-import lib_uied.ip_segment as seg
-import lib_uied.file_utils as file
-import lib_uied.ocr_classify_text as ocr
-import lib_uied.ip_detection_utils as util
+import lib_ip.ip_preprocessing as pre
+import lib_ip.ip_draw as draw
+import lib_ip.ip_detection as det
+import lib_ip.ip_segment as seg
+import lib_ip.file_utils as file
+import lib_ip.ocr_classify_text as ocr
+import lib_ip.ip_detection_utils as util
 from config.CONFIG_UIED import Config
 
 import cv2
+
 
 def processing_block(org, binary, blocks_corner, classifier):
     '''

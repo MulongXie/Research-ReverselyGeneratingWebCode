@@ -2,11 +2,11 @@ import cv2
 import time
 
 import ip
-import lib_uied.block_division as blk
-import lib_uied.ip_preprocessing as pre
-import lib_uied.ip_segment as seg
-import lib_uied.ip_draw as draw
-import lib_uied.ip_detection_utils as util
+import lib_ip.block_division as blk
+import lib_ip.ip_preprocessing as pre
+import lib_ip.ip_segment as seg
+import lib_ip.ip_draw as draw
+import lib_ip.ip_detection_utils as util
 from config.MODEL_CNN import CNN
 cnn = CNN()
 cnn.load()

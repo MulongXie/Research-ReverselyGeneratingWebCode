@@ -1,7 +1,7 @@
 import pytesseract as pyt
 import cv2
 
-import lib_uied.ip_draw as draw
+import lib_ip.ip_draw as draw
 from config.CONFIG_UIED import Config
 
 C = Config()

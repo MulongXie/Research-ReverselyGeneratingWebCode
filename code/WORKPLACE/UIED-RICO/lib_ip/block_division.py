@@ -3,11 +3,11 @@ import numpy as np
 from random import randint as rint
 import time
 
-import lib_uied.ip_preprocessing as pre
-import lib_uied.ip_detection_utils as util
-import lib_uied.ip_detection as det
-import lib_uied.ip_draw as draw
-import lib_uied.ip_segment as seg
+import lib_ip.ip_preprocessing as pre
+import lib_ip.ip_detection_utils as util
+import lib_ip.ip_detection as det
+import lib_ip.ip_draw as draw
+import lib_ip.ip_segment as seg
 
 
 def draw_region(region, broad):
