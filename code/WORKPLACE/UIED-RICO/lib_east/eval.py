@@ -185,17 +185,14 @@ def main(argv=None):
                         cv2.rectangle(im[:, :, ::-1], (box[0][0], box[0][1]), (box[2][0], box[2][1]), (0,0,255), 3)
 
             if not FLAGS.no_write_images:
-                img_path = os.path.join(FLAGS.output_dir, 'drawn' + os.path.basename(img_path))
+                img_path = os.path.join(FLAGS.output_dir, os.path.basename(img_path)[:-4] + '_ocr.png')
                 cv2.imwrite(img_path, im[:, :, ::-1])
 
 
-def east(PATH_INPUT_IMG, PATH_OUTPUT_LABEL):
+def run(input_img_path, output_label_path):
     tf.app.flags.DEFINE_string('test_data_path', 'D:/git_file/github/doing/Research-ReverselyGeneratingWebCode/code/WORKPLACE/UIED-RICO/data/input/1.jpg', '')
     tf.app.flags.DEFINE_string('gpu_list', '0', '')
     tf.app.flags.DEFINE_string('checkpoint_path', 'E:/Mulong/Model/East/east_icdar2015_resnet_v1_50_rbox', '')
     tf.app.flags.DEFINE_string('output_dir', 'D:/git_file/github/doing/Research-ReverselyGeneratingWebCode/code/WORKPLACE/UIED-RICO/data/output', '')
     tf.app.flags.DEFINE_bool('no_write_images', False, 'do not write images')
-    tf.app.run()
-
-
-east(None, None)
+    tf.app.run(main)
