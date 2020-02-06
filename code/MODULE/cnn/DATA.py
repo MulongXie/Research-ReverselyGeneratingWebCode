@@ -22,7 +22,7 @@ class Data:
         self.class_map = cfg.class_map
         self.DATA_PATH = cfg.DATA_PATH
 
-    def load_data(self, resize=True, shape=None):
+    def load_data(self, resize=True, shape=None, max_number=100000):
         # if customize shape
         if shape is not None:
             self.image_shape = shape
@@ -33,7 +33,7 @@ class Data:
         for p in glob.glob(pjoin(self.DATA_PATH, '*')):
             print("*** Loading components of %s: %d ***" %(p.split('\\')[-1], int(len(glob.glob(pjoin(p, '*.png'))))))
             label = self.class_map.index(p.split('\\')[-1])  # map to index of classes
-            for image_path in tqdm(glob.glob(pjoin(p, '*.png'))):
+            for i, image_path in enumerate(tqdm(glob.glob(pjoin(p, '*.png'))[:max_number])):
                 image = cv2.imread(image_path)
                 if resize:
                     image = cv2.resize(image, shape[:2])

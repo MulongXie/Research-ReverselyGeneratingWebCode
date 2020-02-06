@@ -19,7 +19,7 @@ class CNN:
         self.class_map = cfg.class_map
         self.MODEL_PATH = cfg.MODEL_PATH
 
-    def network(self):
+    def network(self, epoch_num):
         # block 1
         self.model.add(Conv2D(64, (3, 3), activation='relu', input_shape=self.image_shape, padding='same'))
         self.model.add(Conv2D(64, (3, 3), activation='relu', padding='same'))
@@ -33,12 +33,12 @@ class CNN:
         self.model.add(Dense(self.class_number, activation='softmax'))
 
         self.model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=['accuracy'])
-        self.model.fit(self.data.X_train, self.data.Y_train, batch_size=64, epochs=10, verbose=1, validation_data=(self.data.X_test, self.data.Y_test))
+        self.model.fit(self.data.X_train, self.data.Y_train, batch_size=64, epochs=epoch_num, verbose=1, validation_data=(self.data.X_test, self.data.Y_test))
 
-    def train(self, data):
+    def train(self, data, epoch_num=30):
         self.data = data
         self.model = Sequential()
-        self.network()
+        self.network(epoch_num)
         self.model.save(self.MODEL_PATH)
         print("Trained model is saved to", self.MODEL_PATH)
 
