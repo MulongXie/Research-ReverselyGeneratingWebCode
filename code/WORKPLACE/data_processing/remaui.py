@@ -12,7 +12,7 @@ def draw_bounding_box(org, corners, color=(0, 255, 0), line=1, show=False):
     return board
 
 
-tree = et.parse('a.xml')
+tree = et.parse('b.xml')
 root = tree.getroot()
 xmlns = '{http://schemas.android.com/apk/res/android}'
 corners = []
@@ -26,5 +26,6 @@ for child in root:
 
         corners.append((up_left, bottom_right))
 
-img = cv2.imread('a.png')
+img = cv2.imread('b.png')
+print(img.shape)
 draw_bounding_box(img, corners, show=True)
