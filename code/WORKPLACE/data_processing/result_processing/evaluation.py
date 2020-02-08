@@ -196,6 +196,6 @@ def eval(detection, ground_truth, org_root, show=True):
 
 
 # detect = load_detect_result_txt('E:\\Mulong\\Result\\rico\\merge')
-detect = load_detect_result_json('E:\Temp\detections_val_results.json', 'E:/Mulong/Datasets/rico/instances_val.json')
+detect = load_detect_result_json('E:\\Mulong\\Result\\rico\\frcnn_val_results.json', 'E:/Mulong/Datasets/rico/instances_val.json')
 gt = load_ground_truth_json('E:/Mulong/Datasets/rico/instances_val.json')
 eval(detect, gt, 'E:\\Mulong\\Datasets\\rico\\combined', show=True)
