@@ -65,22 +65,11 @@ def block_erase(binary, blocks_corner, show=False, pad=2):
     return binary
 
 
-def block_is_top_or_bottom_bar(block, org_shape):
-    height, width = org_shape[:2]
-    ((column_min, row_min), (column_max, row_max)) = block
-    if column_min < 5 and row_min < 5 and \
-            width - column_max < 5 and row_max < 100:
-        return True
-    if column_min < 5 and height - row_min < 200 and \
-            width - column_max < 5 and height - row_max < 5:
-        return True
-    return False
-
-
 def block_division(grey, show=False, write_path=None,
                    line_thickness=C.THRESHOLD_LINE_THICKNESS,
                    min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
-                   max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO):
+                   max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO,
+                   max_compo_scale=C.THRESHOLD_COMPO_MAX_SCALE):
     '''
     :param grey: grey-scale of original image
     :return: corners: list of [(top_left, bottom_right)]
@@ -116,7 +105,7 @@ def block_division(grey, show=False, write_path=None,
             neighbor(point[0], point[1])
         return region
 
-    blocks = []
+    blocks_corner = []
     mask = np.zeros((grey.shape[0], grey.shape[1]), dtype=np.uint8)
     broad = np.zeros((grey.shape[0], grey.shape[1], 3), dtype=np.uint8)
 
@@ -136,13 +125,17 @@ def block_division(grey, show=False, write_path=None,
                 # ignore non-rectangle as blocks must be rectangular
                 if not util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
                     continue
-                blocks.append(boundary)
+                block_corner = det.get_corner([boundary])[0]
+                width = block_corner[1][0] - block_corner[0][0]
+                height = block_corner[1][1] - block_corner[0][1]
+                # ignore atomic components
+                if not (height/column > max_compo_scale[0] and width/column > max_compo_scale[1]):
+                    continue
+                blocks_corner.append(block_corner)
                 draw.draw_region(region, broad)
     if show:
         cv2.imshow('broad', broad)
         cv2.waitKey()
     if write_path is not None:
         cv2.imwrite(write_path, broad)
-
-    blocks_corner = det.get_corner(blocks)
     return blocks_corner

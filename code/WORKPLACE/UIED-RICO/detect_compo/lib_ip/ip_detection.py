@@ -231,68 +231,16 @@ def block_or_compo(org, binary, corners,
     return blocks, imgs, compos
 
 
-def compo_irregular(org, corners,
-                    corners_img, corners_compo,     # output
-                    min_block_edge=C.THRESHOLD_BLOCK_MIN_EDGE_LENGTH,
-                    min_compo_w_h_ratio=C.THRESHOLD_UICOMPO_MIN_W_H_RATIO, max_compo_w_h_ratio=C.THRESHOLD_UICOMPO_MAX_W_H_RATIO):
-    """
-    Select potential irregular shaped elements by checking the height and width
-    Check the edge ratio for img components to avoid text misrecognition
-    :param org: Original image
-    :param corners: [(top_left, bottom_right)]
-                    -> top_left: (column_min, row_min)
-                    -> bottom_right: (column_max, row_max)
-    :param min_compo_edge: ignore small objects
-    :return: corners of img
-    """
-    for corner in corners:
-        (top_left, bottom_right) = corner
-        (col_min, row_min) = top_left
-        (col_max, row_max) = bottom_right
-        height = row_max - row_min
-        width = col_max - col_min
-
-        # select UI component candidates
-        if height > min_block_edge:
-            corners_img.append(corner)
-        else:
-            if min_compo_w_h_ratio < width / height < max_compo_w_h_ratio:
-                corners_compo.append(corner)
-
-
-def img_shrink(org, binary, corners,
-               min_line_length_h=C.THRESHOLD_LINE_MIN_LENGTH_H, min_line_length_v=C.THRESHOLD_LINE_MIN_LENGTH_V,
-               max_thickness=C.THRESHOLD_LINE_THICKNESS):
-    """
-    For imgs that are part of a block, strip the img
-    """
-
-    corners_shrunken = []
-    pad = 2
-    for corner in corners:
-        (top_left, bottom_right) = corner
-        (col_min, row_min) = top_left
-        (col_max, row_max) = bottom_right
-
-        col_min = max(col_min - pad, 0)
-        col_max = min(col_max + pad, org.shape[1])
-        row_min = max(row_min - pad, 0)
-        row_max = min(row_max + pad, org.shape[0])
-
-        clip_bin = binary[row_min:row_max, col_min:col_max]
-        clip_org = org[row_min:row_max, col_min:col_max]
-
-        # detect lines in the image
-        lines_h, lines_v = line_detection(clip_bin, min_line_length_h, min_line_length_v, max_thickness)
-        # select those perpendicularly intersect with others at endpoints
-        lines_h, lines_v = util.line_check_perpendicular(lines_h, lines_v, max_thickness)
-        # convert the position of lines into relative position in the entire image
-        lines_h, lines_v = util.line_cvt_relative_position(col_min, row_min, lines_h, lines_v)
-
-        # shrink corner according to the lines
-        corner_shrunken = util.line_shrink_corners(corner, lines_h, lines_v)
-        corners_shrunken.append(corner_shrunken)
-    return corners_shrunken
+def is_top_or_bottom_bar(corner, org_shape):
+    height, width = org_shape[:2]
+    ((column_min, row_min), (column_max, row_max)) = corner
+    if column_min < 5 and row_min < 5 and \
+            width - column_max < 5 and row_max < 100:
+        return True
+    if column_min < 5 and height - row_min < 200 and \
+            width - column_max < 5 and height - row_max < 5:
+        return True
+    return False
 
 
 def rm_img_in_compo(corners_img, corners_compo):
@@ -355,12 +303,22 @@ def rm_text(org, corners, compo_class,
     return new_corners, new_class
 
 
+def rm_top_or_bottom_corners(corners, org_shape):
+    new_corners = []
+    height, width = org_shape[:2]
+    for corner in corners:
+        ((column_min, row_min), (column_max, row_max)) = corner
+        if not (row_max < height * 0.045 or row_min > height * 0.94):
+            new_corners.append(corner)
+    return new_corners
+
+
 def line_removal(binary, max_line_thickness=C.THRESHOLD_LINE_THICKNESS):
     width = binary.shape[1]
     thickness = 0
     gap = 0
     for i, row in enumerate(binary):
-        if int(np.sum(row)/255) / width > 0.78:
+        if int(np.sum(row)/255) / width > 0.85:
             gap = 0
             thickness += 1
         else:
