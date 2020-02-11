@@ -8,6 +8,8 @@ import lib_ip.ip_detection_utils as util
 import lib_ip.ip_detection as det
 import lib_ip.ip_draw as draw
 import lib_ip.ip_segment as seg
+from config.CONFIG_UIED import Config
+C = Config()
 
 
 def block_rectify(block_corner, components_corner):
@@ -75,7 +77,10 @@ def block_is_top_or_bottom_bar(block, org_shape):
     return False
 
 
-def block_division(grey, show=False, write_path=None):
+def block_division(grey, show=False, write_path=None,
+                   line_thickness=C.THRESHOLD_LINE_THICKNESS,
+                   min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
+                   max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO):
     '''
     :param grey: grey-scale of original image
     :return: corners: list of [(top_left, bottom_right)]
@@ -126,10 +131,10 @@ def block_division(grey, show=False, write_path=None):
                 # get the boundary of this region
                 boundary = util.boundary_get_boundary(region)
                 # ignore lines
-                if util.boundary_is_line(boundary, 5):
+                if util.boundary_is_line(boundary, line_thickness):
                     continue
                 # ignore non-rectangle as blocks must be rectangular
-                if not util.boundary_is_rectangle(boundary, 0.66, 0.25):
+                if not util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
                     continue
                 blocks.append(boundary)
                 draw.draw_region(region, broad)

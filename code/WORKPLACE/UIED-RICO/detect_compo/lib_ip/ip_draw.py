@@ -36,7 +36,7 @@ def draw_bounding_box_class(org, corners, classes, color_map=C.COLOR, line=2,
     return board
 
 
-def draw_bounding_box(org, corners, color=(0, 255, 0), line=3, show=False):
+def draw_bounding_box(org, corners, color=(0, 255, 0), line=2, show=False):
     """
     Draw bounding box of components on the original image
     :param org: original image

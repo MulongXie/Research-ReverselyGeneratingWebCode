@@ -6,7 +6,6 @@ import lib_ip.ip_preprocessing as pre
 import lib_ip.ip_detection_utils as util
 import lib_ip.ocr_classify_text as ocr
 from config.CONFIG_UIED import Config
-
 C = Config()
 
 
@@ -356,12 +355,11 @@ def rm_text(org, corners, compo_class,
     return new_corners, new_class
 
 
-def line_removal(binary, max_line_thickness):
+def line_removal(binary, max_line_thickness=C.THRESHOLD_LINE_THICKNESS):
     width = binary.shape[1]
     thickness = 0
     gap = 0
     for i, row in enumerate(binary):
-        print(int(np.sum(row)/255), thickness, gap)
         if int(np.sum(row)/255) / width > 0.78:
             gap = 0
             thickness += 1
