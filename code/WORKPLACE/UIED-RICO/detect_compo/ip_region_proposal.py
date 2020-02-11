@@ -14,7 +14,7 @@ import lib_ip.block_division as blk
 from config.CONFIG_UIED import Config
 
 
-def processing_block(org, binary, blocks_corner, show=False):
+def processing_block(org, binary, blocks_corner):
     '''
     :param org: original image
     :param binary: binary map of original image
@@ -35,7 +35,7 @@ def processing_block(org, binary, blocks_corner, show=False):
     all_compos_boundary = []
     all_compos_corner = []
     for i in range(len(blocks_corner)):
-        # *** Substep 1.1 *** pre-processing: get block information -> binarization
+        # *** Substep 1.1 *** pre-processing: get valid block -> binarization -> remove conglutinated line
         block_corner = blocks_corner[i]
         if det.is_top_or_bottom_bar(blocks_corner[i], org.shape): continue
         block_clip_bin = blocks_clip_bin[i]
@@ -52,11 +52,11 @@ def processing_block(org, binary, blocks_corner, show=False):
     return all_compos_boundary, all_compos_corner
 
 
-def processing(org, binary, inspect_img=False):
+def processing(org, binary):
+    # *** Substep 2.1 *** pre-processing: remove conglutinated line
     det.line_removal(binary)
-    cv2.imshow('bin', binary)
-    cv2.waitKey()
-    # *** Substep 2.1 *** object extraction: extract components boundary -> get bounding box corner
+
+    # *** Substep 2.2 *** object extraction: extract components boundary -> get bounding box corner
     compos_boundary = det.boundary_detection(binary)
     compos_corner = det.get_corner(compos_boundary)
 
@@ -78,7 +78,7 @@ def compo_detection(input_img_path, output_root, resize_by_height=600):
 
     # *** Step 3 *** non-block processing: erase blocks from binary -> detect left components
     binary_non_block = blk.block_erase(binary_org, blocks_corner)
-    compo_non_blk_boundary, compo_non_blk_corner = processing(org, binary_non_block, True)
+    compo_non_blk_boundary, compo_non_blk_corner = processing(org, binary_non_block)
 
     # *** Step 4 *** merge results
     compos_corner = compo_in_blk_corner + compo_non_blk_corner
