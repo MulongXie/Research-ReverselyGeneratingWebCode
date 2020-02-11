@@ -96,6 +96,42 @@ def merge_corner(corners, compos_class, min_selected_IoU=C.THRESHOLD_MIN_IOU, is
     return new_corners, new_class
 
 
+def merge_intersected_corner(corners):
+    def is_intersected(corner_a, corner_b):
+        ((col_min_a, row_min_a), (col_max_a, row_max_a)) = corner_a
+        ((col_min_b, row_min_b), (col_max_b, row_max_b)) = corner_b
+
+        # get the intersected area
+        col_min_s = max(col_min_a, col_min_b)
+        row_min_s = max(row_min_a, row_min_b)
+        col_max_s = min(col_max_a, col_max_b)
+        row_max_s = min(row_max_a, row_max_b)
+        w = max(0, col_max_s - col_min_s)
+        h = max(0, row_max_s - row_min_s)
+        inter = w * h
+        if inter == 0:
+            return False
+        return True
+
+    changed = False
+    new_corners = []
+    for i in range(len(corners)):
+        merged = False
+        for j in range(len(new_corners)):
+            if is_intersected(corners[i], new_corners[j]):
+                new_corners[j] = util.corner_merge_two_corners(corners[i], new_corners[j])
+                merged = True
+                changed = True
+                break
+        if not merged:
+            new_corners.append(corners[i])
+
+    if not changed:
+        return corners
+    else:
+        return merge_intersected_corner(new_corners)
+
+
 def merge_text(corners, max_word_gad=C.THRESHOLD_TEXT_MAX_WORD_GAP):
     def is_text_line(corner_a, corner_b):
         ((col_min_a, row_min_a), (col_max_a, row_max_a)) = corner_a

@@ -80,8 +80,6 @@ def eval(detection, ground_truth, img_root, show=True):
         '''
         area_d = (d_bbox[2] - d_bbox[0]) * (d_bbox[3] - d_bbox[1])
         for i, gt_bbox in enumerate(gt_bboxes):
-            if matched[i] == 0:
-                continue
             area_gt = (gt_bbox[2] - gt_bbox[0]) * (gt_bbox[3] - gt_bbox[1])
             col_min = max(d_bbox[0], gt_bbox[0])
             row_min = max(d_bbox[1], gt_bbox[1])
@@ -131,6 +129,6 @@ def eval(detection, ground_truth, img_root, show=True):
               % (i, amount, TP, FP, FN, precesion, recall))
 
 
-detect = load_detect_result_json('data\\output\\29029_ip.json')
+detect = load_detect_result_json('data\\output\\35930_ip.json')
 gt = load_ground_truth_json('E:/Mulong/Datasets/rico/instances_val.json')
-eval(detect, gt, 'E:\\Mulong\\Datasets\\rico\\combined', show=False)
+eval(detect, gt, 'E:\\Mulong\\Datasets\\rico\\combined', show=True)

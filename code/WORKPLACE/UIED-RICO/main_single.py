@@ -1,10 +1,10 @@
-import ip
+import ip_region_proposal as ip
 import time
 
 resize_by_height = 800
 
 # set input image path
-PATH_IMG_INPUT = 'data\\input\\29029.jpg'
+PATH_IMG_INPUT = 'data\\input\\35930.jpg'
 PATH_OUTPUT_ROOT = 'data\\output'
 
 start = time.clock()

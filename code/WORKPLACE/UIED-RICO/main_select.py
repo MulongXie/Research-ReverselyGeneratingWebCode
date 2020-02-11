@@ -13,7 +13,7 @@ C.build_output_folders(is_clip)
 resize_by_height = 800
 
 # set input root directory and sort all images by their indices
-data = json.load(open('data/instances_val.json', 'r'))
+data = json.load(open('E:\\Mulong\\Datasets\\rico\\instances_val_notext.json', 'r'))
 input_paths_img = [pjoin(C.ROOT_INPUT, img['file_name'].split('/')[-1]) for img in data['images']]
 input_paths_img = sorted(input_paths_img, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 # set the range of target inputs' indices

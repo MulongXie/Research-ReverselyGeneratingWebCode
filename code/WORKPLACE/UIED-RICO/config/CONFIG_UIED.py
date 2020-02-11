@@ -12,6 +12,7 @@ class Config:
         self.THRESHOLD_REC_MAX_DENT_RATIO = 0.25
         self.THRESHOLD_LINE_THICKNESS = 8
         self.THRESHOLD_COMPO_MAX_SCALE = (0.08, 0.9)  # maximum height and width ratio for a atomic compo (button)
+        self.THRESHOLD_TEXT_MAX_WORD_GAP = 10
 
         # obsolete
         self.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS = 8
@@ -23,7 +24,6 @@ class Config:
         self.THRESHOLD_LINE_MIN_LENGTH_V = 50
         self.OCR_PADDING = 5
         self.OCR_MIN_WORD_AREA = 0.45
-        self.THRESHOLD_TEXT_MAX_WORD_GAP = 10
 
         self.THRESHOLD_MIN_IOU = 0.1              # dribbble:0.003 rico:0.1 web:0.1
         self.THRESHOLD_BLOCK_MIN_EDGE_LENGTH = 210   # dribbble:68 rico:210 web:70
