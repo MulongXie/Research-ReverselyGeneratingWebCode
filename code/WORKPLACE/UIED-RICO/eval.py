@@ -25,19 +25,20 @@ def draw_bounding_box(org, corners, color=(0, 255, 0), line=2, show=False):
     return board
 
 
-def load_detect_result_json(reslut_file):
-    img_name = reslut_file.split('\\')[-1].split('_')[0]
-    print(img_name)
-    compos = json.load(open(reslut_file, 'r'))['compos']
-    print('Loading %d detection results' % len(compos))
+def load_detect_result_json(reslut_file_root):
+    result_files = glob(pjoin(reslut_file_root, '*.json'))
     compos_reform = {}
-    for compo in tqdm(compos):
-        if img_name not in compos_reform:
-            compos_reform[img_name] = {'bboxes': [[compo['column_min'], compo['row_min'], compo['column_max'], compo['row_max']]],
-                                       'categories': [compo['class']]}
-        else:
-            compos_reform[img_name]['bboxes'].append([compo['column_min'], compo['row_min'], compo['column_max'], compo['row_max']])
-            compos_reform[img_name]['categories'].append(compo['class'])
+    print('Loading %d detection results' % len(result_files))
+    for reslut_file in tqdm(result_files):
+        img_name = reslut_file.split('\\')[-1].split('_')[0]
+        compos = json.load(open(reslut_file, 'r'))['compos']
+        for compo in compos:
+            if img_name not in compos_reform:
+                compos_reform[img_name] = {'bboxes': [[compo['column_min'], compo['row_min'], compo['column_max'], compo['row_max']]],
+                                           'categories': [compo['class']]}
+            else:
+                compos_reform[img_name]['bboxes'].append([compo['column_min'], compo['row_min'], compo['column_max'], compo['row_max']])
+                compos_reform[img_name]['categories'].append(compo['class'])
     return compos_reform
 
 
@@ -99,21 +100,19 @@ def eval(detection, ground_truth, img_root, show=True):
                 broad = draw_bounding_box(org, [d_bbox], color=(0, 0, 255))
                 draw_bounding_box(broad, [gt_bbox], color=(0, 255, 0), show=True)
 
-            if iou > 0.9 or iod > 0.8:
+            if iou > 0.5 or iod > 0.8:
                 matched[i] = 0
                 return True
         return False
 
     amount = len(detection)
     TP, FP, FN = 0, 0, 0
-    for i, image_id in enumerate(tqdm(detection)):
+    for i, image_id in enumerate(detection):
         img = cv2.imread(pjoin(img_root, image_id + '.jpg'))
         d_compos = detection[image_id]
         gt_compos = ground_truth[image_id]
         d_compos['bboxes'] = resize_label(d_compos['bboxes'], 800, gt_compos['size'][0])
         matched = np.ones(len(gt_compos['bboxes']), dtype=int)
-        if show:
-            print("Number of gt boxes: %d, Number of detected boxes: %d" % (len(gt_compos['bboxes']), len(d_compos['bboxes'])))
         for d_bbox in d_compos['bboxes']:
             if match(img, d_bbox, gt_compos['bboxes'], matched):
                 TP += 1
@@ -123,12 +122,18 @@ def eval(detection, ground_truth, img_root, show=True):
 
         precesion = TP / (TP+FP)
         recall = TP / (TP+FN)
-        broad = draw_bounding_box(img,  d_compos['bboxes'], color=(0, 0, 255), line=3)
-        draw_bounding_box(broad, gt_compos['bboxes'], color=(0, 255, 0), show=True, line=2)
-        print('[%d/%d] TP:%d, FP:%d, FN:%d, Precesion:%.3f, Recall:%.3f'
-              % (i, amount, TP, FP, FN, precesion, recall))
+        if show:
+            print("Number of gt boxes: %d, Number of detected boxes: %d" % (
+            len(gt_compos['bboxes']), len(d_compos['bboxes'])))
+
+            broad = draw_bounding_box(img,  d_compos['bboxes'], color=(0, 0, 255), line=3)
+            draw_bounding_box(broad, gt_compos['bboxes'], color=(0, 255, 0), show=True, line=2)
+            print('[%d/%d] TP:%d, FP:%d, FN:%d, Precesion:%.3f, Recall:%.3f' % (i, amount, TP, FP, FN, precesion, recall))
+
+        if i % 20 == 0:
+            print('[%d/%d] TP:%d, FP:%d, FN:%d, Precesion:%.3f, Recall:%.3f' % (i, amount, TP, FP, FN, precesion, recall))
 
 
-detect = load_detect_result_json('data\\output\\35930_ip.json')
-gt = load_ground_truth_json('E:/Mulong/Datasets/rico/instances_val.json')
-eval(detect, gt, 'E:\\Mulong\\Datasets\\rico\\combined', show=True)
+detect = load_detect_result_json('E:\\Mulong\\Result\\rico2\\ip')
+gt = load_ground_truth_json('E:/Mulong/Datasets/rico/instances_val_notext.json')
+eval(detect, gt, 'E:\\Mulong\\Datasets\\rico\\combined', show=False)

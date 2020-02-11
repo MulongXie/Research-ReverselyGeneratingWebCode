@@ -109,8 +109,10 @@ def merge_intersected_corner(corners):
         w = max(0, col_max_s - col_min_s)
         h = max(0, row_max_s - row_min_s)
         inter = w * h
+        # intersected
         if inter == 0:
             return False
+        # very closed
         return True
 
     changed = False
@@ -360,6 +362,9 @@ def rm_top_or_bottom_corners(corners, org_shape):
     height, width = org_shape[:2]
     for corner in corners:
         ((column_min, row_min), (column_max, row_max)) = corner
+        # remove big ones
+        if (row_max - row_min) / height > 0.7 and (column_max - column_min) / width > 0.8:
+            continue
         if not (row_max < height * 0.045 or row_min > height * 0.94):
             new_corners.append(corner)
     return new_corners
