@@ -356,94 +356,25 @@ def rm_text(org, corners, compo_class,
     return new_corners, new_class
 
 
-def line_detection(binary,
-                   min_line_length_h=C.THRESHOLD_LINE_MIN_LENGTH_H, min_line_length_v=C.THRESHOLD_LINE_MIN_LENGTH_V,
-                   max_thickness=C.THRESHOLD_LINE_THICKNESS):
-    """
-    Detect lines
-    :param binary: Binary image from pre-processing
-    :param min_line_length_h: Min length for horizontal lines
-    :param min_line_length_v: Min length for vertical lines
-    :param max_thickness
-    :return: lines: [line_h, line_v]
-            -> line_h: horizontal {'head':(column_min, row), 'end':(column_max, row), 'thickness':int)
-            -> line_v: vertical {'head':(column, row_min), 'end':(column, row_max), 'thickness':int}
-    """
-    def no_neighbor(start_row, start_col, mode, line=None):
-        """
-        check this point has adjacent points in orthogonal direction
-        """
-        if mode == 'h':
-            for t in range(max_thickness + 1):
-                if start_row + t >= binary.shape[0] or binary[start_row + t, start_col] == 0:
-                    # if not start point, update the thickness of this line
-                    if line is not None:
-                        line['thickness'] = max(line['thickness'], t)
-                    return True
-                mark_h[start_row + t, start_col] = 255
-            return False
-        elif mode == 'v':
-            for t in range(max_thickness + 1):
-                if start_col + t >= binary.shape[1] or binary[start_row, start_col + t] == 0:
-                    # if not start point, update the thickness of this line
-                    if line is not None:
-                        line['thickness'] = max(line['thickness'], t)
-                    return True
-                mark_v[start_row, start_col + t] = 255
-            return False
-
-    row, column = binary.shape[0], binary.shape[1]
-    mark_h = np.zeros(binary.shape, dtype=np.uint8)
-    mark_v = np.zeros(binary.shape, dtype=np.uint8)
-    lines_h = []
-    lines_v = []
-    x, y = 0, 0
-    while x < row - 1 or y < column - 1:
-        # horizontal
-        new_line = False
-        head, end = None, None
-        line = {}
-        for j in range(column):
-            # line start
-            if not new_line and mark_h[x][j] == 0 and binary[x][j] > 0 and no_neighbor(x, j, 'h'):
-                head = j
-                new_line = True
-                line['head'] = [head, x]
-                line['thickness'] = -1
-            # line end
-            elif new_line and (j == column - 1 or mark_h[x][j] > 0 or binary[x][j] == 0 or not no_neighbor(x, j, 'h', line)):
-                end = j
-                new_line = False
-                if end - head > min_line_length_h:
-                    line['end'] = [end, x]
-                    lines_h.append(line)
-                line = {}
-
-        # vertical
-        new_line = False
-        head, end = None, None
-        line = {}
-        for i in range(row):
-            # line start
-            if not new_line and mark_v[i][y] == 0 and binary[i][y] > 0 and no_neighbor(i, y, 'v'):
-                head = i
-                new_line = True
-                line['head'] = [y, head]
-                line['thickness'] = 0
-            # line end
-            elif new_line and (i == row - 1 or mark_v[i][y] > 0 or binary[i][y] == 0 or not no_neighbor(i, y, 'v', line)):
-                end = i
-                new_line = False
-                if end - head > min_line_length_v:
-                    line['end'] = [y, end]
-                    lines_v.append(line)
-                line = {}
-
-        if x < row - 1:
-            x += 1
-        if y < column - 1:
-            y += 1
-    return lines_h, lines_v
+def line_removal(binary, max_line_thickness):
+    width = binary.shape[1]
+    thickness = 0
+    gap = 0
+    for i, row in enumerate(binary):
+        print(int(np.sum(row)/255), thickness, gap)
+        if int(np.sum(row)/255) / width > 0.78:
+            gap = 0
+            thickness += 1
+        else:
+            gap += 1
+            if thickness > 0:
+                # line ends
+                if thickness <= max_line_thickness:
+                    # erase line part if line is detected
+                    binary[i - thickness: i] = 0
+                    thickness = 0
+                if gap >= max_line_thickness:
+                    thickness = 0
 
 
 # take the binary image as input
@@ -454,7 +385,7 @@ def boundary_detection(binary,
                        line_thickness=C.THRESHOLD_LINE_THICKNESS,
                        min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
                        max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO,
-                       rec_detect=False, show=False, write=False):
+                       rec_detect=False, show=False):
     """
     :param binary: Binary image from pre-processing
     :param min_obj_area: If not pass then ignore the small object
