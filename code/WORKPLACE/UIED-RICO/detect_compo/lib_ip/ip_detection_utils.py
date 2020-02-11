@@ -253,6 +253,17 @@ def corner_cvt_relative_position(corners, col_min_base, row_min_base):
     return rlt_corners
 
 
+def corner_merge_two_corners(corner_a, corner_b):
+    ((col_min_a, row_min_a), (col_max_a, row_max_a)) = corner_a
+    ((col_min_b, row_min_b), (col_max_b, row_max_b)) = corner_b
+
+    col_min = min(col_min_a, col_min_b)
+    col_max = max(col_max_a, col_max_b)
+    row_min = min(row_min_a, row_min_b)
+    row_max = max(row_max_a, row_max_b)
+    return (col_min, row_min), (col_max, row_max)
+
+
 def line_check_perpendicular(lines_h, lines_v, max_thickness):
     """
     lines: [line_h, line_v]

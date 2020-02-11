@@ -48,20 +48,6 @@ def merge_corner(corners, compos_class, min_selected_IoU=C.THRESHOLD_MIN_IOU, is
                             -> bottom_right: (column_max, row_max)
     :return: new corners
     """
-    def merge_overlapped(corner_a, corner_b):
-        (top_left_a, bottom_right_a) = corner_a
-        (col_min_a, row_min_a) = top_left_a
-        (col_max_a, row_max_a) = bottom_right_a
-        (top_left_b, bottom_right_b) = corner_b
-        (col_min_b, row_min_b) = top_left_b
-        (col_max_b, row_max_b) = bottom_right_b
-
-        col_min = min(col_min_a, col_min_b)
-        col_max = max(col_max_a, col_max_b)
-        row_min = min(row_min_a, row_min_b)
-        row_max = max(row_max_a, row_max_b)
-        return (col_min, row_min), (col_max, row_max)
-
     new_corners = []
     new_class = []
     for i in range(len(corners)):
@@ -102,12 +88,42 @@ def merge_corner(corners, compos_class, min_selected_IoU=C.THRESHOLD_MIN_IOU, is
             elif r == 4:
                 is_intersected = True
                 if compos_class[i] == new_class[j]:
-                    new_corners[j] = merge_overlapped(corners[i], new_corners[j])
+                    new_corners[j] = util.corner_merge_two_corners(corners[i], new_corners[j])
 
         if not is_intersected:
             new_corners.append(corners[i])
             new_class.append(compos_class[i])
     return new_corners, new_class
+
+
+def merge_text(corners, max_word_gad=C.THRESHOLD_TEXT_MAX_WORD_GAP):
+    def is_text_line(corner_a, corner_b):
+        ((col_min_a, row_min_a), (col_max_a, row_max_a)) = corner_a
+        ((col_min_b, row_min_b), (col_max_b, row_max_b)) = corner_b
+        # on the same line
+        if abs(row_min_a - row_min_b) < max_word_gad and abs(row_max_a - row_max_b) < max_word_gad:
+            # close distance
+            if abs(col_min_b - col_max_a) < max_word_gad or abs(col_min_a - col_max_b) < max_word_gad:
+                return True
+        return False
+
+    changed = False
+    new_corners = []
+    for i in range(len(corners)):
+        merged = False
+        for j in range(len(new_corners)):
+            if is_text_line(corners[i], new_corners[j]):
+                new_corners[j] = util.corner_merge_two_corners(corners[i], new_corners[j])
+                merged = True
+                changed = True
+                break
+        if not merged:
+            new_corners.append(corners[i])
+
+    if not changed:
+        return corners
+    else:
+        return merge_text(new_corners)
 
 
 def strip_img(corners_compo, compos_class, corners_img):

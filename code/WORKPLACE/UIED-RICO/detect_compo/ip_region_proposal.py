@@ -80,12 +80,13 @@ def compo_detection(input_img_path, output_root, resize_by_height=600):
     binary_non_block = blk.block_erase(binary_org, blocks_corner)
     compo_non_blk_boundary, compo_non_blk_corner = processing(org, binary_non_block)
 
-    # *** Step 4 *** merge results
+    # *** Step 4 *** results refinement: remove top and bottom compos -> merge words into line
     compos_corner = compo_in_blk_corner + compo_non_blk_corner
     compos_corner = det.rm_top_or_bottom_corners(compos_corner, org.shape)
+    compos_corner = det.merge_text(compos_corner)
 
     # *** Step 5 *** save results: save text label -> save drawn image
-    draw.draw_bounding_box(org, compos_corner, show=True,  write_path=pjoin(output_root, name + '_ip.png'))
+    draw.draw_bounding_box(org, compos_corner, show=False, write_path=pjoin(output_root, name + '_ip.png'))
     file.save_corners_json(pjoin(output_root, name + '_ip.json'), compos_corner, np.full(len(compos_corner), '0'))
 
     print("[Compo Detection Completed in %.3f s]" % (time.clock() - start))
