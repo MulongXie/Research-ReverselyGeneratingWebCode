@@ -451,7 +451,8 @@ def line_detection(binary,
 # return all boundaries and boundaries of rectangles
 def boundary_detection(binary,
                        min_obj_area=C.THRESHOLD_OBJ_MIN_AREA, min_obj_perimeter=C.THRESHOLD_OBJ_MIN_PERIMETER,
-                       line_thickness=C.THRESHOLD_LINE_THICKNESS, min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
+                       line_thickness=C.THRESHOLD_LINE_THICKNESS,
+                       min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
                        max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO,
                        rec_detect=False, show=False, write=False):
     """
@@ -480,7 +481,7 @@ def boundary_detection(binary,
                 # print(len(area))
                 # draw.draw_region_bin(area, np.zeros(binary.shape, dtype=np.uint8), True)
                 # ignore small area
-                if len(area) < 20:
+                if len(area) < min_obj_area:
                     continue
 
                 # calculate the boundary of the connected area
@@ -490,7 +491,7 @@ def boundary_detection(binary,
 
                 # print(perimeter)
                 # draw.draw_boundary([boundary], binary.shape, True)
-                if perimeter < 20:
+                if perimeter < min_obj_perimeter:
                     continue
                 # check if it is line by checking the length of edges
                 if util.boundary_is_line(boundary, line_thickness):

@@ -1,0 +1,94 @@
+{
+    "compos": [
+        {
+            "row_min": 120,
+            "height": 27,
+            "row_max": 147,
+            "column_min": 99,
+            "width": 54,
+            "id": 0,
+            "column_max": 153,
+            "class": "text"
+        },
+        {
+            "row_min": 120,
+            "height": 34,
+            "row_max": 154,
+            "column_min": 159,
+            "width": 187,
+            "id": 1,
+            "column_max": 346,
+            "class": "button"
+        },
+        {
+            "row_min": 166,
+            "height": 41,
+            "row_max": 207,
+            "column_min": 65,
+            "width": 321,
+            "id": 2,
+            "column_max": 386,
+            "class": "img"
+        },
+        {
+            "row_min": 247,
+            "height": 233,
+            "row_max": 480,
+            "column_min": 39,
+            "width": 409,
+            "id": 3,
+            "column_max": 448,
+            "class": "img"
+        },
+        {
+            "row_min": 486,
+            "height": 26,
+            "row_max": 512,
+            "column_min": 59,
+            "width": 127,
+            "id": 4,
+            "column_max": 186,
+            "class": "button"
+        },
+        {
+            "row_min": 486,
+            "height": 24,
+            "row_max": 510,
+            "column_min": 239,
+            "width": 94,
+            "id": 5,
+            "column_max": 333,
+            "class": "text"
+        },
+        {
+            "row_min": 487,
+            "height": 20,
+            "row_max": 507,
+            "column_min": 412,
+            "width": 36,
+            "id": 6,
+            "column_max": 448,
+            "class": "text"
+        },
+        {
+            "row_min": 579,
+            "height": 54,
+            "row_max": 633,
+            "column_min": 87,
+            "width": 272,
+            "id": 7,
+            "column_max": 359,
+            "class": "button"
+        },
+        {
+            "row_min": 593,
+            "height": 25,
+            "row_max": 618,
+            "column_min": 186,
+            "width": 80,
+            "id": 8,
+            "column_max": 266,
+            "class": "text"
+        }
+    ]
+}
