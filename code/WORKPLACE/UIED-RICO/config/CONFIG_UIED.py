@@ -3,15 +3,15 @@ class Config:
     def __init__(self):
         # Adjustable
         self.THRESHOLD_PRE_GRADIENT = 4             # dribbble:4 rico:4 web:1
-        self.THRESHOLD_PRE_MORPH = (3,3)
-        self.THRESHOLD_OBJ_MIN_AREA = 175
+        self.THRESHOLD_OBJ_MIN_AREA = 180
         self.THRESHOLD_OBJ_MIN_PERIMETER = 70
         self.THRESHOLD_BLOCK_GRADIENT = 8
 
         # *** Frozen ***
         self.THRESHOLD_REC_MIN_EVENNESS = 0.66
-        self.THRESHOLD_REC_MAX_DENT_RATIO = 0.1
-        self.THRESHOLD_LINE_THICKNESS = 5
+        self.THRESHOLD_REC_MAX_DENT_RATIO = 0.25
+        self.THRESHOLD_LINE_THICKNESS = 8
+        self.THRESHOLD_COMPO_MAX_SCALE = (0.08, 0.9)  # maximum height and width ratio for a atomic compo (button)
 
         # obsolete
         self.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS = 8

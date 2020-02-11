@@ -1,0 +1,91 @@
+import cv2
+from os.path import join as pjoin
+import time
+import numpy as np
+
+import lib_ip.ip_preprocessing as pre
+import lib_ip.ip_draw as draw
+import lib_ip.ip_detection as det
+import lib_ip.ip_segment as seg
+import lib_ip.file_utils as file
+import lib_ip.ocr_classify_text as ocr
+import lib_ip.ip_detection_utils as util
+import lib_ip.block_division as blk
+from config.CONFIG_UIED import Config
+
+
+def processing_block(org, binary, blocks_corner, show=False):
+    '''
+    :param org: original image
+    :param binary: binary map of original image
+    :param blocks_corner: list of corners of blocks
+                        [(top_left, bottom_right)]
+                        -> top_left: (column_min, row_min)
+                        -> bottom_right: (column_max, row_max)
+    :param classifier: cnn model
+    :return: boundaries of detected components in blocks;
+                        [up, bottom, left, right]
+                        -> up, bottom: list of [(column_index, min/max row border)]
+                        -> left, right: list of [(row_index, min/max column border)]
+             corners of detected components in blocks;
+             corresponding classes of components;
+    '''
+    blocks_clip_bin = seg.clipping(binary, blocks_corner, shrink=2)
+
+    all_compos_boundary = []
+    all_compos_corner = []
+    for i in range(len(blocks_corner)):
+        # *** Substep 1.1 *** pre-processing: get block information -> binarization
+        block_corner = blocks_corner[i]
+        if det.is_top_or_bottom_bar(blocks_corner[i], org.shape): continue
+        block_clip_bin = blocks_clip_bin[i]
+        det.line_removal(block_clip_bin)
+
+        # *** Substep 1.2 *** object extraction: extract components boundary -> get bounding box corner
+        compos_boundary = det.boundary_detection(block_clip_bin)
+        compos_corner = det.get_corner(compos_boundary)
+        compos_corner = util.corner_cvt_relative_position(compos_corner, block_corner[0][0], block_corner[0][1])
+
+        if len(compos_boundary) > 0:
+            all_compos_boundary += compos_boundary
+            all_compos_corner += compos_corner
+    return all_compos_boundary, all_compos_corner
+
+
+def processing(org, binary, inspect_img=False):
+    det.line_removal(binary)
+    cv2.imshow('bin', binary)
+    cv2.waitKey()
+    # *** Substep 2.1 *** object extraction: extract components boundary -> get bounding box corner
+    compos_boundary = det.boundary_detection(binary)
+    compos_corner = det.get_corner(compos_boundary)
+
+    return compos_boundary, compos_corner
+
+
+def compo_detection(input_img_path, output_root, resize_by_height=600):
+    start = time.clock()
+    print("Compo Detection for %s" % input_img_path)
+    name = input_img_path.split('\\')[-1][:-4]
+
+    # *** Step 1 *** pre-processing: read img -> get binary map
+    org, grey = pre.read_img(input_img_path, resize_by_height)
+    binary_org = pre.preprocess(org, write_path=pjoin(output_root, name + '_binary.png'))
+
+    # *** Step 2 *** block processing: detect block -> detect components in block
+    blocks_corner = blk.block_division(grey, write_path=pjoin(output_root, name + '_block.png'))
+    compo_in_blk_boundary, compo_in_blk_corner = processing_block(org, binary_org, blocks_corner)
+
+    # *** Step 3 *** non-block processing: erase blocks from binary -> detect left components
+    binary_non_block = blk.block_erase(binary_org, blocks_corner)
+    compo_non_blk_boundary, compo_non_blk_corner = processing(org, binary_non_block, True)
+
+    # *** Step 4 *** merge results
+    compos_corner = compo_in_blk_corner + compo_non_blk_corner
+    compos_corner = det.rm_top_or_bottom_corners(compos_corner, org.shape)
+
+    # *** Step 5 *** save results: save text label -> save drawn image
+    draw.draw_bounding_box(org, compos_corner, show=True,  write_path=pjoin(output_root, name + '_ip.png'))
+    file.save_corners_json(pjoin(output_root, name + '_ip.json'), compos_corner, np.full(len(compos_corner), '0'))
+
+    print("[Compo Detection Completed in %.3f s]" % (time.clock() - start))
