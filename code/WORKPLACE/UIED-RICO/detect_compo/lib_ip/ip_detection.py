@@ -134,7 +134,7 @@ def merge_intersected_corner(corners):
         return merge_intersected_corner(new_corners)
 
 
-def merge_text(corners, max_word_gad=C.THRESHOLD_TEXT_MAX_WORD_GAP):
+def merge_text(corners, org_shape, max_word_gad=C.THRESHOLD_TEXT_MAX_WORD_GAP, max_word_height_ratio=C.THRESHOLD_TEXT_MAX_HEIGHT):
     def is_text_line(corner_a, corner_b):
         ((col_min_a, row_min_a), (col_max_a, row_max_a)) = corner_a
         ((col_min_b, row_min_b), (col_max_b, row_max_b)) = corner_b
@@ -147,8 +147,14 @@ def merge_text(corners, max_word_gad=C.THRESHOLD_TEXT_MAX_WORD_GAP):
 
     changed = False
     new_corners = []
+    row, col = org_shape[:2]
     for i in range(len(corners)):
         merged = False
+        height = corners[i][1][1] - corners[i][0][1]
+        # ignore non-text
+        if height / row > max_word_height_ratio:
+            new_corners.append(corners[i])
+            continue
         for j in range(len(new_corners)):
             if is_text_line(corners[i], new_corners[j]):
                 new_corners[j] = util.corner_merge_two_corners(corners[i], new_corners[j])
@@ -161,7 +167,7 @@ def merge_text(corners, max_word_gad=C.THRESHOLD_TEXT_MAX_WORD_GAP):
     if not changed:
         return corners
     else:
-        return merge_text(new_corners)
+        return merge_text(new_corners, org_shape)
 
 
 def strip_img(corners_compo, compos_class, corners_img):
@@ -363,7 +369,7 @@ def rm_top_or_bottom_corners(corners, org_shape, top_bottom_height=C.THRESHOLD_T
     for corner in corners:
         ((column_min, row_min), (column_max, row_max)) = corner
         # remove big ones
-        if (row_max - row_min) / height > 0.7 and (column_max - column_min) / width > 0.8:
+        if (row_max - row_min) / height > 0.65 and (column_max - column_min) / width > 0.8:
             continue
         if not (row_max < height * top_bottom_height[0] or row_min > height * top_bottom_height[1]):
             new_corners.append(corner)

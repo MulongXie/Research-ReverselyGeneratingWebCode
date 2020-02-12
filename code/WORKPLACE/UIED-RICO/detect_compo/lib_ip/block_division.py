@@ -78,7 +78,8 @@ def block_is_compo(corner, org_shape, max_compo_scale=C.THRESHOLD_COMPO_MAX_SCAL
 def block_division(grey, show=False, write_path=None,
                    line_thickness=C.THRESHOLD_LINE_THICKNESS,
                    min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
-                   max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO):
+                   max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO,
+                   min_block_height_ratio=C.THRESHOLD_BLOCK_MIN_HEIGHT):
     '''
     :param grey: grey-scale of original image
     :return: corners: list of [(top_left, bottom_right)]
@@ -135,11 +136,15 @@ def block_division(grey, show=False, write_path=None,
                 if not util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
                     continue
                 block_corner = det.get_corner([boundary])[0]
+                width = block_corner[1][0] - block_corner[0][0]
+                height = block_corner[1][1] - block_corner[0][1]
+                if height/row < min_block_height_ratio:
+                    continue
                 blocks_corner.append(block_corner)
                 draw.draw_region(region, broad)
-    if show:
-        cv2.imshow('broad', broad)
-        cv2.waitKey()
+                if show:
+                    print("width:%d, height:%d, ratio:%.3f" %(width, height, width/height))
+                    draw.draw_boundary([boundary], grey.shape, show=True)
     if write_path is not None:
         cv2.imwrite(write_path, broad)
     return blocks_corner
