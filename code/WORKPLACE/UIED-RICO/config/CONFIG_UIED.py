@@ -13,6 +13,7 @@ class Config:
         self.THRESHOLD_LINE_THICKNESS = 8
         self.THRESHOLD_COMPO_MAX_SCALE = (0.08, 0.9)  # maximum height and width ratio for a atomic compo (button)
         self.THRESHOLD_TEXT_MAX_WORD_GAP = 10
+        self.THRESHOLD_TOP_BOTTOM_BAR = (0.045, 0.94)
 
         # obsolete
         self.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS = 8

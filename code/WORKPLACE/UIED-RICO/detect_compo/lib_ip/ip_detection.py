@@ -285,13 +285,13 @@ def block_or_compo(org, binary, corners,
     return blocks, imgs, compos
 
 
-def is_top_or_bottom_bar(corner, org_shape):
+def is_top_or_bottom_bar(corner, org_shape, top_bottom_height=C.THRESHOLD_TOP_BOTTOM_BAR):
     height, width = org_shape[:2]
     ((column_min, row_min), (column_max, row_max)) = corner
     if column_min < 5 and row_min < 5 and \
-            width - column_max < 5 and row_max < 100:
+            width - column_max < 5 and row_max < height * top_bottom_height[0]:
         return True
-    if column_min < 5 and height - row_min < 200 and \
+    if column_min < 5 and row_min > height * top_bottom_height[1] and \
             width - column_max < 5 and height - row_max < 5:
         return True
     return False
@@ -357,7 +357,7 @@ def rm_text(org, corners, compo_class,
     return new_corners, new_class
 
 
-def rm_top_or_bottom_corners(corners, org_shape):
+def rm_top_or_bottom_corners(corners, org_shape, top_bottom_height=C.THRESHOLD_TOP_BOTTOM_BAR):
     new_corners = []
     height, width = org_shape[:2]
     for corner in corners:
@@ -365,7 +365,7 @@ def rm_top_or_bottom_corners(corners, org_shape):
         # remove big ones
         if (row_max - row_min) / height > 0.7 and (column_max - column_min) / width > 0.8:
             continue
-        if not (row_max < height * 0.045 or row_min > height * 0.94):
+        if not (row_max < height * top_bottom_height[0] or row_min > height * top_bottom_height[1]):
             new_corners.append(corner)
     return new_corners
 

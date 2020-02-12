@@ -37,7 +37,8 @@ def processing_block(org, binary, blocks_corner):
         # *** Substep 1.1 *** pre-processing: get valid block -> binarization -> remove conglutinated line
         block_corner = blocks_corner[i]
         block_clip_bin = blocks_clip_bin[i]
-        if det.is_top_or_bottom_bar(blocks_corner[i], org.shape): continue
+        if det.is_top_or_bottom_bar(blocks_corner[i], org.shape):
+            continue
         if blk.block_is_compo(block_corner, org.shape):
             all_compos_corner.append(block_corner)
             continue
