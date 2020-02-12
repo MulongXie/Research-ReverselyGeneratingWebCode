@@ -32,13 +32,15 @@ def processing_block(org, binary, blocks_corner):
     '''
     blocks_clip_bin = seg.clipping(binary, blocks_corner, shrink=2)
 
-    all_compos_boundary = []
     all_compos_corner = []
     for i in range(len(blocks_corner)):
         # *** Substep 1.1 *** pre-processing: get valid block -> binarization -> remove conglutinated line
         block_corner = blocks_corner[i]
-        if det.is_top_or_bottom_bar(blocks_corner[i], org.shape): continue
         block_clip_bin = blocks_clip_bin[i]
+        if det.is_top_or_bottom_bar(blocks_corner[i], org.shape): continue
+        if blk.block_is_compo(block_corner, org.shape):
+            all_compos_corner.append(block_corner)
+            continue
         det.line_removal(block_clip_bin)
 
         # *** Substep 1.2 *** object extraction: extract components boundary -> get bounding box corner
@@ -46,10 +48,9 @@ def processing_block(org, binary, blocks_corner):
         compos_corner = det.get_corner(compos_boundary)
         compos_corner = util.corner_cvt_relative_position(compos_corner, block_corner[0][0], block_corner[0][1])
 
-        if len(compos_boundary) > 0:
-            all_compos_boundary += compos_boundary
+        if len(compos_corner) > 0:
             all_compos_corner += compos_corner
-    return all_compos_boundary, all_compos_corner
+    return all_compos_corner
 
 
 def processing(org, binary):
@@ -59,8 +60,7 @@ def processing(org, binary):
     # *** Substep 2.2 *** object extraction: extract components boundary -> get bounding box corner
     compos_boundary = det.boundary_detection(binary)
     compos_corner = det.get_corner(compos_boundary)
-
-    return compos_boundary, compos_corner
+    return compos_corner
 
 
 def compo_detection(input_img_path, output_root, resize_by_height=600):
@@ -74,11 +74,11 @@ def compo_detection(input_img_path, output_root, resize_by_height=600):
 
     # *** Step 2 *** block processing: detect block -> detect components in block
     blocks_corner = blk.block_division(grey, write_path=pjoin(output_root, name + '_block.png'))
-    compo_in_blk_boundary, compo_in_blk_corner = processing_block(org, binary_org, blocks_corner)
+    compo_in_blk_corner = processing_block(org, binary_org, blocks_corner)
 
     # *** Step 3 *** non-block processing: erase blocks from binary -> detect left components
     binary_non_block = blk.block_erase(binary_org, blocks_corner)
-    compo_non_blk_boundary, compo_non_blk_corner = processing(org, binary_non_block)
+    compo_non_blk_corner = processing(org, binary_non_block)
 
     # *** Step 4 *** results refinement: remove top and bottom compos -> merge words into line
     compos_corner = compo_in_blk_corner + compo_non_blk_corner

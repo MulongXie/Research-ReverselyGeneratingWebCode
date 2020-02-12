@@ -65,11 +65,20 @@ def block_erase(binary, blocks_corner, show=False, pad=2):
     return binary
 
 
+def block_is_compo(corner, org_shape, max_compo_scale=C.THRESHOLD_COMPO_MAX_SCALE):
+    row, column = org_shape[:2]
+    width = corner[1][0] - corner[0][0]
+    height = corner[1][1] - corner[0][1]
+    # ignore atomic components
+    if not (height / column > max_compo_scale[0] and width / column > max_compo_scale[1]):
+        return True
+    return False
+
+
 def block_division(grey, show=False, write_path=None,
                    line_thickness=C.THRESHOLD_LINE_THICKNESS,
                    min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
-                   max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO,
-                   max_compo_scale=C.THRESHOLD_COMPO_MAX_SCALE):
+                   max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO):
     '''
     :param grey: grey-scale of original image
     :return: corners: list of [(top_left, bottom_right)]
@@ -126,11 +135,6 @@ def block_division(grey, show=False, write_path=None,
                 if not util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
                     continue
                 block_corner = det.get_corner([boundary])[0]
-                width = block_corner[1][0] - block_corner[0][0]
-                height = block_corner[1][1] - block_corner[0][1]
-                # ignore atomic components
-                if not (height/column > max_compo_scale[0] and width/column > max_compo_scale[1]):
-                    continue
                 blocks_corner.append(block_corner)
                 draw.draw_region(region, broad)
     if show:
