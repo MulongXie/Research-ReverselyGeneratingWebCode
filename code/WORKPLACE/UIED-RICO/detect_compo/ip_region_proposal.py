@@ -64,9 +64,9 @@ def processing(org, binary):
     return compos_corner
 
 
-def compo_detection(input_img_path, output_root, resize_by_height=600):
+def compo_detection(input_img_path, output_root, num=0, resize_by_height=600):
     start = time.clock()
-    print("Compo Detection for %s" % input_img_path)
+    # print("Compo Detection for %s" % input_img_path)
     name = input_img_path.split('\\')[-1][:-4]
 
     # *** Step 1 *** pre-processing: read img -> get binary map
@@ -84,12 +84,11 @@ def compo_detection(input_img_path, output_root, resize_by_height=600):
     # *** Step 4 *** results refinement: remove top and bottom compos -> merge words into line
     compos_corner = compo_in_blk_corner + compo_non_blk_corner
     compos_corner = det.rm_top_or_bottom_corners(compos_corner, org.shape)
-    draw.draw_bounding_box(org, compos_corner, show=True)
     compos_corner = det.merge_text(compos_corner, org.shape)
     compos_corner = det.merge_intersected_corner(compos_corner)
 
     # *** Step 5 *** save results: save text label -> save drawn image
-    draw.draw_bounding_box(org, compos_corner, show=True, write_path=pjoin(output_root, name + '_ip.png'))
+    draw.draw_bounding_box(org, compos_corner, show=False, write_path=pjoin(output_root, name + '_ip.png'))
     file.save_corners_json(pjoin(output_root, name + '_ip.json'), compos_corner, np.full(len(compos_corner), '0'))
 
-    print("[Compo Detection Completed in %.3f s]" % (time.clock() - start))
+    print("[Compo Detection Completed in %.3f s] %d %s\n" % (time.clock() - start, num, input_img_path))
