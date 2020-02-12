@@ -7,7 +7,7 @@ def nothing(x):
     pass
 
 
-img_file = 'data/input/2008.jpg'
+img_file = 'data/input/85.jpg'
 resize_height = 800
 
 cv2.namedWindow('control')

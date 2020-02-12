@@ -11,15 +11,16 @@ class Config:
         self.THRESHOLD_REC_MIN_EVENNESS = 0.66
         self.THRESHOLD_REC_MAX_DENT_RATIO = 0.25
         self.THRESHOLD_LINE_THICKNESS = 8
-        self.THRESHOLD_COMPO_MAX_SCALE = (0.08, 0.9)  # maximum height and width ratio for a atomic compo (button)
+        self.THRESHOLD_COMPO_MAX_SCALE = (0.08, 0.9)  # (64/800, 405/450) maximum height and width ratio for a atomic compo (button)
         self.THRESHOLD_TEXT_MAX_WORD_GAP = 10
-        self.THRESHOLD_TOP_BOTTOM_BAR = (0.045, 0.94)
+        self.THRESHOLD_TOP_BOTTOM_BAR = (0.045, 0.94)  # (36/800, 752/800) height ratio of top and bottom bar
+        self.THRESHOLD_TEXT_MAX_HEIGHT = 0.05  # 40/800 maximum height of text
+        self.THRESHOLD_BLOCK_MIN_HEIGHT = 0.03  # 24/800
 
         # obsolete
         self.THRESHOLD_BLOCK_MAX_BORDER_THICKNESS = 8
         self.THRESHOLD_BLOCK_MAX_CROSS_POINT = 0.1
         self.THRESHOLD_UICOMPO_MIN_W_H_RATIO = 0.4
-        self.THRESHOLD_TEXT_MAX_HEIGHT = 100
         self.THRESHOLD_TEXT_MAX_WIDTH = 150
         self.THRESHOLD_LINE_MIN_LENGTH_H = 50
         self.THRESHOLD_LINE_MIN_LENGTH_V = 50
