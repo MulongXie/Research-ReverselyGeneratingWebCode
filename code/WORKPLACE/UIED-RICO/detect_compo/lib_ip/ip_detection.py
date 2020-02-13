@@ -378,7 +378,10 @@ def rm_top_or_bottom_corners(corners, org_shape, top_bottom_height=C.THRESHOLD_T
     return new_corners
 
 
-def line_removal(binary, max_line_thickness=C.THRESHOLD_LINE_THICKNESS, min_line_length_ratio=C.THRESHOLD_LINE_MIN_LENGTH):
+def line_removal(binary,
+                 max_line_thickness=C.THRESHOLD_LINE_THICKNESS,
+                 min_line_length_ratio=C.THRESHOLD_LINE_MIN_LENGTH,
+                 show=False):
     width = binary.shape[1]
     thickness = 0
     gap = 0
@@ -412,6 +415,9 @@ def line_removal(binary, max_line_thickness=C.THRESHOLD_LINE_THICKNESS, min_line
                     thickness = 0
                 if gap >= max_line_thickness:
                     thickness = 0
+    if show:
+        cv2.imshow('no_line', binary)
+        cv2.waitKey()
 
 
 # take the binary image as input
@@ -451,14 +457,10 @@ def boundary_detection(binary,
                 # ignore small area
                 if len(area) < min_obj_area:
                     continue
-
                 # calculate the boundary of the connected area
                 boundary = util.boundary_get_boundary(area)
                 # ignore small area
                 perimeter = np.sum([len(b) for b in boundary])
-
-                # print(perimeter)
-                # draw.draw_boundary([boundary], binary.shape, True)
                 if perimeter < min_obj_perimeter:
                     continue
                 # check if it is line by checking the length of edges
