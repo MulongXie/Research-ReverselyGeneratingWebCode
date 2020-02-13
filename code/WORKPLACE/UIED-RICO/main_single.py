@@ -4,7 +4,7 @@ import time
 resize_by_height = 800
 
 # set input image path
-PATH_IMG_INPUT = 'data\\input\\426.jpg'
+PATH_IMG_INPUT = 'data\\input\\175.jpg'
 PATH_OUTPUT_ROOT = 'data\\output'
 
 start = time.clock()

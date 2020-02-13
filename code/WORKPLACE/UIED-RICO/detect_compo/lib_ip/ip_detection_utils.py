@@ -133,7 +133,6 @@ def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio, org_shape=
             # if the surface is not changing to a pit and the gradient is zero, then count it as flat
             if abs(depth) < 3:
                 flat += 1
-
         # if the pit is too big, the shape should not be a rectangle
         if pit / len(border) > max_dent_ratio:
             return False

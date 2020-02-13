@@ -100,6 +100,8 @@ def merge_intersected_corner(corners):
     def is_intersected(corner_a, corner_b):
         ((col_min_a, row_min_a), (col_max_a, row_max_a)) = corner_a
         ((col_min_b, row_min_b), (col_max_b, row_max_b)) = corner_b
+        area_a = (col_max_a - col_min_a) * (row_max_a - row_min_a)
+        area_b = (col_max_b - col_min_b) * (row_max_b - row_min_b)
 
         # get the intersected area
         col_min_s = max(col_min_a, col_min_b)
@@ -109,8 +111,8 @@ def merge_intersected_corner(corners):
         w = max(0, col_max_s - col_min_s)
         h = max(0, row_max_s - row_min_s)
         inter = w * h
-        # intersected
-        if inter == 0:
+        # intersected but not containing
+        if inter == 0 and inter != area_a and inter != area_b:
             return False
         # very closed
         return True
@@ -369,8 +371,8 @@ def rm_top_or_bottom_corners(corners, org_shape, top_bottom_height=C.THRESHOLD_T
     for corner in corners:
         ((column_min, row_min), (column_max, row_max)) = corner
         # remove big ones
-        if (row_max - row_min) / height > 0.65 and (column_max - column_min) / width > 0.8:
-            continue
+        # if (row_max - row_min) / height > 0.65 and (column_max - column_min) / width > 0.8:
+        #     continue
         if not (row_max < height * top_bottom_height[0] or row_min > height * top_bottom_height[1]):
             new_corners.append(corner)
     return new_corners

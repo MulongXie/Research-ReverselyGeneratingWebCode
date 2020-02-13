@@ -30,7 +30,7 @@ def processing_block(org, binary, blocks_corner):
              corners of detected components in blocks;
              corresponding classes of components;
     '''
-    blocks_clip_bin = seg.clipping(binary, blocks_corner, shrink=2)
+    blocks_clip_bin = seg.clipping(binary, blocks_corner, shrink=0)
 
     all_compos_corner = []
     for i in range(len(blocks_corner)):
