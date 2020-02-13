@@ -9,7 +9,6 @@ cfg = Config()
 
 
 class Data:
-
     def __init__(self):
         self.data_num = 0
         self.images = []

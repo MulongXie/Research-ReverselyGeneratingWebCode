@@ -27,10 +27,11 @@ class ResClassifier():
         self.model = Dropout(0.5)(self.model)
         self.model = Dense(15, activation='softmax')(self.model)
 
-        self.model = Model(inputs=base_model, outputs=self.model)
+        self.model = Model(inputs=base_model.input, outputs=self.model)
         if is_compile:
             self.model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=['accuracy'])
-            self.model.fit(self.data.X_train, self.data.Y_train, batch_size=64, epochs=epoch_num, verbose=1, validation_data=(self.data.X_test, self.data.Y_test))
+            self.model.fit(self.data.X_train, self.data.Y_train, batch_size=64, epochs=epoch_num, verbose=1,
+                           validation_data=(self.data.X_test, self.data.Y_test))
 
     def train(self, data, epoch_num=30):
         self.data = data
