@@ -3,6 +3,7 @@ from keras.applications.resnet50 import ResNet50
 from keras.models import Model,load_model
 from keras.layers import Dense, Activation, Flatten, Dropout
 import numpy as np
+import cv2
 
 from Config import Config
 cfg = Config()
@@ -38,3 +39,24 @@ class ResClassifier():
         self.build_model(epoch_num)
         self.model.save(self.MODEL_PATH)
         print("Trained model is saved to", self.MODEL_PATH)
+
+    def predict(self, img_path, load=True, show=False):
+        """
+        :type img_path: list of img path
+        """
+        if load:
+            self.load()
+        for path in img_path:
+            img = cv2.imread(path)
+            X = cv2.resize(img, self.image_shape[:2])
+            X = np.array([X])  # from (64, 64, 3) to (1, 64, 64, 3)
+            Y = self.class_map[np.argmax(self.model.predict(X))]
+            print(Y)
+            if show:
+                cv2.imshow('img', img)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
+
+    def load(self):
+        self.model = load_model(self.MODEL_PATH)
+        print('Model Loaded From', self.MODEL_PATH)
