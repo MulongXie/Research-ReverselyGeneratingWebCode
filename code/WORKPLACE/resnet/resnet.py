@@ -72,7 +72,6 @@ class ResClassifier():
 
         matrix = confusion_matrix(Y_test, Y_pre)
         print(matrix)
-        print(self.model.metrics_names)
 
         TP, FP, FN = 0, 0, 0
         for i in range(len(matrix)):
