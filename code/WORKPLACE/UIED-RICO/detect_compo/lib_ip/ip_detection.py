@@ -378,12 +378,28 @@ def rm_top_or_bottom_corners(corners, org_shape, top_bottom_height=C.THRESHOLD_T
     return new_corners
 
 
-def line_removal(binary, max_line_thickness=C.THRESHOLD_LINE_THICKNESS):
+def line_removal(binary, max_line_thickness=C.THRESHOLD_LINE_THICKNESS, min_line_length_ratio=C.THRESHOLD_LINE_MIN_LENGTH):
     width = binary.shape[1]
     thickness = 0
     gap = 0
+
     for i, row in enumerate(binary):
-        if int(np.sum(row)/255) / width > 0.85:
+        line_length = 0
+        line_cut = 0
+        for j, point in enumerate(row):
+            if point != 0:
+                line_cut = 0
+                line_length += 1
+            else:
+                line_cut += 1
+                if line_cut >= 4:
+                    if j > width * min_line_length_ratio:
+                        break
+                    line_length = 0
+                    if j > width * 1 - min_line_length_ratio:
+                        break
+
+        if line_length / width > min_line_length_ratio:
             gap = 0
             thickness += 1
         else:

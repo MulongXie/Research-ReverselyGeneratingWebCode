@@ -42,7 +42,10 @@ def processing_block(org, binary, blocks_corner):
         if blk.block_is_compo(block_corner, org.shape):
             all_compos_corner.append(block_corner)
             continue
-        # det.line_removal(block_clip_bin)
+        cv2.imshow('before', block_clip_bin)
+        det.line_removal(block_clip_bin)
+        cv2.imshow('after', block_clip_bin)
+        cv2.waitKey()
 
         # *** Substep 1.2 *** object extraction: extract components boundary -> get bounding box corner
         compos_boundary = det.boundary_detection(block_clip_bin)
@@ -56,7 +59,10 @@ def processing_block(org, binary, blocks_corner):
 
 def processing(org, binary):
     # *** Substep 2.1 *** pre-processing: remove conglutinated line
-    # det.line_removal(binary)
+    cv2.imshow('before', binary)
+    det.line_removal(binary)
+    cv2.imshow('after', binary)
+    cv2.waitKey()
 
     # *** Substep 2.2 *** object extraction: extract components boundary -> get bounding box corner
     compos_boundary = det.boundary_detection(binary)
@@ -83,6 +89,7 @@ def compo_detection(input_img_path, output_root, num=0, resize_by_height=600):
 
     # *** Step 4 *** results refinement: remove top and bottom compos -> merge words into line
     compos_corner = compo_in_blk_corner + compo_non_blk_corner
+    draw.draw_bounding_box(org, compos_corner, show=True)
     compos_corner = det.rm_top_or_bottom_corners(compos_corner, org.shape)
     compos_corner = det.merge_text(compos_corner, org.shape)
     compos_corner = det.merge_intersected_corner(compos_corner)

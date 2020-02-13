@@ -5,12 +5,13 @@ class Config:
         self.THRESHOLD_PRE_GRADIENT = 4             # dribbble:4 rico:4 web:1
         self.THRESHOLD_OBJ_MIN_AREA = 180
         self.THRESHOLD_OBJ_MIN_PERIMETER = 70
-        self.THRESHOLD_BLOCK_GRADIENT = 4
+        self.THRESHOLD_BLOCK_GRADIENT = 8
 
         # *** Frozen ***
         self.THRESHOLD_REC_MIN_EVENNESS = 0.7
         self.THRESHOLD_REC_MAX_DENT_RATIO = 0.25
         self.THRESHOLD_LINE_THICKNESS = 8
+        self.THRESHOLD_LINE_MIN_LENGTH = 0.85
         self.THRESHOLD_COMPO_MAX_SCALE = (0.08, 0.9)  # (64/800, 405/450) maximum height and width ratio for a atomic compo (button)
         self.THRESHOLD_TEXT_MAX_WORD_GAP = 10
         self.THRESHOLD_TOP_BOTTOM_BAR = (0.045, 0.94)  # (36/800, 752/800) height ratio of top and bottom bar
