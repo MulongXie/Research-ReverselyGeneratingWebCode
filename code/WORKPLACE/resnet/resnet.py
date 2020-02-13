@@ -2,6 +2,7 @@ import keras
 from keras.applications.resnet50 import ResNet50
 from keras.models import Model,load_model
 from keras.layers import Dense, Activation, Flatten, Dropout
+from sklearn.metrics import confusion_matrix
 import numpy as np
 import cv2
 
@@ -40,23 +41,44 @@ class ResClassifier():
         self.model.save(self.MODEL_PATH)
         print("Trained model is saved to", self.MODEL_PATH)
 
-    def predict(self, img_path, load=True, show=False):
+    def load(self):
+        self.model = load_model(self.MODEL_PATH)
+        print('Model Loaded From', self.MODEL_PATH)
+
+    def read_img(self, img_path):
+        image = cv2.imread(img_path)
+        image = cv2.resize(image, self.image_shape[:2])
+        x = (image / 255).astype('float32')
+        x = np.array([x])
+        return x
+
+    def predict(self, img_path, load=True):
         """
         :type img_path: list of img path
         """
         if load:
             self.load()
         for path in img_path:
-            img = cv2.imread(path)
-            X = cv2.resize(img, self.image_shape[:2])
-            X = np.array([X])  # from (64, 64, 3) to (1, 64, 64, 3)
+            X = self.read_img(path)
             Y = self.class_map[np.argmax(self.model.predict(X))]
             print(Y)
-            if show:
-                cv2.imshow('img', img)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()
 
-    def load(self):
-        self.model = load_model(self.MODEL_PATH)
-        print('Model Loaded From', self.MODEL_PATH)
+    def evaluate(self, data, load=True):
+        if load:
+            self.load()
+        X_test = data.X_test
+        Y_test = [np.argmax(y) for y in data.Y_test]
+        Y_pre = [np.argmax(y_pre) for y_pre in self.model.predict(X_test, verbose=1)]
+
+        matrix = confusion_matrix(Y_test, Y_pre)
+        print(matrix)
+        print(self.model.metrics_names)
+
+        TP, FP, FN = 0, 0, 0
+        for i in range(len(matrix)):
+            TP += matrix[i][i]
+            FP += sum(matrix[i][:]) - matrix[i][i]
+            FN += sum(matrix[:][i]) - matrix[i][i]
+        precision = TP/(TP+FP)
+        recall = TP / (TP+FN)
+        print("Precision:%.3f, Recall:%.3f" % (precision, recall))
