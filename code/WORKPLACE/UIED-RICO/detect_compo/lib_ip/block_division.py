@@ -134,7 +134,7 @@ def block_division(grey, show=False, write_path=None,
                 if util.boundary_is_line(boundary, line_thickness):
                     continue
                 # ignore non-rectangle as blocks must be rectangular
-                if not util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio, grey.shape, show=True):
+                if not util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio, grey.shape):
                     continue
                 block_corner = det.get_corner([boundary])[0]
                 width = block_corner[1][0] - block_corner[0][0]

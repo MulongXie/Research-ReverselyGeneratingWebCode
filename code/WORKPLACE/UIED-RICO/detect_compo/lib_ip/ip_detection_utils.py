@@ -91,7 +91,6 @@ def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio, org_shape=
 
     flat = 0
     parameter = 0
-    print('*************************************')
     for n, border in enumerate(boundary):
         parameter += len(border)
         # dent detection
