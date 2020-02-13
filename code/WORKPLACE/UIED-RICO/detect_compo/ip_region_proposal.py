@@ -42,7 +42,7 @@ def processing_block(org, binary, blocks_corner):
         if blk.block_is_compo(block_corner, org.shape):
             all_compos_corner.append(block_corner)
             continue
-        det.line_removal(block_clip_bin)
+        # det.line_removal(block_clip_bin)
 
         # *** Substep 1.2 *** object extraction: extract components boundary -> get bounding box corner
         compos_boundary = det.boundary_detection(block_clip_bin)
@@ -56,7 +56,7 @@ def processing_block(org, binary, blocks_corner):
 
 def processing(org, binary):
     # *** Substep 2.1 *** pre-processing: remove conglutinated line
-    det.line_removal(binary)
+    # det.line_removal(binary)
 
     # *** Substep 2.2 *** object extraction: extract components boundary -> get bounding box corner
     compos_boundary = det.boundary_detection(binary)
@@ -88,7 +88,7 @@ def compo_detection(input_img_path, output_root, num=0, resize_by_height=600):
     compos_corner = det.merge_intersected_corner(compos_corner)
 
     # *** Step 5 *** save results: save text label -> save drawn image
-    draw.draw_bounding_box(org, compos_corner, show=False, write_path=pjoin(output_root, name + '_ip.png'))
+    draw.draw_bounding_box(org, compos_corner, show=True, write_path=pjoin(output_root, name + '_ip.png'))
     file.save_corners_json(pjoin(output_root, name + '_ip.json'), compos_corner, np.full(len(compos_corner), '0'))
 
     print("[Compo Detection Completed in %.3f s] %d %s\n" % (time.clock() - start, num, input_img_path))

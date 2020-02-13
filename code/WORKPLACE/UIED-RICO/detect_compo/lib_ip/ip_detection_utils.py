@@ -86,11 +86,12 @@ def boundary_is_line(boundary, min_line_thickness):
 # @boundary: [border_up, border_bottom, border_left, border_right]
 # -> up, bottom: (column_index, min/max row border)
 # -> left, right: (row_index, min/max column border) detect range of each row
-def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
+def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio, org_shape=None, show=False):
     dent_direction = [1, -1, 1, -1]  # direction for convex
 
     flat = 0
     parameter = 0
+    print('*************************************')
     for n, border in enumerate(boundary):
         parameter += len(border)
         # dent detection
@@ -131,7 +132,7 @@ def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
                 continue
 
             # if the surface is not changing to a pit and the gradient is zero, then count it as flat
-            if abs(difference) == 0:
+            if abs(depth) < 3:
                 flat += 1
 
         # if the pit is too big, the shape should not be a rectangle
@@ -140,6 +141,7 @@ def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
     # ignore text and irregular shape
     if (flat / parameter) < min_rec_evenness:
         return False
+    draw.draw_boundary([boundary], org_shape, show=show)
     return True
 
 

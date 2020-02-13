@@ -81,6 +81,8 @@ def eval(detection, ground_truth, img_root, show=True):
         '''
         area_d = (d_bbox[2] - d_bbox[0]) * (d_bbox[3] - d_bbox[1])
         for i, gt_bbox in enumerate(gt_bboxes):
+            if matched[i] == 0:
+                continue
             area_gt = (gt_bbox[2] - gt_bbox[0]) * (gt_bbox[3] - gt_bbox[1])
             col_min = max(d_bbox[0], gt_bbox[0])
             row_min = max(d_bbox[1], gt_bbox[1])
@@ -100,7 +102,7 @@ def eval(detection, ground_truth, img_root, show=True):
                 broad = draw_bounding_box(org, [d_bbox], color=(0, 0, 255))
                 draw_bounding_box(broad, [gt_bbox], color=(0, 255, 0), show=True)
 
-            if iou > 0.5 or iod > 0.8:
+            if iou > 0.9 or iod > 0.9:
                 matched[i] = 0
                 return True
         return False
@@ -134,6 +136,6 @@ def eval(detection, ground_truth, img_root, show=True):
             print('[%d/%d] TP:%d, FP:%d, FN:%d, Precesion:%.3f, Recall:%.3f' % (i, amount, TP, FP, FN, precesion, recall))
 
 
-detect = load_detect_result_json('E:\\Mulong\\Result\\rico2\\ip')
+detect = load_detect_result_json('E:\\Mulong\\Result\\rico3\\ip')
 gt = load_ground_truth_json('E:/Mulong/Datasets/rico/instances_val_notext.json')
 eval(detect, gt, 'E:\\Mulong\\Datasets\\rico\\combined', show=False)

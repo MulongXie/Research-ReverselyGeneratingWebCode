@@ -39,7 +39,7 @@ def block_rectify(block_corner, components_corner):
     return compos_corner_new
 
 
-def block_erase(binary, blocks_corner, show=False, pad=2):
+def block_erase(binary, blocks_corner, show=False, pad=0):
     '''
     erase the block parts from the binary map
     :param binary: binary map of original image
@@ -76,6 +76,7 @@ def block_is_compo(corner, org_shape, max_compo_scale=C.THRESHOLD_COMPO_MAX_SCAL
 
 
 def block_division(grey, show=False, write_path=None,
+                   grad_thresh=C.THRESHOLD_BLOCK_GRADIENT,
                    line_thickness=C.THRESHOLD_LINE_THICKNESS,
                    min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
                    max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO,
@@ -102,7 +103,7 @@ def block_division(grey, show=False, write_path=None,
                 if i < 0 or i >= img.shape[0]: continue
                 for j in range(y - 1, y + 2):
                     if j < 0 or j >= img.shape[1]: continue
-                    if mark[i, j] == 0 and abs(img[i, j] - img[x, y]) < 8:
+                    if mark[i, j] == 0 and abs(img[i, j] - img[x, y]) < grad_thresh:
                         stack.append([i, j])
                         mark[i, j] = 255
 
@@ -133,7 +134,7 @@ def block_division(grey, show=False, write_path=None,
                 if util.boundary_is_line(boundary, line_thickness):
                     continue
                 # ignore non-rectangle as blocks must be rectangular
-                if not util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio):
+                if not util.boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio, grey.shape, show=True):
                     continue
                 block_corner = det.get_corner([boundary])[0]
                 width = block_corner[1][0] - block_corner[0][0]
