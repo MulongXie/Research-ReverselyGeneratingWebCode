@@ -4,7 +4,7 @@ import time
 resize_by_height = 800
 
 # set input image path
-PATH_IMG_INPUT = 'E:\\Mulong\\Datasets\\rico\\combined\\66.jpg'
+PATH_IMG_INPUT = 'E:\\Mulong\\Datasets\\rico\\combined\\256.jpg'
 PATH_OUTPUT_ROOT = 'data\\output'
 
 start = time.clock()
