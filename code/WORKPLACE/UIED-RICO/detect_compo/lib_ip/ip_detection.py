@@ -96,7 +96,7 @@ def merge_corner(corners, compos_class, min_selected_IoU=C.THRESHOLD_MIN_IOU, is
     return new_corners, new_class
 
 
-def merge_intersected_corner(corners):
+def merge_intersected_corner(corners, org_shape, max_compo_scale=C.THRESHOLD_COMPO_MAX_SCALE):
     def is_intersected(corner_a, corner_b):
         ((col_min_a, row_min_a), (col_max_a, row_max_a)) = corner_a
         ((col_min_b, row_min_b), (col_max_b, row_max_b)) = corner_b
@@ -119,9 +119,16 @@ def merge_intersected_corner(corners):
 
     changed = False
     new_corners = []
+    row, col = org_shape[:2]
     for i in range(len(corners)):
         merged = False
+        height = corners[i][1][1] - corners[i][0][1]
+        if height / row > max_compo_scale[0]:
+            new_corners.append(corners[i])
+            continue
         for j in range(len(new_corners)):
+            if (corners[j][1][1] - corners[j][0][1]) / row > max_compo_scale[0]:
+                continue
             if is_intersected(corners[i], new_corners[j]):
                 new_corners[j] = util.corner_merge_two_corners(corners[i], new_corners[j])
                 merged = True
@@ -133,7 +140,7 @@ def merge_intersected_corner(corners):
     if not changed:
         return corners
     else:
-        return merge_intersected_corner(new_corners)
+        return merge_intersected_corner(new_corners, org_shape)
 
 
 def merge_text(corners, org_shape, max_word_gad=C.THRESHOLD_TEXT_MAX_WORD_GAP, max_word_height_ratio=C.THRESHOLD_TEXT_MAX_HEIGHT):
@@ -385,27 +392,26 @@ def line_removal(binary,
     width = binary.shape[1]
     thickness = 0
     gap = 0
+    broad = np.zeros(binary.shape[:2], dtype=np.uint8)
 
     for i, row in enumerate(binary):
         line_length = 0
         line_cut = 0
         for j, point in enumerate(row):
+            broad[i][j] = point
             if point != 0:
                 line_cut = 0
                 line_length += 1
             else:
                 line_cut += 1
                 if line_cut >= 4:
-                    if j > width * min_line_length_ratio:
-                        break
-                    line_length = 0
-                    if j > width * 1 - min_line_length_ratio:
+                    if j > width * (1 - min_line_length_ratio):
                         break
 
         if line_length / width > min_line_length_ratio:
             gap = 0
             thickness += 1
-        else:
+        elif (sum(row) / 255) / width < 0.5:
             gap += 1
             if thickness > 0:
                 # line ends
@@ -415,9 +421,10 @@ def line_removal(binary,
                     thickness = 0
                 if gap >= max_line_thickness:
                     thickness = 0
-    if show:
-        cv2.imshow('no_line', binary)
-        cv2.waitKey()
+        if show:
+            print(sum(row) / width)
+            cv2.imshow('l', broad)
+            cv2.waitKey()
 
 
 # take the binary image as input

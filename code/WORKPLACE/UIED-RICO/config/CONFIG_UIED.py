@@ -11,7 +11,7 @@ class Config:
         self.THRESHOLD_REC_MIN_EVENNESS = 0.7
         self.THRESHOLD_REC_MAX_DENT_RATIO = 0.25
         self.THRESHOLD_LINE_THICKNESS = 8
-        self.THRESHOLD_LINE_MIN_LENGTH = 0.85
+        self.THRESHOLD_LINE_MIN_LENGTH = 0.9
         self.THRESHOLD_COMPO_MAX_SCALE = (0.1, 0.9)  # (80/800, 405/450) maximum height and width ratio for a atomic compo (button)
         self.THRESHOLD_TEXT_MAX_WORD_GAP = 10
         self.THRESHOLD_TEXT_MAX_HEIGHT = 0.05  # 40/800 maximum height of text
