@@ -65,14 +65,17 @@ def block_erase(binary, blocks_corner, show=False, pad=0):
     return binary
 
 
-def block_is_compo(corner, org_shape, max_compo_scale=C.THRESHOLD_COMPO_MAX_SCALE):
-    row, column = org_shape[:2]
+def block_is_compo(corner, org, max_compo_scale=C.THRESHOLD_COMPO_MAX_SCALE):
+    row, column = org.shape[:2]
     width = corner[1][0] - corner[0][0]
     height = corner[1][1] - corner[0][1]
+
+    # print(height, height / column, max_compo_scale[0], height / column > max_compo_scale[0])
+    # draw.draw_bounding_box(org, [corner], show=True)
     # ignore atomic components
-    if not (height / column > max_compo_scale[0] and width / column > max_compo_scale[1]):
-        return True
-    return False
+    if height / column > max_compo_scale[0] or width / column > max_compo_scale[1]:
+        return False
+    return True
 
 
 def block_division(grey, show=False, write_path=None,
@@ -143,9 +146,9 @@ def block_division(grey, show=False, write_path=None,
                     continue
                 blocks_corner.append(block_corner)
                 draw.draw_region(region, broad)
-                if show:
-                    print("width:%d, height:%d, ratio:%.3f" %(width, height, width/height))
-                    draw.draw_boundary([boundary], grey.shape, show=True)
+    if show:
+        cv2.imshow('block', broad)
+        cv2.waitKey()
     if write_path is not None:
         cv2.imwrite(write_path, broad)
     return blocks_corner

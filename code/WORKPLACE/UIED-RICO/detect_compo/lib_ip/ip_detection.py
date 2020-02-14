@@ -293,8 +293,8 @@ def block_or_compo(org, binary, corners,
     return blocks, imgs, compos
 
 
-def is_top_or_bottom_bar(corner, org_shape, top_bottom_height=C.THRESHOLD_TOP_BOTTOM_BAR):
-    height, width = org_shape[:2]
+def is_top_or_bottom_bar(corner, org, top_bottom_height=C.THRESHOLD_TOP_BOTTOM_BAR):
+    height, width = org.shape[:2]
     ((column_min, row_min), (column_max, row_max)) = corner
     if column_min < 5 and row_min < 5 and \
             width - column_max < 5 and row_max < height * top_bottom_height[0]:
@@ -461,6 +461,8 @@ def boundary_detection(binary,
                 boundary = util.boundary_get_boundary(area)
                 # ignore small area
                 perimeter = np.sum([len(b) for b in boundary])
+                # print('Area:%d, Perimeter:%d' % (len(area), perimeter))
+                # draw.draw_boundary([boundary], binary.shape, show=True)
                 if perimeter < min_obj_perimeter:
                     continue
                 # check if it is line by checking the length of edges

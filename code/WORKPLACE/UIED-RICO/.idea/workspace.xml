@@ -16,8 +16,8 @@
           <file leaf-file-name="main_single.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/main_single.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="170">
-                  <caret line="10" column="86" selection-start-line="10" selection-start-column="86" selection-end-line="10" selection-end-column="86" />
+                <state relative-caret-position="102">
+                  <caret line="6" column="59" selection-start-line="6" selection-start-column="59" selection-end-line="6" selection-end-column="59" />
                   <folding>
                     <element signature="e#0#31#0" expanded="true" />
                   </folding>
@@ -28,8 +28,8 @@
           <file leaf-file-name="ip_region_proposal.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/detect_compo/ip_region_proposal.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-217">
-                  <caret line="57" lean-forward="true" selection-start-line="57" selection-end-line="57" />
+                <state relative-caret-position="327">
+                  <caret line="75" column="56" selection-start-line="75" selection-start-column="56" selection-end-line="75" selection-end-column="56" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -44,10 +44,22 @@
           <file leaf-file-name="block_division.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/block_division.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="391">
-                  <caret line="143" column="50" lean-forward="true" selection-start-line="143" selection-start-column="50" selection-end-line="143" selection-end-column="50" />
+                <state relative-caret-position="476">
+                  <caret line="79" lean-forward="true" selection-start-line="79" selection-end-line="79" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ip_detection_utils.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/ip_detection_utils.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="477">
+                  <caret line="142" column="21" lean-forward="true" selection-start-line="142" selection-start-column="21" selection-end-line="142" selection-end-column="21" />
+                  <folding>
+                    <element signature="e#0#18#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -56,17 +68,17 @@
           <file leaf-file-name="CONFIG_UIED.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/config/CONFIG_UIED.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="289">
-                  <caret line="18" column="30" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
+                <state relative-caret-position="238">
+                  <caret line="14" column="58" selection-start-line="14" selection-start-column="58" selection-end-line="14" selection-end-column="58" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="ip_detection.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="ip_detection.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/ip_detection.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="477">
-                  <caret line="419" column="20" selection-start-line="419" selection-start-column="20" selection-end-line="419" selection-end-column="20" />
+                <state relative-caret-position="306">
+                  <caret line="303" column="19" selection-start-line="303" selection-start-column="19" selection-end-line="303" selection-end-column="19" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -127,20 +139,20 @@
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/lib_east/eval.py" />
         <option value="$PROJECT_DIR$/detect_compo/ip.py" />
-        <option value="$PROJECT_DIR$/detect_compo/lib_ip/ip_preprocessing.py" />
         <option value="$PROJECT_DIR$/detect_compo/lib_ip/ip_draw.py" />
         <option value="$PROJECT_DIR$/adjusting.py" />
         <option value="$PROJECT_DIR$/eval.py" />
         <option value="$PROJECT_DIR$/main_select.py" />
         <option value="$PROJECT_DIR$/test.py" />
-        <option value="$PROJECT_DIR$/test2.py" />
         <option value="$PROJECT_DIR$/main_select_multipro.py" />
         <option value="$PROJECT_DIR$/config/CONFIG.py" />
-        <option value="$PROJECT_DIR$/detect_compo/lib_ip/ip_detection_utils.py" />
-        <option value="$PROJECT_DIR$/config/CONFIG_UIED.py" />
-        <option value="$PROJECT_DIR$/main_single.py" />
-        <option value="$PROJECT_DIR$/detect_compo/lib_ip/block_division.py" />
+        <option value="$PROJECT_DIR$/detect_compo/lib_ip/ip_preprocessing.py" />
         <option value="$PROJECT_DIR$/detect_compo/lib_ip/ip_detection.py" />
+        <option value="$PROJECT_DIR$/test2.py" />
+        <option value="$PROJECT_DIR$/config/CONFIG_UIED.py" />
+        <option value="$PROJECT_DIR$/detect_compo/lib_ip/block_division.py" />
+        <option value="$PROJECT_DIR$/main_single.py" />
+        <option value="$PROJECT_DIR$/detect_compo/lib_ip/ip_detection_utils.py" />
         <option value="$PROJECT_DIR$/detect_compo/ip_region_proposal.py" />
       </list>
     </option>
@@ -167,6 +179,11 @@
             <path>
               <item name="UIED-RICO" type="b2602c69:ProjectViewProjectNode" />
               <item name="UIED-RICO" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="UIED-RICO" type="b2602c69:ProjectViewProjectNode" />
+              <item name="UIED-RICO" type="462c0819:PsiDirectoryNode" />
               <item name="detect_compo" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -176,7 +193,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../resnet" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../.." />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
@@ -312,8 +329,8 @@
       <list>
         <item itemvalue="Python.main_single" />
         <item itemvalue="Python.ip_region_proposal" />
-        <item itemvalue="Python.main_select_multipro" />
         <item itemvalue="Python.test2" />
+        <item itemvalue="Python.main_select_multipro" />
         <item itemvalue="Python.ip_detection" />
       </list>
     </recent_temporary>
@@ -498,16 +515,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/ip_preprocessing.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="60" column="46" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="53" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/input/68011.jpg">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -531,33 +538,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test2.py" />
-    <entry file="file://$PROJECT_DIR$/config/CONFIG.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="39" column="45" lean-forward="true" selection-start-line="39" selection-start-column="45" selection-end-line="39" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main_select.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="18" column="41" lean-forward="true" selection-start-line="18" selection-start-column="41" selection-end-line="18" selection-end-column="41" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main_select_multipro.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -578,57 +564,94 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/ip_detection_utils.py">
+    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/ip_preprocessing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-289">
-          <caret line="92" column="17" selection-start-line="92" selection-start-column="17" selection-end-line="92" selection-end-column="17" />
+        <state relative-caret-position="1">
+          <caret line="46" selection-start-line="46" selection-end-line="46" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main_single.py">
+    <entry file="file://$PROJECT_DIR$/config/CONFIG.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="86" selection-start-line="10" selection-start-column="86" selection-end-line="10" selection-end-column="86" />
+        <state relative-caret-position="160">
+          <caret line="10" column="47" selection-start-line="10" selection-start-column="47" selection-end-line="10" selection-end-column="47" />
           <folding>
-            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main_select_multipro.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="34" column="17" selection-start-line="34" selection-start-column="17" selection-end-line="34" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="12" lean-forward="true" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/ip_detection.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="303" column="19" selection-start-line="303" selection-start-column="19" selection-end-line="303" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/block_division.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="79" lean-forward="true" selection-start-line="79" selection-end-line="79" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/config/CONFIG_UIED.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="18" column="30" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
+        <state relative-caret-position="238">
+          <caret line="14" column="58" selection-start-line="14" selection-start-column="58" selection-end-line="14" selection-end-column="58" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/block_division.py">
+    <entry file="file://$PROJECT_DIR$/main_single.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="143" column="50" lean-forward="true" selection-start-line="143" selection-start-column="50" selection-end-line="143" selection-end-column="50" />
+        <state relative-caret-position="102">
+          <caret line="6" column="59" selection-start-line="6" selection-start-column="59" selection-end-line="6" selection-end-column="59" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/ip_detection.py">
+    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/ip_detection_utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="477">
-          <caret line="419" column="20" selection-start-line="419" selection-start-column="20" selection-end-line="419" selection-end-column="20" />
+          <caret line="142" column="21" lean-forward="true" selection-start-line="142" selection-start-column="21" selection-end-line="142" selection-end-column="21" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/detect_compo/ip_region_proposal.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-217">
-          <caret line="57" lean-forward="true" selection-start-line="57" selection-end-line="57" />
+        <state relative-caret-position="327">
+          <caret line="75" column="56" selection-start-line="75" selection-start-column="56" selection-end-line="75" selection-end-column="56" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

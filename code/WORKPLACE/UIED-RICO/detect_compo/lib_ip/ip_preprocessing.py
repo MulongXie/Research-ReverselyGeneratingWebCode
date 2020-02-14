@@ -58,11 +58,13 @@ def reverse_binary(bin):
     return bin
 
 
-def preprocess(org, grad_min=C.THRESHOLD_PRE_GRADIENT, write_path=None):
+def preprocess(org, grad_min=C.THRESHOLD_PRE_GRADIENT, show=False, write_path=None):
     grey = cv2.cvtColor(org, cv2.COLOR_BGR2GRAY)
     grad = gray_to_gradient(grey)        # get RoI with high gradient
     binary = grad_to_binary(grad, grad_min)   # enhance the RoI
     morph = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, (3, 3))  # remove noises
     if write_path is not None:
         cv2.imwrite(write_path, morph)
+    if show:
+        cv2.imshow('binary', morph)
     return morph

@@ -104,7 +104,7 @@ def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio, org_shape=
         # -> up, bottom: (column_index, min/max row border)
         # -> left, right: (row_index, min/max column border) detect range of each row
         abnm = 0
-        for i in range(len(border) - 1):
+        for i in range(3, len(border) - 1):
             # calculate gradient
             difference = border[i][1] - border[i + 1][1]
             # the degree of surface changing
@@ -115,7 +115,7 @@ def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio, org_shape=
 
             # print(border[i][1], i / len(border), depth, (dent_direction[n] * difference) / adj_side )
             # if the change of the surface is too large, count it as part of abnormal change
-            if abs(depth) / adj_side > 0.5:
+            if abs(depth) / adj_side > 0.3:
                 abnm += 1    # count the size of the abnm
                 # if the abnm is too big, the shape should not be a rectangle
                 if abnm / len(border) > 0.1:
@@ -131,15 +131,18 @@ def boundary_is_rectangle(boundary, min_rec_evenness, max_dent_ratio, org_shape=
                 continue
 
             # if the surface is not changing to a pit and the gradient is zero, then count it as flat
-            if abs(depth) < 3:
+            if abs(depth) < 7:
                 flat += 1
+            # print(depth, adj_side, abnm)
         # if the pit is too big, the shape should not be a rectangle
         if pit / len(border) > max_dent_ratio:
             return False
+        # print()
+    # print(flat / parameter, '\n')
+    # draw.draw_boundary([boundary], org_shape, show=True)
     # ignore text and irregular shape
     if (flat / parameter) < min_rec_evenness:
         return False
-    draw.draw_boundary([boundary], org_shape, show=show)
     return True
 
 

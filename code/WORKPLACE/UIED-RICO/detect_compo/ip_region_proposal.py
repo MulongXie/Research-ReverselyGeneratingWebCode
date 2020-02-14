@@ -15,21 +15,7 @@ from config.CONFIG_UIED import Config
 
 
 def processing_block(org, binary, blocks_corner):
-    '''
-    :param org: original image
-    :param binary: binary map of original image
-    :param blocks_corner: list of corners of blocks
-                        [(top_left, bottom_right)]
-                        -> top_left: (column_min, row_min)
-                        -> bottom_right: (column_max, row_max)
-    :param classifier: cnn model
-    :return: boundaries of detected components in blocks;
-                        [up, bottom, left, right]
-                        -> up, bottom: list of [(column_index, min/max row border)]
-                        -> left, right: list of [(row_index, min/max column border)]
-             corners of detected components in blocks;
-             corresponding classes of components;
-    '''
+    # get binary map for each block
     blocks_clip_bin = seg.clipping(binary, blocks_corner, shrink=0)
 
     all_compos_corner = []
@@ -37,9 +23,9 @@ def processing_block(org, binary, blocks_corner):
         # *** Substep 1.1 *** pre-processing: get valid block -> binarization -> remove conglutinated line
         block_corner = blocks_corner[i]
         block_clip_bin = blocks_clip_bin[i]
-        if det.is_top_or_bottom_bar(blocks_corner[i], org.shape):
+        if det.is_top_or_bottom_bar(blocks_corner[i], org):
             continue
-        if blk.block_is_compo(block_corner, org.shape):
+        if blk.block_is_compo(block_corner, org):
             all_compos_corner.append(block_corner)
             continue
         det.line_removal(block_clip_bin)
@@ -76,17 +62,18 @@ def compo_detection(input_img_path, output_root, num=0, resize_by_height=600):
     compo_in_blk_corner = processing_block(org, binary_org, blocks_corner)
 
     # *** Step 3 *** non-block processing: erase blocks from binary -> detect left components
-    binary_non_block = blk.block_erase(binary_org, blocks_corner)
+    binary_non_block = blk.block_erase(binary_org, blocks_corner, pad=2)
     compo_non_blk_corner = processing(org, binary_non_block)
 
     # *** Step 4 *** results refinement: remove top and bottom compos -> merge words into line
     compos_corner = compo_in_blk_corner + compo_non_blk_corner
+    # draw.draw_bounding_box(org, compos_corner, show=True)
     compos_corner = det.rm_top_or_bottom_corners(compos_corner, org.shape)
     compos_corner = det.merge_text(compos_corner, org.shape)
     compos_corner = det.merge_intersected_corner(compos_corner)
 
     # *** Step 5 *** save results: save text label -> save drawn image
-    draw.draw_bounding_box(org, compos_corner, show=False, write_path=pjoin(output_root, name + '_ip.png'))
+    draw.draw_bounding_box(org, compos_corner, show=True, write_path=pjoin(output_root, name + '_ip.png'))
     file.save_corners_json(pjoin(output_root, name + '_ip.json'), compos_corner, np.full(len(compos_corner), '0'))
 
     print("[Compo Detection Completed in %.3f s] %d %s\n" % (time.clock() - start, num, input_img_path))
