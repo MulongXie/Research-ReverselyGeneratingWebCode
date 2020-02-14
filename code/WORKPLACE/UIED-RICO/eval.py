@@ -136,6 +136,6 @@ def eval(detection, ground_truth, img_root, show=True):
             print('[%d/%d] TP:%d, FP:%d, FN:%d, Precesion:%.3f, Recall:%.3f' % (i, amount, TP, FP, FN, precesion, recall))
 
 
-detect = load_detect_result_json('E:\\Mulong\\Result\\rico3\\ip')
+detect = load_detect_result_json('E:\\Mulong\\Result\\rico2\\ip')
 gt = load_ground_truth_json('E:/Mulong/Datasets/rico/instances_val_notext.json')
 eval(detect, gt, 'E:\\Mulong\\Datasets\\rico\\combined', show=False)
