@@ -48,7 +48,7 @@ def processing(org, binary):
     return compos_corner
 
 
-def compo_detection(input_img_path, output_root, num=0, resize_by_height=600):
+def compo_detection(input_img_path, output_root, num=0, resize_by_height=600, is_classification=True):
     start = time.clock()
     # print("Compo Detection for %s" % input_img_path)
     name = input_img_path.split('\\')[-1][:-4]
@@ -67,8 +67,16 @@ def compo_detection(input_img_path, output_root, num=0, resize_by_height=600):
 
     # *** Step 4 *** results refinement: remove top and bottom compos -> merge words into line
     compos_corner = compo_in_blk_corner + compo_non_blk_corner
-    # draw.draw_bounding_box(org, compos_corner, show=True)
     compos_corner = det.rm_top_or_bottom_corners(compos_corner, org.shape)
+    # draw.draw_bounding_box(org, compos_corner, show=True)
+
+    # *** Step 5 *** post-processing: classification (opt) -> merge components
+    if is_classification:
+        from Resnet import ResClassifier
+        resnet = ResClassifier()
+        resnet.load()
+        compos_class = resnet.predict(seg.clipping(org, compos_corner))
+        draw.draw_bounding_box_class(org, compos_corner, compos_class, show=True)
     compos_corner = det.merge_text(compos_corner, org.shape)
     compos_corner = det.merge_intersected_corner(compos_corner, org.shape)
 
