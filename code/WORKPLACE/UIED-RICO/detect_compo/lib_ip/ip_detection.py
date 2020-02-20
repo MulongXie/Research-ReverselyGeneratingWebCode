@@ -9,6 +9,19 @@ from config.CONFIG_UIED import Config
 C = Config()
 
 
+def corner_padding(img, corners, pad):
+    row, col = img.shape[:2]
+    corners_new = []
+    for corner in corners:
+        ((column_min, row_min), (column_max, row_max)) = corner
+        column_min = max(column_min - pad, 0)
+        column_max = min(column_max + pad, col)
+        row_min = max(row_min - pad, 0)
+        row_max = min(row_max + pad, row)
+        corners_new.append(((column_min, row_min), (column_max, row_max)))
+    return corners_new
+
+
 def get_corner(boundaries):
     """
     Get the top left and bottom right points of boundary
@@ -404,7 +417,7 @@ def line_removal(binary,
                 line_length += 1
             else:
                 line_cut += 1
-                if line_cut >= 4:
+                if line_cut >= 5:
                     if j > width * (1 - min_line_length_ratio):
                         break
 
@@ -421,10 +434,9 @@ def line_removal(binary,
                     thickness = 0
                 if gap >= max_line_thickness:
                     thickness = 0
-        if show:
-            print(sum(row) / width)
-            cv2.imshow('l', broad)
-            cv2.waitKey()
+    if show:
+        cv2.imshow('no-line', binary)
+        cv2.waitKey()
 
 
 # take the binary image as input

@@ -20,8 +20,14 @@ if __name__ == '__main__':
     input_paths_img = [pjoin(input_root, img['file_name'].split('/')[-1]) for img in data['images']]
     input_paths_img = sorted(input_paths_img, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
-    # concurrently running on multiple processors
-    pool = multiprocessing.Pool(processes=1)
+    # switch of the classification func
+    is_clf = True
+    if is_clf:
+        from Resnet import ResClassifier
+        classifier = ResClassifier()
+    else:
+        classifier = None
+
     # set the range of target inputs' indices
     num = 0
     start_index = 0
@@ -32,8 +38,6 @@ if __name__ == '__main__':
             continue
         if int(index) > end_index:
             break
-        # *** start processing ***
-        pool.apply_async(ip.compo_detection, (input_path_img, output_root, num, resize_by_height, ))
+        ip.compo_detection(input_path_img, output_root, num, show=True,
+                           resize_by_height=resize_by_height, classifier=classifier)
         num += 1
-    pool.close()
-    pool.join()

@@ -3,7 +3,7 @@ class Config:
     def __init__(self):
         # Adjustable
         self.THRESHOLD_PRE_GRADIENT = 4             # dribbble:4 rico:4 web:1
-        self.THRESHOLD_OBJ_MIN_AREA = 60
+        self.THRESHOLD_OBJ_MIN_AREA = 30
         self.THRESHOLD_OBJ_MIN_PERIMETER = 0
         self.THRESHOLD_BLOCK_GRADIENT = 8
 
@@ -32,7 +32,10 @@ class Config:
         self.THRESHOLD_BLOCK_MIN_EDGE_LENGTH = 210   # dribbble:68 rico:210 web:70
         self.THRESHOLD_UICOMPO_MAX_W_H_RATIO = 10   # dribbble:10 rico:10 web:22
 
-        self.COLOR = {'Button': (0, 255, 0), 'CheckBox': (0, 0, 255), 'Chronometer': (255, 166, 166), 'EditText': (255, 166, 0),
-                      'ImageButton': (77, 77, 255), 'ImageView': (255, 0, 166), 'ProgressBar': (166, 0, 255), 'RadioButton': (166, 166, 166),
+        self.COLOR = {'Button': (0, 255, 0), 'CheckBox': (0, 0, 255), 'Chronometer': (255, 166, 166),
+                      'EditText': (255, 166, 0),
+                      'ImageButton': (77, 77, 255), 'ImageView': (255, 0, 166), 'ProgressBar': (166, 0, 255),
+                      'RadioButton': (166, 166, 166),
                       'RatingBar': (0, 166, 255), 'SeekBar': (0, 166, 10), 'Spinner': (50, 21, 255),
-                      'Switch': (80, 166, 66), 'ToggleButton': (0, 66, 80), 'VideoView': (88, 66, 0), 'TextView': (169, 255, 0)}
+                      'Switch': (80, 166, 66), 'ToggleButton': (0, 66, 80), 'VideoView': (88, 66, 0),
+                      'TextView': (169, 255, 0)}

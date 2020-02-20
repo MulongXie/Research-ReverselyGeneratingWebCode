@@ -6,7 +6,7 @@ from os.path import join as pjoin
 from tqdm import tqdm
 
 
-def resize_label(bboxes, d_height, gt_height, bias=10):
+def resize_label(bboxes, d_height, gt_height, bias=0):
     bboxes_new = []
     scale = gt_height/d_height
     for bbox in bboxes:
@@ -20,12 +20,18 @@ def draw_bounding_box(org, corners, color=(0, 255, 0), line=2, show=False):
     for i in range(len(corners)):
         board = cv2.rectangle(board, (corners[i][0], corners[i][1]), (corners[i][2], corners[i][3]), color, line)
     if show:
-        cv2.imshow('a', cv2.resize(board, (300, 600)))
+        cv2.imshow('a', cv2.resize(board, (500, 1000)))
         cv2.waitKey(0)
     return board
 
 
-def load_detect_result_json(reslut_file_root):
+def load_detect_result_json(reslut_file_root, shrink=2):
+    def is_bottom_or_top(corner):
+        column_min, row_min, column_max, row_max = corner
+        if row_max < 36 or row_min > 725:
+            return True
+        return False
+
     result_files = glob(pjoin(reslut_file_root, '*.json'))
     compos_reform = {}
     print('Loading %d detection results' % len(result_files))
@@ -33,11 +39,13 @@ def load_detect_result_json(reslut_file_root):
         img_name = reslut_file.split('\\')[-1].split('_')[0]
         compos = json.load(open(reslut_file, 'r'))['compos']
         for compo in compos:
+            if is_bottom_or_top((compo['column_min'], compo['row_min'], compo['column_max'], compo['row_max'])):
+                continue
             if img_name not in compos_reform:
-                compos_reform[img_name] = {'bboxes': [[compo['column_min'], compo['row_min'], compo['column_max'], compo['row_max']]],
+                compos_reform[img_name] = {'bboxes': [[compo['column_min'] + shrink, compo['row_min'] + shrink, compo['column_max'] - shrink, compo['row_max'] - shrink]],
                                            'categories': [compo['class']]}
             else:
-                compos_reform[img_name]['bboxes'].append([compo['column_min'], compo['row_min'], compo['column_max'], compo['row_max']])
+                compos_reform[img_name]['bboxes'].append([compo['column_min'] + shrink, compo['row_min'] + shrink, compo['column_max'] - shrink, compo['row_max'] - shrink])
                 compos_reform[img_name]['categories'].append(compo['class'])
     return compos_reform
 
@@ -96,13 +104,11 @@ def eval(detection, ground_truth, img_root, show=True):
                 continue
             iod = area_inter / area_d
             iou = area_inter / (area_d + area_gt - area_inter)
+            # if show:
+            #     cv2.putText(org, (str(round(iou, 2)) + ',' + str(round(iod, 2))), (d_bbox[0], d_bbox[1]),
+            #                 cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
-            if show:
-                print("IoDetection: %.3f, IoU: %.3f" % (iod, iou))
-                broad = draw_bounding_box(org, [d_bbox], color=(0, 0, 255))
-                draw_bounding_box(broad, [gt_bbox], color=(0, 255, 0), show=True)
-
-            if iou > 0.9 or iod > 0.9:
+            if iou > 0.9 or iod == 1:
                 matched[i] = 0
                 return True
         return False
@@ -125,17 +131,18 @@ def eval(detection, ground_truth, img_root, show=True):
         precesion = TP / (TP+FP)
         recall = TP / (TP+FN)
         if show:
-            print("Number of gt boxes: %d, Number of detected boxes: %d" % (
-            len(gt_compos['bboxes']), len(d_compos['bboxes'])))
+            print(image_id + '.jpg')
+            print('[%d/%d] TP:%d, FP:%d, FN:%d, Precesion:%.3f, Recall:%.3f' % (i, amount, TP, FP, FN, precesion, recall))
+            cv2.imshow('org', cv2.resize(img, (500, 1000)))
+            broad = draw_bounding_box(img,  d_compos['bboxes'], color=(255, 0, 0), line=3)
+            draw_bounding_box(broad, gt_compos['bboxes'], color=(0, 0, 255), show=True, line=2)
 
-            broad = draw_bounding_box(img,  d_compos['bboxes'], color=(0, 0, 255), line=3)
-            draw_bounding_box(broad, gt_compos['bboxes'], color=(0, 255, 0), show=True, line=2)
+        if i % 200 == 0:
             print('[%d/%d] TP:%d, FP:%d, FN:%d, Precesion:%.3f, Recall:%.3f' % (i, amount, TP, FP, FN, precesion, recall))
 
-        if i % 20 == 0:
-            print('[%d/%d] TP:%d, FP:%d, FN:%d, Precesion:%.3f, Recall:%.3f' % (i, amount, TP, FP, FN, precesion, recall))
+    # print("Average precision:%.4f; Average recall:%.3f" % (sum(pres)/len(pres), sum(recalls)/len(recalls)))
 
 
-detect = load_detect_result_json('E:\\Mulong\\Result\\rico2\\ip')
+detect = load_detect_result_json('E:\\Mulong\\Result\\rico\\rico_new_uied\\ip')
 gt = load_ground_truth_json('E:/Mulong/Datasets/rico/instances_val_notext.json')
-eval(detect, gt, 'E:\\Mulong\\Datasets\\rico\\combined', show=False)
+eval(detect, gt, 'E:\\Mulong\\Datasets\\rico\\combined', show=True)

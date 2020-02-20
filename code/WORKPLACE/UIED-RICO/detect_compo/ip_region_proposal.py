@@ -14,9 +14,10 @@ import lib_ip.block_division as blk
 from config.CONFIG_UIED import Config
 
 
-def processing_block(org, binary, blocks_corner):
+def processing_block(org, binary, blocks_corner, block_pad):
     # get binary map for each block
-    blocks_clip_bin = seg.clipping(binary, blocks_corner, shrink=0)
+    blocks_corner = det.corner_padding(org, blocks_corner, block_pad)
+    blocks_clip_bin = seg.clipping(binary, blocks_corner)
 
     all_compos_corner = []
     for i in range(len(blocks_corner)):
@@ -48,40 +49,42 @@ def processing(org, binary):
     return compos_corner
 
 
-def compo_detection(input_img_path, output_root, num=0, resize_by_height=600, is_classification=True):
+def compo_detection(input_img_path, output_root, num=0, resize_by_height=600, block_pad=4,
+                    classifier=None, show=False, write_img=True):
     start = time.clock()
-    # print("Compo Detection for %s" % input_img_path)
     name = input_img_path.split('\\')[-1][:-4]
+    ip_root = file.build_directory(pjoin(output_root, "ip"))
+    cls_root = file.build_directory(pjoin(output_root, "cls"))
 
     # *** Step 1 *** pre-processing: read img -> get binary map
     org, grey = pre.read_img(input_img_path, resize_by_height)
-    binary_org = pre.preprocess(org, write_path=pjoin(output_root, name + '_binary.png'))
+    binary_org = pre.preprocess(org, write_path=pjoin(ip_root, name + '_binary.png') if write_img else None)
 
     # *** Step 2 *** block processing: detect block -> detect components in block
-    blocks_corner = blk.block_division(grey, write_path=pjoin(output_root, name + '_block.png'))
-    compo_in_blk_corner = processing_block(org, binary_org, blocks_corner)
+    blocks_corner = blk.block_division(grey, write_path=pjoin(ip_root, name + '_block.png') if write_img else None)
+    compo_in_blk_corner = processing_block(org, binary_org, blocks_corner, block_pad)
 
     # *** Step 3 *** non-block processing: erase blocks from binary -> detect left components
-    binary_non_block = blk.block_erase(binary_org, blocks_corner, pad=2)
+    binary_non_block = blk.block_erase(binary_org, blocks_corner, pad=block_pad)
     compo_non_blk_corner = processing(org, binary_non_block)
 
     # *** Step 4 *** results refinement: remove top and bottom compos -> merge words into line
     compos_corner = compo_in_blk_corner + compo_non_blk_corner
     compos_corner = det.rm_top_or_bottom_corners(compos_corner, org.shape)
-    # draw.draw_bounding_box(org, compos_corner, show=True)
+    file.save_corners_json(pjoin(ip_root, name + '_all.json'), compos_corner + blocks_corner,
+                           list(np.full(len(compos_corner), 'compo')) + list(np.full(len(compos_corner), 'block')))
+    draw.draw_bounding_box(org, compos_corner, show=True)
 
-    # *** Step 5 *** post-processing: classification (opt) -> merge components
-    if is_classification:
-        from Resnet import ResClassifier
-        resnet = ResClassifier()
-        resnet.load()
-        compos_class = resnet.predict(seg.clipping(org, compos_corner))
-        draw.draw_bounding_box_class(org, compos_corner, compos_class, show=True)
+    # *** Step 5 *** post-processing: merge components -> classification (opt)
     compos_corner = det.merge_text(compos_corner, org.shape)
     compos_corner = det.merge_intersected_corner(compos_corner, org.shape)
+    if classifier is not None:
+        compos_class = classifier.predict(seg.clipping(org, compos_corner))
+        draw.draw_bounding_box_class(org, compos_corner, compos_class, show=show, write_path=pjoin(cls_root, name + '.png'))
+        file.save_corners_json(pjoin(cls_root, name + '.json'), compos_corner, compos_class)
 
-    # *** Step 5 *** save results: save text label -> save drawn image
-    draw.draw_bounding_box(org, compos_corner, show=True, write_path=pjoin(output_root, name + '_ip.png'))
-    file.save_corners_json(pjoin(output_root, name + '_ip.json'), compos_corner, np.full(len(compos_corner), '0'))
+    # *** Step 6 *** save results: save text label -> save drawn image
+    draw.draw_bounding_box(org, compos_corner, show=show, write_path=pjoin(ip_root, name + '_ip.png'))
+    file.save_corners_json(pjoin(ip_root, name + '_ip.json'), compos_corner, np.full(len(compos_corner), '0'))
 
     print("[Compo Detection Completed in %.3f s] %d %s\n" % (time.clock() - start, num, input_img_path))
