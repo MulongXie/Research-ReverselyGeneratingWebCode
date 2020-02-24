@@ -3,6 +3,7 @@ import numpy as np
 from random import randint as rint
 import time
 import json
+from os.path import join as pjoin
 
 
 def draw_region(region, board, color=None, show=False):
@@ -98,7 +99,8 @@ def slicing(img, leaves, base_upleft, show=False):
                 bottom = x
                 obj = False
                 box = [[up, bottom], [0, col]]
-                slices.append(box)
+                if (bottom - up) * col > 200:
+                    slices.append(box)
                 continue
 
     obj = False
@@ -113,7 +115,8 @@ def slicing(img, leaves, base_upleft, show=False):
                 right = y
                 obj = False
                 box = [[0, row], [left, right]]
-                slices.append(box)
+                if (right - left) * row > 200:
+                    slices.append(box)
                 continue
 
     for box in slices:
@@ -128,19 +131,32 @@ def slicing(img, leaves, base_upleft, show=False):
     return slices
 
 
-def main():
-    start = time.clock()
+def xianyu(input_img_root='E:\\Mulong\\Datasets\\rico\\combined',
+           output_root='E:\\Mulong\\Result\\rico\\rico_xianyu\\rico_xianyu_background',
+           show=False, write_img=False):
+    data = json.load(open('E:\\Mulong\\Datasets\\rico\\instances_test_org.json', 'r'))
+    input_paths_img = [pjoin(input_img_root, img['file_name'].split('/')[-1]) for img in data['images']]
+    input_paths_img = sorted(input_paths_img, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
-    org = cv2.imread('a.jpg')
-    org = resize_by_height(org, resize_height=800)
+    start_index = 0
+    end_index = 100000
+    for input_path_img in input_paths_img:
+        index = input_path_img.split('\\')[-1][:-4]
+        if int(index) < start_index:
+            continue
+        if int(index) > end_index:
+            break
 
-    grad = gradient_laplacian(org)
-    rm_noise_flood_fill(grad, show=True)
-    leaves = []
-    slicing(grad, leaves, (0,0), show=False)
-    draw_bounding_box(org, leaves, show=True, write_path='xy.png')
-    save_corners_json('xy.json', leaves)
-    print(time.clock() - start)
+        start = time.clock()
+        org = cv2.imread(input_path_img)
+        org = resize_by_height(org, resize_height=800)
+        grad = gradient_laplacian(org)
+        rm_noise_flood_fill(grad, show=False)
+        leaves = []
+        slicing(grad, leaves, (0, 0), show=False)
+        draw_bounding_box(org, leaves, show=show, write_path=pjoin(output_root, str(index) + '.png') if write_img else None)
+        save_corners_json(pjoin(output_root, str(index) + '.json'), leaves)
+        print('[%.3fs] %s' %(time.clock() - start, input_path_img))
 
 
-main()
+xianyu(show=False)
