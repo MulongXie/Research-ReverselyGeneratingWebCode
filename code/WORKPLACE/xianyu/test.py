@@ -1,39 +1,70 @@
 import cv2
 import numpy as np
+from random import randint as rint
+import time
 
 
-def fill_color_diffuse_water_from_img(image, x, y, thres_up = (10, 10, 10), thres_down = (10, 10, 10), fill_color = (255,255,255)):
-    """
-    漫水填充：会改变图像
-    """
-    # 获取图片的高和宽
-    h, w = image.shape[:2]
+def draw_region(region, board, show=False):
+    color = (rint(0,255), rint(0,255), rint(0,255))
+    for point in region:
+        board[point[0], point[1]] = color
 
-    # 创建一个h+2,w+2的遮罩层，
-    # 这里需要注意，OpenCV的默认规定，
-    # 遮罩层的shape必须是h+2，w+2并且必须是单通道8位，具体原因我也不是很清楚。
-    mask = np.zeros([h + 2, w + 2], np.uint8)
-
-    # 这里执行漫水填充，参数代表：
-    # copyImg：要填充的图片
-    # mask：遮罩层
-    # (x, y)：开始填充的位置（开始的种子点）
-    # (255, 255, 255)：填充的值，这里填充成白色
-    # (100,100,100)：开始的种子点与整个图像的像素值的最大的负差值
-    # (50,50,50)：开始的种子点与整个图像的像素值的最大的正差值
-    # cv.FLOODFILL_FIXED_RANGE：处理图像的方法，一般处理彩色图象用这个方法
-    cv2.floodFill(image, mask, (x, y), fill_color, thres_down, thres_up, cv2.FLOODFILL_FIXED_RANGE)
-    cv2.imshow("a", image)
-    cv2.waitKey()
-    return image, mask
+    if show:
+        cv2.imshow('region', board)
+        cv2.waitKey()
+    return board
 
 
-img = cv2.imread('E:\\Mulong\\Datasets\\rico\\combined\\10776.jpg')
-img = cv2.resize(img, (int(img.shape[1]/2), int(img.shape[0]/2)))
+def boundary_get_boundary(area):
+    border_up, border_bottom, border_left, border_right = {}, {}, {}, {}
+    for point in area:
+        # point: (row_index, column_index)
+        # up, bottom: (column_index, min/max row border) detect range of each column
+        if point[1] not in border_up or border_up[point[1]] > point[0]:
+            border_up[point[1]] = point[0]
+        if point[1] not in border_bottom or border_bottom[point[1]] < point[0]:
+            border_bottom[point[1]] = point[0]
+        # left, right: (row_index, min/max column border) detect range of each row
+        if point[0] not in border_left or border_left[point[0]] > point[1]:
+            border_left[point[0]] = point[1]
+        if point[0] not in border_right or border_right[point[0]] < point[1]:
+            border_right[point[0]] = point[1]
+
+    boundary = [border_up, border_bottom, border_left, border_right]
+    # descending sort
+    for i in range(len(boundary)):
+        boundary[i] = [[k, boundary[i][k]] for k in boundary[i].keys()]
+        boundary[i] = sorted(boundary[i], key=lambda x: x[0])
+    return boundary
+
+
+ratio = 1
+
+start = time.clock()
+img = cv2.imread('a.jpg')
+img = cv2.resize(img, (int(img.shape[1]/ratio), int(img.shape[0]/ratio)))
 img = cv2.GaussianBlur(img, (3,3), 0)
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-lap = cv2.Laplacian(gray, cv2.CV_8U, 5)
-filled, mask =  fill_color_diffuse_water_from_img(lap, 0,0)
+grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+canny = cv2.Canny(grey, 20, 80)
+dilate = cv2.morphologyEx(canny, cv2.MORPH_DILATE, (3,3))
 
-cv2.imshow('mask', mask)
+grad_thresh = 0
+mk = np.zeros((grey.shape[0]+2, grey.shape[1]+2), dtype=np.uint8)
+board = np.zeros((grey.shape[0], grey.shape[1], 3), dtype=np.uint8)
+for x in range(0, img.shape[0], 10):
+    for y in range(0, img.shape[1], 10):
+        # print(x, y)
+        if mk[x, y] == 0:
+            mk_copy = mk.copy()
+            cv2.floodFill(dilate, mk, (y, x), 255, grad_thresh, grad_thresh, cv2.FLOODFILL_MASK_ONLY)
+            mk_copy = mk - mk_copy
+            region = np.nonzero(mk_copy[1:-1, 1:-1])
+            region = list(zip(region[0], region[1]))
+            if len(region) < 500:
+                continue
+            draw_region(region, board)
+
+print(time.clock() - start)
+cv2.imshow('bin', dilate)
+cv2.imshow('msk', board)
 cv2.waitKey()
