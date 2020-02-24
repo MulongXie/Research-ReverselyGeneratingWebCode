@@ -4,6 +4,7 @@ from random import randint as rint
 import time
 import json
 from os.path import join as pjoin
+import multiprocessing
 
 
 def draw_region(region, board, color=None, show=False):
@@ -135,10 +136,12 @@ def xianyu(input_img_root='E:\\Mulong\\Datasets\\rico\\combined',
            output_root='E:\\Mulong\\Result\\rico\\rico_xianyu\\rico_xianyu_background',
            show=False, write_img=False):
     data = json.load(open('E:\\Mulong\\Datasets\\rico\\instances_test_org.json', 'r'))
+    print([img['file_name'].split('/')[-1] for img in data['images']])
     input_paths_img = [pjoin(input_img_root, img['file_name'].split('/')[-1]) for img in data['images']]
     input_paths_img = sorted(input_paths_img, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
-    start_index = 0
+    num = 0
+    start_index = 51288
     end_index = 100000
     for input_path_img in input_paths_img:
         index = input_path_img.split('\\')[-1][:-4]
