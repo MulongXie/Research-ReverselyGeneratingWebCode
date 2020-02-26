@@ -94,14 +94,14 @@ def detect_compo(org, output_path=None, show=False):
 
 
 def xianyu(input_img_root='E:\\Mulong\\Datasets\\rico\\combined',
-           output_root='E:\\Mulong\\Result\\rico\\rico_xianyu\\rico_xianyu_background',
+           output_root='E:\\Mulong\\Result\\rico\\rico_xianyu\\rico_xianyu_bg_ocr',
            show=False, write_img=False):
     data = json.load(open('E:\\Mulong\\Datasets\\rico\\instances_test.json', 'r'))
     input_paths_img = [pjoin(input_img_root, img['file_name'].split('/')[-1]) for img in data['images']]
     input_paths_img = sorted(input_paths_img, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
     num = 0
-    start_index = 17
+    start_index = 0
     end_index = 100000
     for input_path_img in input_paths_img:
         index = input_path_img.split('\\')[-1][:-4]
@@ -112,15 +112,15 @@ def xianyu(input_img_root='E:\\Mulong\\Datasets\\rico\\combined',
 
         start = time.clock()
         org = cv2.imread(input_path_img)
-        org = utils.resize_by_height(org, resize_height=800)
+        img = utils.resize_by_height(org, resize_height=800)
 
-        compo = detect_compo(org, show=show)
+        compo = detect_compo(img, show=show)
         text = ocr.ocr(org, show=show)
-        compo_merge, categories = merge.incorporate(org, compo, text, show=True)
+        compo_merge, categories = merge.incorporate(img, compo, text, show=show)
 
-        utils.save_corners_json(pjoin(str(index) + '.json'), compo_merge, categories)
-
+        utils.draw_bounding_box_class(img, compo_merge, categories, write_img=pjoin(output_root, str(index) + '.png'))
+        utils.save_corners_json(pjoin(output_root, str(index) + '.json'), compo_merge, categories)
         print('[%.3fs] %d %s' % (time.clock() - start, num, input_path_img))
 
 
-xianyu(show=True)
+xianyu(show=False)

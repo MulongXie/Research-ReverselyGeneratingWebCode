@@ -16,8 +16,8 @@
           <file leaf-file-name="xianyu.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/xianyu.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-386">
-                  <caret line="45" column="11" lean-forward="true" selection-start-line="45" selection-start-column="11" selection-end-line="45" selection-end-column="11" />
+                <state relative-caret-position="36">
+                  <caret line="76" column="17" lean-forward="true" selection-start-line="76" selection-start-column="17" selection-end-line="76" selection-end-column="17" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -25,14 +25,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/test.py">
+          <file leaf-file-name="block_division.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/block_division.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="302">
-                  <caret line="158" column="44" selection-start-line="158" selection-start-column="44" selection-end-line="158" selection-end-column="44" />
-                  <folding>
-                    <element signature="e#0#10#0" expanded="true" />
-                  </folding>
+                <state>
+                  <caret line="21" column="56" lean-forward="true" selection-start-line="21" selection-start-column="56" selection-end-line="21" selection-end-column="56" />
                 </state>
               </provider>
             </entry>
@@ -40,8 +37,8 @@
           <file leaf-file-name="xianyu_ocr.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/xianyu_ocr.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="591">
-                  <caret line="61" column="52" selection-start-line="61" selection-start-column="52" selection-end-line="61" selection-end-column="52" />
+                <state relative-caret-position="430">
+                  <caret line="69" column="31" selection-start-line="69" selection-start-column="31" selection-end-line="69" selection-end-column="31" />
                   <folding>
                     <element signature="e#0#25#0" expanded="true" />
                   </folding>
@@ -52,8 +49,8 @@
           <file leaf-file-name="xianyu_merge.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/xianyu_merge.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="461">
-                  <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
+                <state relative-caret-position="308">
+                  <caret line="61" column="24" selection-start-line="61" selection-start-column="24" selection-end-line="61" selection-end-column="24" />
                   <folding>
                     <element signature="e#0#11#0" expanded="true" />
                   </folding>
@@ -68,8 +65,8 @@
           <file leaf-file-name="xianyu_background.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/xianyu_background.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="461">
-                  <caret line="120" column="97" selection-start-line="120" selection-start-column="97" selection-end-line="120" selection-end-column="97" />
+                <state relative-caret-position="357">
+                  <caret line="103" column="21" selection-start-line="103" selection-start-column="21" selection-end-line="103" selection-end-column="21" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -80,8 +77,8 @@
           <file leaf-file-name="xianyu_utils.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/xianyu_utils.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="374">
-                  <caret line="46" column="23" selection-start-line="46" selection-start-column="23" selection-end-line="46" selection-end-column="23" />
+                <state relative-caret-position="-493">
+                  <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -116,10 +113,10 @@
         <option value="$PROJECT_DIR$/test2.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/merge.py" />
-        <option value="$PROJECT_DIR$/xianyu_utils.py" />
         <option value="$PROJECT_DIR$/xianyu_ocr.py" />
-        <option value="$PROJECT_DIR$/xianyu_merge.py" />
+        <option value="$PROJECT_DIR$/xianyu_utils.py" />
         <option value="$PROJECT_DIR$/xianyu_background.py" />
+        <option value="$PROJECT_DIR$/xianyu_merge.py" />
       </list>
     </option>
   </component>
@@ -289,10 +286,10 @@
     <frame x="1912" y="1" width="1936" height="1056" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11275026" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11275026" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.31590414" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.31590414" />
       <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -482,13 +479,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/block_division.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="55" column="67" lean-forward="true" selection-start-line="55" selection-start-column="67" selection-end-line="56" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test3.py" />
     <entry file="file://$PROJECT_DIR$/a.jpg" />
     <entry file="file://$PROJECT_DIR$/d.jpg" />
@@ -518,20 +508,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xianyu_utils.py">
+    <entry file="file://$PROJECT_DIR$/17.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="46" column="23" selection-start-line="46" selection-start-column="23" selection-end-line="46" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="189">
+          <caret line="280" column="26" lean-forward="true" selection-start-line="280" selection-start-column="26" selection-end-line="280" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/block_division.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="21" column="56" lean-forward="true" selection-start-line="21" selection-start-column="56" selection-end-line="21" selection-end-column="56" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/xianyu_ocr.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="591">
-          <caret line="61" column="52" selection-start-line="61" selection-start-column="52" selection-end-line="61" selection-end-column="52" />
+        <state relative-caret-position="430">
+          <caret line="69" column="31" selection-start-line="69" selection-start-column="31" selection-end-line="69" selection-end-column="31" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
@@ -540,8 +534,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
+        <state relative-caret-position="600">
           <caret line="158" column="44" selection-start-line="158" selection-start-column="44" selection-end-line="158" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xianyu_utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-493">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -550,8 +554,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/xianyu.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-386">
-          <caret line="45" column="11" lean-forward="true" selection-start-line="45" selection-start-column="11" selection-end-line="45" selection-end-column="11" />
+        <state relative-caret-position="36">
+          <caret line="76" column="17" lean-forward="true" selection-start-line="76" selection-start-column="17" selection-end-line="76" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xianyu_background.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="103" column="21" selection-start-line="103" selection-start-column="21" selection-end-line="103" selection-end-column="21" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -560,20 +574,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/xianyu_merge.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="461">
-          <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
+        <state relative-caret-position="308">
+          <caret line="61" column="24" selection-start-line="61" selection-start-column="24" selection-end-line="61" selection-end-column="24" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xianyu_background.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="461">
-          <caret line="120" column="97" selection-start-line="120" selection-start-column="97" selection-end-line="120" selection-end-column="97" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>

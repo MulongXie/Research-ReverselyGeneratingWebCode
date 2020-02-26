@@ -31,6 +31,7 @@ def incorporate(img, bbox_compos, bbox_text, show=False):
         area_a = (a[2] - a[0]) * (a[3] - a[1])
         new_corner = None
         text_area = 0
+        remain = True
         for i in range(len(bbox_text)):
             b = bbox_text[i]
             area_b = (b[2] - b[0]) * (b[3] - b[1])
@@ -58,16 +59,20 @@ def incorporate(img, bbox_compos, bbox_text, show=False):
                 new_corner = merge_two_corners(a, b)
                 mark_text[i] = True
                 break
-            if iob > 0.9:
+            if ioa > 0.75:
+                remain = False
+                break
+            if iob == 1:
                 text_area += inter
 
         if new_corner is not None:
             corners_compo_refine.append(new_corner)
             compos_class_refine.append('Text')
         elif text_area / area_a > 0.5:
-            print(text_area / area_a)
             corners_compo_refine.append(a)
             compos_class_refine.append('Text')
+        elif not remain:
+            continue
         else:
             corners_compo_refine.append(a)
             compos_class_refine.append('Compo')

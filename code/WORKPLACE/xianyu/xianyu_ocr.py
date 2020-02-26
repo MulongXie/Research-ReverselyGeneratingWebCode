@@ -48,7 +48,16 @@ def merge_text(corners, max_word_gad=40):
         return merge_text(new_corners)
 
 
-def ocr(img, output_path=None, show=False):
+def resize_label(bboxes, org_height, resize_height, bias=0):
+    bboxes_new = []
+    scale = resize_height/org_height
+    for bbox in bboxes:
+        bbox = [int(b * scale + bias) for b in bbox]
+        bboxes_new.append(bbox)
+    return bboxes_new
+
+
+def ocr(img, resize_height=800, output_path=None, show=False):
     start = time.clock()
     data = pyt.image_to_data(img)
     bboxes = []
@@ -56,10 +65,12 @@ def ocr(img, output_path=None, show=False):
     for d in data.split('\n')[1:]:
         d = d.split()
         conf = d[10]
-        if int(conf) > 0:
+        if int(conf) != -1:
             bboxes.append([int(d[6]), int(d[7]), int(d[6]) + int(d[8]), int(d[7]) + int(d[9])])
     bboxes = merge_text(bboxes)
-    utils.draw_bounding_box(img, bboxes, name='ocr', color=(255,6,6), show=show)
+    bboxes = resize_label(bboxes, img.shape[0], resize_height)
+    resize_img = utils.resize_by_height(img, resize_height)
+    utils.draw_bounding_box(resize_img, bboxes, name='ocr', color=(255,6,6), show=show)
     if output_path is not None:
         utils.save_corners_json(output_path + '.json', bboxes, 'Text')
     # print('OCR [%.3fs] %s' % (time.clock() - start, img_path))
