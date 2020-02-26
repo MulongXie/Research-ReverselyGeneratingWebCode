@@ -13,7 +13,7 @@ def resize_by_height(org, resize_height):
     return re
 
 
-def draw_bounding_box_class(org, corners, compo_class, line=2, show=False, name='img', write_img=None):
+def draw_bounding_box_class(org, corners, compo_class, line=2, show=False, name='img', output=None):
     board = org.copy()
     for i in range(len(corners)):
         board = cv2.rectangle(board, (corners[i][0], corners[i][1]), (corners[i][2], corners[i][3]), color_map[compo_class[i]], line)
@@ -23,8 +23,8 @@ def draw_bounding_box_class(org, corners, compo_class, line=2, show=False, name=
         cv2.imshow(name, board)
         cv2.waitKey(0)
 
-    if write_img is not None:
-        cv2.imwrite(write_img, board)
+    if output is not None:
+        cv2.imwrite(output, board)
     return board
 
 

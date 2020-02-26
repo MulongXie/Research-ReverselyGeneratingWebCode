@@ -93,15 +93,32 @@ def detect_compo(org, output_path=None, show=False):
     return compo_bbox
 
 
-def xianyu(input_img_root='E:\\Mulong\\Datasets\\rico\\combined',
-           output_root='E:\\Mulong\\Result\\rico\\rico_xianyu\\rico_xianyu_bg_ocr',
-           show=False, write_img=False):
-    data = json.load(open('E:\\Mulong\\Datasets\\rico\\instances_test.json', 'r'))
-    input_paths_img = [pjoin(input_img_root, img['file_name'].split('/')[-1]) for img in data['images']]
-    input_paths_img = sorted(input_paths_img, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
+def xianyu(input_path_img, output_path, num, show=False, write_img=False):
 
+    start = time.clock()
+    org = cv2.imread(input_path_img)
+    img = utils.resize_by_height(org, resize_height=800)
+
+    compo = detect_compo(img, show=show)
+    text = ocr.ocr(org, show=show)
+    compo_merge, categories = merge.incorporate(img, compo, text, show=show)
+
+    utils.draw_bounding_box_class(img, compo_merge, categories, output=output_path + '.png' if write_img else None)
+    utils.save_corners_json(output_path + '.json', compo_merge, categories)
+    print('[%.3fs] %d %s' % (time.clock() - start, num, input_path_img))
+
+
+input_img_root = 'E:\\Mulong\\Datasets\\rico\\combined'
+output_root = 'E:\\Mulong\\Result\\rico\\rico_xianyu\\rico_xianyu_bg_ocr'
+data = json.load(open('E:\\Mulong\\Datasets\\rico\\instances_test.json', 'r'))
+input_paths_img = [pjoin(input_img_root, img['file_name'].split('/')[-1]) for img in data['images']]
+input_paths_img = sorted(input_paths_img, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
+
+if __name__ == '__main__':
+    cpu_num = 3
+    pool = multiprocessing.Pool(processes=cpu_num)
     num = 0
-    start_index = 1006
+    start_index = 6430
     end_index = 100000
     for input_path_img in input_paths_img:
         index = input_path_img.split('\\')[-1][:-4]
@@ -109,18 +126,8 @@ def xianyu(input_img_root='E:\\Mulong\\Datasets\\rico\\combined',
             continue
         if int(index) > end_index:
             break
-
-        start = time.clock()
-        org = cv2.imread(input_path_img)
-        img = utils.resize_by_height(org, resize_height=800)
-
-        compo = detect_compo(img, show=show)
-        text = ocr.ocr(org, show=show)
-        compo_merge, categories = merge.incorporate(img, compo, text, show=show)
-
-        utils.draw_bounding_box_class(img, compo_merge, categories, write_img=pjoin(output_root, str(index) + '.png'))
-        utils.save_corners_json(pjoin(output_root, str(index) + '.json'), compo_merge, categories)
-        print('[%.3fs] %d %s' % (time.clock() - start, num, input_path_img))
-
-
-xianyu(show=False)
+        output_path = pjoin(output_root, str(index))
+        pool.apply_async(xianyu, (input_path_img, output_path, num, ))
+        num += 1
+    pool.close()
+    pool.join()
