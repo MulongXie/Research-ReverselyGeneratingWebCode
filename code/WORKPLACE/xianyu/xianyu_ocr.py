@@ -1,38 +1,11 @@
 import pytesseract as pyt
 import cv2
 import json
-from os.path import join as pjoin, exists
-from tqdm import tqdm
-import multiprocessing
-import numpy as np
 import time
 
+import xianyu_utils as utils
+
 pyt.pytesseract.tesseract_cmd = 'D:\\tesseract\\tesseract\\tesseract'
-
-
-def draw_bounding_box(img, bboxes, show=False, write_path=None):
-    for bbox in bboxes:
-        cv2.rectangle(img, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255,0,0), 2)
-    if show:
-        cv2.imshow('ocr', img)
-        cv2.waitKey()
-    if write_path is not None:
-        cv2.imwrite(write_path, img)
-
-
-def save_corners_json(file_path, corners, new=True):
-    if not new:
-        f_in = open(file_path, 'r')
-        components = json.load(f_in)
-    else:
-        components = {'compos': []}
-    f_out = open(file_path, 'w')
-
-    for i in range(len(corners)):
-        c = {}
-        (c['column_min'], c['row_min'], c['column_max'], c['row_max']) = corners[i]
-        components['compos'].append(c)
-    json.dump(components, f_out, indent=4)
 
 
 def merge_text(corners, max_word_gad=40):
@@ -83,11 +56,11 @@ def ocr(img, output_path=None, show=False):
     for d in data.split('\n')[1:]:
         d = d.split()
         conf = d[10]
-        if int(conf) > 50:
+        if int(conf) > 0:
             bboxes.append([int(d[6]), int(d[7]), int(d[6]) + int(d[8]), int(d[7]) + int(d[9])])
     bboxes = merge_text(bboxes)
-    draw_bounding_box(img, bboxes, show=show)
+    utils.draw_bounding_box(img, bboxes, name='ocr', color=(255,6,6), show=show)
     if output_path is not None:
-        save_corners_json(output_path + '.json', bboxes)
+        utils.save_corners_json(output_path + '.json', bboxes, 'Text')
     # print('OCR [%.3fs] %s' % (time.clock() - start, img_path))
     return bboxes
