@@ -29,7 +29,7 @@ def rm_noise_flood_fill(img, grad_thresh=10, show=False):
         cv2.waitKey()
 
 
-def slicing(img, leaves, base_upleft, show=False):
+def slicing(img, leaves, base_upleft, show=False, shrink=0):
     '''
     slices: [[col_min, row_min, col_max, row_max]]
     '''
@@ -38,6 +38,7 @@ def slicing(img, leaves, base_upleft, show=False):
     up, bottom, left, right = -1, -1, -1, -1
     obj = False
     for x in range(row):
+        # if np.shape(np.nonzero(img[x]))[1] / len(img[x]) > 0.1:
         if np.sum(img[x]) != 0:
             if not obj:
                 up = x
@@ -47,13 +48,14 @@ def slicing(img, leaves, base_upleft, show=False):
             if obj:
                 bottom = x
                 obj = False
-                box = [0, up, col, bottom]
+                box = [0 + shrink, up + shrink, col - shrink, bottom - shrink]
                 if bottom - up > 10 and (bottom - up) * col > 200:
                     slices.append(box)
                 continue
 
     obj = False
     for y in range(col):
+        # if np.shape(np.nonzero(img[:, y]))[1] / len(img[:, y]) > 0.1:
         if np.sum(img[:, y]) != 0:
             if not obj:
                 left = y
@@ -63,7 +65,7 @@ def slicing(img, leaves, base_upleft, show=False):
             if obj:
                 right = y
                 obj = False
-                box = [left, 0, right, row]
+                box = [left + shrink, 0 + shrink, right - shrink, row - shrink]
                 if right - left > 10 and (right - left) * row > 200:
                     slices.append(box)
                 continue
@@ -93,19 +95,21 @@ def detect_compo(org, output_path=None, show=False):
     return compo_bbox
 
 
-def xianyu(input_path_img, output_path, num, show=False, write_img=False):
+def xianyu(input_path_img, output_path, show=False, write_img=False):
 
     start = time.clock()
     org = cv2.imread(input_path_img)
     img = utils.resize_by_height(org, resize_height=800)
 
-    compo = detect_compo(img, show=show, output_path=output_path.replace('rico_xianyu_bg_ocr', 'rico_xianyu_bg_cv'))
+    compo = detect_compo(img, show=show)
     text = ocr.ocr(org, show=show)
+    # utils.draw_bounding_box_class(img, (compo + text), list(np.full(len(compo), 'Compo')) + list(np.full(len(text), 'Text')), show=True)
+
     compo_merge, categories = merge.incorporate(img, compo, text, show=show)
 
     utils.draw_bounding_box_class(img, compo_merge, categories, output=output_path + '.png' if write_img else None)
-    utils.save_corners_json(output_path + '.json', compo_merge, categories)
-    print('[%.3fs] %d %s' % (time.clock() - start, num, input_path_img))
+    # utils.save_corners_json(output_path + '.json', compo_merge, categories)
+    # print('[%.3fs] %d %s' % (time.clock() - start, input_path_img))
 
 
 input_img_root = 'E:\\Mulong\\Datasets\\rico\\combined'
@@ -114,20 +118,14 @@ data = json.load(open('E:\\Mulong\\Datasets\\rico\\instances_test.json', 'r'))
 input_paths_img = [pjoin(input_img_root, img['file_name'].split('/')[-1]) for img in data['images']]
 input_paths_img = sorted(input_paths_img, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
-if __name__ == '__main__':
-    cpu_num = 3
-    pool = multiprocessing.Pool(processes=cpu_num)
-    num = 0
-    start_index = 0
-    end_index = 100000
-    for input_path_img in input_paths_img:
-        index = input_path_img.split('\\')[-1][:-4]
-        if int(index) < start_index:
-            continue
-        if int(index) > end_index:
-            break
-        output_path = pjoin(output_root, str(index))
-        pool.apply_async(xianyu, (input_path_img, output_path, num, False, ))
-        num += 1
-    pool.close()
-    pool.join()
+
+start_index = 14323
+end_index = 100000
+for input_path_img in input_paths_img:
+    index = input_path_img.split('\\')[-1][:-4]
+    if int(index) < start_index:
+        continue
+    if int(index) > end_index:
+        break
+    output_path = pjoin(output_root, str(index))
+    xianyu(input_path_img, output_path, True)

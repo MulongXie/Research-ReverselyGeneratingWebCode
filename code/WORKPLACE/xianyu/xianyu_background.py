@@ -101,7 +101,7 @@ def xianyu(input_img_root='E:\\Mulong\\Datasets\\rico\\combined',
     input_paths_img = sorted(input_paths_img, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
     num = 0
-    start_index = 1006
+    start_index = 0
     end_index = 100000
     for input_path_img in input_paths_img:
         index = input_path_img.split('\\')[-1][:-4]
@@ -118,9 +118,10 @@ def xianyu(input_img_root='E:\\Mulong\\Datasets\\rico\\combined',
         text = ocr.ocr(org, show=show)
         compo_merge, categories = merge.incorporate(img, compo, text, show=show)
 
-        utils.draw_bounding_box_class(img, compo_merge, categories, write_img=pjoin(output_root, str(index) + '.png'))
+        utils.draw_bounding_box_class(img, compo_merge, categories)
         utils.save_corners_json(pjoin(output_root, str(index) + '.json'), compo_merge, categories)
         print('[%.3fs] %d %s' % (time.clock() - start, num, input_path_img))
+        num += 1
 
 
 xianyu(show=False)

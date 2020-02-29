@@ -29,11 +29,17 @@ def incorporate(img, bbox_compos, bbox_text, show=False):
     for a in bbox_compos:
         broad = utils.draw_bounding_box(img, [a])
         area_a = (a[2] - a[0]) * (a[3] - a[1])
+        if area_a < 10:
+            continue
         new_corner = None
         text_area = 0
         remain = True
         for i in range(len(bbox_text)):
             b = bbox_text[i]
+            if (b[2] - b[0]) / img.shape[1] > 0.9 and\
+                    (b[3] - b[1]) / img.shape[0] > 0.1:
+                continue
+
             area_b = (b[2] - b[0]) * (b[3] - b[1])
             # get the intersected area
             col_min_s = max(a[0], b[0])
@@ -56,14 +62,15 @@ def incorporate(img, bbox_compos, bbox_text, show=False):
 
             # text area
             if iou > 0.6:
-                new_corner = merge_two_corners(a, b)
+                # new_corner = merge_two_corners(a, b)
+                new_corner = b
                 mark_text[i] = True
                 break
-            if ioa > 0.75:
+            if ioa > 0.55:
                 remain = False
                 break
-            if iob == 1:
-                text_area += inter
+            # if iob == 1:
+            #     text_area += inter
 
         if new_corner is not None:
             corners_compo_refine.append(new_corner)

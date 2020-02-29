@@ -25,7 +25,7 @@ def draw_bounding_box(org, corners, color=(0, 255, 0), line=2, show=False):
     return board
 
 
-def load_detect_result_json(reslut_file_root, shrink=0):
+def load_detect_result_json(reslut_file_root, no_text=False, only_text=False, shrink=0):
     def is_bottom_or_top(corner):
         column_min, row_min, column_max, row_max = corner
         if row_max < 36 or row_min > 725:
@@ -39,6 +39,10 @@ def load_detect_result_json(reslut_file_root, shrink=0):
         img_name = reslut_file.split('\\')[-1].split('.')[0]
         compos = json.load(open(reslut_file, 'r'))['compos']
         for compo in compos:
+            if only_text and compo['category'] != 'Text':
+                continue
+            if no_text and compo['category'] == 'Text':
+                continue
             if is_bottom_or_top((compo['column_min'], compo['row_min'], compo['column_max'], compo['row_max'])):
                 continue
             if img_name not in compos_reform:
@@ -50,7 +54,7 @@ def load_detect_result_json(reslut_file_root, shrink=0):
     return compos_reform
 
 
-def load_ground_truth_json(gt_file, no_text=True):
+def load_ground_truth_json(gt_file, no_text=True, only_text=False):
     def get_img_by_id(img_id):
         for image in images:
             if image['id'] == img_id:
@@ -71,8 +75,13 @@ def load_ground_truth_json(gt_file, no_text=True):
     print('Loading %d ground truth' % len(annots))
     for annot in tqdm(annots):
         img_name, size = get_img_by_id(annot['image_id'])
+        if only_text and int(annot['category_id']) != 14:
+            if img_name not in compos:
+                compos[img_name] = {'bboxes': [], 'categories': [], 'size': size}
+            continue
         if no_text and int(annot['category_id']) == 14:
-            compos[img_name] = {'bboxes': [], 'categories': [], 'size': size}
+            if img_name not in compos:
+                compos[img_name] = {'bboxes': [], 'categories': [], 'size': size}
             continue
         if img_name not in compos:
             compos[img_name] = {'bboxes': [cvt_bbox(annot['bbox'])], 'categories': [annot['category_id']], 'size':size}
@@ -117,7 +126,7 @@ def eval(detection, ground_truth, img_root, show=True):
         return False
 
     amount = len(detection)
-    TP, FP, FN = 0, 0, 0
+    TP, FP, FN = 1, 1, 1
     for i, image_id in enumerate(detection):
         img = cv2.imread(pjoin(img_root, image_id + '.jpg'))
         d_compos = detection[image_id]
@@ -147,7 +156,8 @@ def eval(detection, ground_truth, img_root, show=True):
     # print("Average precision:%.4f; Average recall:%.3f" % (sum(pres)/len(pres), sum(recalls)/len(recalls)))
 
 
-# detect = load_detect_result_json('E:\\Mulong\\Result\\rico\\rico_xianyu\\rico_xianyu_background')
-detect = load_detect_result_json('E:\\Mulong\\Result\\rico\\rico_xianyu\\rico_xianyu_bg_ocr')
-gt = load_ground_truth_json('E:\\Mulong\\Datasets\\rico\\instances_test.json', no_text=False)
-eval(detect, gt, 'E:\\Mulong\\Datasets\\rico\\combined', show=False)
+no_text = False
+only_text = False
+detect = load_detect_result_json('E:\\Mulong\\Result\\rico\\rico_xianyu\\rico_xianyu_bg_ocr', no_text=no_text, only_text=only_text)
+gt = load_ground_truth_json('E:\\Mulong\\Datasets\\rico\\instances_test.json', no_text=no_text, only_text=only_text)
+eval(detect, gt, 'E:\\Mulong\\Datasets\\rico\\combined', show=True)
