@@ -28,11 +28,9 @@ class Data:
             self.image_shape = shape
         else:
             shape = self.image_shape
-
         # load data
         for p in glob.glob(pjoin(self.DATA_PATH, '*')):
             print("*** Loading components of %s: %d ***" %(p.split('\\')[-1], int(len(glob.glob(pjoin(p, '*.png'))))))
-
             if p.split('\\')[-1] == 'text':
                 label = 0
                 max_number = 100000
@@ -48,7 +46,82 @@ class Data:
                     self.labels.append(label)
                 except:
                     continue
+        assert len(self.images) == len(self.labels)
+        self.data_num = len(self.images)
+        print('%d Data Loaded' % self.data_num)
 
+    def load_data_textview(self, resize=True, shape=None, max_number=1000000):
+        # if customize shape
+        if shape is not None:
+            self.image_shape = shape
+        else:
+            shape = self.image_shape
+        # load text
+        PATH_TEXT = 'E:\\Mulong\\Datasets\\rico\\elements-14\\TextView'
+        print("*** Loading texts of %s: %d ***" %(PATH_TEXT.split('\\')[-1], int(len(glob.glob(pjoin(PATH_TEXT, '*.png'))))))
+        label = 0
+        for i, image_path in enumerate(tqdm(glob.glob(pjoin(PATH_TEXT, '*.png'))[:20000])):
+            try:
+                image = cv2.imread(image_path)
+                if resize:
+                    image = cv2.resize(image, shape[:2])
+                self.images.append(image)
+                self.labels.append(label)
+            except:
+                continue
+        # load non-text
+        PATH_COMPO = "E:\Mulong\Datasets\dataset_webpage\Components3"
+        for p in glob.glob(pjoin(PATH_COMPO, '*')):
+            if p.split('\\')[-1] == 'text':
+                continue
+            print("*** Loading components of %s: %d ***" % (p.split('\\')[-1], int(len(glob.glob(pjoin(p, '*.png'))))))
+            label = 1
+            for i, image_path in enumerate(tqdm(glob.glob(pjoin(p, '*.png'))[:max_number])):
+                try:
+                    image = cv2.imread(image_path)
+                    if resize:
+                        image = cv2.resize(image, shape[:2])
+                    self.images.append(image)
+                    self.labels.append(label)
+                except:
+                    continue
+        assert len(self.images) == len(self.labels)
+        self.data_num = len(self.images)
+        print('%d Data Loaded' % self.data_num)
+
+    def load_data_noise(self, resize=True, shape=None, max_number=1000000):
+        # if customize shape
+        if shape is not None:
+            self.image_shape = shape
+        else:
+            shape = self.image_shape
+        # load noise
+        PATH_NOISE = 'E:\\Mulong\\Datasets\\rico\\element-noise'
+        print("*** Loading %s: %d ***" %(PATH_NOISE.split('\\')[-1], int(len(glob.glob(pjoin(PATH_NOISE, '*.png'))))))
+        label = 0
+        for i, image_path in enumerate(tqdm(glob.glob(pjoin(PATH_NOISE, '*.png'))[:20000])):
+            try:
+                image = cv2.imread(image_path)
+                if resize:
+                    image = cv2.resize(image, shape[:2])
+                self.images.append(image)
+                self.labels.append(label)
+            except:
+                continue
+        # load non-text
+        PATH_COMPO = "E:\Mulong\Datasets\dataset_webpage\Components3"
+        for p in glob.glob(pjoin(PATH_COMPO, '*')):
+            print("*** Loading components of %s: %d ***" % (p.split('\\')[-1], int(len(glob.glob(pjoin(p, '*.png'))))))
+            label = 1
+            for i, image_path in enumerate(tqdm(glob.glob(pjoin(p, '*.png'))[:max_number])):
+                try:
+                    image = cv2.imread(image_path)
+                    if resize:
+                        image = cv2.resize(image, shape[:2])
+                    self.images.append(image)
+                    self.labels.append(label)
+                except:
+                    continue
         assert len(self.images) == len(self.labels)
         self.data_num = len(self.images)
         print('%d Data Loaded' % self.data_num)
@@ -60,20 +133,17 @@ class Data:
             y = np.eye(class_number)[label]
             y = np.squeeze(y)
             return y
-
         # reshuffle
         np.random.seed(0)
         self.images = np.random.permutation(self.images)
         np.random.seed(0)
         self.labels = np.random.permutation(self.labels)
         Y = expand(self.labels, self.class_number)
-
         # separate dataset
         cut = int(train_data_ratio * self.data_num)
         self.X_train = (self.images[:cut] / 255).astype('float32')
         self.X_test = (self.images[cut:] / 255).astype('float32')
         self.Y_train = Y[:cut]
         self.Y_test = Y[cut:]
-
         print('X_train:%d, Y_train:%d' % (len(self.X_train), len(self.Y_train)))
         print('X_test:%d, Y_test:%d' % (len(self.X_test), len(self.Y_test)))

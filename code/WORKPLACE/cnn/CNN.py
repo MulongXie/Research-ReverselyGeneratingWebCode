@@ -36,11 +36,11 @@ class CNN:
         self.model.fit(self.data.X_train, self.data.Y_train, batch_size=64, epochs=epoch_num, verbose=1, validation_data=(self.data.X_test, self.data.Y_test))
 
     def train(self, data, epoch_num=30):
+        print("Trained model is saved to", self.MODEL_PATH)
         self.data = data
         self.model = Sequential()
         self.network(epoch_num)
         self.model.save(self.MODEL_PATH)
-        print("Trained model is saved to", self.MODEL_PATH)
 
     def evaluate(self, data, load=True):
         # calculate TP, FN, FP, TN
@@ -85,6 +85,7 @@ class CNN:
         for path in img_path:
             img = cv2.imread(path)
             X = cv2.resize(img, self.image_shape[:2])
+            X = (X / 255).astype('float32')
             X = np.array([X])  # from (64, 64, 3) to (1, 64, 64, 3)
             Y = self.class_map[np.argmax(self.model.predict(X))]
             print(Y)
