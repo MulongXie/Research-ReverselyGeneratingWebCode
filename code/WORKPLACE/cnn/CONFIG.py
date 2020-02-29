@@ -26,6 +26,6 @@ class Config:
         # IMAGE RECOGNITION
         self.DATA_PATH = "E:\Mulong\Datasets\dataset_webpage\Components3"
         self.MODEL_PATH = 'E:/Mulong/Model/rico_compos/cnn-image-1.h5'
-        self.class_map = ['Noise', 'Non-Noise']
+        self.class_map = ['Image', 'Non-Image']
 
         self.class_number = len(self.class_map)
