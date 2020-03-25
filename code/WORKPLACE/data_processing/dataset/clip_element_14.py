@@ -5,16 +5,14 @@ import pandas as pd
 import cv2
 import numpy as np
 import json
+from tqdm import tqdm
 
 element_map = {'0':'Button', '1':'CheckBox', '2':'Chronometer', '3':'EditText', '4':'ImageButton', '5':'ImageView',
                '6':'ProgressBar', '7':'RadioButton', '8':'RatingBar', '9':'SeekBar', '10':'Spinner', '11':'Switch',
-               '12':'ToggleButton', '13':'VideoView'}
-element_number = {'ProgressBar': 1772, 'VideoView': 318, 'ImageView': 257824, 'RatingBar': 961, 'SeekBar': 1835,
-                  'EditText': 14338, 'ToggleButton': 2716, 'Switch': 3231, 'ImageButton': 82689, 'Button': 38089,
-                  'Spinner': 110, 'CheckBox': 8468, 'Chronometer': 56, 'RadioButton': 4941}
-ROOT_OUTPUT = "E:/Mulong/Datasets/rico/elements-14"
-ROOT_IMG = 'E:/Mulong/Datasets/rico/combined'
-ROOT_LABEL = 'label_val.txt'
+               '12':'ToggleButton', '13':'VideoView', '14':'TextView'}
+element_number = {'Button': 0, 'Switch': 0, 'CheckBox': 0, 'RatingBar': 0, 'Chronometer': 0, 'TextView':0,
+                  'ImageView': 0, 'SeekBar': 0, 'Spinner': 0, 'ProgressBar': 0, 'VideoView': 0, 'ImageButton': 0,
+                  'EditText': 0, 'RadioButton': 0, 'ToggleButton': 0}
 
 
 def setup_folder():
@@ -24,7 +22,7 @@ def setup_folder():
             os.mkdir(path)
 
 
-def fetch_and_clip(img, annotations, output_root, shrink_ratio=3, pad=False, show_label=False, show_clip=False, write_clip=True):
+def fetch_and_clip(img, annotations, output_root, shrink_ratio=2, pad=False, show_label=False, show_clip=False, write_clip=True):
 
     def padding(clip):
         height = np.shape(clip)[0]
@@ -36,23 +34,22 @@ def fetch_and_clip(img, annotations, output_root, shrink_ratio=3, pad=False, sho
         pad_img[int(pad_height / 2):(int(pad_height / 2) + height), int(pad_wid / 2):(int(pad_wid / 2) + width)] = clip
         return pad_img
 
-    def shrink(img, ratio=3.5):
-        img_shrink = cv2.resize(img, (int(img.shape[1] / ratio), int(img.shape[0] / ratio)))
+    def shrink(img):
+        img_shrink = cv2.resize(img, (int(img.shape[1] / shrink_ratio), int(img.shape[0] / shrink_ratio)))
         return img_shrink
 
     # 'x_min, y_min, x_max, y_max, element'
-    for annot in annotations:
-        bbox = annot['bbox']
+    for i in range(len(annotations['bboxes'])):
+        bbox = annotations['bboxes'][i]
         if bbox[2] < 20 or bbox[3] < 20:
             continue
-        element_name = element_map[str(annot['category_id'])]
+        element_name = element_map[str(annotations['categories'][i])]
         element_number[element_name] += 1
 
         clip = img[int(bbox[1]):int(bbox[1]+bbox[3]), int(bbox[0]):int(bbox[0]+bbox[2])]
-        clip = cv2.resize(clip, (int(clip.shape[1] / shrink_ratio), int(clip.shape[0] / shrink_ratio)))
+        # clip = shrink(clip)
         if pad:
             clip = padding(clip)
-        clip = shrink(clip)
 
         if write_clip:
             cv2.imwrite(pjoin(output_root, element_name, str(element_number[element_name]) + '.png'), clip)
@@ -65,22 +62,27 @@ def fetch_and_clip(img, annotations, output_root, shrink_ratio=3, pad=False, sho
             cv2.waitKey(0)
 
 
-def load(file_name='instances_train.json'):
-    def get_all_annotations_by_img_id(img_id):
-        select_annot = []
-        for annotation in annotations:
-            if annotation['image_id'] == img_id:
-                select_annot.append(annotation)
-        return select_annot
+def load(file_name):
+    def cvt_gt_annotations():
+        annotations = {}
+        for annot in data['annotations']:
+            if annot['image_id'] not in annotations:
+                annotations[annot['image_id']] = {'bboxes': [annot['bbox']], 'categories': [annot['category_id']]}
+            else:
+                annotations[annot['image_id']]['bboxes'].append(annot['bbox'])
+                annotations[annot['image_id']]['categories'].append(annot['category_id'])
+        return annotations
 
     data = json.load(open(file_name))
     images = data['images']
-    annotations = data['annotations']
+    annotations = cvt_gt_annotations()
 
-    start_point = '0'
+    start_point = '39057'
     locate = False
+    amount = len(images)
+    bad = 0
     for i, image in enumerate(images):
-        annots = get_all_annotations_by_img_id(image['id'])
+        annots = annotations[image['id']]
         index = image['file_name'].split('/')[-1][:-4]
         img_path = pjoin(ROOT_IMG, index + '.jpg')
         if locate:
@@ -90,14 +92,20 @@ def load(file_name='instances_train.json'):
                 print('Start from ', start_point)
                 locate = False
 
-        print('Processing %d:' % i, img_path)
-        img = cv2.imread(img_path)
-        img = cv2.resize(img, (image['width'], image['height']))
+        try:
+            print('Processing [%d/%d]:' % (i, amount), img_path)
+            img = cv2.imread(img_path)
+            img = cv2.resize(img, (image['width'], image['height']))
+            fetch_and_clip(img, annots, ROOT_OUTPUT, show_label=False)
+            print(element_number, '\n')
+        except:
+            bad += 1
+            print('*** Bad Image :%d ***\n' % bad)
 
-        fetch_and_clip(img, annots, ROOT_OUTPUT, show_label=False)
-        print(element_number, '\n')
 
-
+ROOT_OUTPUT = "E:/Mulong/Datasets/rico/elements-14"
+ROOT_IMG = 'E:/Mulong/Datasets/rico/combined'
+PATH_LABEL = 'E:/Mulong/Datasets/rico/instances_train.json'
 setup_folder()
-load()
+load(PATH_LABEL)
 print(element_number)

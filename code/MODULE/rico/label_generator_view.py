@@ -134,7 +134,7 @@ def view_label(objects, relabeled_objects, annotimg, org, shrink_ratio=4):
 
 if '__main__':
     show = True
-    start = 1  # start point
+    start = 472  # start point
     end = 80000
     index = start
     labelfile = open('label.txt', 'a')

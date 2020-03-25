@@ -101,7 +101,7 @@ def xianyu(input_img_root='E:\\Mulong\\Datasets\\rico\\combined',
     input_paths_img = sorted(input_paths_img, key=lambda x: int(x.split('\\')[-1][:-4]))  # sorted by index
 
     num = 0
-    start_index = 0
+    start_index = 3762
     end_index = 100000
     for input_path_img in input_paths_img:
         index = input_path_img.split('\\')[-1][:-4]
@@ -124,4 +124,4 @@ def xianyu(input_img_root='E:\\Mulong\\Datasets\\rico\\combined',
         num += 1
 
 
-xianyu(show=False)
+xianyu(show=True)

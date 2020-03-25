@@ -39,16 +39,6 @@ def block_rectify(block_corner, components_corner):
     return compos_corner_new
 
 
-def block_hierarchy(blocks_corner):
-    for i in range(len(blocks_corner)):
-        for j in range(len(blocks_corner)):
-            if i != j:
-                relation = util.corner_relation(blocks_corner[i], blocks_corner[j])
-                if relation == -1:
-
-                    break
-
-
 def block_erase(binary, blocks_corner, show=False, pad=0):
     '''
     erase the block parts from the binary map
@@ -100,7 +90,17 @@ def block_division(grey, show=False, write_path=None,
                         -> top_left: (column_min, row_min)
                         -> bottom_right: (column_max, row_max)
     '''
+
     def flood_fill_bfs(img, x_start, y_start, mark):
+        '''
+        Identify the connected region based on the background color
+        :param img: grey-scale image
+        :param x_start: row coordinate of start position
+        :param y_start: column coordinate of start position
+        :param mark: record passed points
+        :return: region: list of connected points
+        '''
+
         def neighbor(x, y):
             for i in range(x - 1, x + 2):
                 if i < 0 or i >= img.shape[0]: continue
@@ -120,22 +120,14 @@ def block_division(grey, show=False, write_path=None,
         return region
 
     blocks_corner = []
-    mask = np.zeros((grey.shape[0]+2, grey.shape[1]+2), dtype=np.uint8)
+    mask = np.zeros((grey.shape[0], grey.shape[1]), dtype=np.uint8)
     broad = np.zeros((grey.shape[0], grey.shape[1], 3), dtype=np.uint8)
 
     row, column = grey.shape[0], grey.shape[1]
-    for x in range(0, row, 10):
-        for y in range(0, column, 10):
+    for x in range(row):
+        for y in range(column):
             if mask[x, y] == 0:
-                # region = flood_fill_bfs(grey, x, y, mask)
-
-                # flood fill algorithm to get background (layout block)
-                mask_copy = mask.copy()
-                cv2.floodFill(grey, mask, (y,x), None, grad_thresh, grad_thresh, cv2.FLOODFILL_MASK_ONLY)
-                mask_copy = mask - mask_copy
-                region = np.nonzero(mask_copy[1:-1, 1:-1])
-                region = list(zip(region[0], region[1]))
-
+                region = flood_fill_bfs(grey, x, y, mask)
                 # ignore small regions
                 if len(region) < 500:
                     continue

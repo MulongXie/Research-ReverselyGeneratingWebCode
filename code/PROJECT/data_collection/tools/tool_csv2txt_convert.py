@@ -4,6 +4,7 @@ convert the labels into YOLO format
 import os
 import numpy as np
 import pandas as pd
+import cv2
 
 
 def label_convert(label_root, img_root):
@@ -25,7 +26,7 @@ def label_convert(label_root, img_root):
             element = '4'
         return " " + str(x_min) + "," + str(y_min) + "," + str(x_max) + "," + str(y_max) + "," + element
 
-    stamp = 302
+    stamp = 0
 
     label_news = ""
     indices = os.listdir(label_root)
@@ -53,6 +54,25 @@ def label_convert(label_root, img_root):
     return label_news
 
 
-img_root = 'E:/Mulong/Datasets/dataset_webpage/page10000/ip_img_segment'
-label_root = 'E:/Mulong/Datasets/dataset_webpage/page10000/relabel'
+def draw_label_txt(line):
+    colors = [(255, 0, 255), (255, 160, 0), (0, 150, 255), (255, 150, 255), (255, 255, 0)]
+    ele_name = ['button', 'input', 'select', 'search', 'list']
+    line = line.split()
+    print(line[0])
+    img = cv2.imread(line[0])
+    label = line[1:]
+
+    for i in range(len(label)):
+        # col_min, row_min, col_max, row_max, element_class
+        l = [int(e) for e in label[i].split(',')]
+        element = ele_name[l[-1]]
+        color = colors[l[-1]]
+        cv2.rectangle(img, (l[0], l[1]), (l[2], l[3]), color, 1)
+        cv2.putText(img, element, (l[0], l[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
+    cv2.imshow('img', img)
+    cv2.waitKey()
+
+
+img_root = 'E:\Mulong\Datasets\dataset_webpage\manually_labelled\data'
+label_root = 'E:\Mulong\Datasets\dataset_webpage\manually_labelled\label'
 l = label_convert(label_root, img_root)

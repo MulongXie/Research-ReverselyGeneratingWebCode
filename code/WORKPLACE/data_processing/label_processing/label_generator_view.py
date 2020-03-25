@@ -133,8 +133,9 @@ def view_label(objects, relabeled_objects, annotimg, org, shrink_ratio=4):
 
 
 if '__main__':
+    save = False
     show = True
-    start = 472  # start point
+    start = 29029  # start point
     end = 80000
     index = start
     labelfile = open('label.txt', 'a')
@@ -154,7 +155,8 @@ if '__main__':
 
             # save new labels
             # modify here!!!
-            save_label(new_compos, 'E:\\Mulong\\Datasets\\rico\\combined\\' + str(index) + '.jpg', labelfile)
+            if save:
+                save_label(new_compos, 'E:\\Mulong\\Datasets\\rico\\combined\\' + str(index) + '.jpg', labelfile)
 
         index += 1
         if index > end:

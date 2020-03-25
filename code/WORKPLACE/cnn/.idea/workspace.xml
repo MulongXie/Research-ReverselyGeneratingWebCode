@@ -13,23 +13,11 @@
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/main.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="204">
-                  <caret line="16" selection-start-line="16" selection-end-line="16" />
-                  <folding>
-                    <element signature="e#0#10#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="CNN.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="CNN.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/CNN.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="482">
-                  <caret line="44" column="40" selection-start-line="44" selection-start-column="40" selection-end-line="44" selection-end-column="40" />
+                <state relative-caret-position="210">
+                  <caret line="58" selection-start-line="58" selection-end-line="58" />
                   <folding>
                     <element signature="e#0#47#0" expanded="true" />
                   </folding>
@@ -37,20 +25,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Untitled.ipynb" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Untitled.ipynb">
-              <provider selected="true" editor-type-id="ipnb-editor">
-                <state>
-                  <selected id="0" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="DATA.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="DATA.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/DATA.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="669">
-                  <caret line="151" column="40" selection-start-line="151" selection-start-column="40" selection-end-line="151" selection-end-column="40" />
+                <state relative-caret-position="207">
+                  <caret line="22" column="38" selection-start-line="22" selection-start-column="38" selection-end-line="22" selection-end-column="38" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -61,12 +40,12 @@
         </leaf>
       </split-first>
       <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+        <leaf>
           <file leaf-file-name="CONFIG.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/CONFIG.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="476">
-                  <caret line="28" column="8" selection-start-line="28" selection-start-column="8" selection-end-line="28" selection-end-column="47" />
+                <state relative-caret-position="374">
+                  <caret line="22" column="27" selection-end-line="32" selection-end-column="47" />
                 </state>
               </provider>
             </entry>
@@ -101,16 +80,17 @@
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/CNN.py" />
-        <option value="$PROJECT_DIR$/CONFIG.py" />
         <option value="$PROJECT_DIR$/DATA.py" />
+        <option value="$PROJECT_DIR$/cls/add.py" />
+        <option value="$PROJECT_DIR$/cls/view_result.py" />
+        <option value="$PROJECT_DIR$/CONFIG.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1912" />
-    <option name="y" value="-7" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="x" value="-1927" />
+    <option name="width" value="974" />
+    <option name="height" value="1047" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -132,7 +112,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../UIED" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -146,8 +126,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
-    <configuration name="DATA" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.cls_result">
+    <configuration name="cls_result" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="cnn" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -155,11 +135,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="E:/Mulong/GoogleDrive/research/code/cnn" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/cls" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="E:/Mulong/GoogleDrive/research/code/cnn/DATA.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/cls/cls_result.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -240,17 +220,17 @@
     <list>
       <item itemvalue="Python.test" />
       <item itemvalue="Python.model" />
-      <item itemvalue="Python.DATA" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python.test2" />
+      <item itemvalue="Python.cls_result" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.cls_result" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.test2" />
         <item itemvalue="Python.model" />
-        <item itemvalue="Python.DATA" />
       </list>
     </recent_temporary>
   </component>
@@ -268,13 +248,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="-7" width="1936" height="1056" extended-state="6" />
+    <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.10748156" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11696523" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.2849285" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.28431374" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -318,33 +298,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/CONFIG.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="63" selection-start-line="4" selection-start-column="63" selection-end-line="4" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CNN.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="44" column="12" selection-start-line="44" selection-start-column="12" selection-end-line="44" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#47#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DATA.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -581,20 +534,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cnn_keras_exp.ipynb" />
     <entry file="file://E:/Temp/cnn/CONFIG.py" />
-    <entry file="file://$PROJECT_DIR$/cnn.ipynb">
-      <provider selected="true" editor-type-id="ipnb-editor">
-        <state>
-          <selected id="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test.py" />
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/cls/add.py" />
+    <entry file="file://$PROJECT_DIR$/cls/view_result.py" />
+    <entry file="file://$PROJECT_DIR$/cls/cls_result.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        <state relative-caret-position="649">
+          <caret line="72" column="61" lean-forward="true" selection-start-line="72" selection-start-column="61" selection-end-line="72" selection-end-column="61" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -606,30 +554,47 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CNN.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="482">
-          <caret line="44" column="40" selection-start-line="44" selection-start-column="40" selection-end-line="44" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#47#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DATA.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="669">
-          <caret line="151" column="40" selection-start-line="151" selection-start-column="40" selection-end-line="151" selection-end-column="40" />
+        <state relative-caret-position="272">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cnn.ipynb">
+      <provider selected="true" editor-type-id="ipnb-editor">
+        <state>
+          <selected id="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DATA.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="22" column="38" selection-start-line="22" selection-start-column="38" selection-end-line="22" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CNN.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="58" selection-start-line="58" selection-end-line="58" />
+          <folding>
+            <element signature="e#0#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/CONFIG.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" column="8" selection-start-line="28" selection-start-column="8" selection-end-line="28" selection-end-column="47" />
+        <state relative-caret-position="374">
+          <caret line="22" column="27" selection-end-line="32" selection-end-column="47" />
         </state>
       </provider>
     </entry>

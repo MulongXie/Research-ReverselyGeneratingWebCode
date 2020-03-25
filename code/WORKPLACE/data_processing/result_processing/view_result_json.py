@@ -55,9 +55,8 @@ def load_detect_result_json(annotation_file, data_file):
         else:
             compos[img_name]['bboxes'].append(cvt_bbox(annot['bbox']))
             compos[img_name]['categories'].append(annot['category_id'])
-        print("Number of bboxes:", len(compos[img_name]['bboxes']))
 
-        if i > 1000:
+        if i > 1000000:
             break
     return compos
 
@@ -111,5 +110,5 @@ def draw_gt(annots, img_root, show_gt=False):
             break
 
 
-det = load_detect_result_json('E:\Temp\detections_val_results.json', 'E:\Mulong\Datasets\\rico/instances_val.json')
+det = load_detect_result_json('E:\\Mulong\\Result\\rico\\centernet.json', 'E:/Mulong/Datasets/rico/instances_val.json')
 draw_gt(det, 'E:\\Mulong\\Datasets\\rico\\combined')

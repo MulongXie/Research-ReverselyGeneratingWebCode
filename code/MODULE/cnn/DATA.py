@@ -22,7 +22,7 @@ class Data:
         self.class_map = cfg.class_map
         self.DATA_PATH = cfg.DATA_PATH
 
-    def load_data(self, resize=True, shape=None, max_number=100000):
+    def load_data(self, resize=True, shape=None, max_number=1000000):
         # if customize shape
         if shape is not None:
             self.image_shape = shape

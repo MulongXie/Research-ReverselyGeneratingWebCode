@@ -18,17 +18,6 @@ def resize_label(bboxes, d_height, gt_height, bias=10):
 
 
 def draw_bounding_box(org, corners, color=(0, 255, 0), line=2, show=False):
-    """
-    Draw bounding box of components on the original image
-    :param org: original image
-    :param corners: [(top_left, bottom_right)]
-                    -> top_left: (column_min, row_min)
-                    -> bottom_right: (column_max, row_max)
-    :param color: line color
-    :param line: line thickness
-    :param show: show or not
-    :return: labeled image
-    """
     board = org.copy()
     for i in range(len(corners)):
         board = cv2.rectangle(board, (corners[i][0], corners[i][1]), (corners[i][2], corners[i][3]), color, line)
@@ -36,41 +25,6 @@ def draw_bounding_box(org, corners, color=(0, 255, 0), line=2, show=False):
         cv2.imshow('a', cv2.resize(board, (300, 600)))
         cv2.waitKey(0)
     return board
-
-
-def load_detect_result_txt(input_root):
-    def read_label(file_name):
-        '''
-        :return: {list of [[col_min, row_min, col_max, row_max]], list of [class id]
-        '''
-
-        def is_bottom_or_top(bbox):
-            if bbox[1] < 100 and (bbox[1] + bbox[3]) < 100 or \
-                    bbox[1] > 500 and (bbox[1] + bbox[3]) > 500:
-                return True
-            return False
-
-        file = open(file_name, 'r')
-        bboxes = []
-        categories = []
-        for l in file.readlines():
-            labels = l.split()[1:]
-            for label in labels:
-                label = label.split(',')
-                bbox = [int(b) for b in label[:-1]]
-                if not is_bottom_or_top(bbox):
-                    bboxes.append(bbox)
-                    categories.append(class_map[int(label[-1])])
-        index = file_name.split('\\')[-1].split('_')[0]
-        return index, {'bboxes': bboxes, 'categories': categories}
-
-    compos = {}
-    label_paths = glob(pjoin(input_root, '*.txt'))
-    print('Loading %d detection results' % len(label_paths))
-    for label_path in label_paths:
-        index, bboxes = read_label(label_path)
-        compos[index] = bboxes
-    return compos
 
 
 def load_detect_result_json(reslut_file, gt_file):
@@ -102,7 +56,7 @@ def load_detect_result_json(reslut_file, gt_file):
     return compos
 
 
-def load_ground_truth_json(annotation_file):
+def load_ground_truth_json(gt_file):
     def get_img_by_id(img_id):
         for image in images:
             if image['id'] == img_id:
@@ -116,7 +70,7 @@ def load_ground_truth_json(annotation_file):
         bbox = [int(b) for b in bbox]
         return [bbox[0], bbox[1], bbox[0] + bbox[2], bbox[1] + bbox[3]]
 
-    data = json.load(open(annotation_file, 'r'))
+    data = json.load(open(gt_file, 'r'))
     images = data['images']
     annots = data['annotations']
     compos = {}
@@ -131,7 +85,39 @@ def load_ground_truth_json(annotation_file):
     return compos
 
 
-def eval(detection, ground_truth, org_root, show=True):
+def load_detect_result_txt(input_root):
+    def read_label(file_name):
+        '''
+        :return: {list of [[col_min, row_min, col_max, row_max]], list of [class id]
+        '''
+
+        def is_bottom_or_top(bbox):
+            if bbox[1] < 100 and (bbox[1] + bbox[3]) < 100 or \
+                    bbox[1] > 500 and (bbox[1] + bbox[3]) > 500:
+                return True
+            return False
+
+        data = json.load(open(file_name, 'r'))
+        bboxes = []
+        categories = []
+        for c in data['compos']:
+            bbox = [c['column_min'], c['row_min'], c['column_max'], c['row_max']]
+            if not is_bottom_or_top(bbox):
+                bboxes.append(bbox)
+                categories.append(c['class'])
+        index = file_name.split('\\')[-1].split('_')[0]
+        return index, {'bboxes': bboxes, 'categories': categories}
+
+    compos = {}
+    label_paths = glob(pjoin(input_root, '*.json'))
+    print('Loading %d detection results' % len(label_paths))
+    for label_path in tqdm(label_paths):
+        index, bboxes = read_label(label_path)
+        compos[index] = bboxes
+    return compos
+
+
+def eval(detection, ground_truth, img_root, show=True):
     def match(org, d_bbox, gt_bboxes, matched):
         '''
         :param matched: mark if the ground truth component is matched
@@ -166,19 +152,18 @@ def eval(detection, ground_truth, org_root, show=True):
             # if iod == area_d and area_d / area_gt > 0.1:
             #     matched[i] = 0
             #     return True
-            if iou > 0.5:
+            if iou > 0.9:
                 matched[i] = 0
                 return True
         return False
 
     amount = len(detection)
     TP, FP, FN = 0, 0, 0
-    for i, image_id in enumerate(detection):
-        img = cv2.imread(pjoin(org_root, image_id + '.jpg'))
+    for i, image_id in enumerate(tqdm(detection)):
+        img = cv2.imread(pjoin(img_root, image_id + '.jpg'))
         d_compos = detection[image_id]
         gt_compos = ground_truth[image_id]
-        d_compos['bboxes'] = resize_label(d_compos['bboxes'], 600, gt_compos['size'][0])
-        # mark matched bboxes
+        # d_compos['bboxes'] = resize_label(d_compos['bboxes'], 600, gt_compos['size'][0])
         matched = np.ones(len(gt_compos['bboxes']), dtype=int)
         if show:
             print("Number of gt boxes: %d, Number of detected boxes: %d" % (len(gt_compos['bboxes']), len(d_compos['bboxes'])))
@@ -191,11 +176,17 @@ def eval(detection, ground_truth, org_root, show=True):
 
         precesion = TP / (TP+FP)
         recall = TP / (TP+FN)
+        if i % 500 == 0:
+            print('[%d/%d] TP:%d, FP:%d, FN:%d, Precesion:%.3f, Recall:%.3f'
+                  % (i, amount, TP, FP, FN, precesion, recall))
+
+        broad = draw_bounding_box(img,  d_compos['bboxes'], color=(0, 0, 255), line=3)
+        draw_bounding_box(broad, gt_compos['bboxes'], color=(0, 255, 0), show=True, line=2)
         print('[%d/%d] TP:%d, FP:%d, FN:%d, Precesion:%.3f, Recall:%.3f'
               % (i, amount, TP, FP, FN, precesion, recall))
 
 
-# detect = load_detect_result_txt('E:\\Mulong\\Result\\rico\\merge')
-detect = load_detect_result_json('E:\\Mulong\\Result\\rico\\frcnn_val_results.json', 'E:/Mulong/Datasets/rico/instances_val.json')
+detect = load_detect_result_txt('E:\\Mulong\\Result\\rico_remaui')
+# detect = load_detect_result_json('E:\\Temp\\detections_val_results0.3.json', 'E:/Mulong/Datasets/rico/instances_val.json')
 gt = load_ground_truth_json('E:/Mulong/Datasets/rico/instances_val.json')
 eval(detect, gt, 'E:\\Mulong\\Datasets\\rico\\combined', show=True)
