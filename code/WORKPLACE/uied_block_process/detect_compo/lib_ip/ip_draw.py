@@ -108,12 +108,13 @@ def draw_boundary(components, shape, show=False):
 
 def draw_region(compos, shape, show=False, write_path=None):
     board = np.zeros((shape[0], shape[1], 3), dtype=np.uint8)  # binary board
-    for compo in compos:
+    for i, compo in enumerate(compos):
         bbox = compo.put_bbox()
         color = (rint(0,255), rint(0,255), rint(0,255))
         for point in compo.region:
             board[point[0], point[1]] = color
         board = cv2.putText(board, str(compo.layer), (bbox[0]+5, bbox[1]+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 2)
+        board = cv2.putText(board, str(i), (bbox[0]+25, bbox[1]+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 2)
     if show:
         ratio = 2
         cv2.imshow('region', cv2.resize(board, (int(board.shape[1]/ratio), int(board.shape[0]/ratio))))

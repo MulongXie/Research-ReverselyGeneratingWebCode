@@ -42,8 +42,6 @@ class Component:
         self.rect_ = None
         self.line_ = None
 
-        self.layer = 0
-
     def compo_update(self):
         self.width = self.bbox.width
         self.height = self.bbox.height

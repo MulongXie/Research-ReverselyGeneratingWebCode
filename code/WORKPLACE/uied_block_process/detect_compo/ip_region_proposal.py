@@ -6,6 +6,7 @@ import numpy as np
 import lib_ip.ip_preprocessing as pre
 import lib_ip.ip_draw as draw
 import lib_ip.block_division as blk
+import lib_ip.file_utils as file
 from config.CONFIG_UIED import Config
 C = Config()
 
@@ -20,8 +21,9 @@ def block_detection(input_img_path, output_root,
 
     # *** Step 2 *** block processing: detect block -> calculate hierarchy -> detect components in block
     blocks = blk.block_division(grey, org)
-    blk.block_hierarchy(blocks)
+    layers = blk.block_hierarchy(blocks)
 
+    file.save_blocks(pjoin(output_root, name + '.json'), blocks)
     draw.draw_region(blocks, grey.shape, show=show, write_path=pjoin(output_root, name + '.png'))
 
     print("[Compo Detection Completed in %.3f s] %d %s" % (time.clock() - start, num, input_img_path))

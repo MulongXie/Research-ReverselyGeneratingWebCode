@@ -43,6 +43,18 @@ def save_corners_json(file_path, compos, new=True):
     json.dump(output, f_out, indent=4)
 
 
+def save_blocks(file_path, blocks):
+    f_out = open(file_path, 'w')
+    output = {'blocks':[]}
+
+    for i, block in enumerate(blocks):
+        blk = {'id': i, 'layer': block.layer, 'parent': block.parent}
+        (blk['column_min'], blk['row_min'], blk['column_max'], blk['row_max']) = block.put_bbox()
+        # print(i, block.children, block.parent)
+        output['blocks'].append(blk)
+    json.dump(output, f_out, indent=4)
+
+
 def save_clipping(org, output_root, corners, compo_classes, compo_index):
     if not os.path.exists(output_root):
         os.mkdir(output_root)

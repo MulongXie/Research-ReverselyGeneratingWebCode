@@ -1,0 +1,67 @@
+{
+    "blocks": [
+        {
+            "layer": 0,
+            "id": 0,
+            "row_min": 0,
+            "column_min": 0,
+            "column_max": 1279,
+            "row_max": 799,
+            "parent": null
+        },
+        {
+            "layer": 1,
+            "id": 1,
+            "row_min": 49,
+            "column_min": 49,
+            "column_max": 960,
+            "row_max": 320,
+            "parent": 0
+        },
+        {
+            "layer": 2,
+            "id": 2,
+            "row_min": 81,
+            "column_min": 81,
+            "column_max": 800,
+            "row_max": 240,
+            "parent": 1
+        },
+        {
+            "layer": 3,
+            "id": 3,
+            "row_min": 113,
+            "column_min": 113,
+            "column_max": 640,
+            "row_max": 160,
+            "parent": 2
+        },
+        {
+            "layer": 3,
+            "id": 4,
+            "row_min": 193,
+            "column_min": 113,
+            "column_max": 640,
+            "row_max": 224,
+            "parent": 2
+        },
+        {
+            "layer": 1,
+            "id": 5,
+            "row_min": 369,
+            "column_min": 49,
+            "column_max": 960,
+            "row_max": 640,
+            "parent": 0
+        },
+        {
+            "layer": 2,
+            "id": 6,
+            "row_min": 417,
+            "column_min": 81,
+            "column_max": 480,
+            "row_max": 480,
+            "parent": 5
+        }
+    ]
+}

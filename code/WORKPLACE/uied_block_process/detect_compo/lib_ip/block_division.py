@@ -17,13 +17,39 @@ def block_hierarchy(blocks):
     for i in range(len(blocks) - 1):
         for j in range(i + 1, len(blocks)):
             relation = blocks[i].compo_relation(blocks[j])
+            # j contains i
             if relation == -1:
+                # add j's children
                 blocks[j].children.append(i)
+                # set i's parent
                 blocks[i].layer += 1
-            if relation == 1:
+                if blocks[i].parent is None:
+                    blocks[i].parent = j
+                else:
+                    # set the closest container as parent
+                    if j in blocks[blocks[i].parent].children:
+                        blocks[i].parent = j
+
+            # i contains j
+            elif relation == 1:
+                # add i'children
                 blocks[i].children.append(j)
+                # set j's parent
                 blocks[j].layer += 1
-    return
+                if blocks[j].parent is None:
+                    blocks[j].parent = i
+                else:
+                    # set the closest container as parent
+                    if i in blocks[blocks[j].parent].children:
+                        blocks[j].parent = i
+
+    layers = {}
+    for i in range(len(blocks)):
+        if blocks[i].layer not in layers:
+            layers[str(blocks[i].layer)] = [i]
+        else:
+            layers[str(blocks[i].layer)].append(i)
+    return layers
 
 
 def block_filter(blocks, img_shape):
@@ -31,7 +57,8 @@ def block_filter(blocks, img_shape):
     for block in blocks:
         # filter
         if block.block_is_top_or_bottom_bar(img_shape, C.THRESHOLD_TOP_BOTTOM_BAR) or \
-                block.block_is_uicompo(img_shape, C.THRESHOLD_COMPO_MAX_SCALE):
+                block.block_is_uicompo(img_shape, C.THRESHOLD_COMPO_MAX_SCALE) or \
+                block.height < 40 and block.width < 40:
             continue
         blocks_new.append(block)
     return blocks_new
@@ -90,9 +117,6 @@ def block_division(grey, org,
                 if len(region) < 500:
                     continue
                 block = Block(region, grey.shape)
-
-                if block.height < 40 and block.width < 40:
-                    continue
 
                 # get the boundary of this region
                 # ignore lines

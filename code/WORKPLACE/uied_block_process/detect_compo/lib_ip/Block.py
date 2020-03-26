@@ -12,6 +12,7 @@ class Block(Component):
         self.category = 'block'
         self.parent = None
         self.children = []
+        self.layer = 0
         self.uicompo_ = None
         self.top_or_botm = None
 
