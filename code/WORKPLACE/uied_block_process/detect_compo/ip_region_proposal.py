@@ -12,7 +12,7 @@ C = Config()
 
 
 def block_detection(input_img_path, output_root,
-                    num=0, resize_by_height=600, show=False, write_img=True):
+                    num=0, resize_by_height=800, show=False):
     start = time.clock()
     name = input_img_path.split('\\')[-1][:-4]
 
@@ -24,6 +24,7 @@ def block_detection(input_img_path, output_root,
     layers = blk.block_hierarchy(blocks)
 
     file.save_blocks(pjoin(output_root, name + '.json'), blocks)
-    draw.draw_region(blocks, grey.shape, show=show, write_path=pjoin(output_root, name + '.png'))
+    draw.draw_region(blocks, grey.shape, show=show, write_path=pjoin(output_root, name + '_blk.png'))
+    cv2.imwrite(pjoin(output_root, name + '.png'), org)
 
     print("[Compo Detection Completed in %.3f s] %d %s" % (time.clock() - start, num, input_img_path))

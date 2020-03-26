@@ -23,7 +23,7 @@ if __name__ == '__main__':
     # set the range of target inputs' indices
     num = 0
     start_index = 0  # 61728
-    end_index = 100000
+    end_index = 1000
     for input_path_img in input_paths_img:
         index = input_path_img.split('\\')[-1][:-4]
         if int(index) < start_index:
@@ -31,5 +31,5 @@ if __name__ == '__main__':
         if int(index) > end_index:
             break
 
-        ip.block_detection(input_path_img, output_root, num)
+        ip.block_detection(input_path_img, output_root, num, show=False)
         num += 1

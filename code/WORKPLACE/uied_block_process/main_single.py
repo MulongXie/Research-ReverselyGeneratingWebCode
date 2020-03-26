@@ -1,4 +1,3 @@
-from os.path import join as pjoin
 import ip_region_proposal as ip
 
 resize_by_height = 800

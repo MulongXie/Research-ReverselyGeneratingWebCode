@@ -24,8 +24,8 @@ if __name__ == '__main__':
     pool = multiprocessing.Pool(processes=3)
     # set the range of target inputs' indices
     num = 0
-    start_index = 12045
-    end_index = 100000
+    start_index = 0
+    end_index = 10000
     for input_path_img in input_paths_img:
         index = input_path_img.split('\\')[-1][:-4]
         if int(index) < start_index:
@@ -33,7 +33,7 @@ if __name__ == '__main__':
         if int(index) > end_index:
             break
         # *** start processing ***
-        pool.apply_async(ip.compo_detection, (input_path_img, output_root, num, resize_by_height, ))
+        pool.apply_async(ip.block_detection, (input_path_img, output_root, num, ))
         num += 1
     pool.close()
     pool.join()
