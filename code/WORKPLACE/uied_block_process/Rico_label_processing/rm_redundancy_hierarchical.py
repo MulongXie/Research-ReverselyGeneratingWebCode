@@ -37,7 +37,11 @@ def rm_repeated_objects(node, gap):
 
         for j in range(i + 1, len(children_new)):
             if obj_is_same(children_new[i], children_new[j], gap):
-                children_new[i]['children'] += children_new[j]['children']
+                if 'children' in children_new[j]:
+                    if 'children' in children_new[i]:
+                        children_new[i]['children'] += children_new[j]['children']
+                    else:
+                        children_new[i]['children'] = children_new[j]['children']
                 repeat[j] = True
 
     children_non_redundant = []
@@ -57,6 +61,8 @@ def simplify_objects(root):
             extracted_obj['children'] = []
             children = obj['children']
             for child in children:
+                if child is None:
+                    continue
                 kids = iter_kids(child)
                 if kids is not None:
                     extracted_obj['children'].append(kids)
@@ -65,9 +71,6 @@ def simplify_objects(root):
     if 'activity' in root:
         root = root['activity']['root']
     objects = iter_kids(root)
-    # save objects
-    objs_json = json.dumps(objects, indent=4)
-    open('objects.json', 'w').write(objs_json)
     return objects
 
 
@@ -96,32 +99,31 @@ def draw_node(node, board, count, shrink_ratio=4):
 
 if '__main__':
     save = True
-    show = True
-    start = 0  # start point
-    end = 1000
-    index = start
+    show = False
+    start = 7681  # start point
+    end = 100000
     input_root = 'E:\\Mulong\\Datasets\\rico\\combined\\'
     output_root = 'E:\\Temp\\rico-clean'
-    while True:
+    for index in range(start, end):
         img_path = input_root + str(index) + '.jpg'
         json_path = input_root + str(index) + '.json'
         if os.path.exists(img_path):
-            print('\n', index)
+            print(img_path)
             # extract Ui components, relabel them
             img = cv2.imread(img_path)
             jfile = json.load(open(json_path, encoding="utf8"))
             objs = simplify_objects(jfile)
-            objs = rm_repeated_objects(objs, 5)
-
-            if show:
-                org = cv2.resize(img, (1440, 2560))
-                board = np.full((2560, 1440, 3), 255, dtype=np.uint8)  # used for draw new labels
-                cv2.imshow('org', shrink(org, 4))
-                count = draw_node(objs, board, 0)
-                print(count)
-            # if save:
-            #     joutput = open(pjoin(output_root, str(index) + '.json'), 'w')
-            #     json.dump(compos, joutput, indent=4)
+            if objs is not None:
+                objs = rm_repeated_objects(objs, 5)
+                if show:
+                    org = cv2.resize(img, (1440, 2560))
+                    board = np.full((2560, 1440, 3), 255, dtype=np.uint8)  # used for draw new labels
+                    cv2.imshow('org', shrink(org, 4))
+                    count = draw_node(objs, board, 0)
+                    print(count)
+                if save:
+                    joutput = open(pjoin(output_root, str(index) + '.json'), 'w')
+                    json.dump(objs, joutput, indent=4)
 
         index += 1
         if index > end:

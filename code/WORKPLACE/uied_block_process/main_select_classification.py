@@ -31,5 +31,5 @@ if __name__ == '__main__':
         if int(index) > end_index:
             break
 
-        ip.block_detection(input_path_img, output_root, num, show=False)
+        ip.block_detection(input_path_img, output_root, num, resize_by_height=resize_by_height, show=True)
         num += 1

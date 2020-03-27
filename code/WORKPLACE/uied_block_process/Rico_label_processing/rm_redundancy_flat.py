@@ -70,9 +70,9 @@ def view_label(objects, org, shrink_ratio=4):
 
 if '__main__':
     save = True
-    show = True
+    show = False
     start = 0  # start point
-    end = 80000
+    end = 100000
     index = start
     input_root = 'E:\\Mulong\\Datasets\\rico\\combined\\'
     output_root = 'E:\\Temp\\rico-clean'
@@ -80,7 +80,7 @@ if '__main__':
         img_path = input_root + str(index) + '.jpg'
         json_path = input_root + str(index) + '.json'
         if os.path.exists(img_path):
-            print('\n', index)
+            print(img_path)
             # extract Ui components, relabel them
             img = cv2.imread(img_path)
             jfile = json.load(open(json_path, encoding="utf8"))
