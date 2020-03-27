@@ -10,7 +10,7 @@ def shrink(img, ratio):
     return cv2.resize(img, (int(img.shape[1] / ratio), int(img.shape[0] / ratio)))
 
 
-def draw_node(node, board, count, shrink_ratio=4):
+def draw_node(node, board, layer_count, shrink_ratio=4):
 
     color = (rint(0, 255), rint(0, 255), rint(0, 255))
     cv2.rectangle(board, (node['bounds'][0], node['bounds'][1]), (node['bounds'][2], node['bounds'][3]), color, -1)
@@ -20,13 +20,13 @@ def draw_node(node, board, count, shrink_ratio=4):
     print(node['bounds'], node['bounds'][2] - node['bounds'][0], node['bounds'][3] - node['bounds'][1])
     cv2.imshow('board', shrink(board, shrink_ratio))
     cv2.waitKey()
-    count += 1
+    layer_count += 1
 
     if 'children' not in node:
-        return count
+        return layer_count
     for child in node['children']:
-        count = draw_node(child, board, count)
-    return count
+        layer_count = draw_node(child, board, layer_count)
+    return layer_count
 
 
 if '__main__':
@@ -35,7 +35,7 @@ if '__main__':
     start = 7681  # start point
     end = 100000
     img_root = 'E:\\Mulong\\Datasets\\rico\\combined\\'
-    json_root = 'E:\\Temp\\rico-clean\\'
+    json_root = 'E:\\Temp\\rico-tree\\'
     for index in range(start, end):
         img_path = img_root + str(index) + '.jpg'
         json_path = json_root + str(index) + '.json'
@@ -47,6 +47,5 @@ if '__main__':
 
         org = cv2.resize(img, (1440, 2560))
         board = np.full((2560, 1440, 3), 255, dtype=np.uint8)  # used for draw new labels
-        cv2.imshow('org', shrink(org, 4))
         draw_node(tree, board, 0)
 

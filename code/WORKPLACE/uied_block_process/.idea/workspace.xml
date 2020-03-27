@@ -11,31 +11,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ip_region_proposal.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/detect_compo/ip_region_proposal.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
-              <caret line="27" column="55" lean-forward="true" selection-start-line="27" selection-start-column="55" selection-end-line="27" selection-end-column="55" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ip_draw.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/ip_draw.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="235">
-              <caret line="123" lean-forward="true" selection-start-line="123" selection-end-line="123" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="main_select_classification.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main_select_classification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
+            <state relative-caret-position="197">
               <caret line="33" column="23" lean-forward="true" selection-start-line="33" selection-start-column="23" selection-end-line="33" selection-end-column="23" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
@@ -47,8 +26,8 @@
       <file leaf-file-name="main_select_multipro.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main_select_multipro.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="129">
-              <caret line="15" column="30" lean-forward="true" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+            <state relative-caret-position="163">
+              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
               </folding>
@@ -56,13 +35,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CONFIG.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/CONFIG.py">
+      <file leaf-file-name="merge.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/segment_subtree/merge.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+            <state relative-caret-position="248">
+              <caret line="39" column="62" selection-start-line="39" selection-start-column="62" selection-end-line="39" selection-end-column="62" />
               <folding>
-                <element signature="e#0#33#0" expanded="true" />
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Tree.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/segment_subtree/Tree.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="95">
+              <caret line="15" column="39" selection-start-line="15" selection-start-column="39" selection-end-line="15" selection-end-column="39" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -95,7 +86,6 @@
         <option value="$PROJECT_DIR$/main_single.py" />
         <option value="$PROJECT_DIR$/detect_compo/lib_ip/block_division.py" />
         <option value="$PROJECT_DIR$/detect_compo/ip_region_proposal.py" />
-        <option value="$PROJECT_DIR$/main_select_multipro.py" />
         <option value="$PROJECT_DIR$/test2.py" />
         <option value="$PROJECT_DIR$/merge.py" />
         <option value="$PROJECT_DIR$/Rico_label_processing/rm_redundancy_flat.py" />
@@ -104,11 +94,12 @@
         <option value="$PROJECT_DIR$/Rico_label_processing/rm_redundancy_hierarchical.py" />
         <option value="$PROJECT_DIR$/segment_subtree/Dom_Tree.py" />
         <option value="$PROJECT_DIR$/segment_subtree/Block.py" />
-        <option value="$PROJECT_DIR$/segment_subtree/Tree.py" />
-        <option value="$PROJECT_DIR$/segment_subtree/test.py" />
         <option value="$PROJECT_DIR$/segment_subtree/Detected_Block.py" />
-        <option value="$PROJECT_DIR$/segment_subtree/merge.py" />
         <option value="$PROJECT_DIR$/main_select_classification.py" />
+        <option value="$PROJECT_DIR$/main_select_multipro.py" />
+        <option value="$PROJECT_DIR$/segment_subtree/test.py" />
+        <option value="$PROJECT_DIR$/segment_subtree/Tree.py" />
+        <option value="$PROJECT_DIR$/segment_subtree/merge.py" />
       </list>
     </option>
   </component>
@@ -263,9 +254,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.merge (1)" />
+        <item itemvalue="Python.test (1)" />
         <item itemvalue="Python.main_select_multipro" />
         <item itemvalue="Python.main_select_classification" />
-        <item itemvalue="Python.test (1)" />
         <item itemvalue="Python.rm_redundancy_hierarchical" />
       </list>
     </recent_temporary>
@@ -359,11 +350,6 @@
           <url>file://$PROJECT_DIR$/Rico_label_processing/rm_redundancy_hierarchical.py</url>
           <line>56</line>
           <option name="timeStamp" value="34" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/segment_subtree/test.py</url>
-          <line>47</line>
-          <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/detect_compo/ip_region_proposal.py</url>
@@ -612,16 +598,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/segment_subtree/Tree.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="50" selection-start-line="10" selection-start-column="50" selection-end-line="10" selection-end-column="50" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/Bbox.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -649,20 +625,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/segment_subtree/test.py">
+    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/ip_draw.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="43" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="235">
+          <caret line="123" lean-forward="true" selection-start-line="123" selection-end-line="123" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/segment_subtree/merge.py">
+    <entry file="file://$PROJECT_DIR$/detect_compo/ip_region_proposal.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="265">
-          <caret line="28" column="58" lean-forward="true" selection-start-line="28" selection-start-column="58" selection-end-line="28" selection-end-column="58" />
+        <state relative-caret-position="61">
+          <caret line="19" column="62" lean-forward="true" selection-start-line="19" selection-start-column="62" selection-end-line="19" selection-end-column="62" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -679,10 +652,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/segment_subtree/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="42" column="41" lean-forward="true" selection-start-line="42" selection-start-column="41" selection-end-line="42" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main_select_multipro.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="15" column="30" lean-forward="true" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+        <state relative-caret-position="163">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
           <folding>
             <element signature="e#0#22#0" expanded="true" />
           </folding>
@@ -691,7 +674,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main_select_classification.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
+        <state relative-caret-position="197">
           <caret line="33" column="23" lean-forward="true" selection-start-line="33" selection-start-column="23" selection-end-line="33" selection-end-column="23" />
           <folding>
             <element signature="e#0#22#0" expanded="true" />
@@ -699,17 +682,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/ip_draw.py">
+    <entry file="file://$PROJECT_DIR$/segment_subtree/Tree.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="123" lean-forward="true" selection-start-line="123" selection-end-line="123" />
+        <state relative-caret-position="95">
+          <caret line="15" column="39" selection-start-line="15" selection-start-column="39" selection-end-line="15" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/detect_compo/ip_region_proposal.py">
+    <entry file="file://$PROJECT_DIR$/segment_subtree/merge.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="27" column="55" lean-forward="true" selection-start-line="27" selection-start-column="55" selection-end-line="27" selection-end-column="55" />
+        <state relative-caret-position="248">
+          <caret line="39" column="62" selection-start-line="39" selection-start-column="62" selection-end-line="39" selection-end-column="62" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
