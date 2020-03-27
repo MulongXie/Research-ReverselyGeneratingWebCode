@@ -3,19 +3,21 @@ import json
 import numpy as np
 from random import randint as rint
 import os
+from os.path import join as pjoin
 
 
-def rm_repeated_obj(objects):
+def rm_repeated_obj(objects, gap):
     repeat = np.full(len(objects), False)
     objects_non_repeat = []
     for i in range(len(objects)):
         if not repeat[i]:
             for j in range(i + 1, len(objects) - 1):
-                # print(objects[i]['bounds'], objects[j]['bounds'])
-                if objects[i]['bounds'] == objects[j]['bounds']:
+                if abs(objects[i]['bounds'][0] - objects[j]['bounds'][0]) < gap and \
+                        abs(objects[i]['bounds'][1] - objects[j]['bounds'][1]) < gap and \
+                        abs(objects[i]['bounds'][2] - objects[j]['bounds'][2]) < gap and \
+                        abs(objects[i]['bounds'][3] - objects[j]['bounds'][3]) < gap:
                     repeat[j] = True
 
-    print(repeat)
     for i in range(len(repeat)):
         if not repeat[i]:
             objects_non_repeat.append(objects[i])
@@ -24,7 +26,7 @@ def rm_repeated_obj(objects):
 
 def extract_objects(root):
     def extract(obj):
-        return {'class':obj['class'], 'bounds':obj['bounds'],
+        return {'class':obj['class'], 'bounds':[int(b) for b in obj['bounds']],
                 'compoLabel':obj['componentLabel'] if 'componentLabel' in obj else None}
 
     def iter_kids(obj):
@@ -65,17 +67,15 @@ def view_label(objects, org, shrink_ratio=4):
         cv2.imshow('board', shrink(board, shrink_ratio))
         cv2.waitKey()
 
-    # cv2.imshow('board', shrink(board, shrink_ratio))
-    # cv2.waitKey()
-
 
 if '__main__':
-    save = False
+    save = True
     show = True
-    start = 2  # start point
+    start = 0  # start point
     end = 80000
     index = start
     input_root = 'E:\\Mulong\\Datasets\\rico\\combined\\'
+    output_root = 'E:\\Temp\\rico-clean'
     while True:
         img_path = input_root + str(index) + '.jpg'
         json_path = input_root + str(index) + '.json'
@@ -85,10 +85,13 @@ if '__main__':
             img = cv2.imread(img_path)
             jfile = json.load(open(json_path, encoding="utf8"))
             compos = extract_objects(jfile)
-            compos = rm_repeated_obj(compos)
+            compos = rm_repeated_obj(compos, 5)
 
             if show:
                 view_label(compos, img)
+            if save:
+                joutput = open(pjoin(output_root, str(index) + '.json'), 'w')
+                json.dump(compos, joutput, indent=4)
 
         index += 1
         if index > end:
