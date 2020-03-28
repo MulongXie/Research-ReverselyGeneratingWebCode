@@ -19,7 +19,7 @@ def resize_block(blocks, det_height, tgt_height, bias):
         block.resize_bbox(det_height, tgt_height, bias)
 
 
-def check_subtree(block, tree, test=True):
+def check_subtree(block, tree, test=False):
     '''
     relation: -1 : a in b
                0  : a, b are not intersected
@@ -36,8 +36,8 @@ def check_subtree(block, tree, test=True):
         cv2.imshow('blk-test', cv2.resize(board_test_blk, (300, 500)))
         cv2.waitKey()
 
-    # block contains tree
-    if relation == 1:
+    # block contains tree or block and tree are same
+    if relation == 1 or relation == 3:
         return tree
     # non-intersected
     elif relation == 0:
@@ -46,22 +46,27 @@ def check_subtree(block, tree, test=True):
     else:
         if 'children' not in tree:
             return None
-        sub_trees = []
+        subtrees = []
         for child in tree['children']:
-            if check_subtree(block, child) is not None:
-                sub_trees.append(sub_trees)
-        if len(sub_trees) > 0:
-            return sub_trees
+            subtree = check_subtree(block, child)
+            if subtree is not None:
+                if type(subtree) is list:
+                    subtrees += subtree
+                else:
+                    subtrees.append(subtree)
+        if len(subtrees) > 0:
+            return subtrees
         else:
             return None
 
 
 def segment_subtree(blocks, tree):
-    segmented_subtree = {'subtrees': []}
+    segmented_subtree = {'segments':[]}
     for block in blocks:
-        sub_tree = check_subtree(block, tree)
-        if sub_tree is not None:
-            segmented_subtree['subtrees'].append(sub_tree)
+        subtree = check_subtree(block, tree)
+        if subtree is not None:
+            segment = {'block': block.put_bbox(), 'subtree':subtree}
+            segmented_subtree['segments'].append(segment)
     return segmented_subtree
 
 
@@ -99,3 +104,9 @@ if '__main__':
         cv2.destroyAllWindows()
 
         seg_subtrees = segment_subtree(blocks, tree)
+        print(seg_subtrees)
+
+        jfile = open('subtrees.json', 'w')
+        json.dump(seg_subtrees, jfile, indent=4)
+        print('write to subtrees.json')
+        break

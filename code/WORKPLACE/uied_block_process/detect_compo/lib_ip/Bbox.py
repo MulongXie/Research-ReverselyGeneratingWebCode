@@ -50,6 +50,7 @@ class Bbox:
          0  : a, b are not intersected
          1  : b in a
          2  : a, b are intersected
+         3  : a, b are same
        '''
         col_min_a, row_min_a, col_max_a, row_max_a = self.put_bbox()
         col_min_b, row_min_b, col_max_b, row_max_b = bbox_b.put_bbox()
@@ -68,16 +69,19 @@ class Bbox:
         ioa = inter / self.box_area
         iob = inter / bbox_b.box_area
 
-        print('IoU:%.3f, IoA:%.3f, IoB:%.3f' % (iou, ioa, iob))
+        # print('IoU:%.3f, IoA:%.3f, IoB:%.3f' % (iou, ioa, iob))
 
         # not intersected with each other
         if iou == 0:
             return 0
+        # a and b are same
+        if iou >= 0.8:
+            return 3
         # contained by b
-        if ioa >= 1:
+        if ioa >= 0.9:
             return -1
         # contains b
-        if iob >= 1:
+        if iob >= 0.9:
             return 1
         # intersected
         return 2
