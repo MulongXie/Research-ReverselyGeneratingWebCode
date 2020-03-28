@@ -24,3 +24,19 @@ class Block:
 
     def put_bbox(self):
         return self.bbox.put_bbox()
+
+    def relation(self, bound):
+        '''
+        relation: -1 : a in b
+                  0  : a, b are not intersected
+                  1  : b in a
+                  2  : a, b are identical or intersected
+        '''
+        col_min, row_min, col_max, row_max = bound
+        bbox = Bbox(col_min, row_min, col_max, row_max)
+        return self.bbox.bbox_relation_nms(bbox)
+
+    def resize_bbox(self, det_height, tgt_height, bias):
+        col_min, row_min, col_max, row_max = self.bbox.put_bbox()
+        scale = tgt_height / det_height
+        self.bbox = Bbox(int(col_min*scale) + bias, int(row_min*scale) + bias, int(col_max*scale) - bias, int(row_max*scale) - bias)
