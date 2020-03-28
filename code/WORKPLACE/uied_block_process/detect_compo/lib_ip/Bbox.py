@@ -1,4 +1,5 @@
 import numpy as np
+import cv2
 import lib_ip.ip_draw as draw
 
 
@@ -114,3 +115,6 @@ class Bbox:
         self.col_max = min(self.col_max + pad, col)
         self.row_min = max(self.row_min - pad, 0)
         self.row_max = min(self.row_max + pad, row)
+
+    def bbox_fill_box(self, img, color, pad=0):
+        cv2.rectangle(img, (self.col_min - pad, self.row_min - pad), (self.col_max + pad, self.row_max + pad), color, -1)

@@ -61,33 +61,28 @@ def block_filter(blocks, img_shape):
     return blocks_new
 
 
-def block_bin_erase_all_blk(binary, blocks, pad=0, show=False):
-    '''
-    erase the block parts from the binary map
-    :param binary: binary map of original image
-    :param blocks_corner: corners of detected layout block
-    :param show: show or not
-    :param pad: expand the bounding boxes of blocks
-    :return: binary map without block parts
-    '''
-
-    bin_org = binary.copy()
+def block_add_bkg(blocks, org, img_shape, show=False):
+    board = np.full(img_shape[:2], 255, dtype=np.uint8)
     for block in blocks:
-        block.block_erase_from_bin(binary, pad)
+        block.block_fill_color(board, 0, flag='bbox')
+
+    blocks_bkg = block_division(board, is_binary=True)
+
     if show:
-        cv2.imshow('before', bin_org)
-        cv2.imshow('after', binary)
+        ratio = 2
+        board_bkg = draw.draw_bounding_box(org, blocks_bkg, name='block_bkg')
+        cv2.imshow('bkg_board', cv2.resize(board_bkg, (int(board_bkg.shape[1]/ratio), int(board_bkg.shape[0]/ratio))))
+        cv2.imshow('filled_board', cv2.resize(board, (int(board.shape[1]/ratio), int(board.shape[0]/ratio))))
         cv2.waitKey()
 
+    return blocks_bkg + blocks
 
-def block_division(grey, org,
-                   show=False, write_path=None,
-                   step_h=10, step_v=10,
+
+def block_division(grey, step_h=10, step_v=10, is_binary=False,
                    grad_thresh=C.THRESHOLD_BLOCK_GRADIENT,
                    line_thickness=C.THRESHOLD_LINE_THICKNESS,
                    min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
-                   max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO,
-                   min_block_height_ratio=C.THRESHOLD_BLOCK_MIN_HEIGHT):
+                   max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO):
     '''
     :param grey: grey-scale of original image
     :return: corners: list of [(top_left, bottom_right)]
@@ -100,6 +95,8 @@ def block_division(grey, org,
     row, column = grey.shape[0], grey.shape[1]
     for x in range(0, row, step_h):
         for y in range(0, column, step_v):
+            if is_binary and grey[x, y] == 0:
+                continue
             if mask[x, y] == 0:
                 # region = flood_fill_bfs(grey, x, y, mask)
 

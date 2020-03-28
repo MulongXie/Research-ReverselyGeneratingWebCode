@@ -2,6 +2,7 @@ import cv2
 import json
 import numpy as np
 import os
+import time
 
 import segment_subtree.Detected_Block as Block
 import segment_subtree.Tree as Tree
@@ -73,15 +74,17 @@ def segment_subtree(blocks, tree):
 if '__main__':
     save = True
     show = True
-    start = 27  # start point
+    start = 0  # start point
     end = 100000
     img_root = 'E:\\Mulong\\Datasets\\rico\\combined\\'
     block_root = 'E:\\Temp\\rico-block\\'
     tree_root = 'E:\\Temp\\rico-tree\\'
+    subtree_root = 'E:\\Temp\\rico-subtree\\'
     for index in range(start, end):
         img_path = img_root + str(index) + '.jpg'
         block_path = block_root + str(index) + '.json'
         tree_path = tree_root + str(index) + '.json'
+        subtree_path = subtree_root + str(index) + '.json'
 
         if not os.path.exists(block_path) or not os.path.exists(tree_path):
             continue
@@ -94,19 +97,19 @@ if '__main__':
         board_block = draw.draw_bounding_box(img, blocks, line=5)
 
         tree = Tree.load_tree(tree_path)
-        board_tree = np.full((2560, 1440, 3), 255, dtype=np.uint8)  # used for draw new labels
-        Tree.draw_tree(tree, board_tree, 0)
+        segments = segment_subtree(blocks, tree)
 
-        cv2.imshow('blk_img', cv2.resize(block_img, (300, 500)))
-        cv2.imshow('block', cv2.resize(board_block, (300, 500)))
-        cv2.imshow('tree', cv2.resize(board_tree, (300, 500)))
-        cv2.waitKey()
-        cv2.destroyAllWindows()
+        if show:
+            board_tree = np.full((2560, 1440, 3), 255, dtype=np.uint8)  # used for draw new labels
+            Tree.draw_tree(tree, board_tree, 0)
+            cv2.imshow('blk_img', cv2.resize(block_img, (300, 500)))
+            cv2.imshow('block', cv2.resize(board_block, (300, 500)))
+            cv2.imshow('tree', cv2.resize(board_tree, (300, 500)))
+            cv2.waitKey()
+            cv2.destroyAllWindows()
+            Tree.view_segments(segments, img)
 
-        seg_subtrees = segment_subtree(blocks, tree)
-        print(seg_subtrees)
+        if save:
+            jfile = open(subtree_path, 'w')
+            json.dump(segments, jfile, indent=4)
 
-        jfile = open('subtrees.json', 'w')
-        json.dump(seg_subtrees, jfile, indent=4)
-        print('write to subtrees.json')
-        break

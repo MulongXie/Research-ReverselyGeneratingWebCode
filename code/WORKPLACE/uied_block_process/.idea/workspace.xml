@@ -13,65 +13,61 @@
     <favorites_list name="uied_block_process" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Tree.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/segment_subtree/Tree.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="11" lean-forward="true" selection-start-column="11" selection-end-line="1" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Detected_Block.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/segment_subtree/Detected_Block.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Bbox.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/Bbox.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1224">
-              <caret line="72" lean-forward="true" selection-start-line="72" selection-end-line="72" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="merge.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/segment_subtree/merge.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="452">
-              <caret line="94" lean-forward="true" selection-start-line="94" selection-end-line="94" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="view_subtree.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/segment_subtree/view_subtree.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="81">
-              <caret line="24" column="59" lean-forward="true" selection-start-line="24" selection-start-column="59" selection-end-line="24" selection-end-column="59" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="main_single.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/detect_compo/main_single.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="153">
+                  <caret line="9" column="14" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ip_region_proposal.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/detect_compo/ip_region_proposal.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="104">
+                  <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
+                  <folding>
+                    <element signature="e#0#10#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="block_division.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/block_division.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="179">
+                  <caret line="68" column="53" selection-start-line="68" selection-start-column="53" selection-end-line="68" selection-end-column="53" />
+                  <folding>
+                    <element signature="e#0#10#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="block_division.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/block_division.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-480">
+                  <caret line="66" column="53" selection-start-line="66" selection-start-column="53" selection-end-line="66" selection-end-column="53" />
+                  <folding>
+                    <element signature="e#0#10#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -94,11 +90,8 @@
         <option value="$PROJECT_DIR$/config/CONFIG_UIED.py" />
         <option value="$PROJECT_DIR$/detect_compo/lib_ip/ip_draw.py" />
         <option value="$PROJECT_DIR$/detect_compo/lib_ip/Component.py" />
-        <option value="$PROJECT_DIR$/detect_compo/lib_ip/Block.py" />
         <option value="$PROJECT_DIR$/detect_compo/lib_ip/file_utils.py" />
         <option value="$PROJECT_DIR$/main_single.py" />
-        <option value="$PROJECT_DIR$/detect_compo/lib_ip/block_division.py" />
-        <option value="$PROJECT_DIR$/detect_compo/ip_region_proposal.py" />
         <option value="$PROJECT_DIR$/merge.py" />
         <option value="$PROJECT_DIR$/Rico_label_processing/rm_redundancy_flat.py" />
         <option value="$PROJECT_DIR$/test.py" />
@@ -106,16 +99,21 @@
         <option value="$PROJECT_DIR$/segment_subtree/Dom_Tree.py" />
         <option value="$PROJECT_DIR$/segment_subtree/Block.py" />
         <option value="$PROJECT_DIR$/main_select_classification.py" />
-        <option value="$PROJECT_DIR$/main_select_multipro.py" />
         <option value="$PROJECT_DIR$/Rico_label_processing/rm_redundancy_hierarchical.py" />
         <option value="$PROJECT_DIR$/segment_subtree/test2.py" />
-        <option value="$PROJECT_DIR$/segment_subtree/Tree.py" />
         <option value="$PROJECT_DIR$/segment_subtree/Detected_Block.py" />
         <option value="$PROJECT_DIR$/segment_subtree/test.py" />
-        <option value="$PROJECT_DIR$/detect_compo/lib_ip/Bbox.py" />
         <option value="$PROJECT_DIR$/test2.py" />
         <option value="$PROJECT_DIR$/segment_subtree/merge.py" />
         <option value="$PROJECT_DIR$/segment_subtree/view_subtree.py" />
+        <option value="$PROJECT_DIR$/segment_subtree/Tree.py" />
+        <option value="$PROJECT_DIR$/segment_subtree/segment_tree.py" />
+        <option value="$PROJECT_DIR$/main_select_multipro.py" />
+        <option value="$PROJECT_DIR$/detect_compo/lib_ip/Bbox.py" />
+        <option value="$PROJECT_DIR$/detect_compo/lib_ip/Block.py" />
+        <option value="$PROJECT_DIR$/detect_compo/main_single.py" />
+        <option value="$PROJECT_DIR$/detect_compo/ip_region_proposal.py" />
+        <option value="$PROJECT_DIR$/detect_compo/lib_ip/block_division.py" />
       </list>
     </option>
   </component>
@@ -141,7 +139,18 @@
             <path>
               <item name="uied_block_process" type="b2602c69:ProjectViewProjectNode" />
               <item name="uied_block_process" type="462c0819:PsiDirectoryNode" />
-              <item name="segment_subtree" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="uied_block_process" type="b2602c69:ProjectViewProjectNode" />
+              <item name="uied_block_process" type="462c0819:PsiDirectoryNode" />
+              <item name="detect_compo" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="uied_block_process" type="b2602c69:ProjectViewProjectNode" />
+              <item name="uied_block_process" type="462c0819:PsiDirectoryNode" />
+              <item name="detect_compo" type="462c0819:PsiDirectoryNode" />
+              <item name="lib_ip" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -170,8 +179,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.view_subtree">
-    <configuration name="merge (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.main_single">
+    <configuration name="Tree" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="uied_block_process" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -183,13 +192,13 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/segment_subtree/merge.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/segment_subtree/Tree.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="test (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="ip_region_proposal" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="uied_block_process" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -197,17 +206,17 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/segment_subtree" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/detect_compo" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/segment_subtree/test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/detect_compo/ip_region_proposal.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="test2 (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="main_select_multipro" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="uied_block_process" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -219,13 +228,31 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test2.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main_select_multipro.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="test2" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="main_single" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="uied_block_process" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/detect_compo" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/detect_compo/main_single.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="segment_tree" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="uied_block_process" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -237,44 +264,26 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/segment_subtree/test2.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
-    <configuration name="view_subtree" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="uied_block_process" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/segment_subtree" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/segment_subtree/view_subtree.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/segment_subtree/segment_tree.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
     <list>
-      <item itemvalue="Python.test (1)" />
-      <item itemvalue="Python.merge (1)" />
-      <item itemvalue="Python.test2" />
-      <item itemvalue="Python.test2 (1)" />
-      <item itemvalue="Python.view_subtree" />
+      <item itemvalue="Python.segment_tree" />
+      <item itemvalue="Python.Tree" />
+      <item itemvalue="Python.main_select_multipro" />
+      <item itemvalue="Python.main_single" />
+      <item itemvalue="Python.ip_region_proposal" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.view_subtree" />
-        <item itemvalue="Python.merge (1)" />
-        <item itemvalue="Python.test2 (1)" />
-        <item itemvalue="Python.test (1)" />
-        <item itemvalue="Python.test2" />
+        <item itemvalue="Python.main_single" />
+        <item itemvalue="Python.ip_region_proposal" />
+        <item itemvalue="Python.main_select_multipro" />
+        <item itemvalue="Python.segment_tree" />
+        <item itemvalue="Python.Tree" />
       </list>
     </recent_temporary>
   </component>
@@ -295,12 +304,12 @@
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19952305" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.19952305" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.31842577" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.31842577" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -340,15 +349,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/detect_compo/ip_region_proposal.py</url>
-          <line>29</line>
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/detect_compo/ip_region_proposal.py</url>
-          <line>26</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Rico_label_processing/rm_redundancy_hierarchical.py</url>
           <line>25</line>
           <option name="timeStamp" value="30" />
@@ -369,19 +369,9 @@
           <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/detect_compo/ip_region_proposal.py</url>
-          <line>27</line>
-          <option name="timeStamp" value="37" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/detect_compo/lib_ip/ip_draw.py</url>
           <line>122</line>
           <option name="timeStamp" value="38" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/segment_subtree/merge.py</url>
-          <line>109</line>
-          <option name="timeStamp" value="57" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/segment_subtree/view_subtree.py</url>
@@ -454,26 +444,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/Component.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="43" column="8" selection-start-line="43" selection-start-column="8" selection-end-line="43" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/ip_detection.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/block_division.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
         </state>
       </provider>
     </entry>
@@ -588,16 +564,6 @@
     <entry file="file://$PROJECT_DIR$/segment_subtree/Block.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/Block.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="15" column="20" lean-forward="true" selection-start-line="15" selection-start-column="20" selection-end-line="15" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Rico_label_processing/rm_redundancy_flat.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -615,23 +581,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/ip_draw.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="123" lean-forward="true" selection-start-line="123" selection-end-line="123" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/detect_compo/ip_region_proposal.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="61">
-          <caret line="19" column="62" lean-forward="true" selection-start-line="19" selection-start-column="62" selection-end-line="19" selection-end-column="62" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/CONFIG.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -642,30 +591,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main_select_classification.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="33" column="23" selection-start-line="33" selection-start-column="23" selection-end-line="33" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/segment_subtree/test2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main_select_multipro.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -689,13 +618,6 @@
     <entry file="file://$PROJECT_DIR$/t.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/test2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="14" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Rico_label_processing/rm_redundancy_hierarchical.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="223">
@@ -713,10 +635,77 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/segment_subtree/Detected_Block.py">
+    <entry file="file://$PROJECT_DIR$/segment_subtree/merge.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="146">
+          <caret line="76" column="16" lean-forward="true" selection-start-line="76" selection-start-column="16" selection-end-line="76" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/segment_subtree/Tree.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="77">
+          <caret line="40" selection-start-line="40" selection-end-line="52" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/segment_subtree/view_subtree.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-34">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
-          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+          <caret line="4" column="14" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/segment_subtree/segment_tree.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="77" column="16" lean-forward="true" selection-start-line="77" selection-start-column="16" selection-end-line="77" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main_select_classification.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7">
+          <caret line="15" column="31" lean-forward="true" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main_select_multipro.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="17" column="67" lean-forward="true" selection-start-line="17" selection-start-column="67" selection-end-line="17" selection-end-column="67" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/segment_subtree/Detected_Block.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="21" column="24" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="24" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
@@ -725,35 +714,59 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/Bbox.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1224">
-          <caret line="72" lean-forward="true" selection-start-line="72" selection-end-line="72" />
+        <state relative-caret-position="214">
+          <caret line="118" column="38" lean-forward="true" selection-start-line="118" selection-start-column="38" selection-end-line="118" selection-end-column="38" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/segment_subtree/Tree.py">
+    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/Component.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="11" lean-forward="true" selection-start-column="11" selection-end-line="1" selection-end-column="34" />
+        <state relative-caret-position="85">
+          <caret line="27" column="6" selection-start-line="27" selection-start-column="6" selection-end-line="27" selection-end-column="6" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/segment_subtree/view_subtree.py">
+    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/Block.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="24" column="59" lean-forward="true" selection-start-line="24" selection-start-column="59" selection-end-line="24" selection-end-column="59" />
+        <state relative-caret-position="-161">
+          <caret line="8" column="16" lean-forward="true" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/segment_subtree/merge.py">
+    <entry file="file://$PROJECT_DIR$/detect_compo/main_single.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="452">
-          <caret line="94" lean-forward="true" selection-start-line="94" selection-end-line="94" />
+        <state relative-caret-position="153">
+          <caret line="9" column="14" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/ip_draw.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="35" column="4" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detect_compo/ip_region_proposal.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/detect_compo/lib_ip/block_division.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="68" column="53" selection-start-line="68" selection-start-column="53" selection-end-line="68" selection-end-column="53" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

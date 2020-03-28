@@ -20,8 +20,9 @@ def block_detection(input_img_path, output_root,
     org, grey = pre.read_img(input_img_path, resize_by_height)
 
     # *** Step 2 *** block processing: detect block -> calculate hierarchy -> detect components in block
-    blocks = blk.block_division(grey, org)
-    layers = blk.block_hierarchy(blocks)
+    blocks = blk.block_division(grey)
+    blocks = blk.block_add_bkg(blocks, org, grey.shape, show=show)
+    blk.block_hierarchy(blocks)
 
     file.save_blocks(pjoin(output_root, name + '.json'), blocks)
     draw.draw_region(blocks, grey.shape, show=show, write_path=pjoin(output_root, name + '_blk.png'))

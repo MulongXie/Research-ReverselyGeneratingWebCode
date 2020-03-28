@@ -33,7 +33,7 @@ if __name__ == '__main__':
         if int(index) > end_index:
             break
         # *** start processing ***
-        pool.apply_async(ip.block_detection, (input_path_img, output_root, num, ))
+        pool.apply_async(ip.block_detection, (input_path_img, output_root, num, resize_by_height, ))
         num += 1
     pool.close()
     pool.join()
