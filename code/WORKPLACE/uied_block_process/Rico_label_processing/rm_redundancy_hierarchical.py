@@ -99,11 +99,11 @@ def draw_node(node, board, count, layer, shrink_ratio=4):
 
 if '__main__':
     save = True
-    show = True
-    start = 27  # start point
-    end = 100000
+    show = False
+    start = 7656  # start point
+    end = 7657
     input_root = 'E:\\Mulong\\Datasets\\rico\\combined\\'
-    output_root = 'E:\\Temp\\rico-clean'
+    output_root = 'E:\\Temp\\rico-tree'
     for index in range(start, end):
         img_path = input_root + str(index) + '.jpg'
         json_path = input_root + str(index) + '.json'
@@ -122,7 +122,8 @@ if '__main__':
                     count = draw_node(objs, board, 0, 0)
                     print(count)
                 if save:
-                    joutput = open(pjoin(output_root, str(index) + '.json'), 'w')
+                    # joutput = open(pjoin(output_root, str(index) + '.json'), 'w')
+                    joutput = open('sb.json', 'w')
                     json.dump(objs, joutput, indent=4)
 
         index += 1

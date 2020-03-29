@@ -70,12 +70,12 @@ def view_label(objects, org, shrink_ratio=4):
 
 if '__main__':
     save = True
-    show = False
-    start = 0  # start point
+    show = True
+    start = 6750  # start point
     end = 100000
     index = start
     input_root = 'E:\\Mulong\\Datasets\\rico\\combined\\'
-    output_root = 'E:\\Temp\\rico-clean'
+    output_root = 'E:\\Temp\\rico-tree'
     while True:
         img_path = input_root + str(index) + '.jpg'
         json_path = input_root + str(index) + '.json'

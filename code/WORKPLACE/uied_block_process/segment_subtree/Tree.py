@@ -8,7 +8,7 @@ from lib_ip.Bbox import Bbox
 
 
 def load_tree(file_path):
-    root = json.load(open(file_path, encoding="utf8"))
+    root = json.load(open(file_path, 'r', encoding="utf8"))
     return root
 
 

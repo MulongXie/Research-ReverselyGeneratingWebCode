@@ -32,14 +32,14 @@ def check_subtree(block, tree, test=False):
         print(relation, block.put_bbox(), tree['bounds'])
         board_test_blk = draw.draw_bounding_box(img, [block], line=5)
         board_test_tree = cv2.resize(img, (1440, 2560))
-        Tree.draw_tree(tree, board_test_tree, 0, 2)
+        Tree.draw_tree(tree, board_test_tree, 0)
         cv2.imshow('tree-test', cv2.resize(board_test_tree, (300, 500)))
         cv2.imshow('blk-test', cv2.resize(board_test_blk, (300, 500)))
         cv2.waitKey()
 
     # block contains tree or block and tree are same
     if relation == 1 or relation == 3:
-        return tree
+        return [tree]
     # non-intersected
     elif relation == 0:
         return None
@@ -53,8 +53,6 @@ def check_subtree(block, tree, test=False):
             if subtree is not None:
                 if type(subtree) is list:
                     subtrees += subtree
-                else:
-                    subtrees.append(subtree)
         if len(subtrees) > 0:
             return subtrees
         else:
@@ -73,8 +71,10 @@ def segment_subtree(blocks, tree):
 
 if '__main__':
     save = True
-    show = True
-    start = 0  # start point
+    show = False
+    bad_num = 0
+    num = 4463
+    start = 7656  # start point
     end = 100000
     img_root = 'E:\\Mulong\\Datasets\\rico\\combined\\'
     block_root = 'E:\\Temp\\rico-block\\'
@@ -89,6 +89,7 @@ if '__main__':
         if not os.path.exists(block_path) or not os.path.exists(tree_path):
             continue
 
+        start_time = time.clock()
         img, _ = pre.read_img(img_path, resize_height=2560)
         block_img = cv2.imread(block_root + str(index) + '_blk.png')
 
@@ -96,7 +97,12 @@ if '__main__':
         resize_block(blocks, det_height=800, tgt_height=2560, bias=0)
         board_block = draw.draw_bounding_box(img, blocks, line=5)
 
-        tree = Tree.load_tree(tree_path)
+        try:
+            tree = Tree.load_tree(tree_path)
+        except:
+            bad_num += 1
+            print('*** Fuck Json: %d %s ***' %(bad_num, tree_path))
+            continue
         segments = segment_subtree(blocks, tree)
 
         if show:
@@ -113,3 +119,5 @@ if '__main__':
             jfile = open(subtree_path, 'w')
             json.dump(segments, jfile, indent=4)
 
+        print('[%.3fs]: %d %s' % (time.clock() - start_time, num, img_path))
+        num += 1
