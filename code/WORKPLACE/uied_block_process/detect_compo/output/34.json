@@ -1,0 +1,76 @@
+{
+    "blocks": [
+        {
+            "row_max": 746,
+            "id": 0,
+            "layer": 0,
+            "parent": null,
+            "column_min": 0,
+            "column_max": 449,
+            "row_min": 0
+        },
+        {
+            "row_max": 68,
+            "id": 1,
+            "layer": 1,
+            "parent": 0,
+            "column_min": 0,
+            "column_max": 325,
+            "row_min": 0
+        },
+        {
+            "row_max": 746,
+            "id": 2,
+            "layer": 1,
+            "parent": 0,
+            "column_min": 0,
+            "column_max": 323,
+            "row_min": 71
+        },
+        {
+            "row_max": 215,
+            "id": 3,
+            "layer": 1,
+            "parent": 0,
+            "column_min": 328,
+            "column_max": 436,
+            "row_min": 83
+        },
+        {
+            "row_max": 361,
+            "id": 4,
+            "layer": 1,
+            "parent": 0,
+            "column_min": 328,
+            "column_max": 436,
+            "row_min": 230
+        },
+        {
+            "row_max": 506,
+            "id": 5,
+            "layer": 1,
+            "parent": 0,
+            "column_min": 328,
+            "column_max": 436,
+            "row_min": 375
+        },
+        {
+            "row_max": 652,
+            "id": 6,
+            "layer": 1,
+            "parent": 0,
+            "column_min": 328,
+            "column_max": 436,
+            "row_min": 521
+        },
+        {
+            "row_max": 799,
+            "id": 7,
+            "layer": 0,
+            "parent": null,
+            "column_min": 0,
+            "column_max": 449,
+            "row_min": 747
+        }
+    ]
+}

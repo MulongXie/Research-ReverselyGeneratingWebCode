@@ -66,7 +66,7 @@ def block_add_bkg(blocks, org, img_shape, show=False):
     for block in blocks:
         block.block_fill_color(board, 0, flag='bbox')
 
-    blocks_bkg = block_division(board, is_binary=True)
+    blocks_bkg = block_division(board, is_background=True)
 
     if show:
         ratio = 2
@@ -78,7 +78,7 @@ def block_add_bkg(blocks, org, img_shape, show=False):
     return blocks_bkg + blocks
 
 
-def block_division(grey, step_h=10, step_v=10, is_binary=False,
+def block_division(grey, step_h=10, step_v=10, is_background=False,
                    grad_thresh=C.THRESHOLD_BLOCK_GRADIENT,
                    line_thickness=C.THRESHOLD_LINE_THICKNESS,
                    min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
@@ -95,7 +95,7 @@ def block_division(grey, step_h=10, step_v=10, is_binary=False,
     row, column = grey.shape[0], grey.shape[1]
     for x in range(0, row, step_h):
         for y in range(0, column, step_v):
-            if is_binary and grey[x, y] == 0:
+            if is_background and grey[x, y] == 0:
                 continue
             if mask[x, y] == 0:
                 # region = flood_fill_bfs(grey, x, y, mask)
@@ -117,7 +117,7 @@ def block_division(grey, step_h=10, step_v=10, is_binary=False,
                 if block.compo_is_line(line_thickness):
                     continue
                 # ignore non-rectangle as blocks must be rectangular
-                if not block.compo_is_rectangle(min_rec_evenness, max_dent_ratio):
+                if not is_background and not block.compo_is_rectangle(min_rec_evenness, max_dent_ratio):
                     continue
 
                 blocks.append(block)
